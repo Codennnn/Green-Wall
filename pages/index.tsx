@@ -1,6 +1,6 @@
 import html2canvas from 'html2canvas'
 import Head from 'next/head'
-import { useEffect, useRef, useState } from 'react'
+import { type FormEventHandler, useEffect, useRef, useState } from 'react'
 
 import Graph from '../components/Graph'
 import GraphFooter from '../components/GraphFooter'
@@ -12,18 +12,18 @@ import type { GraphData } from '../types'
 
 export default function HomePage() {
   const container = useRef<HTMLDivElement>(null)
-  const input = useRef<HTMLInputElement>(null)
+  const inputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
-    input.current?.focus()
+    inputRef.current?.focus()
   }, [])
 
-  const [username, setUsername] = useState<string>()
+  const [username, setUsername] = useState('')
   const [graphData, setGraphData] = useState<GraphData>()
   const [loading, setLoading] = useState(false)
 
   const handleDownload = async () => {
-    if (container.current) {
+    if (container.current && graphData) {
       const canvas = await html2canvas(container.current, {
         backgroundColor: null,
       })
@@ -31,25 +31,26 @@ export default function HomePage() {
 
       const trigger = document.createElement('a')
       trigger.href = dataURL
-      trigger.download = `${username}.png`
+      trigger.download = `${graphData.username}.png`
       trigger.click()
     }
   }
 
-  const generateGraph = () => {
-    void (async () => {
-      if (username) {
-        try {
-          setLoading(true)
-          const res = await fetch(`/api/${username}`)
-          const data: GraphData = await res.json()
-          console.log(data)
-          setGraphData(data)
-        } finally {
-          setLoading(false)
-        }
+  const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
+    e.preventDefault()
+
+    if (username) {
+      try {
+        inputRef.current!.blur()
+        setLoading(true)
+        const res = await fetch(`/api/${username}`)
+        const data: GraphData = await res.json()
+        console.log(data)
+        setGraphData(data)
+      } finally {
+        setLoading(false)
       }
-    })()
+    }
   }
 
   return (
@@ -66,39 +67,38 @@ export default function HomePage() {
         </header>
 
         <main className="pb-16 pt-10">
-          <h1 className="text-center font-bold md:text-4xl">
+          <h1 className="mx-auto text-center font-bold md:w-2/3 md:text-5xl">
             Generate the contributions you have made on GitHub over the years.
           </h1>
 
-          <div className="flex h-[4.5rem] items-center justify-center gap-x-5 py-5 px-2">
-            <button
-              className="inline-flex h-full items-center rounded-sm bg-gray-100 px-4 text-sm font-medium text-gray-500 focus:outline-none"
-              onClick={handleDownload}
-            >
-              Download
-            </button>
-            <input
-              ref={input}
-              className="inline-block h-full rounded-sm bg-gray-100 px-3 text-main-800 caret-main-500 placeholder:text-main-400 focus:outline-none focus:ring-2 focus:ring-accent-200"
-              placeholder="GitHub Username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              onKeyUp={(e) => {
-                if (e.currentTarget.value && e.key === 'Enter') {
-                  e.currentTarget.blur()
-                  generateGraph()
-                }
-              }}
-            />
-            <button
-              className="inline-flex h-full items-center rounded-sm bg-accent-500 px-4 text-sm font-medium text-white focus:outline-none disabled:cursor-not-allowed"
-              disabled={loading}
-              type="button"
-              onClick={generateGraph}
-            >
-              Generate
-            </button>
-          </div>
+          <form className="py-8" onSubmit={handleSubmit}>
+            <div className="flex h-[3rem] items-center justify-center gap-x-5">
+              <button
+                className="inline-flex h-full items-center rounded-sm bg-gray-100 px-4 text-sm font-medium text-gray-500 focus:outline-none"
+                type="button"
+                onClick={handleDownload}
+              >
+                Download
+              </button>
+              <input
+                ref={inputRef}
+                required
+                className="inline-block h-full rounded-sm bg-gray-100 px-5 text-main-800 caret-main-500 placeholder:text-main-400 focus:outline-none focus:ring-2 focus:ring-accent-200"
+                name="username"
+                placeholder="GitHub Username"
+                type="text"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+              />
+              <button
+                className="inline-flex h-full items-center rounded-sm bg-accent-500 px-4 text-sm font-medium text-white focus:outline-none disabled:cursor-not-allowed"
+                disabled={loading}
+                type="submit"
+              >
+                Generate
+              </button>
+            </div>
+          </form>
 
           <div className="flex justify-center py-5">
             <ThemeSelector
