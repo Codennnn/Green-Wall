@@ -1,0 +1,31 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --header-height: 60px;
+  --min-content-width: 300px;
+  --max-content-width: 960px;
+
+  color-scheme: light;
+}
+
+::selection {
+  @apply bg-accent-100 text-current;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+body {
+  @apply text-main-800 bg-white;
+
+  font-family: -apple-system, BlinkMacSystemFont, Rubik, 'Helvetica Neue', sans-serif;
+}
+
+#__next {
+  @apply h-full;
+}
