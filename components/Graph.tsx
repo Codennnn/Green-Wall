@@ -3,6 +3,10 @@ import { useMemo } from 'react'
 import type { Contribution, RemoteData } from '../types'
 import EmptyGraph from './EmptyGraph'
 
+function numberWithCommas(x: number) {
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+}
+
 interface GraphProps {
   data: RemoteData
 }
@@ -39,9 +43,11 @@ export default function Graph(props: GraphProps) {
 
   return (
     <div>
-      <div className="mb-2 text-xs">
-        {props.data.year}: {res?.total} Contributions
-      </div>
+      {res && (
+        <div className="mb-2 text-xs">
+          {props.data.year}: {numberWithCommas(res.total)} Contributions
+        </div>
+      )}
 
       <div className="graph text-xs">
         <ul className="months">

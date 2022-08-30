@@ -1,15 +1,16 @@
 import html2canvas from 'html2canvas'
 import Head from 'next/head'
+import Image from 'next/image'
 import { type FormEventHandler, useEffect, useRef, useState } from 'react'
 
 import ErrorMessage from '../components/ErrorMessage'
+import GenerateButton from '../components/GenerateButton'
 import GitHubButton from '../components/GitHubButton'
 import Graph from '../components/Graph'
 import GraphFooter from '../components/GraphFooter'
 import GraphHeader from '../components/GraphHeader'
 import Loading from '../components/Loading'
 import ThemeSelector from '../components/ThemeSelector'
-import ThreeDButton from '../components/ThreeDButton'
 import mockData from '../mock-data'
 import type { ErrorData, GraphData } from '../types'
 
@@ -71,32 +72,33 @@ export default function HomePage() {
       <div className="min-h-full md:mx-auto md:min-w-content md:max-w-content">
         <header>
           <div className="flex h-header items-center">
-            <div className="text-xl font-bold">Green Wall</div>
+            <div className="flex items-center text-xl font-bold">
+              <Image height={24} src="/favicon.svg" width={24} />
+              <span className="ml-3">Green Wall</span>
+            </div>
 
             <GitHubButton />
           </div>
         </header>
 
-        <main className="pb-16 pt-10">
+        <main className="pb-16 pt-14">
           <h1 className="mx-auto text-center font-bold md:w-2/3 md:text-5xl">
             Generate the contributions you have made on GitHub over the years.
           </h1>
 
-          <form className="py-8" onSubmit={handleSubmit}>
-            <div className="flex h-[2.5rem] items-center justify-center gap-x-5">
+          <form className="py-16" onSubmit={handleSubmit}>
+            <div className="flex h-[2.8rem] items-center justify-center gap-x-5">
               <input
                 ref={inputRef}
                 required
-                className="inline-block h-full rounded-md bg-gray-100 px-5 text-main-800 caret-main-500 transition-colors duration-300 placeholder:text-main-400 focus:bg-white focus:shadow-[0_0_1rem_rgb(35_35_35_/_0.15)] focus:outline-none"
+                className="inline-block h-full overflow-hidden rounded-lg bg-gray-100 px-5 text-center text-lg text-main-800 caret-main-500 shadow-main-300 transition-colors duration-300 placeholder:text-main-400 focus:bg-white focus:shadow-[0_0_1.5rem_var(--tw-shadow-color)] focus:outline-none"
                 name="username"
                 placeholder="GitHub Username"
                 type="text"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
               />
-              <ThreeDButton disabled={loading} type="submit">
-                Generate
-              </ThreeDButton>
+              <GenerateButton loading={loading} type="submit" />
             </div>
           </form>
 
