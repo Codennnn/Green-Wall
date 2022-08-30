@@ -87,7 +87,7 @@ export default function HomePage() {
               <input
                 ref={inputRef}
                 required
-                className="inline-block h-full rounded-md bg-gray-100 px-5 text-main-800 caret-main-500 placeholder:text-main-400 focus:bg-white focus:shadow-[0_0_1rem_rgb(35_35_35_/_0.15)] focus:outline-none"
+                className="inline-block h-full rounded-md bg-gray-100 px-5 text-main-800 caret-main-500 transition-colors duration-300 placeholder:text-main-400 focus:bg-white focus:shadow-[0_0_1rem_rgb(35_35_35_/_0.15)] focus:outline-none"
                 name="username"
                 placeholder="GitHub Username"
                 type="text"
