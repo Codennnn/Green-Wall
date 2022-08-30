@@ -29,6 +29,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
 
   if (typeof username === 'string') {
     const years = await fetchYears(username)
+    console.log(years)
     const data = await Promise.all(years.map((year) => fetchDataForYear(username, year.text)))
     const graphData: GraphData = { username: data[0].username, data }
 

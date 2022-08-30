@@ -39,6 +39,10 @@ export interface RemoteData {
   p99: number
 }
 
+export interface ErrorData {
+  tip?: string
+}
+
 export interface GraphData {
   username: RemoteData['username']
   data: RemoteData[]

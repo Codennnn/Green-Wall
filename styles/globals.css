@@ -11,7 +11,7 @@
 }
 
 ::selection {
-  @apply bg-accent-100 text-current;
+  @apply bg-accent-500 bg-opacity-20 text-current;
 }
 
 @media (prefers-reduced-motion: no-preference) {
