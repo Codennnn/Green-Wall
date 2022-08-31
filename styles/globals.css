@@ -23,6 +23,8 @@
 body {
   @apply text-main-800 bg-white;
 
+  /* font-family: -apple-system, BlinkMacSystemFont, Rubik, sans-serif; */
+
   font-family: -apple-system, BlinkMacSystemFont, Rubik, 'Helvetica Neue', sans-serif;
 }
 

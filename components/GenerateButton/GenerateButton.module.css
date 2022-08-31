@@ -39,12 +39,11 @@
 }
 
 .front {
-  @apply bg-accent-500;
+  @apply bg-accent-500 font-medium;
 
   position: relative;
   display: block;
   padding: 10px 20px;
-  font-weight: bold;
   border-radius: 12px;
   transform: translateY(-4px);
   transition: transform 600ms cubic-bezier(0.3, 0.7, 0.4, 1);
