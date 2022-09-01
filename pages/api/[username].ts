@@ -28,11 +28,19 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
   })
 
   if (typeof username === 'string') {
-    const years = await fetchYears(username)
-    console.log(years)
-    const data = await Promise.all(years.map((year) => fetchDataForYear(username, year.text)))
-    const graphData: GraphData = { username: data[0].username, data }
-
-    res.status(200).json(graphData)
+    try {
+      const years = await fetchYears(username)
+      try {
+        const data = await Promise.all(years.map((year) => fetchDataForYear(username, year.text)))
+        const graphData: GraphData = { username: data[0].username, data }
+        res.status(200).json(graphData)
+      } catch {
+        res.status(500).json({ message: 'Something went wrong. Please try again soon.' })
+      }
+    } catch {
+      res.status(404).json({
+        message: 'Can not find the GitHub user, please make sure the username is correct.',
+      })
+    }
   }
 }

@@ -40,7 +40,7 @@ export interface RemoteData {
 }
 
 export interface ErrorData {
-  tip?: string
+  message?: string
 }
 
 export interface GraphData {

@@ -50,11 +50,16 @@ export default function HomePage() {
         setError(undefined)
         setLoading(true)
         const res = await fetch(`/api/${username}`)
-        const data: GraphData = await res.json()
-        console.log(data)
-        setGraphData(data)
+        console.log(res)
+        if (res.status >= 400) {
+          const error: ErrorData = await res.json()
+          setError({ message: error.message })
+        } else {
+          const data: GraphData = await res.json()
+          console.log(data)
+          setGraphData(data)
+        }
       } catch (e) {
-        console.log(e)
         setGraphData(undefined)
         setError({})
       } finally {
@@ -69,10 +74,10 @@ export default function HomePage() {
         <title>Green Wall · Review your GitHub contributions</title>
       </Head>
 
-      <div className="min-h-full md:mx-auto md:min-w-content md:max-w-content">
+      <div className="md:mx-auto md:min-w-content md:max-w-content">
         <header>
           <div className="flex h-header items-center">
-            <div className="flex items-center text-xl font-bold">
+            <div className="flex select-none items-center text-xl font-bold">
               <Image height={24} src="/favicon.svg" width={24} />
               <span className="ml-3">Green Wall</span>
             </div>
@@ -91,7 +96,7 @@ export default function HomePage() {
               <input
                 ref={inputRef}
                 required
-                className="inline-block h-full overflow-hidden rounded-lg bg-gray-100 px-5 text-center text-lg text-main-800 caret-main-500 shadow-main-300 transition-colors duration-300 placeholder:text-main-400 focus:bg-white focus:shadow-[0_0_1.5rem_var(--tw-shadow-color)] focus:outline-none"
+                className="inline-block h-full overflow-hidden rounded-lg bg-gray-100 px-5 text-center text-lg text-main-800 caret-main-500 shadow-main-300 transition-colors duration-300 placeholder:select-none placeholder:text-main-400 focus:bg-white focus:shadow-[0_0_1.5rem_var(--tw-shadow-color)] focus:outline-none"
                 name="username"
                 placeholder="GitHub Username"
                 type="text"
@@ -144,7 +149,7 @@ export default function HomePage() {
               )}
             </Loading>
           ) : (
-            <ErrorMessage tip={error.tip} />
+            <ErrorMessage message={error.message} />
           )}
         </main>
 

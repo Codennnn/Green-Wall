@@ -1,22 +1,30 @@
-import { useMemo } from 'react'
+import { memo, useMemo } from 'react'
 
 import type { Contribution, RemoteData } from '../types'
-import EmptyGraph from './EmptyGraph'
 
 function numberWithCommas(x: number) {
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
 }
 
-interface GraphProps {
-  data: RemoteData
+interface DDD {
+  total: number
+  contributions: Contribution[]
 }
 
-export default function Graph(props: GraphProps) {
-  const res = useMemo(() => {
-    if (!props.data.contributions || props.data.min === null || props.data.max === null) {
-      return
+interface GraphProps {
+  data: RemoteData
+  daysLabel?: boolean
+}
+
+const days = [...Array(7)].map(() => ({ count: 0, level: 0 }))
+
+function Graph(props: GraphProps) {
+  const res = useMemo<DDD>(() => {
+    if (!props.data.contributions || !props.data.min || !props.data.max) {
+      return { total: 0, contributions: [...Array(52)].map(() => ({ week: 0, days })) }
     }
-    return props.data.contributions.reduce<{ total: number; contributions: Contribution[] }>(
+
+    return props.data.contributions.reduce<DDD>(
       (res, item) => {
         res.contributions.push({
           week: item.week,
@@ -43,11 +51,9 @@ export default function Graph(props: GraphProps) {
 
   return (
     <div>
-      {res && (
-        <div className="mb-2 text-xs">
-          {props.data.year}: {numberWithCommas(res.total)} Contributions
-        </div>
-      )}
+      <div className="mb-2 text-xs">
+        {props.data.year}: {numberWithCommas(res.total)} Contributions
+      </div>
 
       <div className="graph text-xs">
         <ul className="months">
@@ -65,42 +71,42 @@ export default function Graph(props: GraphProps) {
           <li>Dec</li>
         </ul>
 
-        <ul className="days">
-          <li>Sun</li>
-          <li>Mon</li>
-          <li>Tue</li>
-          <li>Wed</li>
-          <li>Thu</li>
-          <li>Fri</li>
-          <li>Sat</li>
-        </ul>
+        {props.daysLabel && (
+          <ul className="days">
+            <li>Sun</li>
+            <li>Mon</li>
+            <li>Tue</li>
+            <li>Wed</li>
+            <li>Thu</li>
+            <li>Fri</li>
+            <li>Sat</li>
+          </ul>
+        )}
 
         <ul className="squares">
-          {res && res.contributions.length > 0 ? (
-            res?.contributions.reduce<React.ReactNode[]>((res, week, i) => {
-              let days = week.days
+          {res.contributions.reduce<React.ReactNode[]>((acc, week, i) => {
+            let days = week.days
 
-              if (days.length < 7) {
-                const fills = Array.from(Array(7 - days.length)).map(() => ({
-                  count: 0,
-                  level: -1,
-                }))
-                if (week.week === 0) {
-                  days = [...fills, ...week.days]
-                } else {
-                  days = [...week.days, ...fills]
-                }
+            if (days.length < 7) {
+              const fills = Array.from(Array(7 - days.length)).map(() => ({
+                count: 0,
+                level: -1,
+              }))
+              if (week.week === 0) {
+                days = [...fills, ...week.days]
+              } else {
+                days = [...week.days, ...fills]
               }
-              days.forEach((day, j) => {
-                res.push(<li key={`${i}${j}`} className="day" data-level={day.level}></li>)
-              })
-              return res
-            }, [])
-          ) : (
-            <EmptyGraph />
-          )}
+            }
+            days.forEach((day, j) => {
+              acc.push(<li key={`${i}${j}`} className="day" data-level={day.level}></li>)
+            })
+            return acc
+          }, [])}
         </ul>
       </div>
     </div>
   )
 }
+
+export default memo(Graph)

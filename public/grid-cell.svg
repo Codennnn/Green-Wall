@@ -1,0 +1,23 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="27px"
+  height="27px"
+  viewBox="0 0 27 27"
+  version="1.1"
+>
+  <title>grid-cell</title>
+  <g
+    id="Landing-page"
+    stroke="none"
+    stroke-width="1"
+    fill="none"
+    fill-rule="evenodd"
+    stroke-linecap="square"
+  >
+    <g id="grid-cell" stroke="#efefef">
+      <line x1="0" y1="0" x2="27" y2="0" id="horz" />
+      <line x1="0" y1="0" x2="1.66533454e-15" y2="27" id="vert" />
+    </g>
+  </g>
+</svg>

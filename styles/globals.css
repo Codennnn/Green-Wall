@@ -14,20 +14,25 @@
   @apply bg-accent-500 bg-opacity-20 text-current;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  html {
-    scroll-behavior: smooth;
-  }
+html {
+  @apply motion-safe:scroll-smooth;
 }
 
 body {
   @apply text-main-800 bg-white;
 
-  /* font-family: -apple-system, BlinkMacSystemFont, Rubik, sans-serif; */
-
   font-family: -apple-system, BlinkMacSystemFont, Rubik, 'Helvetica Neue', sans-serif;
+  background: linear-gradient(180deg, rgb(255 255 255 / 0) 15em, #fff 30em),
+    url('/grid-cell.svg') 0 0 repeat;
+  background-size: 100% 100%, 40px 40px;
+  background-attachment: scroll, scroll;
+}
+
+html,
+body {
+  @apply h-[unset];
 }
 
 #__next {
-  @apply h-full;
+  @apply min-h-screen;
 }
