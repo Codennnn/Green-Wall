@@ -1,3 +1,4 @@
+import splitbee from '@splitbee/web'
 import html2canvas from 'html2canvas'
 import Head from 'next/head'
 import Image from 'next/image'
@@ -29,6 +30,7 @@ export default function HomePage() {
 
   const handleDownload = async () => {
     if (container.current && graphData) {
+      splitbee.track('Click Download')
       const canvas = await html2canvas(container.current, {
         backgroundColor: null,
       })
@@ -45,6 +47,7 @@ export default function HomePage() {
     e.preventDefault()
 
     if (username) {
+      splitbee.track('Click Generate')
       try {
         inputRef.current!.blur()
         setError(undefined)
@@ -74,7 +77,7 @@ export default function HomePage() {
         <title>Green Wall · Review your GitHub contributions</title>
       </Head>
 
-      <div className="md:mx-auto md:min-w-content md:max-w-content">
+      <div className="min-h-screen md:mx-auto md:min-w-content md:max-w-content">
         <header>
           <div className="flex h-header items-center">
             <div className="flex select-none items-center text-xl font-bold">
@@ -120,6 +123,7 @@ export default function HomePage() {
                     </button>
                     <ThemeSelector
                       onChange={(theme) => {
+                        splitbee.track('Change theme', { themeName: theme.name })
                         container.current?.style.setProperty('--graph-text-color', theme.textColor)
                         container.current?.style.setProperty('--graph-bg', theme.background)
 
@@ -153,7 +157,9 @@ export default function HomePage() {
           )}
         </main>
 
-        {/* <footer className="sticky top-[100vh] py-3 text-center text-sm text-main-400"></footer> */}
+        <footer className="sticky top-[100vh] py-3 text-center text-sm text-main-400">
+          Power by Vercel
+        </footer>
       </div>
     </>
   )
