@@ -15,7 +15,7 @@
     fill-rule="evenodd"
     stroke-linecap="square"
   >
-    <g id="grid-cell" stroke="#efefef">
+    <g id="grid-cell" stroke="rgb(30 41 59 / 0.08)">
       <line x1="0" y1="0" x2="27" y2="0" id="horz" />
       <line x1="0" y1="0" x2="1.66533454e-15" y2="27" id="vert" />
     </g>

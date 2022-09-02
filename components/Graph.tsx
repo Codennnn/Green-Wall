@@ -31,15 +31,16 @@ function Graph(props: GraphProps) {
           days: item.days.map((day) => {
             res.total += day.count
             const level =
-              day.count >= props.data.p90
+              day.count >= (props.data.p90 ?? Infinity)
                 ? 4
-                : day.count >= props.data.p80
+                : day.count >= (props.data.p80 ?? Infinity)
                 ? 3
-                : day.count >= props.data.median
+                : day.count >= (props.data.median ?? Infinity)
                 ? 2
                 : day.count >= props.data.min
                 ? 1
                 : 0
+            console.log(day.count, props.data.p90)
             return { count: day.count, level }
           }),
         })
