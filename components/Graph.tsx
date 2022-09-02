@@ -40,7 +40,6 @@ function Graph(props: GraphProps) {
                 : day.count >= props.data.min
                 ? 1
                 : 0
-            console.log(day.count, props.data.p90)
             return { count: day.count, level }
           }),
         })
