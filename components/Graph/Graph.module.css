@@ -1,20 +1,15 @@
-.graph-container {
-  color: var(--graph-text-color, #000);
-  background-color: var(--graph-bg, #fff);
-}
-
 .graph {
   --square-size: 10px;
   --square-round: 2px;
   --square-gap: 3px;
   --week-width: calc(var(--square-size) + var(--square-gap));
 
-  @apply gap-1;
+  @apply text-xs gap-1;
 
   display: inline-grid;
   grid-template-areas:
-    'empty months'
-    'days squares';
+    'null months'
+    'days blocks';
   grid-template-columns: auto 1fr;
 }
 
@@ -40,52 +35,52 @@
   grid-area: days;
 }
 
-.days li:nth-child(odd) {
-  visibility: hidden;
-}
-
 .months,
 .days {
   opacity: 0.4;
 }
 
-.squares {
-  grid-area: squares;
+.blocks {
+  grid-area: blocks;
   grid-auto-columns: var(--square-size, 10px);
   grid-auto-flow: column;
 }
 
-.days,
-.squares {
-  display: grid;
-  grid-gap: var(--square-gap);
-  grid-template-rows: repeat(7, var(--square-size));
-}
-
-.day {
+.grids li {
   border-radius: var(--square-round);
 }
 
-.day[data-level='-1'] {
-  opacity: 0;
+.grids li[data-level='-1'] {
+  visibility: hidden;
 }
 
-.day[data-level='0'] {
+.grids li[data-level='0'] {
   background-color: var(--level-0, #ebedf0);
 }
 
-.day[data-level='1'] {
+.grids li[data-level='1'] {
   background-color: var(--level-1, #9be9a8);
 }
 
-.day[data-level='2'] {
+.grids li[data-level='2'] {
   background-color: var(--level-2, #40c463);
 }
 
-.day[data-level='3'] {
+.grids li[data-level='3'] {
   background-color: var(--level-3, #30a14e);
 }
 
-.day[data-level='4'] {
+.grids li[data-level='4'] {
   background-color: var(--level-4, #216e39);
+}
+
+.days li:nth-child(odd) {
+  visibility: hidden;
+}
+
+.days,
+.blocks {
+  display: grid;
+  grid-gap: var(--square-gap);
+  grid-template-rows: repeat(7, var(--square-size));
 }

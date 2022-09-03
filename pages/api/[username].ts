@@ -7,11 +7,15 @@ import type { GraphData, RemoteData } from '../../types'
 async function fetchYears(username: string): Promise<{ text: string }[]> {
   const data = await fetch(`https://github.com/${username}`)
   const $ = load(await data.text())
-  return $('.js-year-link')
-    .get()
-    .map((a) => ({
-      text: $(a).text().trim(),
-    }))
+  const yearsData = $('.js-year-link').get()
+
+  if (!yearsData || yearsData.length <= 0) {
+    throw new Error('GitHub User Not Found')
+  }
+
+  return yearsData.map((a) => ({
+    text: $(a).text().trim(),
+  }))
 }
 
 async function fetchDataForYear(username: string, year: string): Promise<RemoteData> {
@@ -39,7 +43,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
       }
     } catch {
       res.status(404).json({
-        message: 'Can not find the GitHub user, please make sure the username is correct.',
+        message: 'Can not find the GitHub user. Please make sure the username is correct.',
       })
     }
   }

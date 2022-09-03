@@ -1,4 +1,5 @@
-import type { GraphData } from '../types'
+import type { GraphData } from '../../types'
+import styles from './Graph.module.css'
 
 export default function GraphHeader(props: { username?: GraphData['username'] }) {
   return (
@@ -19,13 +20,13 @@ export default function GraphHeader(props: { username?: GraphData['username'] })
 
       <div className="ml-auto flex items-center text-xs">
         <span>Less</span>
-        <div className="mx-1 flex gap-1">
-          <span className="day aspect-square w-3" data-level="0" />
-          <span className="day aspect-square w-3" data-level="1" />
-          <span className="day aspect-square w-3" data-level="2" />
-          <span className="day aspect-square w-3" data-level="3" />
-          <span className="day aspect-square w-3" data-level="4" />
-        </div>
+        <ul className={`${styles['grids']} mx-2 grid grid-cols-5 gap-[3px]`}>
+          <li className="day aspect-square w-3" data-level="0" />
+          <li className="day aspect-square w-3" data-level="1" />
+          <li className="day aspect-square w-3" data-level="2" />
+          <li className="day aspect-square w-3" data-level="3" />
+          <li className="day aspect-square w-3" data-level="4" />
+        </ul>
         <span>More</span>
       </div>
     </div>

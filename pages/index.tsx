@@ -7,9 +7,7 @@ import { type FormEventHandler, useEffect, useRef, useState } from 'react'
 import ErrorMessage from '../components/ErrorMessage'
 import GenerateButton from '../components/GenerateButton'
 import GitHubButton from '../components/GitHubButton'
-import Graph from '../components/Graph'
-import GraphFooter from '../components/GraphFooter'
-import GraphHeader from '../components/GraphHeader'
+import Graph, { GraphFooter, GraphHeader } from '../components/Graph'
 import Loading from '../components/Loading'
 import ThemeSelector from '../components/ThemeSelector'
 import mockData from '../mock-data'
@@ -43,6 +41,11 @@ export default function HomePage() {
     }
   }
 
+  const handleError = (errorData: ErrorData = {}) => {
+    setGraphData(undefined)
+    setError(errorData)
+  }
+
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault()
 
@@ -56,15 +59,23 @@ export default function HomePage() {
         console.log(res)
         if (res.status >= 400) {
           const error: ErrorData = await res.json()
-          setError({ message: error.message })
+          console.log(error)
+          handleError({ message: error.message })
         } else {
           const data: GraphData = await res.json()
           console.log(data)
           setGraphData(data)
+          setTimeout(() => {
+            if (container.current) {
+              const offsetTop = container.current.getBoundingClientRect().top
+              if (offsetTop > 0) {
+                window.scrollTo(0, offsetTop)
+              }
+            }
+          }, 50)
         }
       } catch (e) {
-        setGraphData(undefined)
-        setError({})
+        handleError()
       } finally {
         setLoading(false)
       }
@@ -77,29 +88,29 @@ export default function HomePage() {
         <title>Green Wall · Review your GitHub contributions</title>
       </Head>
 
-      <div className="min-h-screen md:mx-auto md:min-w-content md:max-w-content">
+      <div className="min-h-screen px-5 md:mx-auto md:min-w-content md:max-w-content lg:px-0">
         <header>
           <div className="flex h-header items-center">
             <div className="flex select-none items-center text-xl font-bold">
               <Image height={24} src="/favicon.svg" width={24} />
-              <span className="ml-3">Green Wall</span>
+              <span className="ml-3 hidden md:inline">Green Wall</span>
             </div>
 
             <GitHubButton />
           </div>
         </header>
 
-        <main className="pb-16 pt-14">
-          <h1 className="mx-auto text-center font-bold md:w-2/3 md:text-5xl">
-            Generate the contributions you have made on GitHub over the years.
+        <main className="py-10 md:py-14">
+          <h1 className="text-3xl font-bold md:mx-auto md:px-20 md:text-center md:text-6xl md:leading-[1.2]">
+            Review the contributions you have made on GitHub over the years.
           </h1>
 
-          <form className="py-16" onSubmit={handleSubmit}>
-            <div className="flex h-[2.8rem] items-center justify-center gap-x-5">
+          <form className="py-12 md:py-16" onSubmit={handleSubmit}>
+            <div className="flex flex-col items-center justify-center gap-y-6 md:flex-row md:gap-x-5">
               <input
                 ref={inputRef}
                 required
-                className="inline-block h-full overflow-hidden rounded-lg bg-gray-100 px-5 text-center text-lg text-main-800 caret-main-500 shadow-main-300 transition-colors duration-300 placeholder:select-none placeholder:text-main-400 focus:bg-white focus:shadow-[0_0_1.5rem_var(--tw-shadow-color)] focus:outline-none"
+                className="inline-block h-[2.8rem] overflow-hidden rounded-lg bg-main-100 px-5 text-center text-lg font-medium text-main-800 text-opacity-80 caret-main-500 shadow-main-300 outline-none transition-all duration-300 placeholder:select-none placeholder:font-normal placeholder:text-main-400 focus:bg-white focus:shadow-[0_0_1.5rem_var(--tw-shadow-color)]"
                 name="username"
                 placeholder="GitHub Username"
                 type="text"
@@ -140,7 +151,7 @@ export default function HomePage() {
                     >
                       <GraphHeader username={graphData.username} />
 
-                      <div className="flex flex-col gap-y-5">
+                      <div className="flex flex-col gap-y-6">
                         {graphData.data?.map((data, i) => (
                           <Graph key={`${i}`} data={data} />
                         ))}

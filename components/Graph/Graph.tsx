@@ -1,6 +1,7 @@
 import { memo, useMemo } from 'react'
 
-import type { Contribution, RemoteData } from '../types'
+import type { Contribution, RemoteData } from '../../types'
+import styles from './Graph.module.css'
 
 function numberWithCommas(x: number) {
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
@@ -51,12 +52,13 @@ function Graph(props: GraphProps) {
 
   return (
     <div>
-      <div className="mb-2 text-xs">
-        {props.data.year}: {numberWithCommas(res.total)} Contributions
+      <div className="mb-2 text-sm">
+        <span className="mr-2 italic">{props.data.year}:</span>
+        {numberWithCommas(res.total)} Contributions
       </div>
 
-      <div className="graph text-xs">
-        <ul className="months">
+      <div className={`${styles['graph']}`}>
+        <ul className={`${styles['months']}`}>
           <li>Jan</li>
           <li>Feb</li>
           <li>Mar</li>
@@ -72,7 +74,7 @@ function Graph(props: GraphProps) {
         </ul>
 
         {props.daysLabel && (
-          <ul className="days">
+          <ul className={`${styles['days']}`}>
             <li>Sun</li>
             <li>Mon</li>
             <li>Tue</li>
@@ -83,7 +85,7 @@ function Graph(props: GraphProps) {
           </ul>
         )}
 
-        <ul className="squares">
+        <ul className={`${styles['grids']} ${styles['blocks']}`}>
           {res.contributions.reduce<React.ReactNode[]>((acc, week, i) => {
             let days = week.days
 
@@ -99,7 +101,7 @@ function Graph(props: GraphProps) {
               }
             }
             days.forEach((day, j) => {
-              acc.push(<li key={`${i}${j}`} className="day" data-level={day.level}></li>)
+              acc.push(<li key={`${i}${j}`} data-level={day.level}></li>)
             })
             return acc
           }, [])}
