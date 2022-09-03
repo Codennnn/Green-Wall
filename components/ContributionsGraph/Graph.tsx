@@ -1,4 +1,4 @@
-import { memo, useMemo } from 'react'
+import { useMemo } from 'react'
 
 import type { Contribution, RemoteData } from '../../types'
 import styles from './Graph.module.css'
@@ -19,7 +19,7 @@ interface GraphProps {
 
 const days = [...Array(7)].map(() => ({ count: 0, level: 0 }))
 
-function Graph(props: GraphProps) {
+export default function Graph(props: GraphProps) {
   const res = useMemo<DDD>(() => {
     if (!props.data.contributions || !props.data.min || !props.data.max) {
       return { total: 0, contributions: [...Array(52)].map(() => ({ week: 0, days })) }
@@ -110,5 +110,3 @@ function Graph(props: GraphProps) {
     </div>
   )
 }
-
-export default memo(Graph)

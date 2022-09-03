@@ -15,7 +15,9 @@ export default function GenerateButton({ loading = false, ...props }: GenerateBu
     >
       <span className={`${styles['shadow']}`} />
       <span className={`${styles['edge']}`} />
-      <span className={`${styles['front']}`}>{loading ? 'Generating...' : 'Generate'}</span>
+      <span className={`${styles['front']} min-w-[max(30vw,200px)] md:min-w-[120px]`}>
+        {loading ? 'Generating...' : 'Generate'}
+      </span>
     </button>
   )
 }

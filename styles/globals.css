@@ -27,8 +27,3 @@ body {
   background-size: 100% 100%, 40px 40px;
   background-attachment: scroll, scroll;
 }
-
-.graph-container {
-  color: var(--graph-text-color, #000);
-  background-color: var(--graph-bg, #fff);
-}
