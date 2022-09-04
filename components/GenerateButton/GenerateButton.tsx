@@ -7,7 +7,7 @@ interface GenerateButtonProps extends React.ButtonHTMLAttributes<HTMLButtonEleme
 export default function GenerateButton({ loading = false, ...props }: GenerateButtonProps) {
   return (
     <button
-      className={`${styles['pushable']} text-white ${
+      className={`${styles['pushable']} select-none text-white ${
         loading ? 'pointer-events-none text-opacity-80' : ''
       }`}
       disabled={loading}

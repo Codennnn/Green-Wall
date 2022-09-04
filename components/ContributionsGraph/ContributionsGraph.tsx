@@ -1,6 +1,7 @@
-import { forwardRef, memo, useImperativeHandle, useRef } from 'react'
+import { forwardRef, memo, useEffect, useImperativeHandle, useRef } from 'react'
 
-import type { GraphData } from '../../types'
+import themes from '../../themes'
+import type { GraphData, Theme } from '../../types'
 import Graph from './Graph'
 import GraphFooter from './GraphFooter'
 import GraphHeader from './GraphHeader'
@@ -8,14 +9,29 @@ import GraphHeader from './GraphHeader'
 interface ContributionsGraphProps {
   className?: string
   data: GraphData
+  theme?: Theme['name']
 }
 
 function ContributionsGraph(props: ContributionsGraphProps, ref: React.Ref<HTMLDivElement | null>) {
-  const { className = '', data } = props
+  const { className = '', data, theme } = props
 
   const graphRef = useRef<HTMLDivElement>(null)
 
   useImperativeHandle(ref, () => graphRef.current)
+
+  useEffect(() => {
+    if (theme) {
+      const applyedTheme = themes.find((item) => item.name.toLowerCase() === theme.toLowerCase())
+
+      if (graphRef.current && applyedTheme) {
+        graphRef.current.style.setProperty('--graph-text-color', applyedTheme.textColor)
+        graphRef.current.style.setProperty('--graph-bg', applyedTheme.background)
+        applyedTheme.levelColors.forEach((color, i) => {
+          graphRef.current!.style.setProperty(`--level-${i}`, color)
+        })
+      }
+    }
+  }, [theme])
 
   return (
     <div

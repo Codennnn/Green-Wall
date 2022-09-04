@@ -9,12 +9,13 @@
     "dev": "next dev",
     "lint": "next lint && npm run lint:style && npm run lint:ts",
     "lint:es": "eslint \"**/*.{mjs,js,jsx,ts,tsx}\"",
-    "lint:style": "stylelint \"**/*.{css}\"",
+    "lint:style": "stylelint \"**/*.{css,.module.css}\"",
     "lint:ts": "tsc --noEmit --skipLibCheck",
     "lint:prettier": "prettier --write \"**/*.{md,json,html}\"",
     "start": "next start"
   },
   "dependencies": {
+    "@floating-ui/react-dom-interactions": "^0.9.3",
     "@splitbee/web": "^0.3.0",
     "cheerio": "^1.0.0-rc.12",
     "classnames": "^2.3.1",
@@ -22,7 +23,8 @@
     "next": "12.2.5",
     "nextjs-cors": "^2.1.1",
     "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react-dom": "18.2.0",
+    "react-merge-refs": "^2.0.1"
   },
   "devDependencies": {
     "@tailwindcss/line-clamp": "^0.4.0",

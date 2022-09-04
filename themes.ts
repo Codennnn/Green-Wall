@@ -36,16 +36,3 @@ const themes: Theme[] = [
 ]
 
 export default themes
-
-export function applyTheme(name: Theme['name']) {
-  const graph = window.document.getElementById('contributions-graph')
-  const theme = themes.find((item) => item.name.toLowerCase() === name.toLowerCase())
-
-  if (graph && theme) {
-    graph.style.setProperty('--graph-text-color', theme.textColor)
-    graph.style.setProperty('--graph-bg', theme.background)
-    theme.levelColors.forEach((color, i) => {
-      graph.style.setProperty(`--level-${i}`, color)
-    })
-  }
-}

@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react'
 
 import ContributionsGraph from '../../components/ContributionsGraph'
 import Layout from '../../components/Layout'
-import { applyTheme } from '../../themes'
 import type { ErrorData, GraphData, Theme } from '../../types'
 
 interface Props {
@@ -19,7 +18,6 @@ type NextPageWithLayout = NextPage<Props> & {
 const UserSharePage: NextPageWithLayout = ({ username, theme }: Props) => {
   const [graphData, setGraphData] = useState<GraphData>()
   const [loading, setLoading] = useState(true)
-  const [applying, setApplying] = useState(true)
 
   useEffect(() => {
     if (username) {
@@ -43,31 +41,19 @@ const UserSharePage: NextPageWithLayout = ({ username, theme }: Props) => {
     }
   }, [username])
 
-  useEffect(() => {
-    if (graphData) {
-      if (theme) {
-        applyTheme(theme)
-      }
-      setApplying(false)
-    }
-  }, [graphData, theme])
-
-  if (loading || applying) {
+  if (loading) {
     return (
       <div className="flex flex-col items-center justify-center py-20 text-main-400">
         <Image priority height={60} src="/mona-loading-default.gif" width={60} />
-        <span className="bg-white py-4 px-3">Loading contributions...</span>
+        <span className="bg-white py-4 px-3">Loading Contributions...</span>
       </div>
     )
   }
 
   if (graphData) {
     return (
-      <div
-        className="flex w-full overflow-x-auto py-8 md:justify-center md:py-14"
-        style={{ display: applying ? 'none' : undefined }}
-      >
-        <ContributionsGraph className="shadow-2xl shadow-main-200" data={graphData} />
+      <div className="flex w-full overflow-x-auto py-8 md:justify-center md:py-14">
+        <ContributionsGraph className="shadow-2xl shadow-main-200" data={graphData} theme={theme} />
       </div>
     )
   }

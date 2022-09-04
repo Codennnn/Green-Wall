@@ -8,13 +8,14 @@ import ErrorMessage from '../components/ErrorMessage'
 import GenerateButton from '../components/GenerateButton'
 import Layout from '../components/Layout'
 import Loading from '../components/Loading'
+import ShareButton from '../components/ShareButton'
 import ThemeSelector from '../components/ThemeSelector'
 import mockData from '../mock-data'
-import { applyTheme } from '../themes'
 import type { ErrorData, GraphData } from '../types'
 
 export default function HomePage() {
   const graphRef = useRef<HTMLDivElement>(null)
+  const actionRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
@@ -23,6 +24,8 @@ export default function HomePage() {
 
   const [username, setUsername] = useState('')
   const [graphData, setGraphData] = useState<GraphData>()
+  const [theme, setTheme] = useState<string>()
+
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<ErrorData>()
 
@@ -49,7 +52,7 @@ export default function HomePage() {
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault()
 
-    if (username) {
+    if (username && !loading) {
       splitbee.track('Click Generate')
       try {
         inputRef.current!.blur()
@@ -75,8 +78,8 @@ export default function HomePage() {
   }
 
   useEffect(() => {
-    if (graphData && graphRef.current) {
-      const offsetTop = graphRef.current.getBoundingClientRect().top
+    if (graphData && actionRef.current) {
+      const offsetTop = actionRef.current.getBoundingClientRect().top
       if (offsetTop > 0) {
         window.scrollTo(0, offsetTop)
       }
@@ -116,7 +119,8 @@ export default function HomePage() {
           <Loading active={loading}>
             {graphData && (
               <>
-                <div className="flex items-center justify-center gap-x-5 py-5">
+                <div ref={actionRef} className="flex items-center justify-center gap-x-6 py-5">
+                  <ShareButton theme={theme} username={username} />
                   <button
                     className="inline-flex h-full items-center rounded-md bg-main-200 py-2 px-4 font-medium text-main-500 focus:outline-none disabled:cursor-default"
                     onClick={handleDownload}
@@ -126,12 +130,13 @@ export default function HomePage() {
                   <ThemeSelector
                     onChange={(theme) => {
                       splitbee.track('Change theme', { themeName: theme.name })
-                      applyTheme(theme.name)
+                      setTheme(theme.name)
                     }}
                   />
                 </div>
+
                 <div className="flex overflow-x-auto md:justify-center">
-                  <ContributionsGraph ref={graphRef} data={graphData} />
+                  <ContributionsGraph ref={graphRef} data={graphData} theme={theme} />
                 </div>
               </>
             )}
