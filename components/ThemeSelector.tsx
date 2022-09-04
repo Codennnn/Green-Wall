@@ -14,7 +14,7 @@ export default function ThemeSelector(props: ThemeSelectorProps) {
           <div
             key={theme.name}
             className={`grid h-5 w-5 cursor-pointer grid-cols-2 grid-rows-2 ring transition-shadow duration-300 ${
-              props.value?.name === theme.name
+              (props.value?.name || 'GitHub') === theme.name
                 ? 'ring-main-400/60 hover:ring-main-400/60'
                 : 'ring-transparent hover:ring-main-200'
             }`}

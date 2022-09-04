@@ -6,6 +6,7 @@ import { type FormEventHandler, useEffect, useRef, useState } from 'react'
 import ContributionsGraph from '../components/ContributionsGraph'
 import ErrorMessage from '../components/ErrorMessage'
 import GenerateButton from '../components/GenerateButton'
+import { iconImage } from '../components/icons'
 import Switch from '../components/kit/Switch'
 import Layout from '../components/Layout'
 import Loading from '../components/Loading'
@@ -28,20 +29,9 @@ export default function HomePage() {
   const [graphData, setGraphData] = useState<GraphData>()
   const [theme, setTheme] = useState<Theme>()
 
+  const [downloading, setDownloading] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<ErrorData>()
-
-  const handleDownload = async () => {
-    if (graphRef.current && graphData) {
-      splitbee.track('Click Download')
-
-      const dataURL = await toJpeg(graphRef.current)
-      const trigger = document.createElement('a')
-      trigger.href = dataURL
-      trigger.download = `${graphData.username}`
-      trigger.click()
-    }
-  }
 
   const handleError = (errorData: ErrorData = {}) => {
     setGraphData(undefined)
@@ -76,6 +66,25 @@ export default function HomePage() {
     }
   }
 
+  const handleDownload = async () => {
+    if (graphRef.current && graphData) {
+      try {
+        setDownloading(true)
+        splitbee.track('Click Download')
+
+        const dataURL = await toJpeg(graphRef.current)
+        const trigger = document.createElement('a')
+        trigger.href = dataURL
+        trigger.download = `${graphData.username}`
+        trigger.click()
+      } finally {
+        setTimeout(() => {
+          setDownloading(false)
+        }, 2000)
+      }
+    }
+  }
+
   useEffect(() => {
     if (graphData && actionRef.current) {
       const offsetTop = actionRef.current.getBoundingClientRect().top
@@ -101,7 +110,13 @@ export default function HomePage() {
             <input
               ref={inputRef}
               required
-              className="inline-block h-[2.8rem] overflow-hidden rounded-lg bg-main-100 px-5 text-center text-lg font-medium text-main-800/80 caret-main-500 shadow-main-300 outline-none transition-all duration-300 placeholder:select-none placeholder:font-normal placeholder:text-main-400 focus:bg-white focus:shadow-[0_0_1.5rem_var(--tw-shadow-color)]"
+              className={`
+              inline-block h-[2.8rem] overflow-hidden rounded-lg bg-main-100 px-5
+              text-center text-lg font-medium text-main-600 caret-main-500 shadow-main-300 outline-none
+              transition-all duration-300
+              placeholder:select-none placeholder:font-normal placeholder:text-main-400
+              focus:bg-white focus:shadow-[0_0_1.5rem_var(--tw-shadow-color)]
+              `}
               name="username"
               placeholder="GitHub Username"
               type="text"
@@ -123,10 +138,14 @@ export default function HomePage() {
                   className="flex flex-row-reverse flex-wrap items-center justify-center gap-x-6 gap-y-4 py-5"
                 >
                   <button
-                    className="inline-flex h-full items-center rounded-md bg-main-200 py-2 px-4 font-medium text-main-500 focus:outline-none disabled:cursor-default"
+                    className={`inline-flex h-full items-center rounded-md bg-main-100 py-2 px-4 font-medium text-main-500 focus:outline-none disabled:pointer-events-none ${
+                      downloading ? 'animate-bounce' : ''
+                    }`}
+                    disabled={downloading}
                     onClick={handleDownload}
                   >
-                    Save as Image
+                    {iconImage}
+                    <span className="ml-2">Save as Image</span>
                   </button>
                   <div className="flex items-center gap-x-6">
                     <ShareButton theme={theme?.name} username={graphData.username} />
