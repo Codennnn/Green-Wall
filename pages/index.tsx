@@ -25,7 +25,7 @@ export default function HomePage() {
   }, [])
 
   const [username, setUsername] = useState('')
-  const [graphData, setGraphData] = useState<GraphData>(mockData)
+  const [graphData, setGraphData] = useState<GraphData>()
   const [theme, setTheme] = useState<Theme>()
 
   const [loading, setLoading] = useState(false)
