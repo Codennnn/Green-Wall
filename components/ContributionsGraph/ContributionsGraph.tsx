@@ -6,11 +6,12 @@ import GraphFooter from './GraphFooter'
 import GraphHeader from './GraphHeader'
 
 interface ContributionsGraphProps {
+  className?: string
   data: GraphData
 }
 
 function ContributionsGraph(props: ContributionsGraphProps, ref: React.Ref<HTMLDivElement | null>) {
-  const { data } = props
+  const { className = '', data } = props
 
   const graphRef = useRef<HTMLDivElement>(null)
 
@@ -19,7 +20,8 @@ function ContributionsGraph(props: ContributionsGraphProps, ref: React.Ref<HTMLD
   return (
     <div
       ref={graphRef}
-      className="p-5"
+      className={`p-5 ${className}`}
+      id="contributions-graph"
       style={{
         color: 'var(--graph-text-color, #24292f)',
         backgroundColor: 'var(--graph-bg, #fff)',

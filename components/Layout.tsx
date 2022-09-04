@@ -9,8 +9,10 @@ export default function Layout(props: { children?: React.ReactNode }) {
       <header>
         <div className="flex h-header items-center">
           <Link href="/">
-            <span className="flex select-none items-center text-xl font-bold">
-              <Image height={24} src="/favicon.svg" width={24} />
+            <span className="flex cursor-pointer select-none items-center text-xl font-bold">
+              <span className="w-9 md:w-7">
+                <Image height="100%" layout="responsive" src="/favicon.svg" width="100%" />
+              </span>
               <span className="ml-3 hidden md:inline">Green Wall</span>
             </span>
           </Link>

@@ -2,16 +2,11 @@ export interface Theme {
   name: string
   textColor: string
   levelColors: [
-    /** level 0 */
-    string,
-    /** level 1 */
-    string,
-    /** level 2 */
-    string,
-    /** level 3 */
-    string,
-    /** level 4 */
-    string
+    string, // level 0
+    string, // level 1
+    string, // level 2
+    string, // level 3
+    string //  level 4
   ]
   background: string
   mode?: 'light' | 'dark'

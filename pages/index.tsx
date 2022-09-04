@@ -10,6 +10,7 @@ import Layout from '../components/Layout'
 import Loading from '../components/Loading'
 import ThemeSelector from '../components/ThemeSelector'
 import mockData from '../mock-data'
+import { applyTheme } from '../themes'
 import type { ErrorData, GraphData } from '../types'
 
 export default function HomePage() {
@@ -64,15 +65,6 @@ export default function HomePage() {
           const data: GraphData = await res.json()
           console.log(data)
           setGraphData(data)
-
-          setTimeout(() => {
-            if (graphRef.current) {
-              const offsetTop = graphRef.current.getBoundingClientRect().top
-              if (offsetTop > 0) {
-                window.scrollTo(0, offsetTop)
-              }
-            }
-          }, 50)
         }
       } catch (e) {
         handleError()
@@ -81,6 +73,15 @@ export default function HomePage() {
       }
     }
   }
+
+  useEffect(() => {
+    if (graphData && graphRef.current) {
+      const offsetTop = graphRef.current.getBoundingClientRect().top
+      if (offsetTop > 0) {
+        window.scrollTo(0, offsetTop)
+      }
+    }
+  }, [graphData])
 
   return (
     <>
@@ -124,15 +125,8 @@ export default function HomePage() {
                   </button>
                   <ThemeSelector
                     onChange={(theme) => {
-                      if (graphRef.current) {
-                        splitbee.track('Change theme', { themeName: theme.name })
-
-                        graphRef.current.style.setProperty('--graph-text-color', theme.textColor)
-                        graphRef.current.style.setProperty('--graph-bg', theme.background)
-                        theme.levelColors.forEach((color, i) => {
-                          graphRef.current!.style.setProperty(`--level-${i}`, color)
-                        })
-                      }
+                      splitbee.track('Change theme', { themeName: theme.name })
+                      applyTheme(theme.name)
                     }}
                   />
                 </div>
