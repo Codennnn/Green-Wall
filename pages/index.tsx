@@ -1,17 +1,19 @@
 import splitbee from '@splitbee/web'
-import html2canvas from 'html2canvas'
+import { toPng as toJpeg } from 'html-to-image'
 import Head from 'next/head'
 import { type FormEventHandler, useEffect, useRef, useState } from 'react'
 
 import ContributionsGraph from '../components/ContributionsGraph'
 import ErrorMessage from '../components/ErrorMessage'
 import GenerateButton from '../components/GenerateButton'
+import Switch from '../components/kit/Switch'
 import Layout from '../components/Layout'
 import Loading from '../components/Loading'
+import SettingButton from '../components/SettingButton'
 import ShareButton from '../components/ShareButton'
 import ThemeSelector from '../components/ThemeSelector'
 import mockData from '../mock-data'
-import type { ErrorData, GraphData } from '../types'
+import type { ErrorData, GraphData, Theme } from '../types'
 
 export default function HomePage() {
   const graphRef = useRef<HTMLDivElement>(null)
@@ -23,8 +25,8 @@ export default function HomePage() {
   }, [])
 
   const [username, setUsername] = useState('')
-  const [graphData, setGraphData] = useState<GraphData>()
-  const [theme, setTheme] = useState<string>()
+  const [graphData, setGraphData] = useState<GraphData>(mockData)
+  const [theme, setTheme] = useState<Theme>()
 
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<ErrorData>()
@@ -32,14 +34,11 @@ export default function HomePage() {
   const handleDownload = async () => {
     if (graphRef.current && graphData) {
       splitbee.track('Click Download')
-      const canvas = await html2canvas(graphRef.current, {
-        backgroundColor: null,
-      })
-      const dataURL = canvas.toDataURL()
 
+      const dataURL = await toJpeg(graphRef.current)
       const trigger = document.createElement('a')
       trigger.href = dataURL
-      trigger.download = `${graphData.username}.png`
+      trigger.download = `${graphData.username}`
       trigger.click()
     }
   }
@@ -102,7 +101,7 @@ export default function HomePage() {
             <input
               ref={inputRef}
               required
-              className="inline-block h-[2.8rem] overflow-hidden rounded-lg bg-main-100 px-5 text-center text-lg font-medium text-main-800 text-opacity-80 caret-main-500 shadow-main-300 outline-none transition-all duration-300 placeholder:select-none placeholder:font-normal placeholder:text-main-400 focus:bg-white focus:shadow-[0_0_1.5rem_var(--tw-shadow-color)]"
+              className="inline-block h-[2.8rem] overflow-hidden rounded-lg bg-main-100 px-5 text-center text-lg font-medium text-main-800/80 caret-main-500 shadow-main-300 outline-none transition-all duration-300 placeholder:select-none placeholder:font-normal placeholder:text-main-400 focus:bg-white focus:shadow-[0_0_1.5rem_var(--tw-shadow-color)]"
               name="username"
               placeholder="GitHub Username"
               type="text"
@@ -119,24 +118,45 @@ export default function HomePage() {
           <Loading active={loading}>
             {graphData && (
               <>
-                <div ref={actionRef} className="flex items-center justify-center gap-x-6 py-5">
-                  <ShareButton theme={theme} username={username} />
+                <div
+                  ref={actionRef}
+                  className="flex flex-row-reverse flex-wrap items-center justify-center gap-x-6 gap-y-4 py-5"
+                >
                   <button
                     className="inline-flex h-full items-center rounded-md bg-main-200 py-2 px-4 font-medium text-main-500 focus:outline-none disabled:cursor-default"
                     onClick={handleDownload}
                   >
                     Save as Image
                   </button>
-                  <ThemeSelector
-                    onChange={(theme) => {
-                      splitbee.track('Change theme', { themeName: theme.name })
-                      setTheme(theme.name)
-                    }}
-                  />
+                  <div className="flex items-center gap-x-6">
+                    <ShareButton theme={theme?.name} username={graphData.username} />
+                    <SettingButton
+                      content={
+                        <div className="text-main-400">
+                          <div className="flex items-center justify-between py-2">
+                            <label className="" htmlFor="origin">
+                              Origin
+                            </label>
+                            <Switch id="origin" />
+                          </div>
+                          <div>
+                            <label className="mb-2 inline-block font-bold">Theme</label>
+                            <ThemeSelector
+                              value={theme}
+                              onChange={(theme) => {
+                                splitbee.track('Change theme', { themeName: theme.name })
+                                setTheme(theme)
+                              }}
+                            />
+                          </div>
+                        </div>
+                      }
+                    />
+                  </div>
                 </div>
 
                 <div className="flex overflow-x-auto md:justify-center">
-                  <ContributionsGraph ref={graphRef} data={graphData} theme={theme} />
+                  <ContributionsGraph ref={graphRef} data={graphData} theme={theme?.name} />
                 </div>
               </>
             )}

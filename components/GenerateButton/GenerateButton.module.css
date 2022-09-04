@@ -9,7 +9,7 @@
 }
 
 .shadow {
-  @apply bg-main-800 bg-opacity-20;
+  @apply bg-main-800/20;
 
   position: absolute;
   top: 0;

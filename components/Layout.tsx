@@ -10,7 +10,7 @@ export default function Layout(props: { children?: React.ReactNode }) {
         <div className="flex h-header items-center">
           <Link href="/">
             <span className="flex cursor-pointer select-none items-center text-xl font-bold">
-              <span className="w-9 md:w-7">
+              <span className="pointer-events-none w-9 md:w-7">
                 <Image height="100%" layout="responsive" src="/favicon.svg" width="100%" />
               </span>
               <span className="ml-3 hidden md:inline">Green Wall</span>

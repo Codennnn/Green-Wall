@@ -8,7 +8,7 @@ export default function GenerateButton({ loading = false, ...props }: GenerateBu
   return (
     <button
       className={`${styles['pushable']} select-none text-white ${
-        loading ? 'pointer-events-none text-opacity-80' : ''
+        loading ? 'text-white-80 pointer-events-none' : ''
       }`}
       disabled={loading}
       {...props}

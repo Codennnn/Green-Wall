@@ -7,6 +7,7 @@ class Document extends NextDocument {
         <Head>
           <link href="/favicon.svg" rel="icon" type="image/svg+xml" />
           <link
+            crossOrigin="anonymous"
             href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500&display=swap"
             rel="stylesheet"
           />

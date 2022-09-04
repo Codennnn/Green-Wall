@@ -40,7 +40,6 @@ export const iconGitHub = (
 
 export const iconShare = (
   <svg
-    className="h-6 w-6"
     fill="none"
     stroke="currentColor"
     strokeWidth="1.5"
@@ -55,9 +54,8 @@ export const iconShare = (
   </svg>
 )
 
-export const iconCopy = (
+export const iconSetting = (
   <svg
-    className="h-6 w-6"
     fill="none"
     stroke="currentColor"
     strokeWidth="1.5"
@@ -65,7 +63,7 @@ export const iconCopy = (
     xmlns="http://www.w3.org/2000/svg"
   >
     <path
-      d="M15.666 3.888A2.25 2.25 0 0013.5 2.25h-3c-1.03 0-1.9.693-2.166 1.638m7.332 0c.055.194.084.4.084.612v0a.75.75 0 01-.75.75H9a.75.75 0 01-.75-.75v0c0-.212.03-.418.084-.612m7.332 0c.646.049 1.288.11 1.927.184 1.1.128 1.907 1.077 1.907 2.185V19.5a2.25 2.25 0 01-2.25 2.25H6.75A2.25 2.25 0 014.5 19.5V6.257c0-1.108.806-2.057 1.907-2.185a48.208 48.208 0 011.927-.184"
+      d="M4.5 12a7.5 7.5 0 0015 0m-15 0a7.5 7.5 0 1115 0m-15 0H3m16.5 0H21m-1.5 0H12m-8.457 3.077l1.41-.513m14.095-5.13l1.41-.513M5.106 17.785l1.15-.964m11.49-9.642l1.149-.964M7.501 19.795l.75-1.3m7.5-12.99l.75-1.3m-6.063 16.658l.26-1.477m2.605-14.772l.26-1.477m0 17.726l-.26-1.477M10.698 4.614l-.26-1.477M16.5 19.794l-.75-1.299M7.5 4.205L12 12m6.894 5.785l-1.149-.964M6.256 7.178l-1.15-.964m15.352 8.864l-1.41-.513M4.954 9.435l-1.41-.514M12.002 12l-3.75 6.495"
       strokeLinecap="round"
       strokeLinejoin="round"
     />

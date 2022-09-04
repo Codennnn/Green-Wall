@@ -16,22 +16,24 @@
   },
   "dependencies": {
     "@floating-ui/react-dom-interactions": "^0.9.3",
+    "@radix-ui/react-switch": "^1.0.0",
     "@splitbee/web": "^0.3.0",
     "cheerio": "^1.0.0-rc.12",
     "classnames": "^2.3.1",
-    "html2canvas": "^1.4.1",
+    "html-to-image": "^1.10.8",
     "next": "12.2.5",
     "nextjs-cors": "^2.1.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "react-merge-refs": "^2.0.1"
+    "react-merge-refs": "^2.0.1",
+    "tailwindcss-radix": "^2.5.0"
   },
   "devDependencies": {
     "@tailwindcss/line-clamp": "^0.4.0",
     "@types/node": "18.7.13",
     "@types/react": "18.0.17",
     "autoprefixer": "^10.4.8",
-    "eslint-plugin-tailwindcss": "^3.6.0",
+    "eslint-plugin-tailwindcss": "^3.6.1",
     "postcss": "^8.4.16",
     "prefer-code-style": "0.6.2",
     "tailwindcss": "^3.1.8",

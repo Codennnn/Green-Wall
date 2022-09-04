@@ -61,7 +61,7 @@ const UserSharePage: NextPageWithLayout = ({ username, theme }: Props) => {
   return null
 }
 
-UserSharePage.getInitialProps = async ({ query }) => {
+UserSharePage.getInitialProps = ({ query }) => {
   const username = query.username as string
   const theme =
     typeof query.theme === 'string'

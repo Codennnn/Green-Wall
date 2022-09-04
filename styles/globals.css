@@ -2,6 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer components {
+  .text-button {
+    @apply relative flex items-center gap-x-1 text-sm text-main-400 hover:text-main-500 transition-colors duration-300;
+  }
+
+  .text-button.divider::after {
+    @apply content-[''] h-4 w-[1px] absolute top-1/2 -right-3 -translate-y-1/2 bg-main-300;
+  }
+}
+
 :root {
   --header-height: 65px;
   --min-content-width: 300px;
@@ -11,7 +21,7 @@
 }
 
 ::selection {
-  @apply bg-accent-500 bg-opacity-20 text-current;
+  @apply bg-accent-500/20 text-current;
 }
 
 html {

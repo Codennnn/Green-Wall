@@ -1,7 +1,7 @@
 import { useState } from 'react'
 
 import type { Theme } from '../types'
-import { iconCopy, iconShare } from './icons'
+import { iconShare } from './icons'
 import Popover from './Popover'
 
 interface ShareButtonProps {
@@ -11,7 +11,7 @@ interface ShareButtonProps {
 
 export default function ShareButton({ username, theme }: ShareButtonProps) {
   const [shareUrl, setShareUrl] = useState<string>()
-  const [copying, setCopying] = useState(false)
+  const [copied, setCopied] = useState(false)
 
   return (
     <Popover
@@ -22,18 +22,17 @@ export default function ShareButton({ username, theme }: ShareButtonProps) {
             <button
               className="inline-block h-full min-w-[3.5rem] rounded bg-accent-100 py-2 px-1 text-accent-600"
               onClick={() => {
-                if (shareUrl && !copying) {
-                  setCopying(() => {
+                if (shareUrl && !copied) {
+                  navigator.clipboard.writeText(shareUrl).then(() => {
+                    setCopied(true)
                     setTimeout(() => {
-                      setCopying(false)
+                      setCopied(false)
                     }, 1500)
-                    return true
                   })
-                  navigator.clipboard.writeText(shareUrl)
                 }
               }}
             >
-              {copying ? 'Copied' : 'Copy'}
+              {copied ? 'Copied' : 'Copy'}
             </button>
           </div>
         </div>
@@ -41,7 +40,7 @@ export default function ShareButton({ username, theme }: ShareButtonProps) {
       offset={15}
     >
       <button
-        className="flex items-center font-medium text-main-400 hover:text-main-500"
+        className="text-button divider"
         onClick={() => {
           const url = new URL(
             `${window.location.protocol}//${window.location.host}/share/${username}`
@@ -52,8 +51,8 @@ export default function ShareButton({ username, theme }: ShareButtonProps) {
           setShareUrl(url.toString())
         }}
       >
-        {iconShare}
-        <span className="ml-1">Share it</span>
+        <span className="h-5 w-5">{iconShare}</span>
+        <span>Share it</span>
       </button>
     </Popover>
   )
