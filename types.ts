@@ -42,3 +42,10 @@ export interface GraphData {
   username: RemoteData['username']
   data: RemoteData[]
 }
+
+export type GraphSize = 'normal' | 'medium' | 'large'
+
+export interface GraphSettings {
+  size?: GraphSize
+  showOrigin?: boolean
+}

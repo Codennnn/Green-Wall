@@ -17,13 +17,13 @@ export default function ShareButton({ username, theme }: ShareButtonProps) {
   return (
     <Popover
       content={
-        <div className="max-w-[90vw] rounded-md border-2 border-solid border-main-200 bg-white py-3 px-4 md:max-w-[50vw]">
+        <div className="max-w-[90vw] rounded-md border-2 border-solid border-main-200 bg-white py-3 px-4 md:max-w-[50vw,500px]">
           <div className="mb-2 font-bold text-main-500">Share your graph</div>
           {shareUrl && (
-            <div className="flex flex-wrap items-center justify-end gap-y-2 gap-x-3 text-xs text-main-500">
+            <div className="flex h-8 flex-wrap items-center justify-end gap-2 text-xs text-main-500">
               <Link passHref href={shareUrl}>
                 <a
-                  className="flex flex-1 cursor-pointer items-center rounded bg-main-100 p-2"
+                  className="flex h-full flex-1 cursor-pointer items-center rounded bg-main-100/80 px-3"
                   target="_blank"
                   title="preview"
                 >
@@ -31,7 +31,7 @@ export default function ShareButton({ username, theme }: ShareButtonProps) {
                 </a>
               </Link>
               <button
-                className="inline-block h-full min-w-[3.5rem] rounded bg-accent-100 py-2 px-1 text-accent-600"
+                className="inline-block h-full min-w-[3.5rem] rounded bg-accent-100 px-1 text-accent-600"
                 onClick={() => {
                   if (!copied) {
                     navigator.clipboard.writeText(shareUrl).then(() => {

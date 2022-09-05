@@ -1,8 +1,6 @@
 import * as SwitchPrimitive from '@radix-ui/react-switch'
 
-interface SwitchProps {
-  id?: string
-}
+type SwitchProps = SwitchPrimitive.SwitchProps
 
 export default function Switch(props: SwitchProps) {
   return (
@@ -13,7 +11,7 @@ export default function Switch(props: SwitchProps) {
       shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out
       radix-state-checked:bg-accent-400 radix-state-unchecked:bg-main-200
       `}
-      id={props.id}
+      {...props}
     >
       <SwitchPrimitive.Thumb
         className={`

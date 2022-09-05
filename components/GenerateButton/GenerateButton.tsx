@@ -1,6 +1,6 @@
 import styles from './GenerateButton.module.css'
 
-interface GenerateButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+interface GenerateButtonProps extends React.ComponentProps<'button'> {
   loading?: boolean
 }
 
@@ -15,7 +15,9 @@ export default function GenerateButton({ loading = false, ...props }: GenerateBu
     >
       <span className={`${styles['shadow']}`} />
       <span className={`${styles['edge']}`} />
-      <span className={`${styles['front']} min-w-[max(30vw,200px)] md:min-w-[120px]`}>
+      <span
+        className={`${styles['front']} min-w-[max(30vw,200px)] text-center text-lg font-medium md:min-w-[120px] md:text-base`}
+      >
         {loading ? 'Generating...' : 'Generate'}
       </span>
     </button>
