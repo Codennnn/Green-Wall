@@ -29,11 +29,11 @@ export default function Select(props: SelectProps) {
             {items?.map((it) => (
               <SelectPrimitive.Item
                 key={it.value}
-                className={`
+                className="
                 relative flex select-none items-center rounded-md px-8 py-2 text-sm font-medium text-main-600
                 focus:bg-main-100 focus:outline-none
                 radix-disabled:opacity-50
-                `}
+                "
                 disabled={it.disabled}
                 value={it.value}
               >

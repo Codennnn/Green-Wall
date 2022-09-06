@@ -1,4 +1,4 @@
-export default {
+const data = {
   username: 'V21XY',
   data: [
     {
@@ -4122,3 +4122,5 @@ export default {
     },
   ],
 }
+
+export default data as any

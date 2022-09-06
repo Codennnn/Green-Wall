@@ -3,7 +3,7 @@ import { useState } from 'react'
 
 import type { Theme } from '../types'
 import { iconShare } from './icons'
-import Popover from './Popover'
+import Popover from './kit/Popover'
 
 interface ShareButtonProps {
   username?: string
@@ -17,13 +17,12 @@ export default function ShareButton({ username, theme }: ShareButtonProps) {
   return (
     <Popover
       content={
-        <div className="max-w-[90vw] rounded-md border-2 border-solid border-main-200 bg-white py-3 px-4 md:max-w-[50vw,500px]">
-          <div className="mb-2 font-bold text-main-500">Share your graph</div>
+        <div className="max-w-[90vw] rounded-md pt-5 md:max-w-[min(40vw,400px)]">
           {shareUrl && (
             <div className="flex h-8 flex-wrap items-center justify-end gap-2 text-xs text-main-500">
               <Link passHref href={shareUrl}>
                 <a
-                  className="flex h-full flex-1 cursor-pointer items-center rounded bg-main-100/80 px-3"
+                  className="flex h-full flex-1 cursor-pointer items-center break-all rounded bg-main-100/80 py-1 px-3 transition-colors duration-200 hover:bg-main-200/80"
                   target="_blank"
                   title="preview"
                 >
@@ -49,7 +48,7 @@ export default function ShareButton({ username, theme }: ShareButtonProps) {
           )}
         </div>
       }
-      offset={15}
+      title="Share Your Graph"
     >
       <button
         className="text-button divider"

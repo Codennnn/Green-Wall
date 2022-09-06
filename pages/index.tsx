@@ -26,18 +26,20 @@ export default function HomePage() {
   }, [])
 
   const [username, setUsername] = useState('')
-  const [graphData, setGraphData] = useState<GraphData>()
   const [theme, setTheme] = useState<Theme>()
   const [settings, setSettings] = useState<GraphSettings>({ size: 'normal' })
 
   const [downloading, setDownloading] = useState(false)
-  const [loading, setLoading] = useState(false)
+
+  const [graphData, setGraphData] = useState<GraphData | undefined>(mockData)
   const [error, setError] = useState<ErrorData>()
 
   const handleError = (errorData: ErrorData = {}) => {
     setGraphData(undefined)
     setError(errorData)
   }
+
+  const [loading, setLoading] = useState(false)
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault()
@@ -107,8 +109,8 @@ export default function HomePage() {
             { label: 'large', value: 'large' },
           ]}
           value={settings.size}
-          onValueChange={(v) => {
-            setSettings((s) => ({ ...s, size: v as GraphSize }))
+          onValueChange={(size) => {
+            setSettings((s) => ({ ...s, size: size as GraphSize }))
           }}
         />
       </div>
@@ -148,13 +150,13 @@ export default function HomePage() {
           <input
             ref={inputRef}
             required
-            className={`
+            className="
               inline-block h-[2.8rem] overflow-hidden rounded-lg bg-main-100 px-5
               text-center text-lg font-medium text-main-600 caret-main-500 shadow-main-300 outline-none
               transition-all duration-300
               placeholder:select-none placeholder:font-normal placeholder:text-main-400
               focus:bg-white focus:shadow-[0_0_1.5rem_var(--tw-shadow-color)]
-              `}
+            "
             name="username"
             placeholder="GitHub Username"
             type="text"

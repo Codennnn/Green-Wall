@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@floating-ui/react-dom-interactions": "^0.9.3",
+    "@radix-ui/react-popover": "^1.0.0",
     "@radix-ui/react-select": "^1.0.0",
     "@radix-ui/react-switch": "^1.0.0",
     "@splitbee/web": "^0.3.0",
