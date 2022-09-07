@@ -8,7 +8,7 @@ export default function Layout(props: { children?: React.ReactNode }) {
   return (
     <>
       <Head>
-        <title>Green Wall · Review your GitHub contributions</title>
+        <title>Green Wall · GitHub contribution graph generator</title>
       </Head>
 
       <div className="min-h-screen px-5 md:mx-auto md:min-w-content md:max-w-content lg:px-0">

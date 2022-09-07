@@ -1,72 +1,50 @@
-import React, { forwardRef, memo, useEffect, useImperativeHandle, useRef } from 'react'
+import React, { forwardRef, memo, useImperativeHandle, useMemo, useRef } from 'react'
 
-import themes from '../../themes'
-import type { GraphData, GraphSettings, GraphSize, Theme } from '../../types'
+import { DEFAULT_SIZE, DEFAULT_THEME, sizeProperties, themeList } from '../../constants'
+import type { GraphData, GraphSettings } from '../../types'
 import Graph from './Graph'
 import GraphFooter from './GraphFooter'
 import GraphHeader from './GraphHeader'
 
-const variantsMap: Record<
-  GraphSize,
-  {
-    ['--block-size']: string
-    ['--block-round']: string
-    ['--block-gap']: string
-  }
-> = {
-  normal: {
-    ['--block-size']: '10px',
-    ['--block-round']: '2px',
-    ['--block-gap']: '3px',
-  },
-  medium: {
-    ['--block-size']: '11px',
-    ['--block-round']: '3px',
-    ['--block-gap']: '3px',
-  },
-  large: {
-    ['--block-size']: '12px',
-    ['--block-round']: '3px',
-    ['--block-gap']: '4px',
-  },
-}
-
 interface ContributionsGraphProps {
   className?: string
   data: GraphData
-  theme?: Theme['name']
   settings?: GraphSettings
 }
 
 function ContributionsGraph(props: ContributionsGraphProps, ref: React.Ref<HTMLDivElement | null>) {
-  const { className = '', data, theme, settings } = props
+  const { className = '', data, settings } = props
 
   const graphRef = useRef<HTMLDivElement>(null)
 
   useImperativeHandle(ref, () => graphRef.current)
 
-  useEffect(() => {
-    if (theme) {
-      const applyedTheme = themes.find((item) => item.name.toLowerCase() === theme.toLowerCase())
+  const applyedTheme = useMemo(
+    () =>
+      themeList.find(
+        (item) => item.name.toLowerCase() === (settings?.theme || DEFAULT_THEME).toLowerCase()
+      )!,
+    [settings?.theme]
+  )
 
-      if (graphRef.current && applyedTheme) {
-        graphRef.current.style.setProperty('--graph-text-color', applyedTheme.textColor)
-        graphRef.current.style.setProperty('--graph-bg', applyedTheme.background)
-        applyedTheme.levelColors.forEach((color, i) => {
-          graphRef.current!.style.setProperty(`--level-${i}`, color)
-        })
-      }
-    }
-  }, [theme])
+  const themeProperties = {
+    '--graph-text-color': applyedTheme.textColor,
+    '--graph-bg': applyedTheme.background,
+    '--level-0': applyedTheme.levelColors[0],
+    '--level-1': applyedTheme.levelColors[1],
+    '--level-2': applyedTheme.levelColors[2],
+    '--level-3': applyedTheme.levelColors[3],
+    '--level-4': applyedTheme.levelColors[4],
+  }
 
-  const variants = variantsMap[settings?.size || 'normal']
+  const styleProperties = { ...themeProperties, ...sizeProperties[settings?.size || DEFAULT_SIZE] }
 
   return (
     <div
       ref={graphRef}
       className={`p-5 ${className}`}
       style={{
-        ...variants,
+        ...styleProperties,
         color: 'var(--graph-text-color, #24292f)',
         backgroundColor: 'var(--graph-bg, #fff)',
       }}

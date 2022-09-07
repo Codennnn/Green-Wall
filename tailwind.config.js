@@ -21,6 +21,9 @@ module.exports = {
       padding: {
         header: 'var(--header-height)',
       },
+      boxShadow: {
+        overlay: 'rgb(14 18 22 / 0.2) 0 6px 38px -10px, rgb(14 18 22 / 0.3) 0 8px 20px -15px',
+      },
     },
   },
 

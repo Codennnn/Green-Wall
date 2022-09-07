@@ -4,18 +4,18 @@ import { useEffect, useState } from 'react'
 
 import ContributionsGraph from '../../components/ContributionsGraph'
 import Layout from '../../components/Layout'
-import type { ErrorData, GraphData, Theme } from '../../types'
+import type { ErrorData, GraphData, GraphSettings, GraphSize, Themes } from '../../types'
 
 interface Props {
   username: string
-  theme?: Theme['name']
+  settings: GraphSettings
 }
 
 type NextPageWithLayout = NextPage<Props> & {
   getLayout?: (page: React.ReactElement) => React.ReactNode
 }
 
-const UserSharePage: NextPageWithLayout = ({ username, theme }: Props) => {
+const UserSharePage: NextPageWithLayout = ({ username, settings }: Props) => {
   const [graphData, setGraphData] = useState<GraphData>()
   const [loading, setLoading] = useState(true)
 
@@ -53,7 +53,11 @@ const UserSharePage: NextPageWithLayout = ({ username, theme }: Props) => {
   if (graphData) {
     return (
       <div className="flex w-full overflow-x-auto py-8 md:justify-center md:py-14">
-        <ContributionsGraph className="shadow-2xl shadow-main-200" data={graphData} theme={theme} />
+        <ContributionsGraph
+          className="shadow-2xl shadow-main-200"
+          data={graphData}
+          settings={settings}
+        />
       </div>
     )
   }
@@ -63,14 +67,11 @@ const UserSharePage: NextPageWithLayout = ({ username, theme }: Props) => {
 
 UserSharePage.getInitialProps = ({ query }) => {
   const username = query.username as string
-  const theme =
-    typeof query.theme === 'string'
-      ? query.theme
-      : Array.isArray(query.theme) && query.theme.length > 0
-      ? query.theme[0]
-      : undefined
 
-  return { username, theme }
+  const size = typeof query.size === 'string' ? (query.size as GraphSize) : undefined
+  const theme = typeof query.theme === 'string' ? (query.theme as Themes) : undefined
+
+  return { username, settings: { size, theme } }
 }
 
 UserSharePage.getLayout = (page: React.ReactElement) => {

@@ -1,5 +1,7 @@
+export type Themes = 'GitHub' | 'Halloween' | 'GitLab' | 'GitHubDark' | 'Dracula'
+
 export interface Theme {
-  name: string
+  name: Themes
   textColor: string
   levelColors: [
     string, // level 0
@@ -48,4 +50,5 @@ export type GraphSize = 'normal' | 'medium' | 'large'
 export interface GraphSettings {
   size?: GraphSize
   showOrigin?: boolean
+  theme?: Themes
 }

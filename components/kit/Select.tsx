@@ -1,6 +1,6 @@
 import * as SelectPrimitive from '@radix-ui/react-select'
 
-import { iconCheck, iconChevronDown, iconChevronUp } from '../icons'
+import { iconChevronDown, iconChevronUp } from '../icons'
 import Button from './Button'
 
 type SelectProps = SelectPrimitive.SelectProps & {
@@ -30,17 +30,17 @@ export default function Select(props: SelectProps) {
               <SelectPrimitive.Item
                 key={it.value}
                 className="
-                relative flex select-none items-center rounded-md px-8 py-2 text-sm font-medium text-main-600
-                focus:bg-main-100 focus:outline-none
+                relative flex cursor-pointer select-none items-center rounded-md px-7 py-2 text-sm font-medium
+                text-main-600 focus:bg-main-100/50 focus:outline-none
                 radix-disabled:opacity-50
                 "
                 disabled={it.disabled}
                 value={it.value}
               >
-                <SelectPrimitive.ItemText>{it.label}</SelectPrimitive.ItemText>
-                <SelectPrimitive.ItemIndicator className="absolute left-2 inline-flex h-4 w-4 items-center">
-                  {iconCheck}
+                <SelectPrimitive.ItemIndicator className="absolute inset-0 flex cursor-default items-center justify-center rounded-md bg-main-100">
+                  {it.label}
                 </SelectPrimitive.ItemIndicator>
+                <SelectPrimitive.ItemText>{it.label}</SelectPrimitive.ItemText>
               </SelectPrimitive.Item>
             ))}
           </SelectPrimitive.Group>

@@ -1,7 +1,7 @@
 {
   "name": "green-wall",
   "private": true,
-  "description": "GitHub contributions graph. Review all the contributions you've made to GitHub over the years.",
+  "description": "GitHub contribution graph. Review all the contributions you've made to GitHub over the years.",
   "license": "UNLECENSED",
   "scripts": {
     "build": "next build",
