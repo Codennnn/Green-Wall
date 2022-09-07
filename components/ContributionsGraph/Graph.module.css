@@ -1,8 +1,5 @@
 .graph {
-  --square-size: 10px;
-  --square-round: 2px;
-  --square-gap: 3px;
-  --week-width: calc(var(--square-size) + var(--square-gap));
+  --week-width: calc(var(--block-size) + var(--block-gap));
 
   @apply text-xs gap-1;
 
@@ -42,12 +39,12 @@
 
 .blocks {
   grid-area: blocks;
-  grid-auto-columns: var(--square-size, 10px);
+  grid-auto-columns: var(--block-size, 10px);
   grid-auto-flow: column;
 }
 
 .grids li {
-  border-radius: var(--square-round);
+  border-radius: var(--block-round);
 }
 
 .grids li[data-level='-1'] {
@@ -81,6 +78,6 @@
 .days,
 .blocks {
   display: grid;
-  grid-gap: var(--square-gap);
-  grid-template-rows: repeat(7, var(--square-size));
+  grid-gap: var(--block-gap);
+  grid-template-rows: repeat(7, var(--block-size));
 }

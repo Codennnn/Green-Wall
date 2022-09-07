@@ -39,7 +39,7 @@
 }
 
 .front {
-  @apply bg-accent-500 font-medium text-center;
+  @apply bg-accent-500;
 
   position: relative;
   display: block;
