@@ -13,7 +13,7 @@ class Document extends NextDocument {
           />
           <meta content="light" name="color-scheme" />
 
-          <meta content="gitHub contributions graph,github api" name="keywords" />
+          <meta content="gitHub contribution graph,github api" name="keywords" />
           <meta
             content="Review all the contributions you've made to GitHub over the years."
             name="description"

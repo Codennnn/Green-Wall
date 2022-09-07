@@ -26,8 +26,7 @@
   bottom: 0;
   left: 0;
   min-height: 10rem;
-  background-color: rgb(255 255 255 / 0.8);
-  backdrop-filter: blur(3px);
+  background-color: rgb(255 255 255 / 0.85);
 }
 
 .waterfall div {

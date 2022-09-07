@@ -19,7 +19,7 @@ export default function Popover(props: PopoverProps) {
           align="center"
           className="
           radix-side-top:animate-slide-up radix-side-bottom:animate-slide-down
-          z-50 rounded-lg bg-white p-4 shadow-lg
+          z-50 rounded-lg bg-white p-4 shadow-overlay
           "
           sideOffset={4}
         >

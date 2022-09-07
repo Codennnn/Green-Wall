@@ -2,19 +2,19 @@ import splitbee from '@splitbee/web'
 import { toPng } from 'html-to-image'
 import { type FormEventHandler, useEffect, useRef, useState } from 'react'
 
+import AppearanceSetting from '../components/AppearanceSetting'
 import ContributionsGraph from '../components/ContributionsGraph'
 import ErrorMessage from '../components/ErrorMessage'
 import GenerateButton from '../components/GenerateButton'
 import { iconImage } from '../components/icons'
-import Select from '../components/kit/Select'
-import Switch from '../components/kit/Switch'
 import Layout from '../components/Layout'
 import Loading from '../components/Loading'
 import SettingButton from '../components/SettingButton'
 import ShareButton from '../components/ShareButton'
-import ThemeSelector from '../components/ThemeSelector'
+import TweetButton from '../components/TweetButton'
 import mockData from '../mock-data'
-import type { ErrorData, GraphData, GraphSettings, GraphSize, Theme } from '../types'
+import type { ErrorData, GraphData } from '../types'
+import useSetting from '../useSetting'
 
 export default function HomePage() {
   const graphRef = useRef<HTMLDivElement>(null)
@@ -26,12 +26,11 @@ export default function HomePage() {
   }, [])
 
   const [username, setUsername] = useState('')
-  const [theme, setTheme] = useState<Theme>()
-  const [settings, setSettings] = useState<GraphSettings>({ size: 'normal' })
+  const [settings, dispatch] = useSetting()
 
   const [downloading, setDownloading] = useState(false)
 
-  const [graphData, setGraphData] = useState<GraphData | undefined>(mockData)
+  const [graphData, setGraphData] = useState<GraphData>()
   const [error, setError] = useState<ErrorData>()
 
   const handleError = (errorData: ErrorData = {}) => {
@@ -47,18 +46,15 @@ export default function HomePage() {
     if (username && !loading) {
       splitbee.track('Click Generate')
       try {
-        inputRef.current!.blur()
         setError(undefined)
         setLoading(true)
         const res = await fetch(`/api/${username}`)
-        console.log(res)
         if (res.status >= 400) {
           const error: ErrorData = await res.json()
           console.log(error)
           handleError({ message: error.message })
         } else {
           const data: GraphData = await res.json()
-          console.log(data)
           setGraphData(data)
         }
       } catch (e) {
@@ -97,48 +93,6 @@ export default function HomePage() {
     }
   }, [graphData])
 
-  const configurator = (
-    <div className="text-main-400 md:min-w-[min(30vw,250px)]">
-      <div className="flex items-center justify-between">
-        <label className="mr-5">Size</label>
-        <Select
-          defaultValue="normal"
-          items={[
-            { label: 'normal', value: 'normal' },
-            { label: 'medium', value: 'medium' },
-            { label: 'large', value: 'large' },
-          ]}
-          value={settings.size}
-          onValueChange={(size) => {
-            setSettings((s) => ({ ...s, size: size as GraphSize }))
-          }}
-        />
-      </div>
-      <div className="flex items-center justify-between py-2">
-        <label className="mr-5" htmlFor="origin">
-          Origin
-        </label>
-        <Switch
-          defaultChecked={true}
-          id="origin"
-          onCheckedChange={(checked) => {
-            setSettings((s) => ({ ...s, showOrigin: checked }))
-          }}
-        />
-      </div>
-      <div className="mt-3">
-        <label className="mb-3 inline-block font-bold">Theme</label>
-        <ThemeSelector
-          value={theme}
-          onChange={(theme) => {
-            splitbee.track('Change theme', { themeName: theme.name })
-            setTheme(theme)
-          }}
-        />
-      </div>
-    </div>
-  )
-
   return (
     <div className="py-10 md:py-14">
       <h1 className="text-center text-3xl font-bold md:mx-auto md:px-20 md:text-6xl md:leading-[1.2]">
@@ -157,6 +111,7 @@ export default function HomePage() {
               placeholder:select-none placeholder:font-normal placeholder:text-main-400
               focus:bg-white focus:shadow-[0_0_1.5rem_var(--tw-shadow-color)]
             "
+            disabled={loading}
             name="username"
             placeholder="GitHub Username"
             type="text"
@@ -180,7 +135,7 @@ export default function HomePage() {
                 <button
                   className={`
                   inline-flex h-full items-center rounded-md bg-main-100 py-2 px-4 font-medium text-main-500
-                  focus:outline-none disabled:pointer-events-none
+                  disabled:pointer-events-none
                   ${downloading ? 'animate-bounce' : ''}
                   `}
                   disabled={downloading}
@@ -190,18 +145,16 @@ export default function HomePage() {
                   <span>Save as Image</span>
                 </button>
                 <div className="flex items-center gap-x-6">
-                  <ShareButton theme={theme?.name} username={graphData.username} />
-                  <SettingButton content={configurator} />
+                  <TweetButton />
+                  <ShareButton settings={settings} username={graphData.username} />
+                  <SettingButton
+                    content={<AppearanceSetting value={settings} onChange={dispatch} />}
+                  />
                 </div>
               </div>
 
               <div className="flex overflow-x-auto md:justify-center">
-                <ContributionsGraph
-                  ref={graphRef}
-                  data={graphData}
-                  settings={settings}
-                  theme={theme?.name}
-                />
+                <ContributionsGraph ref={graphRef} data={graphData} settings={settings} />
               </div>
             </>
           )}

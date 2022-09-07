@@ -1,6 +1,6 @@
-import type { Theme } from './types'
+import type { GraphSize, Theme, Themes } from './types'
 
-const themes: Theme[] = [
+export const themeList: Theme[] = [
   {
     name: 'GitHub',
     textColor: '#24292f',
@@ -35,4 +35,30 @@ const themes: Theme[] = [
   },
 ]
 
-export default themes
+export const sizeProperties: Record<
+  GraphSize,
+  {
+    ['--block-size']: string
+    ['--block-round']: string
+    ['--block-gap']: string
+  }
+> = {
+  normal: {
+    ['--block-size']: '10px',
+    ['--block-round']: '2px',
+    ['--block-gap']: '3px',
+  },
+  medium: {
+    ['--block-size']: '11px',
+    ['--block-round']: '3px',
+    ['--block-gap']: '3px',
+  },
+  large: {
+    ['--block-size']: '12px',
+    ['--block-round']: '3px',
+    ['--block-gap']: '4px',
+  },
+}
+
+export const DEFAULT_SIZE: GraphSize = 'normal'
+export const DEFAULT_THEME: Themes = 'GitHub'
