@@ -1,8 +1,8 @@
 {
   "name": "green-wall",
   "private": true,
-  "description": "GitHub contribution graph. Review all the contributions you've made to GitHub over the years.",
-  "license": "UNLECENSED",
+  "description": "GitHub contribution graph generator. Review all the contributions you've made to GitHub over the years.",
+  "license": "MIT",
   "scripts": {
     "build": "next build",
     "deps": "yarn upgrade-interactive --latest",
@@ -21,13 +21,11 @@
     "@radix-ui/react-switch": "^1.0.0",
     "@splitbee/web": "^0.3.0",
     "cheerio": "^1.0.0-rc.12",
-    "classnames": "^2.3.1",
     "html-to-image": "^1.10.8",
     "next": "12.2.5",
     "nextjs-cors": "^2.1.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "react-merge-refs": "^2.0.1",
     "tailwindcss-radix": "^2.5.0"
   },
   "devDependencies": {

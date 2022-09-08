@@ -1,4 +1,4 @@
-import React, { forwardRef, memo, useImperativeHandle, useMemo, useRef } from 'react'
+import { forwardRef, memo, useImperativeHandle, useMemo, useRef } from 'react'
 
 import { DEFAULT_SIZE, DEFAULT_THEME, sizeProperties, themeList } from '../../constants'
 import type { GraphData, GraphSettings } from '../../types'
@@ -37,14 +37,14 @@ function ContributionsGraph(props: ContributionsGraphProps, ref: React.Ref<HTMLD
     '--level-4': applyedTheme.levelColors[4],
   }
 
-  const styleProperties = { ...themeProperties, ...sizeProperties[settings?.size || DEFAULT_SIZE] }
+  const cssProperties = { ...themeProperties, ...sizeProperties[settings?.size || DEFAULT_SIZE] }
 
   return (
     <div
       ref={graphRef}
       className={`p-5 ${className}`}
       style={{
-        ...styleProperties,
+        ...cssProperties,
         color: 'var(--graph-text-color, #24292f)',
         backgroundColor: 'var(--graph-bg, #fff)',
       }}
@@ -52,8 +52,8 @@ function ContributionsGraph(props: ContributionsGraphProps, ref: React.Ref<HTMLD
       <GraphHeader username={data.username} />
 
       <div className="flex flex-col gap-y-6">
-        {data.data?.map((data, i) => (
-          <Graph key={`${i}`} data={data} />
+        {data.data?.map((data) => (
+          <Graph key={data.year} data={data} />
         ))}
       </div>
 

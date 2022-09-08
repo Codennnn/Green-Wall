@@ -18,12 +18,14 @@ export default function ShareButton({ username, settings }: ShareButtonProps) {
   useEffect(() => {
     if (username && settings) {
       const url = new URL(`${window.location.protocol}//${window.location.host}/share/${username}`)
+
       if (settings.size && settings.size !== DEFAULT_SIZE) {
-        url.searchParams.append('size', settings.size)
+        url.searchParams.set('size', settings.size)
       }
       if (settings.theme && settings.theme !== DEFAULT_THEME) {
-        url.searchParams.append('theme', settings.theme)
+        url.searchParams.set('theme', settings.theme)
       }
+
       setShareUrl(url.toString())
     }
   }, [username, settings])

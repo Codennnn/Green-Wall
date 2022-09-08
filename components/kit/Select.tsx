@@ -1,9 +1,9 @@
-import * as SelectPrimitive from '@radix-ui/react-select'
+import * as RdxSelect from '@radix-ui/react-select'
 
 import { iconChevronDown, iconChevronUp } from '../icons'
 import Button from './Button'
 
-type SelectProps = SelectPrimitive.SelectProps & {
+type SelectProps = RdxSelect.SelectProps & {
   items?: { label: string; value: string; disabled?: boolean }[]
 }
 
@@ -11,23 +11,23 @@ export default function Select(props: SelectProps) {
   const { items, ...rest } = props
 
   return (
-    <SelectPrimitive.Root {...rest}>
-      <SelectPrimitive.Trigger asChild>
+    <RdxSelect.Root {...rest}>
+      <RdxSelect.Trigger asChild>
         <Button>
-          <SelectPrimitive.Value />
-          <SelectPrimitive.Icon className="ml-2 h-4 w-4">{iconChevronDown}</SelectPrimitive.Icon>
+          <RdxSelect.Value />
+          <RdxSelect.Icon className="ml-2 h-4 w-4">{iconChevronDown}</RdxSelect.Icon>
         </Button>
-      </SelectPrimitive.Trigger>
+      </RdxSelect.Trigger>
 
-      <SelectPrimitive.Content className="z-50">
-        <SelectPrimitive.ScrollUpButton className="flex items-center justify-center text-main-600">
+      <RdxSelect.Content className="z-50">
+        <RdxSelect.ScrollUpButton className="flex items-center justify-center text-main-600">
           <span className="h-4 w-4">{iconChevronUp}</span>
-        </SelectPrimitive.ScrollUpButton>
+        </RdxSelect.ScrollUpButton>
 
-        <SelectPrimitive.Viewport className="rounded-lg bg-white p-2 shadow-lg">
-          <SelectPrimitive.Group>
+        <RdxSelect.Viewport className="rounded-lg bg-white p-2 shadow-lg">
+          <RdxSelect.Group>
             {items?.map((it) => (
-              <SelectPrimitive.Item
+              <RdxSelect.Item
                 key={it.value}
                 className="
                 relative flex cursor-pointer select-none items-center rounded-md px-7 py-2 text-sm font-medium
@@ -37,19 +37,19 @@ export default function Select(props: SelectProps) {
                 disabled={it.disabled}
                 value={it.value}
               >
-                <SelectPrimitive.ItemIndicator className="absolute inset-0 flex cursor-default items-center justify-center rounded-md bg-main-100">
+                <RdxSelect.ItemIndicator className="absolute inset-0 flex cursor-default items-center justify-center rounded-md bg-main-100">
                   {it.label}
-                </SelectPrimitive.ItemIndicator>
-                <SelectPrimitive.ItemText>{it.label}</SelectPrimitive.ItemText>
-              </SelectPrimitive.Item>
+                </RdxSelect.ItemIndicator>
+                <RdxSelect.ItemText>{it.label}</RdxSelect.ItemText>
+              </RdxSelect.Item>
             ))}
-          </SelectPrimitive.Group>
-        </SelectPrimitive.Viewport>
+          </RdxSelect.Group>
+        </RdxSelect.Viewport>
 
-        <SelectPrimitive.ScrollDownButton className="flex items-center justify-center text-gray-700">
+        <RdxSelect.ScrollDownButton className="flex items-center justify-center text-gray-700">
           <span className="h-4 w-4">{iconChevronDown}</span>
-        </SelectPrimitive.ScrollDownButton>
-      </SelectPrimitive.Content>
-    </SelectPrimitive.Root>
+        </RdxSelect.ScrollDownButton>
+      </RdxSelect.Content>
+    </RdxSelect.Root>
   )
 }

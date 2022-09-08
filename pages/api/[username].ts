@@ -25,11 +25,14 @@ async function fetchDataForYear(username: string, year: string): Promise<RemoteD
 
 export default async function (req: NextApiRequest, res: NextApiResponse) {
   const { username } = req.query
-  await NextCors(req, res, {
-    methods: ['GET'],
-    origin: '*',
-    optionsSuccessStatus: 200,
-  })
+
+  if (process.env.NODE_ENV === 'development') {
+    await NextCors(req, res, {
+      methods: ['GET'],
+      origin: '*',
+      optionsSuccessStatus: 200,
+    })
+  }
 
   if (typeof username === 'string') {
     try {
