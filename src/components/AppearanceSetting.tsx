@@ -17,9 +17,9 @@ export default function AppearanceSetting({
   onChange: Dispatch
 }) {
   return (
-    <div className="text-main-400 md:min-w-[min(30vw,250px)]">
-      <fieldset className="flex items-center justify-between">
-        <label className="mr-5">Size</label>
+    <div className="min-w-[min(50vw,250px)] max-w-[min(90vw,400px)] text-main-400">
+      <fieldset className="fieldset">
+        <label className="mr-5">Graph Size</label>
         <Select
           items={[
             { label: 'normal', value: 'normal' },
@@ -31,9 +31,9 @@ export default function AppearanceSetting({
         />
       </fieldset>
 
-      <fieldset className="flex items-center justify-between py-2">
+      <fieldset className="fieldset">
         <label className="mr-5" htmlFor="origin">
-          Origin
+          Show Origin
         </label>
         <Switch
           defaultChecked={true}

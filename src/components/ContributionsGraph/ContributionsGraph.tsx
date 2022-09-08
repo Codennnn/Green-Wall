@@ -1,6 +1,6 @@
 import { forwardRef, memo, useImperativeHandle, useMemo, useRef } from 'react'
 
-import { DEFAULT_SIZE, DEFAULT_THEME, sizeProperties, themeList } from '../../constants'
+import { DEFAULT_SIZE, DEFAULT_THEME, sizeProperties, THEMES } from '../../constants'
 import type { GraphData, GraphSettings } from '../../types'
 import Graph from './Graph'
 import GraphFooter from './GraphFooter'
@@ -21,7 +21,7 @@ function ContributionsGraph(props: ContributionsGraphProps, ref: React.Ref<HTMLD
 
   const applyedTheme = useMemo(
     () =>
-      themeList.find(
+      THEMES.find(
         (item) => item.name.toLowerCase() === (settings?.theme || DEFAULT_THEME).toLowerCase()
       )!,
     [settings?.theme]

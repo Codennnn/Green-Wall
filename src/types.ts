@@ -1,4 +1,15 @@
-export type Themes = 'GitHub' | 'Halloween' | 'GitLab' | 'GitHubDark' | 'Dracula'
+export type Themes =
+  | 'GitHub'
+  | 'Halloween'
+  | 'GitLab'
+  | 'GitHubDark'
+  | 'Dracula'
+  | 'Slate'
+  | 'Rose'
+  | 'Indigo'
+  | 'Emerald'
+  | 'Sky'
+  | 'Amber'
 
 export interface Theme {
   name: Themes

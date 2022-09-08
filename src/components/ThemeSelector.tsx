@@ -1,4 +1,4 @@
-import { themeList } from '../constants'
+import { THEMES } from '../constants'
 import type { Themes } from '../types'
 
 interface ThemeSelectorProps {
@@ -8,15 +8,15 @@ interface ThemeSelectorProps {
 
 export default function ThemeSelector(props: ThemeSelectorProps) {
   return (
-    <div className="flex gap-3">
-      {themeList.map((theme) => {
+    <div className="flex flex-wrap gap-3">
+      {THEMES.map((theme) => {
         return (
           <div
             key={theme.name}
-            className={`grid h-5 w-5 cursor-pointer grid-cols-2 grid-rows-2 ring transition-shadow duration-200 ${
+            className={`grid h-5 w-5 cursor-pointer grid-cols-2 grid-rows-2 ring-[2px] transition-shadow duration-200 ${
               props.value === theme.name
-                ? 'ring-main-400/60 hover:ring-main-400/60'
-                : 'ring-transparent hover:ring-main-300'
+                ? 'ring-main-400/60 ring-offset-2 hover:ring-main-400/60'
+                : 'ring-transparent hover:ring-4 hover:ring-main-300/80'
             }`}
             title={theme.name}
             onClick={() => props.onChange?.(theme.name)}

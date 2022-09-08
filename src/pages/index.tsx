@@ -47,6 +47,7 @@ export default function HomePage() {
       splitbee.track('Click Generate')
       try {
         setError(undefined)
+        setGraphData(undefined)
         setLoading(true)
         const res = await fetch(`/api/${username}`)
         if (res.status >= 400) {
@@ -144,7 +145,7 @@ export default function HomePage() {
                   <span className="mr-2 h-6 w-6">{iconImage}</span>
                   <span>Save as Image</span>
                 </button>
-                <div className="flex items-center gap-x-6">
+                <div className="flex flex-wrap items-center gap-x-6 md:justify-center">
                   <TweetButton />
                   <ShareButton settings={settings} username={graphData.username} />
                   <SettingButton

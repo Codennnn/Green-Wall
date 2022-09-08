@@ -10,10 +10,13 @@
   .simple-button.divider::after {
     @apply content-[''] h-4 w-[1px] absolute top-1/2 -right-3 -translate-y-1/2 bg-main-300;
   }
+
+  .fieldset {
+    @apply flex items-center justify-between;
+  }
 }
 
 :root {
-  --header-height: 65px;
   --min-content-width: 300px;
   --max-content-width: 960px;
 
