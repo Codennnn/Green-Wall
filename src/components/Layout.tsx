@@ -31,11 +31,13 @@ export default function Layout(props: { children?: React.ReactNode }) {
 
         <footer className="sticky top-[100vh] py-3 text-center text-sm text-main-400/70">
           <Link passHref href="https://leoku.top">
-            <a className="transition-colors duration-200 hover:text-main-500/90">Made by LeoKu.</a>
+            <a className="transition-colors duration-200 hover:text-main-500/90" target="_blank">
+              Made by LeoKu.
+            </a>
           </Link>
           <span className="mx-3 font-medium">·</span>
           <Link passHref href="https://github-contributions.vercel.app">
-            <a className="transition-colors duration-200 hover:text-main-500/90">
+            <a className="transition-colors duration-200 hover:text-main-500/90" target="_blank">
               Inspired by GitHub Contributions Chart Generator.
             </a>
           </Link>
