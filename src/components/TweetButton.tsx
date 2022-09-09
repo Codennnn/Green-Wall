@@ -6,9 +6,9 @@ import { iconTwitter } from './icons'
 export default function TweetButton() {
   return (
     <Link passHref href="https://twitter.com">
-      <a className="" target="_blank">
+      <a target="_blank">
         <button className="simple-button divider" onClick={() => splitbee.track('Tweet')}>
-          <span className="h-5 w-5">{iconTwitter}</span>
+          <span className="h-[1.2rem] w-[1.2rem]">{iconTwitter}</span>
           <span>Tweet it</span>
         </button>
       </a>
