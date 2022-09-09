@@ -1,14 +1,14 @@
-import React, { forwardRef, memo, useImperativeHandle, useMemo, useRef } from 'react'
+import { forwardRef, memo, useImperativeHandle, useMemo, useRef } from 'react'
 
-import { DEFAULT_SIZE, DEFAULT_THEME, sizeProperties, themeList } from '../../constants'
-import type { GraphData, GraphSettings } from '../../types'
+import { DEFAULT_SIZE, DEFAULT_THEME, sizeProperties, THEMES } from '../../constants'
+import type { GraphRemoteData, GraphSettings } from '../../types'
 import Graph from './Graph'
 import GraphFooter from './GraphFooter'
 import GraphHeader from './GraphHeader'
 
 interface ContributionsGraphProps {
   className?: string
-  data: GraphData
+  data: GraphRemoteData
   settings?: GraphSettings
 }
 
@@ -19,32 +19,32 @@ function ContributionsGraph(props: ContributionsGraphProps, ref: React.Ref<HTMLD
 
   useImperativeHandle(ref, () => graphRef.current)
 
-  const applyedTheme = useMemo(
+  const applyingTheme = useMemo(
     () =>
-      themeList.find(
+      THEMES.find(
         (item) => item.name.toLowerCase() === (settings?.theme || DEFAULT_THEME).toLowerCase()
       )!,
     [settings?.theme]
   )
 
   const themeProperties = {
-    '--graph-text-color': applyedTheme.textColor,
-    '--graph-bg': applyedTheme.background,
-    '--level-0': applyedTheme.levelColors[0],
-    '--level-1': applyedTheme.levelColors[1],
-    '--level-2': applyedTheme.levelColors[2],
-    '--level-3': applyedTheme.levelColors[3],
-    '--level-4': applyedTheme.levelColors[4],
+    '--graph-text-color': applyingTheme.textColor,
+    '--graph-bg': applyingTheme.background,
+    '--level-0': applyingTheme.levelColors[0],
+    '--level-1': applyingTheme.levelColors[1],
+    '--level-2': applyingTheme.levelColors[2],
+    '--level-3': applyingTheme.levelColors[3],
+    '--level-4': applyingTheme.levelColors[4],
   }
 
-  const styleProperties = { ...themeProperties, ...sizeProperties[settings?.size || DEFAULT_SIZE] }
+  const cssProperties = { ...themeProperties, ...sizeProperties[settings?.size || DEFAULT_SIZE] }
 
   return (
     <div
       ref={graphRef}
       className={`p-5 ${className}`}
       style={{
-        ...styleProperties,
+        ...cssProperties,
         color: 'var(--graph-text-color, #24292f)',
         backgroundColor: 'var(--graph-bg, #fff)',
       }}
@@ -52,8 +52,8 @@ function ContributionsGraph(props: ContributionsGraphProps, ref: React.Ref<HTMLD
       <GraphHeader username={data.username} />
 
       <div className="flex flex-col gap-y-6">
-        {data.data?.map((data, i) => (
-          <Graph key={`${i}`} data={data} />
+        {data.data?.map((data) => (
+          <Graph key={data.year} data={data} />
         ))}
       </div>
 

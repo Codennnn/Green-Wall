@@ -1,4 +1,15 @@
-export type Themes = 'GitHub' | 'Halloween' | 'GitLab' | 'GitHubDark' | 'Dracula'
+export type Themes =
+  | 'GitHub'
+  | 'Halloween'
+  | 'GitLab'
+  | 'GitHubDark'
+  | 'Dracula'
+  | 'Slate'
+  | 'Rose'
+  | 'Indigo'
+  | 'Emerald'
+  | 'Sky'
+  | 'Amber'
 
 export interface Theme {
   name: Themes
@@ -40,9 +51,14 @@ export interface ErrorData {
   message?: string
 }
 
-export interface GraphData {
+export interface GraphRemoteData {
   username: RemoteData['username']
   data: RemoteData[]
+}
+
+export interface GraphData {
+  total: number
+  contributions: Contribution[]
 }
 
 export type GraphSize = 'normal' | 'medium' | 'large'

@@ -1,9 +1,9 @@
-import * as PopoverPrimitive from '@radix-ui/react-popover'
+import * as RdxPopover from '@radix-ui/react-popover'
 
 import { iconClose } from '../icons'
 
 type PopoverProps = React.PropsWithChildren<
-  PopoverPrimitive.PopoverProps & {
+  RdxPopover.PopoverProps & {
     title?: string
     content?: React.ReactNode
   }
@@ -12,10 +12,10 @@ type PopoverProps = React.PropsWithChildren<
 export default function Popover(props: PopoverProps) {
   return (
     <div className="relative inline-block text-left">
-      <PopoverPrimitive.Root>
-        <PopoverPrimitive.Trigger asChild>{props.children}</PopoverPrimitive.Trigger>
+      <RdxPopover.Root>
+        <RdxPopover.Trigger asChild>{props.children}</RdxPopover.Trigger>
 
-        <PopoverPrimitive.Content
+        <RdxPopover.Content
           align="center"
           className="
           radix-side-top:animate-slide-up radix-side-bottom:animate-slide-down
@@ -23,19 +23,19 @@ export default function Popover(props: PopoverProps) {
           "
           sideOffset={4}
         >
-          <PopoverPrimitive.Arrow className="fill-current text-white" />
+          <RdxPopover.Arrow className="fill-current text-white" />
 
           <h3 className="font-medium text-main-500">{props.title}</h3>
 
           <div>{props.content}</div>
 
-          <PopoverPrimitive.Close className="absolute top-3.5 right-3.5">
+          <RdxPopover.Close className="absolute top-3.5 right-3.5">
             <span className="inline-flex items-center justify-center rounded p-[0.3rem] transition-colors duration-200 hover:bg-main-100/80">
               <span className="h-4 w-4 text-main-500">{iconClose}</span>
             </span>
-          </PopoverPrimitive.Close>
-        </PopoverPrimitive.Content>
-      </PopoverPrimitive.Root>
+          </RdxPopover.Close>
+        </RdxPopover.Content>
+      </RdxPopover.Root>
     </div>
   )
 }

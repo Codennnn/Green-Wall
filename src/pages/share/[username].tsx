@@ -1,10 +1,11 @@
 import type { NextPage } from 'next'
 import Image from 'next/image'
+import Link from 'next/link'
 import { useEffect, useState } from 'react'
 
 import ContributionsGraph from '../../components/ContributionsGraph'
 import Layout from '../../components/Layout'
-import type { ErrorData, GraphData, GraphSettings, GraphSize, Themes } from '../../types'
+import type { ErrorData, GraphRemoteData, GraphSettings, GraphSize, Themes } from '../../types'
 
 interface Props {
   username: string
@@ -16,7 +17,7 @@ type NextPageWithLayout = NextPage<Props> & {
 }
 
 const UserSharePage: NextPageWithLayout = ({ username, settings }: Props) => {
-  const [graphData, setGraphData] = useState<GraphData>()
+  const [graphData, setGraphData] = useState<GraphRemoteData>()
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -28,7 +29,7 @@ const UserSharePage: NextPageWithLayout = ({ username, settings }: Props) => {
           const res = await fetch(`/api/${username}`)
 
           if (res.status < 400) {
-            const data: GraphData = await res.json()
+            const data: GraphRemoteData = await res.json()
             setGraphData(data)
           } else {
             const error: ErrorData = await res.json()
@@ -52,12 +53,23 @@ const UserSharePage: NextPageWithLayout = ({ username, settings }: Props) => {
 
   if (graphData) {
     return (
-      <div className="flex w-full overflow-x-auto py-8 md:justify-center md:py-14">
-        <ContributionsGraph
-          className="shadow-2xl shadow-main-200"
-          data={graphData}
-          settings={settings}
-        />
+      <div className="py-10 md:py-14">
+        <h1 className="text-lg font-medium md:mx-auto md:px-20 md:text-2xl md:leading-[1.2]">
+          Just got my GitHub contribution graph by GreenWall,{' '}
+          <Link href="/">
+            <span className="cursor-pointer bg-gradient-to-br from-accent-500 to-accent-300/60 bg-clip-text text-transparent">
+              generate yours!
+            </span>
+          </Link>
+        </h1>
+
+        <div className="flex w-full overflow-x-auto py-5 md:justify-center md:py-14">
+          <ContributionsGraph
+            className="md:shadow-2xl md:shadow-main-200"
+            data={graphData}
+            settings={settings}
+          />
+        </div>
       </div>
     )
   }
