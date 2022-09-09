@@ -4,7 +4,7 @@
 
 @layer components {
   .simple-button {
-    @apply relative py-1 flex items-center gap-x-1 text-sm text-main-400 hover:text-main-500 transition-colors duration-300;
+    @apply relative py-1 flex items-center gap-x-1 text-xs md:text-sm text-main-400 hover:text-main-500 transition-colors duration-300;
   }
 
   .simple-button.divider::after {

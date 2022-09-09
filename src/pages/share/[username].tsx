@@ -45,7 +45,7 @@ const UserSharePage: NextPageWithLayout = ({ username, settings }: Props) => {
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center py-20 text-main-400">
-        <Image priority height={60} src="/mona-loading-default.gif" width={60} />
+        <Image priority alt="loading" height={60} src="/mona-loading-default.gif" width={60} />
         <span className="bg-white py-4 px-3">Loading Contributions...</span>
       </div>
     )
