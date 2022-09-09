@@ -4,7 +4,7 @@ import Link from 'next/link'
 
 import GitHubButton from './GitHubButton'
 
-export default function Layout(props: { children?: React.ReactNode }) {
+export default function Layout(props: React.PropsWithChildren) {
   return (
     <>
       <Head>

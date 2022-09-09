@@ -1,36 +1,27 @@
 import { useMemo } from 'react'
 
-import type { Contribution, RemoteData } from '../../types'
+import { generateInvalidFakeContributions, numberWithCommas } from '../../helpers'
+import type { GraphData, RemoteData } from '../../types'
 import styles from './Graph.module.css'
-
-function numberWithCommas(x: number) {
-  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-}
-
-interface DDD {
-  total: number
-  contributions: Contribution[]
-}
 
 interface GraphProps {
   data: RemoteData
   daysLabel?: boolean
 }
 
-const days = [...Array(7)].map(() => ({ count: 0, level: 0 }))
-
 export default function Graph(props: GraphProps) {
-  const res = useMemo<DDD>(() => {
+  const res = useMemo<GraphData>(() => {
     if (!props.data.contributions || !props.data.min || !props.data.max) {
-      return { total: 0, contributions: [...Array(52)].map(() => ({ week: 0, days })) }
+      return { total: 0, contributions: generateInvalidFakeContributions(props.data.year) }
     }
 
-    return props.data.contributions.reduce<DDD>(
+    return props.data.contributions.reduce<GraphData>(
       (res, item) => {
         res.contributions.push({
           week: item.week,
           days: item.days.map((day) => {
             res.total += day.count
+
             const level =
               day.count >= (props.data.p90 ?? Infinity)
                 ? 4
@@ -41,9 +32,11 @@ export default function Graph(props: GraphProps) {
                 : day.count >= props.data.min
                 ? 1
                 : 0
+
             return { count: day.count, level }
           }),
         })
+
         return res
       },
       { total: 0, contributions: [] }
@@ -86,7 +79,7 @@ export default function Graph(props: GraphProps) {
         )}
 
         <ul className={`${styles['grids']} ${styles['blocks']}`}>
-          {res.contributions.reduce<React.ReactNode[]>((acc, week, i) => {
+          {res.contributions.reduce<React.ReactElement[]>((acc, week, i) => {
             let days = week.days
 
             if (days.length < 7) {
@@ -100,9 +93,11 @@ export default function Graph(props: GraphProps) {
                 days = [...week.days, ...fills]
               }
             }
+
             days.forEach((day, j) => {
               acc.push(<li key={`${i}${j}`} data-level={day.level}></li>)
             })
+
             return acc
           }, [])}
         </ul>

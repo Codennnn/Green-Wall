@@ -2,7 +2,7 @@ import splitbee from '@splitbee/web'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 
-import { DEFAULT_SIZE, DEFAULT_THEME } from '../constants'
+import { DEFAULT_SIZE, DEFAULT_THEME, SITE_HOST } from '../constants'
 import type { GraphSettings } from '../types'
 import { iconShare, iconUpRight } from './icons'
 import Popover from './kit/Popover'
@@ -18,7 +18,7 @@ export default function ShareButton({ username, settings }: ShareButtonProps) {
 
   useEffect(() => {
     if (username && settings) {
-      const url = new URL(`${window.location.protocol}//${window.location.host}/share/${username}`)
+      const url = new URL(`${SITE_HOST.HOST}/share/${username}`)
 
       if (settings.size && settings.size !== DEFAULT_SIZE) {
         url.searchParams.set('size', settings.size)

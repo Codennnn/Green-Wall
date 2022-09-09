@@ -17,9 +17,9 @@ export default function AppearanceSetting({
   onChange: Dispatch
 }) {
   return (
-    <div className="min-w-[min(50vw,250px)] max-w-[min(90vw,400px)] text-main-400">
+    <div className="min-w-[min(50vw,250px)] max-w-[min(90vw,350px)] text-main-400">
       <fieldset className="fieldset">
-        <label className="mr-5">Graph Size</label>
+        <label>Graph Size</label>
         <Select
           items={[
             { label: 'normal', value: 'normal' },
@@ -32,9 +32,7 @@ export default function AppearanceSetting({
       </fieldset>
 
       <fieldset className="fieldset">
-        <label className="mr-5" htmlFor="origin">
-          Show Origin
-        </label>
+        <label htmlFor="origin">Show Origin</label>
         <Switch
           defaultChecked={true}
           id="origin"

@@ -21,6 +21,7 @@
     "@radix-ui/react-switch": "^1.0.0",
     "@splitbee/web": "^0.3.0",
     "cheerio": "^1.0.0-rc.12",
+    "date-fns": "^2.29.2",
     "html-to-image": "^1.10.8",
     "next": "12.2.5",
     "nextjs-cors": "^2.1.1",

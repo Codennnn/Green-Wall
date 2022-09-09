@@ -1,4 +1,22 @@
-import type { GraphSize, Theme, Themes } from './types'
+import type { Contribution, GraphSize, Theme, Themes } from './types'
+
+export const WEEKS_OF_YEAR = 52
+
+export const FAKE_DAYS: Contribution['days'] = [
+  { count: 0, level: 0 },
+  { count: 0, level: 0 },
+  { count: 0, level: 0 },
+  { count: 0, level: 0 },
+  { count: 0, level: 0 },
+  { count: 0, level: 0 },
+  { count: 0, level: 0 },
+]
+
+export const SITE_HOST = {
+  get HOST() {
+    return `${window.location.protocol}//${window.location.host}`
+  },
+}
 
 export const sizeProperties: Record<
   GraphSize,

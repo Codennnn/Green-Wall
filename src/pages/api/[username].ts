@@ -2,7 +2,7 @@ import { load } from 'cheerio'
 import type { NextApiRequest, NextApiResponse } from 'next'
 import NextCors from 'nextjs-cors'
 
-import type { GraphData, RemoteData } from '../../types'
+import type { GraphRemoteData, RemoteData } from '../../types'
 
 async function fetchYears(username: string): Promise<{ text: string }[]> {
   const data = await fetch(`https://github.com/${username}`)
@@ -39,7 +39,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
       const years = await fetchYears(username)
       try {
         const data = await Promise.all(years.map((year) => fetchDataForYear(username, year.text)))
-        const graphData: GraphData = { username: data[0].username, data }
+        const graphData: GraphRemoteData = { username: data[0].username, data }
         res.status(200).json(graphData)
       } catch {
         res.status(500).json({ message: 'Something went wrong. Please try again soon.' })

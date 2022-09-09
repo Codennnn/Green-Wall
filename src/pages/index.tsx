@@ -13,7 +13,7 @@ import SettingButton from '../components/SettingButton'
 import ShareButton from '../components/ShareButton'
 import TweetButton from '../components/TweetButton'
 import mockData from '../mock-data'
-import type { ErrorData, GraphData } from '../types'
+import type { ErrorData, GraphRemoteData } from '../types'
 import useSetting from '../useSetting'
 
 export default function HomePage() {
@@ -30,7 +30,7 @@ export default function HomePage() {
 
   const [downloading, setDownloading] = useState(false)
 
-  const [graphData, setGraphData] = useState<GraphData>()
+  const [graphData, setGraphData] = useState<GraphRemoteData>()
   const [error, setError] = useState<ErrorData>()
 
   const handleError = (errorData: ErrorData = {}) => {
@@ -55,7 +55,7 @@ export default function HomePage() {
           console.log(error)
           handleError({ message: error.message })
         } else {
-          const data: GraphData = await res.json()
+          const data: GraphRemoteData = await res.json()
           setGraphData(data)
         }
       } catch (e) {
@@ -75,7 +75,7 @@ export default function HomePage() {
         const dataURL = await toPng(graphRef.current)
         const trigger = document.createElement('a')
         trigger.href = dataURL
-        trigger.download = `${graphData.username}`
+        trigger.download = `${graphData.username}_contributions`
         trigger.click()
       } finally {
         setTimeout(() => {
@@ -118,6 +118,7 @@ export default function HomePage() {
             type="text"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
+            onFocus={() => inputRef.current?.select()}
           />
           <GenerateButton loading={loading} type="submit" />
         </div>
