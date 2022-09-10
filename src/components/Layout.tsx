@@ -25,7 +25,9 @@ export default function Layout(props: React.PropsWithChildren) {
                     width="100%"
                   />
                 </span>
-                <span className="ml-3 hidden md:inline">Green Wall</span>
+                <span className="ml-3 hidden md:inline" translate="no">
+                  Green Wall
+                </span>
               </span>
             </Link>
 
