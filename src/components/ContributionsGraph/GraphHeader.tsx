@@ -18,7 +18,9 @@ export default function GraphHeader(props: { username: GraphRemoteData['username
               />
             </svg>
           </span>
-          <span className="text-xl font-bold group-hover:underline">{props.username}</span>
+          <span className="text-xl font-bold group-hover:underline" translate="no">
+            {props.username}
+          </span>
         </a>
       </Link>
 
