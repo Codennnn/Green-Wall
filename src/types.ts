@@ -26,9 +26,16 @@ export interface Theme {
   mode?: 'light' | 'dark'
 }
 
+type Level = -1 | 0 | 1 | 2 | 3 | 4
+
+export interface ContributionDay {
+  count: number
+  level: Level
+}
+
 export interface Contribution {
   week: number
-  days: { count: number; level: number }[]
+  days: ContributionDay[]
 }
 
 export interface RemoteContribution {

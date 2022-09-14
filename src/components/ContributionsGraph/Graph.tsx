@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 
 import { generateInvalidFakeContributions, numberWithCommas } from '../../helpers'
-import type { GraphData, RemoteData } from '../../types'
+import type { ContributionDay, GraphData, RemoteData } from '../../types'
 import styles from './Graph.module.css'
 
 interface GraphProps {
@@ -23,7 +23,9 @@ export default function Graph(props: GraphProps) {
             res.total += day.count
 
             const level =
-              day.count >= (props.data.p90 ?? Infinity)
+              day.count === props.data.min
+                ? 1
+                : day.count >= (props.data.p90 ?? Infinity)
                 ? 4
                 : day.count >= (props.data.p80 ?? Infinity)
                 ? 3
@@ -83,7 +85,7 @@ export default function Graph(props: GraphProps) {
             let days = week.days
 
             if (days.length < 7) {
-              const fills = Array.from(Array(7 - days.length)).map(() => ({
+              const fills = Array.from(Array(7 - days.length)).map<ContributionDay>(() => ({
                 count: 0,
                 level: -1,
               }))
