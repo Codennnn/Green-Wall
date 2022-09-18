@@ -14,7 +14,10 @@ export const FAKE_DAYS: ContributionDay[] = [
 
 export const SITE_HOST = {
   get HOST() {
-    return `${window.location.protocol}//${window.location.host}`
+    if (typeof window !== 'undefined') {
+      return `${window.location.protocol}//${window.location.host}`
+    }
+    return ''
   },
 }
 
@@ -26,7 +29,7 @@ export const sizeProperties: Record<
     ['--block-gap']: string
   }
 > = {
-  normal: {
+  small: {
     ['--block-size']: '10px',
     ['--block-round']: '2px',
     ['--block-gap']: '3px',
@@ -43,7 +46,7 @@ export const sizeProperties: Record<
   },
 }
 
-export const DEFAULT_SIZE: GraphSize = 'normal'
+export const DEFAULT_SIZE: GraphSize = 'small'
 export const DEFAULT_THEME: Themes = 'GitHub'
 
 export const THEMES: Theme[] = [
