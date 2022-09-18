@@ -2,7 +2,7 @@ import { forwardRef } from 'react'
 
 type ButtonProps = Omit<React.ComponentProps<'button'>, 'className'>
 
-function Button({ children, ...props }: ButtonProps, ref: React.Ref<HTMLButtonElement>) {
+function SelectButton({ children, ...props }: ButtonProps, ref: React.Ref<HTMLButtonElement>) {
   return (
     <button
       ref={ref}
@@ -20,4 +20,4 @@ function Button({ children, ...props }: ButtonProps, ref: React.Ref<HTMLButtonEl
   )
 }
 
-export default forwardRef(Button)
+export default forwardRef(SelectButton)

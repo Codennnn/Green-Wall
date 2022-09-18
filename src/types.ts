@@ -69,7 +69,7 @@ export interface GraphData {
   contributions: Contribution[]
 }
 
-export type GraphSize = 'normal' | 'medium' | 'large'
+export type GraphSize = 'small' | 'medium' | 'large'
 
 export interface GraphSettings {
   size?: GraphSize

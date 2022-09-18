@@ -2,9 +2,9 @@ import splitbee from '@splitbee/web'
 
 import type { GraphSize } from '../types'
 import type useSetting from '../useSetting'
-import Select from './kit/Select'
-import Switch from './kit/Switch'
 import ThemeSelector from './ThemeSelector'
+import { RadixSwitch } from './ui-kit/RadixSwitch'
+import { RadixToggleGroup } from './ui-kit/RadixToggleGroup'
 
 type State = ReturnType<typeof useSetting>[0]
 type Dispatch = ReturnType<typeof useSetting>[1]
@@ -20,12 +20,14 @@ export default function AppearanceSetting({
     <div className="min-w-[min(50vw,250px)] max-w-[min(90vw,350px)] text-main-400">
       <fieldset className="fieldset">
         <label>Graph Size</label>
-        <Select
-          items={[
-            { label: 'normal', value: 'normal' },
-            { label: 'medium', value: 'medium' },
-            { label: 'large', value: 'large' },
+        <RadixToggleGroup
+          options={[
+            { label: 'S', value: 'small', tooltip: 'Small' },
+            { label: 'M', value: 'medium', tooltip: 'Medium' },
+            { label: 'L', value: 'large', tooltip: 'Large' },
           ]}
+          size="small"
+          type="single"
           value={settings.size}
           onValueChange={(size) => dispatch({ type: 'size', payload: size as GraphSize })}
         />
@@ -33,7 +35,7 @@ export default function AppearanceSetting({
 
       <fieldset className="fieldset">
         <label htmlFor="origin">Show Origin</label>
-        <Switch
+        <RadixSwitch
           defaultChecked={true}
           id="origin"
           onCheckedChange={(checked) => dispatch({ type: 'showOrigin', payload: checked })}

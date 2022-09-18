@@ -1,10 +1,10 @@
-import * as RdxSwitch from '@radix-ui/react-switch'
+import * as Switch from '@radix-ui/react-switch'
 
-type SwitchProps = RdxSwitch.SwitchProps
+type SwitchProps = Switch.SwitchProps
 
-export default function Switch(props: SwitchProps) {
+export function RadixSwitch(props: SwitchProps) {
   return (
-    <RdxSwitch.Root
+    <Switch.Root
       className="
       group relative inline-flex h-5 w-10
       shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out
@@ -12,13 +12,13 @@ export default function Switch(props: SwitchProps) {
       "
       {...props}
     >
-      <RdxSwitch.Thumb
+      <Switch.Thumb
         className="
         pointer-events-none
         inline-block h-4 w-5 rounded-full bg-white transition duration-200 ease-in-out
         group-radix-state-checked:translate-x-4 group-radix-state-unchecked:translate-x-0
         "
       />
-    </RdxSwitch.Root>
+    </Switch.Root>
   )
 }

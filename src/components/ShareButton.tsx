@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react'
 import { DEFAULT_SIZE, DEFAULT_THEME, SITE_HOST } from '../constants'
 import type { GraphSettings } from '../types'
 import { iconShare, iconUpRight } from './icons'
-import Popover from './kit/Popover'
+import { RadixPopover } from './ui-kit/RadixPopover'
 
 interface ShareButtonProps {
   username?: string
@@ -32,9 +32,9 @@ export default function ShareButton({ username, settings }: ShareButtonProps) {
   }, [username, settings])
 
   return (
-    <Popover
+    <RadixPopover
       content={
-        <div className="max-w-[90vw] rounded-md pt-5 md:max-w-[min(40vw,300px)]">
+        <div className="max-w-[90vw] rounded-md pt-2 md:max-w-[min(40vw,300px)]">
           {shareUrl && (
             <div className="overflow-hidden rounded bg-main-100/80 p-3 text-xs text-main-500">
               <div className="break-all">{shareUrl}</div>
@@ -78,6 +78,6 @@ export default function ShareButton({ username, settings }: ShareButtonProps) {
         <span className="h-5 w-5">{iconShare}</span>
         <span>Share it</span>
       </button>
-    </Popover>
+    </RadixPopover>
   )
 }

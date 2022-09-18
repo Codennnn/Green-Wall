@@ -20,7 +20,7 @@ interface PopoverProps {
   offset?: Parameters<typeof offset>[0]
 }
 
-export default function Popover({
+export default function FloatingPopover({
   children,
   content,
   placement,
