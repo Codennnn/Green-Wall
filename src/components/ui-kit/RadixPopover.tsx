@@ -27,7 +27,7 @@ export function RadixPopover(props: React.PropsWithChildren<PopoverProps>) {
 
           <div className="mb-2">
             <h3 className="min-h-[24px] font-medium text-main-500">{title}</h3>
-            <Popover.Close className="absolute top-3.5 right-3.5">
+            <Popover.Close aria-label="Close" className="absolute top-3.5 right-3.5" title="Close">
               <span className="inline-flex items-center justify-center rounded p-[0.3rem] transition-colors duration-200 hover:bg-main-100/80">
                 <span className="h-4 w-4 text-main-500">{iconClose}</span>
               </span>
