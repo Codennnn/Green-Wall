@@ -12,11 +12,18 @@
   }
 
   .fieldset {
-    @apply flex items-center justify-between py-1 min-h-[30px];
+    @apply min-h-[30px] flex items-center justify-between py-1;
   }
 
   .fieldset > label {
     @apply mr-5 text-sm font-medium;
+  }
+
+  .bg-decoration {
+    background: linear-gradient(180deg, rgb(255 255 255 / 0) 18em, #fff 30em),
+      url('/grid-cell.svg') 0 0 repeat;
+    background-size: 100% 100%, 40px 40px;
+    background-attachment: scroll, scroll;
   }
 }
 
@@ -39,8 +46,4 @@ body {
   @apply text-main-700 bg-white;
 
   font-family: Rubik, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
-  background: linear-gradient(180deg, rgb(255 255 255 / 0) 18em, #fff 30em),
-    url('/grid-cell.svg') 0 0 repeat;
-  background-size: 100% 100%, 40px 40px;
-  background-attachment: scroll, scroll;
 }

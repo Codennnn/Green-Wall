@@ -1,10 +1,24 @@
 import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
+import { useEffect } from 'react'
 
 import GitHubButton from './GitHubButton'
 
 export default function Layout(props: React.PropsWithChildren) {
+  const router = useRouter()
+
+  useEffect(() => {
+    if (router.route === '/' || router.route.startsWith('/share')) {
+      window.document.body.classList.add('bg-decoration')
+
+      return () => {
+        window.document.body.classList.remove('bg-decoration')
+      }
+    }
+  }, [router.route])
+
   return (
     <>
       <Head>
