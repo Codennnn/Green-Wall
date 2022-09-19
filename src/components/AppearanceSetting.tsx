@@ -17,7 +17,7 @@ export default function AppearanceSetting({
   onChange: Dispatch
 }) {
   return (
-    <div className="min-w-[min(50vw,250px)] max-w-[min(90vw,350px)] text-main-400">
+    <div className="min-w-[min(40vw,100px)] max-w-[min(90vw,250px)] text-main-400">
       <fieldset className="fieldset">
         <label>Graph Size</label>
         <RadixToggleGroup
