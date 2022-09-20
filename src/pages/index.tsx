@@ -2,7 +2,7 @@ import splitbee from '@splitbee/web'
 import { toPng } from 'html-to-image'
 import { type FormEventHandler, useEffect, useRef, useState } from 'react'
 
-import AppearanceSetting from '../components/AppearanceSetting'
+import { AppearanceSetting, DraggableAppearanceSetting } from '../components/AppearanceSetting'
 import ContributionsGraph from '../components/ContributionsGraph'
 import ErrorMessage from '../components/ErrorMessage'
 import GenerateButton from '../components/GenerateButton'
@@ -27,6 +27,7 @@ export default function HomePage() {
 
   const [username, setUsername] = useState('')
   const [settings, dispatch] = useSetting()
+  const [settingPopUp, setSettingPopUp] = useState(false)
 
   const [downloading, setDownloading] = useState(false)
 
@@ -149,9 +150,28 @@ export default function HomePage() {
                 <div className="flex flex-wrap items-center gap-x-6 md:justify-center">
                   <TweetButton />
                   <ShareButton settings={settings} username={graphData.username} />
-                  <SettingButton
-                    content={<AppearanceSetting value={settings} onChange={dispatch} />}
-                  />
+                  <div className="relative">
+                    <SettingButton
+                      content={<AppearanceSetting value={settings} onChange={dispatch} />}
+                      onClick={() => {
+                        if (settingPopUp) {
+                          setSettingPopUp(false)
+                        }
+                      }}
+                      onPopOut={() => {
+                        setSettingPopUp(true)
+                      }}
+                    />
+                    {settingPopUp && (
+                      <DraggableAppearanceSetting
+                        value={settings}
+                        onChange={dispatch}
+                        onClose={() => {
+                          setSettingPopUp(false)
+                        }}
+                      />
+                    )}
+                  </div>
                 </div>
               </div>
 

@@ -12,15 +12,6 @@ export const FAKE_DAYS: ContributionDay[] = [
   { count: 0, level: 0 },
 ]
 
-export const SITE_HOST = {
-  get HOST() {
-    if (typeof window !== 'undefined') {
-      return `${window.location.protocol}//${window.location.host}`
-    }
-    return ''
-  },
-}
-
 export const sizeProperties: Record<
   GraphSize,
   {
@@ -101,35 +92,35 @@ export const THEMES: Theme[] = [
     name: 'Rose',
     textColor: '#881337',
     levelColors: ['#ffe4e6', '#fecdd3', '#fda4af', '#fb7185', '#f43f5e'],
-    background: '#fff1f2',
+    background: '#fff1f288',
     mode: 'light',
   },
   {
     name: 'Indigo',
     textColor: '#312e81',
     levelColors: ['#e0e7ff', '#c7d2fe', '#a5b4fc', '#818cf8', '#6366f1'],
-    background: '#eef2ff',
+    background: '#eef2ff88',
     mode: 'light',
   },
   {
     name: 'Emerald',
     textColor: '#064e3b',
     levelColors: ['#d1fae5', '#a7f3d0', '#6ee7b7', '#10b981', '#059669'],
-    background: '#ecfdf5',
+    background: '#ecfdf588',
     mode: 'light',
   },
   {
     name: 'Sky',
     textColor: '#0c4a6e',
     levelColors: ['#e0f2fe', '#bae6fd', '#7dd3fc', '#38bdf8', '#06b6d4'],
-    background: '#f0f9ff',
+    background: '#f0f9ff88',
     mode: 'light',
   },
   {
     name: 'Amber',
     textColor: '#78350f',
     levelColors: ['#fef3c7', '#fde68a', '#fcd34d', '#fbbf24', '#f59e0b'],
-    background: '#fffbeb',
+    background: '#fffbeb88',
     mode: 'light',
   },
 ]

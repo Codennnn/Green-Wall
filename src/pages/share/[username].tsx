@@ -54,11 +54,11 @@ const UserSharePage: NextPageWithLayout = ({ username, settings }: Props) => {
   if (graphData) {
     return (
       <div className="py-10 md:py-14">
-        <h1 className="text-lg font-medium md:mx-auto md:px-20 md:text-2xl md:leading-[1.2]">
-          Just got my GitHub contribution graph by GreenWall,{' '}
+        <h1 className="text-center text-lg font-medium md:mx-auto md:px-20 md:text-3xl md:leading-[1.2]">
+          <div className="mb-2">Just got my GitHub contribution graph by GreenWall.</div>
           <Link href="/">
             <span className="cursor-pointer bg-gradient-to-br from-accent-500 to-accent-300/60 bg-clip-text text-transparent">
-              generate yours!
+              Generate Yours!
             </span>
           </Link>
         </h1>
