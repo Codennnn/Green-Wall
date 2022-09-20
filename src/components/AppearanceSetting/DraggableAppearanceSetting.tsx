@@ -1,5 +1,5 @@
 import { motion, useDragControls } from 'framer-motion'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import { iconClose } from '../icons'
 import AppearanceSetting, { type AppearanceSettingProps } from './AppearanceSetting'
@@ -9,6 +9,10 @@ export default function DraggableAppearanceSetting(
 ) {
   const { onClose, ...appearanceSetting } = props
 
+  const [fixed, setFixed] = useState(false)
+  const [top, setTop] = useState(35)
+  const wrapper = useRef<HTMLDivElement>(null)
+
   const dragControls = useDragControls()
   const [renderClientSide, setRenderClientSide] = useState(false)
 
@@ -16,11 +20,26 @@ export default function DraggableAppearanceSetting(
     setRenderClientSide(true)
   }, [])
 
+  useEffect(() => {
+    // HACK:
+    if (renderClientSide) {
+      setFixed(true)
+      const distanceToTop = wrapper.current?.getBoundingClientRect().top
+      if (typeof distanceToTop === 'number') {
+        setTop(distanceToTop)
+      }
+    }
+  }, [renderClientSide])
+
   return renderClientSide ? (
-    <div className="absolute top-[35px] left-1/2 z-[99] w-[300px] -translate-x-1/2">
+    <div
+      ref={wrapper}
+      className={`${fixed ? 'fixed' : 'absolute'} left-1/2 z-[99] w-[300px] -translate-x-1/2`}
+      style={{ top }}
+    >
       <motion.div
         drag
-        className="inline-block overflow-hidden rounded-lg bg-white shadow-overlay"
+        className="fixed inline-block overflow-hidden rounded-lg bg-white shadow-overlay"
         dragConstraints={{ current: window.document.body }}
         dragControls={dragControls}
         dragListener={false}
