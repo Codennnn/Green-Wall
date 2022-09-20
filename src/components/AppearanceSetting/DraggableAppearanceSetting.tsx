@@ -39,7 +39,7 @@ export default function DraggableAppearanceSetting(
     >
       <motion.div
         drag
-        className="fixed inline-block overflow-hidden rounded-lg bg-white shadow-overlay"
+        className="absolute inline-block overflow-hidden rounded-lg bg-white shadow-overlay"
         dragConstraints={{ current: window.document.body }}
         dragControls={dragControls}
         dragListener={false}
