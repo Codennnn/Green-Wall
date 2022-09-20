@@ -1,23 +1,25 @@
 import splitbee from '@splitbee/web'
 
-import type { GraphSize } from '../types'
-import type useSetting from '../useSetting'
-import ThemeSelector from './ThemeSelector'
-import { RadixSwitch } from './ui-kit/RadixSwitch'
-import { RadixToggleGroup } from './ui-kit/RadixToggleGroup'
+import type { GraphSize } from '../../types'
+import type useSetting from '../../useSetting'
+import ThemeSelector from '../ThemeSelector'
+import { RadixSwitch } from '../ui-kit/RadixSwitch'
+import { RadixToggleGroup } from '../ui-kit/RadixToggleGroup'
 
 type State = ReturnType<typeof useSetting>[0]
 type Dispatch = ReturnType<typeof useSetting>[1]
 
+export interface AppearanceSettingProps {
+  value?: State
+  onChange?: Dispatch
+}
+
 export default function AppearanceSetting({
   value: settings,
   onChange: dispatch,
-}: {
-  value: State
-  onChange: Dispatch
-}) {
+}: AppearanceSettingProps) {
   return (
-    <div className="min-w-[min(40vw,100px)] max-w-[min(90vw,250px)] text-main-400">
+    <div className="min-w-[min(40vw,220px)] max-w-[min(90vw,280px)] text-main-400">
       <fieldset className="fieldset">
         <label>Graph Size</label>
         <RadixToggleGroup
@@ -28,8 +30,8 @@ export default function AppearanceSetting({
           ]}
           size="small"
           type="single"
-          value={settings.size}
-          onValueChange={(size) => dispatch({ type: 'size', payload: size as GraphSize })}
+          value={settings?.size}
+          onValueChange={(size) => dispatch?.({ type: 'size', payload: size as GraphSize })}
         />
       </fieldset>
 
@@ -38,17 +40,17 @@ export default function AppearanceSetting({
         <RadixSwitch
           defaultChecked={true}
           id="origin"
-          onCheckedChange={(checked) => dispatch({ type: 'showOrigin', payload: checked })}
+          onCheckedChange={(checked) => dispatch?.({ type: 'showOrigin', payload: checked })}
         />
       </fieldset>
 
       <fieldset className="mt-3">
         <label className="mb-3 inline-block font-bold">Theme</label>
         <ThemeSelector
-          value={settings.theme}
+          value={settings?.theme}
           onChange={(theme) => {
             splitbee.track('Change theme', { themeName: theme })
-            dispatch({ type: 'theme', payload: theme })
+            dispatch?.({ type: 'theme', payload: theme })
           }}
         />
       </fieldset>

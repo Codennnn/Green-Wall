@@ -33,7 +33,6 @@ export function RadixToggleGroup(props: RadixToggleGroupProps) {
 
   return (
     <ToggleGroup.Root
-      aria-label="Text alignment"
       className="inline-flex rounded bg-white shadow shadow-main-200"
       defaultValue="center"
       {...toggleGroupProps}
@@ -44,7 +43,7 @@ export function RadixToggleGroup(props: RadixToggleGroupProps) {
             key={opt.value}
             className="
             toggle-on:bg-success-300 flex-row-reverse items-center justify-center
-            bg-white text-main-500 hover:bg-main-100/40
+            text-main-500 hover:bg-main-100/40
             focus-visible:z-10 toggle-on:bg-main-100 toggle-on:font-medium toggle-on:text-main-700
             "
             style={{ height: itemSize, width: itemSize, fontSize }}
