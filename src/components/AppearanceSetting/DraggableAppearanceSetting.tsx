@@ -45,10 +45,12 @@ export default function DraggableAppearanceSetting(
         dragListener={false}
         dragMomentum={false}
       >
-        <div
-          className="flex min-h-[35px] cursor-grab select-none items-center bg-accent-50 px-3 text-sm font-medium text-accent-500"
-          onPointerDown={(ev) => {
-            dragControls.start(ev, { snapToCursor: false })
+        <motion.div
+          className="flex min-h-[35px] select-none items-center bg-accent-50 px-3 text-sm font-medium text-accent-500"
+          initial={{ cursor: 'grab' }}
+          whileTap={{ cursor: 'grabbing' }}
+          onPointerDown={(event) => {
+            dragControls.start(event, { snapToCursor: false })
           }}
         >
           Appearance
@@ -59,12 +61,15 @@ export default function DraggableAppearanceSetting(
             onClick={() => {
               onClose?.()
             }}
+            onPointerDown={(event) => {
+              event.stopPropagation()
+            }}
           >
             <span className="inline-flex items-center justify-center rounded p-[0.3rem] transition-colors duration-200 hover:bg-main-100/80">
               <span className="h-4 w-4 text-main-500">{iconClose}</span>
             </span>
           </button>
-        </div>
+        </motion.div>
 
         <div className="p-5">
           <AppearanceSetting {...appearanceSetting} />
