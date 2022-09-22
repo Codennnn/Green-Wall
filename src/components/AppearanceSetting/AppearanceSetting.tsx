@@ -36,7 +36,7 @@ export default function AppearanceSetting({
       </fieldset>
 
       <fieldset className="fieldset">
-        <label htmlFor="origin">Show Origin</label>
+        <label htmlFor="origin">Attribution</label>
         <RadixSwitch
           defaultChecked={true}
           id="origin"
