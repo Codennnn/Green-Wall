@@ -42,7 +42,7 @@ function ContributionsGraph(props: ContributionsGraphProps, ref: React.Ref<HTMLD
   return (
     <div
       ref={graphRef}
-      className={`py-5 md:p-5 ${className}`}
+      className={`-mx-5 p-5 md:mx-0 ${className}`}
       style={{
         ...cssProperties,
         color: 'var(--graph-text-color, #24292f)',

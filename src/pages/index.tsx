@@ -1,6 +1,6 @@
 import splitbee from '@splitbee/web'
 import { toPng } from 'html-to-image'
-import { type FormEventHandler, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import { AppearanceSetting, DraggableAppearanceSetting } from '../components/AppearanceSetting'
 import ContributionsGraph from '../components/ContributionsGraph'
@@ -41,10 +41,10 @@ export default function HomePage() {
 
   const [loading, setLoading] = useState(false)
 
-  const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
+  const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault()
 
-    if (username && !loading) {
+    if (username.trim() && !loading) {
       splitbee.track('Click Generate')
       try {
         setError(undefined)
