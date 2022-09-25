@@ -1,13 +1,13 @@
 import { endOfYear, getDay, startOfYear } from 'date-fns'
 
 import { FAKE_DAYS, WEEKS_OF_YEAR } from './constants'
-import type { Contribution } from './types'
+import type { Contribution, Year } from './types'
 
 export function numberWithCommas(x: number): string {
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
 }
 
-export function generateInvalidFakeContributions(year: string): Contribution[] {
+export function generateInvalidFakeContributions(year: Year): Contribution[] {
   const startWeekDayOfYear = getDay(startOfYear(new Date(year)))
   const endWeekDayOfYear = getDay(endOfYear(new Date(year)))
 

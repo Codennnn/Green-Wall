@@ -1,6 +1,6 @@
 import splitbee from '@splitbee/web'
 import { toPng } from 'html-to-image'
-import { type FormEventHandler, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import { AppearanceSetting, DraggableAppearanceSetting } from '../components/AppearanceSetting'
 import ContributionsGraph from '../components/ContributionsGraph'
@@ -35,16 +35,17 @@ export default function HomePage() {
   const [error, setError] = useState<ErrorData>()
 
   const handleError = (errorData: ErrorData = {}) => {
+    console.log({ errorData })
     setGraphData(undefined)
     setError(errorData)
   }
 
   const [loading, setLoading] = useState(false)
 
-  const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
+  const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault()
 
-    if (username && !loading) {
+    if (username.trim() && !loading) {
       splitbee.track('Click Generate')
       try {
         setError(undefined)
@@ -53,7 +54,6 @@ export default function HomePage() {
         const res = await fetch(`/api/${username}`)
         if (res.status >= 400) {
           const error: ErrorData = await res.json()
-          console.log(error)
           handleError({ message: error.message })
         } else {
           const data: GraphRemoteData = await res.json()

@@ -1,24 +1,43 @@
-import { load } from 'cheerio'
 import type { NextApiRequest, NextApiResponse } from 'next'
 import NextCors from 'nextjs-cors'
 
-import type { GraphRemoteData, RemoteData } from '../../types'
+import type { GraphRemoteData, RemoteData, Year } from '../../types'
 
-async function fetchYears(username: string): Promise<{ text: string }[]> {
-  const data = await fetch(`https://github.com/${username}`)
-  const $ = load(await data.text())
-  const yearsData = $('.js-year-link').get()
+async function fetchYears(username: string): Promise<Year[]> {
+  const res = await fetch('https://api.github.com/graphql', {
+    method: 'post',
+    body: JSON.stringify({
+      query: `
+        {
+          user(login: "${username}") {
+            contributionsCollection {
+              contributionYears
+            }
+          }
+        }
+      `,
+    }),
+    headers: {
+      Authorization: `Bearer ${process.env.GITHUB_ACCESS_TOKEN}`,
+      'content-type': 'application/json',
+    },
+  })
 
-  if (!yearsData || yearsData.length <= 0) {
-    throw new Error('GitHub User Not Found')
+  type Json = {
+    data: { user: { contributionsCollection: { contributionYears: Year[] } } | null }
+    errors?: any[]
+  }
+  const json: Json = await res.json()
+
+  if (!json.data.user) {
+    throw new Error()
   }
 
-  return yearsData.map((a) => ({
-    text: $(a).text().trim(),
-  }))
+  const years = json.data.user.contributionsCollection.contributionYears
+  return years
 }
 
-async function fetchDataForYear(username: string, year: string): Promise<RemoteData> {
+async function fetchDataForYear(username: string, year: Year): Promise<RemoteData> {
   const data = await fetch(`https://skyline.github.com/${username}/${year}.json`)
   return data.json()
 }
@@ -38,7 +57,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
     try {
       const years = await fetchYears(username)
       try {
-        const data = await Promise.all(years.map((year) => fetchDataForYear(username, year.text)))
+        const data = await Promise.all(years.map((year) => fetchDataForYear(username, year)))
         const graphData: GraphRemoteData = { username: data[0].username, data }
         res.status(200).json(graphData)
       } catch {

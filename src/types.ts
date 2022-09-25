@@ -43,9 +43,11 @@ export interface RemoteContribution {
   days: { count: number }[]
 }
 
+export type Year = number
+
 export interface RemoteData {
   username: string
-  year: string
+  year: Year
   min: number
   max: number
   median: number
