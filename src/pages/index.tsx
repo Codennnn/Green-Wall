@@ -35,6 +35,7 @@ export default function HomePage() {
   const [error, setError] = useState<ErrorData>()
 
   const handleError = (errorData: ErrorData = {}) => {
+    console.log({ errorData })
     setGraphData(undefined)
     setError(errorData)
   }
@@ -53,7 +54,6 @@ export default function HomePage() {
         const res = await fetch(`/api/${username}`)
         if (res.status >= 400) {
           const error: ErrorData = await res.json()
-          console.log(error)
           handleError({ message: error.message })
         } else {
           const data: GraphRemoteData = await res.json()
