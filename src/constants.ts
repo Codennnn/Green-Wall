@@ -1,16 +1,13 @@
-import type { ContributionDay, GraphSize, Theme, Themes } from './types'
+import type { ContributionLevel, GraphSize, Theme, Themes } from './types'
 
-export const WEEKS_OF_YEAR = 52
-
-export const FAKE_DAYS: ContributionDay[] = [
-  { count: 0, level: 0 },
-  { count: 0, level: 0 },
-  { count: 0, level: 0 },
-  { count: 0, level: 0 },
-  { count: 0, level: 0 },
-  { count: 0, level: 0 },
-  { count: 0, level: 0 },
-]
+export const levels: Record<ContributionLevel, -1 | 0 | 1 | 2 | 3 | 4> = {
+  Null: -1,
+  NONE: 0,
+  FIRST_QUARTILE: 1,
+  SECOND_QUARTILE: 2,
+  THIRD_QUARTILE: 3,
+  FOURTH_QUARTILE: 4,
+}
 
 export const sizeProperties: Record<
   GraphSize,

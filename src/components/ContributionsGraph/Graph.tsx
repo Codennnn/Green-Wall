@@ -1,55 +1,22 @@
-import { useMemo } from 'react'
-
-import { generateInvalidFakeContributions, numberWithCommas } from '../../helpers'
-import type { ContributionDay, GraphData, RemoteData } from '../../types'
+import { levels } from '../../constants'
+import { numberWithCommas } from '../../helpers'
+import type { ContributionCalendar, ContributionDay } from '../../types'
+import { ContributionLevel } from '../../types'
 import styles from './Graph.module.css'
 
 interface GraphProps {
-  data: RemoteData
+  data: ContributionCalendar
   daysLabel?: boolean
 }
 
 export default function Graph(props: GraphProps) {
-  const res = useMemo<GraphData>(() => {
-    if (!props.data.contributions || !props.data.min || !props.data.max) {
-      return { total: 0, contributions: generateInvalidFakeContributions(props.data.year) }
-    }
-
-    return props.data.contributions.reduce<GraphData>(
-      (res, item) => {
-        res.contributions.push({
-          week: item.week,
-          days: item.days.map((day) => {
-            res.total += day.count
-
-            const level =
-              day.count === props.data.min
-                ? 1
-                : day.count >= (props.data.p90 ?? Infinity)
-                ? 4
-                : day.count >= (props.data.p80 ?? Infinity)
-                ? 3
-                : day.count >= (props.data.median ?? Infinity)
-                ? 2
-                : day.count >= props.data.min
-                ? 1
-                : 0
-
-            return { count: day.count, level }
-          }),
-        })
-
-        return res
-      },
-      { total: 0, contributions: [] }
-    )
-  }, [props.data])
+  const calendar = props.data
 
   return (
     <div>
       <div className="mb-2 text-sm">
-        <span className="mr-2 italic">{props.data.year}:</span>
-        {numberWithCommas(res.total)} Contributions
+        <span className="mr-2 italic">{calendar.year}:</span>
+        {numberWithCommas(calendar.total)} Contributions
       </div>
 
       <div className={`${styles['graph']}`}>
@@ -81,15 +48,14 @@ export default function Graph(props: GraphProps) {
         )}
 
         <ul className={`${styles['grids']} ${styles['blocks']}`}>
-          {res.contributions.reduce<React.ReactElement[]>((acc, week, i) => {
+          {calendar.weeks.reduce<React.ReactElement[]>((blocks, week, i) => {
             let days = week.days
 
             if (days.length < 7) {
               const fills = Array.from(Array(7 - days.length)).map<ContributionDay>(() => ({
-                count: 0,
-                level: -1,
+                level: ContributionLevel.Null,
               }))
-              if (week.week === 0) {
+              if (i === 0) {
                 days = [...fills, ...week.days]
               } else {
                 days = [...week.days, ...fills]
@@ -97,10 +63,10 @@ export default function Graph(props: GraphProps) {
             }
 
             days.forEach((day, j) => {
-              acc.push(<li key={`${i}${j}`} data-level={day.level}></li>)
+              blocks.push(<li key={`${i}${j}`} data-level={levels[day.level]}></li>)
             })
 
-            return acc
+            return blocks
           }, [])}
         </ul>
       </div>

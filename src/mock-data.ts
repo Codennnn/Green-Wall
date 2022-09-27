@@ -1,4126 +1,2345 @@
-const data = {
-  username: 'V21XY',
-  data: [
+import type { GraphData } from './types'
+
+const data: GraphData = {
+  name: 'LeoKu',
+  login: 'Codennnn',
+  avatarUrl:
+    'https://avatars.githubusercontent.com/u/47730755?u=b42b926a9de7d3d3161a9ddf9ba9e67fb74ee6b3&v=4',
+  contributionsCollection: { years: [2022, 2021, 2020, 2019] },
+  contributionCalendars: [
     {
-      username: 'V21XY',
-      year: '2022',
-      min: 1,
-      max: 1,
-      median: 1,
-      p80: null,
-      p90: null,
-      p99: null,
-      contributions: [
+      total: 589,
+      weeks: [
         {
-          week: 0,
           days: [
-            {
-              count: 0,
-            },
+            { level: 'NONE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'FIRST_QUARTILE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'FIRST_QUARTILE', weekday: 6 },
           ],
         },
         {
-          week: 1,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'NONE', weekday: 0 },
+            { level: 'THIRD_QUARTILE', weekday: 1 },
+            { level: 'SECOND_QUARTILE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
           ],
         },
         {
-          week: 2,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'NONE', weekday: 0 },
+            { level: 'FIRST_QUARTILE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'FIRST_QUARTILE', weekday: 6 },
           ],
         },
         {
-          week: 3,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'NONE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'SECOND_QUARTILE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
           ],
         },
         {
-          week: 4,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'NONE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
           ],
         },
         {
-          week: 5,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'NONE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'FIRST_QUARTILE', weekday: 2 },
+            { level: 'FOURTH_QUARTILE', weekday: 3 },
+            { level: 'FIRST_QUARTILE', weekday: 4 },
+            { level: 'FIRST_QUARTILE', weekday: 5 },
+            { level: 'SECOND_QUARTILE', weekday: 6 },
           ],
         },
         {
-          week: 6,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'SECOND_QUARTILE', weekday: 0 },
+            { level: 'FIRST_QUARTILE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'FIRST_QUARTILE', weekday: 3 },
+            { level: 'FIRST_QUARTILE', weekday: 4 },
+            { level: 'FIRST_QUARTILE', weekday: 5 },
+            { level: 'FIRST_QUARTILE', weekday: 6 },
           ],
         },
         {
-          week: 7,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'FIRST_QUARTILE', weekday: 0 },
+            { level: 'SECOND_QUARTILE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'FIRST_QUARTILE', weekday: 3 },
+            { level: 'FIRST_QUARTILE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'SECOND_QUARTILE', weekday: 6 },
           ],
         },
         {
-          week: 8,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'FIRST_QUARTILE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'FIRST_QUARTILE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'FIRST_QUARTILE', weekday: 6 },
           ],
         },
         {
-          week: 9,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'NONE', weekday: 0 },
+            { level: 'THIRD_QUARTILE', weekday: 1 },
+            { level: 'THIRD_QUARTILE', weekday: 2 },
+            { level: 'FOURTH_QUARTILE', weekday: 3 },
+            { level: 'SECOND_QUARTILE', weekday: 4 },
+            { level: 'THIRD_QUARTILE', weekday: 5 },
+            { level: 'THIRD_QUARTILE', weekday: 6 },
           ],
         },
         {
-          week: 10,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'SECOND_QUARTILE', weekday: 0 },
+            { level: 'SECOND_QUARTILE', weekday: 1 },
+            { level: 'THIRD_QUARTILE', weekday: 2 },
+            { level: 'SECOND_QUARTILE', weekday: 3 },
+            { level: 'FIRST_QUARTILE', weekday: 4 },
+            { level: 'SECOND_QUARTILE', weekday: 5 },
+            { level: 'SECOND_QUARTILE', weekday: 6 },
           ],
         },
         {
-          week: 11,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'FOURTH_QUARTILE', weekday: 0 },
+            { level: 'SECOND_QUARTILE', weekday: 1 },
+            { level: 'THIRD_QUARTILE', weekday: 2 },
+            { level: 'THIRD_QUARTILE', weekday: 3 },
+            { level: 'SECOND_QUARTILE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'FIRST_QUARTILE', weekday: 6 },
           ],
         },
         {
-          week: 12,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'SECOND_QUARTILE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'FIRST_QUARTILE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'FIRST_QUARTILE', weekday: 4 },
+            { level: 'SECOND_QUARTILE', weekday: 5 },
+            { level: 'FIRST_QUARTILE', weekday: 6 },
           ],
         },
         {
-          week: 13,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'NONE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'FIRST_QUARTILE', weekday: 6 },
           ],
         },
         {
-          week: 14,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'NONE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'FIRST_QUARTILE', weekday: 3 },
+            { level: 'SECOND_QUARTILE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'FIRST_QUARTILE', weekday: 6 },
           ],
         },
         {
-          week: 15,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'FIRST_QUARTILE', weekday: 0 },
+            { level: 'FIRST_QUARTILE', weekday: 1 },
+            { level: 'FIRST_QUARTILE', weekday: 2 },
+            { level: 'SECOND_QUARTILE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'SECOND_QUARTILE', weekday: 5 },
+            { level: 'FIRST_QUARTILE', weekday: 6 },
           ],
         },
         {
-          week: 16,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'NONE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
           ],
         },
         {
-          week: 17,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'SECOND_QUARTILE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'FIRST_QUARTILE', weekday: 3 },
+            { level: 'SECOND_QUARTILE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
           ],
         },
         {
-          week: 18,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'NONE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'FIRST_QUARTILE', weekday: 5 },
+            { level: 'FIRST_QUARTILE', weekday: 6 },
           ],
         },
         {
-          week: 19,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'NONE', weekday: 0 },
+            { level: 'SECOND_QUARTILE', weekday: 1 },
+            { level: 'FIRST_QUARTILE', weekday: 2 },
+            { level: 'SECOND_QUARTILE', weekday: 3 },
+            { level: 'FIRST_QUARTILE', weekday: 4 },
+            { level: 'SECOND_QUARTILE', weekday: 5 },
+            { level: 'SECOND_QUARTILE', weekday: 6 },
           ],
         },
         {
-          week: 20,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'SECOND_QUARTILE', weekday: 0 },
+            { level: 'SECOND_QUARTILE', weekday: 1 },
+            { level: 'FOURTH_QUARTILE', weekday: 2 },
+            { level: 'FIRST_QUARTILE', weekday: 3 },
+            { level: 'THIRD_QUARTILE', weekday: 4 },
+            { level: 'FOURTH_QUARTILE', weekday: 5 },
+            { level: 'FIRST_QUARTILE', weekday: 6 },
           ],
         },
         {
-          week: 21,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'FOURTH_QUARTILE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'SECOND_QUARTILE', weekday: 3 },
+            { level: 'THIRD_QUARTILE', weekday: 4 },
+            { level: 'THIRD_QUARTILE', weekday: 5 },
+            { level: 'THIRD_QUARTILE', weekday: 6 },
           ],
         },
         {
-          week: 22,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'SECOND_QUARTILE', weekday: 0 },
+            { level: 'THIRD_QUARTILE', weekday: 1 },
+            { level: 'FIRST_QUARTILE', weekday: 2 },
+            { level: 'SECOND_QUARTILE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'FIRST_QUARTILE', weekday: 6 },
           ],
         },
         {
-          week: 23,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'SECOND_QUARTILE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'FIRST_QUARTILE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'SECOND_QUARTILE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
           ],
         },
         {
-          week: 24,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'NONE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
           ],
         },
         {
-          week: 25,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'NONE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'FIRST_QUARTILE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
           ],
         },
         {
-          week: 26,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'NONE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'SECOND_QUARTILE', weekday: 2 },
+            { level: 'SECOND_QUARTILE', weekday: 3 },
+            { level: 'SECOND_QUARTILE', weekday: 4 },
+            { level: 'SECOND_QUARTILE', weekday: 5 },
+            { level: 'SECOND_QUARTILE', weekday: 6 },
           ],
         },
         {
-          week: 27,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'FIRST_QUARTILE', weekday: 0 },
+            { level: 'FIRST_QUARTILE', weekday: 1 },
+            { level: 'FIRST_QUARTILE', weekday: 2 },
+            { level: 'FIRST_QUARTILE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'SECOND_QUARTILE', weekday: 6 },
           ],
         },
         {
-          week: 28,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'THIRD_QUARTILE', weekday: 0 },
+            { level: 'FIRST_QUARTILE', weekday: 1 },
+            { level: 'SECOND_QUARTILE', weekday: 2 },
+            { level: 'SECOND_QUARTILE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'FOURTH_QUARTILE', weekday: 5 },
+            { level: 'FIRST_QUARTILE', weekday: 6 },
           ],
         },
         {
-          week: 29,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'SECOND_QUARTILE', weekday: 0 },
+            { level: 'FIRST_QUARTILE', weekday: 1 },
+            { level: 'FIRST_QUARTILE', weekday: 2 },
+            { level: 'FIRST_QUARTILE', weekday: 3 },
+            { level: 'THIRD_QUARTILE', weekday: 4 },
+            { level: 'SECOND_QUARTILE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
           ],
         },
         {
-          week: 30,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 1,
-            },
-            {
-              count: 0,
-            },
+            { level: 'FIRST_QUARTILE', weekday: 0 },
+            { level: 'FIRST_QUARTILE', weekday: 1 },
+            { level: 'FIRST_QUARTILE', weekday: 2 },
+            { level: 'FIRST_QUARTILE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
           ],
         },
         {
-          week: 31,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'SECOND_QUARTILE', weekday: 0 },
+            { level: 'FIRST_QUARTILE', weekday: 1 },
+            { level: 'FIRST_QUARTILE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'SECOND_QUARTILE', weekday: 4 },
+            { level: 'SECOND_QUARTILE', weekday: 5 },
+            { level: 'THIRD_QUARTILE', weekday: 6 },
           ],
         },
         {
-          week: 32,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'SECOND_QUARTILE', weekday: 0 },
+            { level: 'SECOND_QUARTILE', weekday: 1 },
+            { level: 'SECOND_QUARTILE', weekday: 2 },
+            { level: 'THIRD_QUARTILE', weekday: 3 },
+            { level: 'SECOND_QUARTILE', weekday: 4 },
+            { level: 'SECOND_QUARTILE', weekday: 5 },
+            { level: 'SECOND_QUARTILE', weekday: 6 },
           ],
         },
         {
-          week: 33,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'SECOND_QUARTILE', weekday: 0 },
+            { level: 'SECOND_QUARTILE', weekday: 1 },
+            { level: 'SECOND_QUARTILE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
           ],
         },
         {
-          week: 34,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'NONE', weekday: 0 },
+            { level: 'SECOND_QUARTILE', weekday: 1 },
+            { level: 'SECOND_QUARTILE', weekday: 2 },
+            { level: 'FOURTH_QUARTILE', weekday: 3 },
+            { level: 'SECOND_QUARTILE', weekday: 4 },
+            { level: 'THIRD_QUARTILE', weekday: 5 },
+            { level: 'FIRST_QUARTILE', weekday: 6 },
           ],
         },
         {
-          week: 35,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'SECOND_QUARTILE', weekday: 0 },
+            { level: 'FOURTH_QUARTILE', weekday: 1 },
+            { level: 'THIRD_QUARTILE', weekday: 2 },
+            { level: 'THIRD_QUARTILE', weekday: 3 },
+            { level: 'FIRST_QUARTILE', weekday: 4 },
+            { level: 'FOURTH_QUARTILE', weekday: 5 },
+            { level: 'FOURTH_QUARTILE', weekday: 6 },
           ],
         },
         {
-          week: 36,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'NONE', weekday: 0 },
+            { level: 'FIRST_QUARTILE', weekday: 1 },
+            { level: 'FIRST_QUARTILE', weekday: 2 },
+            { level: 'FIRST_QUARTILE', weekday: 3 },
+            { level: 'FIRST_QUARTILE', weekday: 4 },
+            { level: 'FIRST_QUARTILE', weekday: 5 },
+            { level: 'SECOND_QUARTILE', weekday: 6 },
           ],
         },
         {
-          week: 37,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'FOURTH_QUARTILE', weekday: 0 },
+            { level: 'THIRD_QUARTILE', weekday: 1 },
+            { level: 'SECOND_QUARTILE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'SECOND_QUARTILE', weekday: 4 },
+            { level: 'FIRST_QUARTILE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
           ],
         },
         {
-          week: 38,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'SECOND_QUARTILE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
           ],
         },
         {
-          week: 39,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'NONE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
           ],
         },
         {
-          week: 40,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'NONE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
           ],
         },
         {
-          week: 41,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'NONE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
           ],
         },
         {
-          week: 42,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'NONE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
           ],
         },
         {
-          week: 43,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'NONE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
           ],
         },
         {
-          week: 44,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'NONE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
           ],
         },
         {
-          week: 45,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'NONE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
           ],
         },
         {
-          week: 46,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'NONE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
           ],
         },
         {
-          week: 47,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'NONE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
           ],
         },
         {
-          week: 48,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'NONE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
           ],
         },
         {
-          week: 49,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'NONE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
           ],
         },
         {
-          week: 50,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'NONE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
           ],
         },
         {
-          week: 51,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'NONE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
           ],
         },
-        {
-          week: 52,
-          days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-          ],
-        },
+        { days: [{ level: 'NONE', weekday: 0 }] },
       ],
+      year: 2022,
     },
     {
-      username: 'V21XY',
-      year: '2021',
-      min: 1,
-      max: 1,
-      median: 1,
-      p80: null,
-      p90: null,
-      p99: null,
-      contributions: [
+      total: 474,
+      weeks: [
         {
-          week: 0,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'SECOND_QUARTILE', weekday: 5 },
+            { level: 'FIRST_QUARTILE', weekday: 6 },
           ],
         },
         {
-          week: 1,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'FIRST_QUARTILE', weekday: 0 },
+            { level: 'FIRST_QUARTILE', weekday: 1 },
+            { level: 'SECOND_QUARTILE', weekday: 2 },
+            { level: 'SECOND_QUARTILE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'FIRST_QUARTILE', weekday: 6 },
           ],
         },
         {
-          week: 2,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'FIRST_QUARTILE', weekday: 0 },
+            { level: 'FIRST_QUARTILE', weekday: 1 },
+            { level: 'FIRST_QUARTILE', weekday: 2 },
+            { level: 'FIRST_QUARTILE', weekday: 3 },
+            { level: 'FIRST_QUARTILE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'SECOND_QUARTILE', weekday: 6 },
           ],
         },
         {
-          week: 3,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'FIRST_QUARTILE', weekday: 0 },
+            { level: 'FIRST_QUARTILE', weekday: 1 },
+            { level: 'FIRST_QUARTILE', weekday: 2 },
+            { level: 'FIRST_QUARTILE', weekday: 3 },
+            { level: 'FIRST_QUARTILE', weekday: 4 },
+            { level: 'FIRST_QUARTILE', weekday: 5 },
+            { level: 'THIRD_QUARTILE', weekday: 6 },
           ],
         },
         {
-          week: 4,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'FIRST_QUARTILE', weekday: 0 },
+            { level: 'FIRST_QUARTILE', weekday: 1 },
+            { level: 'FIRST_QUARTILE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'FIRST_QUARTILE', weekday: 5 },
+            { level: 'FOURTH_QUARTILE', weekday: 6 },
           ],
         },
         {
-          week: 5,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'FIRST_QUARTILE', weekday: 0 },
+            { level: 'FIRST_QUARTILE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'FIRST_QUARTILE', weekday: 3 },
+            { level: 'FIRST_QUARTILE', weekday: 4 },
+            { level: 'SECOND_QUARTILE', weekday: 5 },
+            { level: 'FIRST_QUARTILE', weekday: 6 },
           ],
         },
         {
-          week: 6,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'FOURTH_QUARTILE', weekday: 0 },
+            { level: 'FIRST_QUARTILE', weekday: 1 },
+            { level: 'FIRST_QUARTILE', weekday: 2 },
+            { level: 'FOURTH_QUARTILE', weekday: 3 },
+            { level: 'FIRST_QUARTILE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
           ],
         },
         {
-          week: 7,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'NONE', weekday: 0 },
+            { level: 'FIRST_QUARTILE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'FIRST_QUARTILE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'FIRST_QUARTILE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
           ],
         },
         {
-          week: 8,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'FIRST_QUARTILE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'FIRST_QUARTILE', weekday: 4 },
+            { level: 'FIRST_QUARTILE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
           ],
         },
         {
-          week: 9,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'FIRST_QUARTILE', weekday: 0 },
+            { level: 'FIRST_QUARTILE', weekday: 1 },
+            { level: 'SECOND_QUARTILE', weekday: 2 },
+            { level: 'FIRST_QUARTILE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
           ],
         },
         {
-          week: 10,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'NONE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'FIRST_QUARTILE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'FIRST_QUARTILE', weekday: 5 },
+            { level: 'FIRST_QUARTILE', weekday: 6 },
           ],
         },
         {
-          week: 11,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'NONE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'FIRST_QUARTILE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'SECOND_QUARTILE', weekday: 6 },
           ],
         },
         {
-          week: 12,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'NONE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'FIRST_QUARTILE', weekday: 6 },
           ],
         },
         {
-          week: 13,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'NONE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'FIRST_QUARTILE', weekday: 6 },
           ],
         },
         {
-          week: 14,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'NONE', weekday: 0 },
+            { level: 'FIRST_QUARTILE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'FIRST_QUARTILE', weekday: 6 },
           ],
         },
         {
-          week: 15,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'NONE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'FIRST_QUARTILE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
           ],
         },
         {
-          week: 16,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'FIRST_QUARTILE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'SECOND_QUARTILE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
           ],
         },
         {
-          week: 17,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'SECOND_QUARTILE', weekday: 0 },
+            { level: 'SECOND_QUARTILE', weekday: 1 },
+            { level: 'FOURTH_QUARTILE', weekday: 2 },
+            { level: 'FIRST_QUARTILE', weekday: 3 },
+            { level: 'FIRST_QUARTILE', weekday: 4 },
+            { level: 'SECOND_QUARTILE', weekday: 5 },
+            { level: 'FIRST_QUARTILE', weekday: 6 },
           ],
         },
         {
-          week: 18,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'FIRST_QUARTILE', weekday: 0 },
+            { level: 'FIRST_QUARTILE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'FIRST_QUARTILE', weekday: 3 },
+            { level: 'FIRST_QUARTILE', weekday: 4 },
+            { level: 'FIRST_QUARTILE', weekday: 5 },
+            { level: 'FIRST_QUARTILE', weekday: 6 },
           ],
         },
         {
-          week: 19,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'NONE', weekday: 0 },
+            { level: 'FIRST_QUARTILE', weekday: 1 },
+            { level: 'FIRST_QUARTILE', weekday: 2 },
+            { level: 'FIRST_QUARTILE', weekday: 3 },
+            { level: 'FIRST_QUARTILE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'FIRST_QUARTILE', weekday: 6 },
           ],
         },
         {
-          week: 20,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'FIRST_QUARTILE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'FIRST_QUARTILE', weekday: 3 },
+            { level: 'FIRST_QUARTILE', weekday: 4 },
+            { level: 'FIRST_QUARTILE', weekday: 5 },
+            { level: 'FIRST_QUARTILE', weekday: 6 },
           ],
         },
         {
-          week: 21,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'NONE', weekday: 0 },
+            { level: 'THIRD_QUARTILE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
           ],
         },
         {
-          week: 22,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'NONE', weekday: 0 },
+            { level: 'FIRST_QUARTILE', weekday: 1 },
+            { level: 'FIRST_QUARTILE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'FIRST_QUARTILE', weekday: 6 },
           ],
         },
         {
-          week: 23,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'FIRST_QUARTILE', weekday: 0 },
+            { level: 'FIRST_QUARTILE', weekday: 1 },
+            { level: 'FIRST_QUARTILE', weekday: 2 },
+            { level: 'FIRST_QUARTILE', weekday: 3 },
+            { level: 'FIRST_QUARTILE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
           ],
         },
         {
-          week: 24,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'NONE', weekday: 0 },
+            { level: 'FIRST_QUARTILE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
           ],
         },
         {
-          week: 25,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'NONE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'FIRST_QUARTILE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
           ],
         },
         {
-          week: 26,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'NONE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
           ],
         },
         {
-          week: 27,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'NONE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
           ],
         },
         {
-          week: 28,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'NONE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
           ],
         },
         {
-          week: 29,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'NONE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
           ],
         },
         {
-          week: 30,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'NONE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
           ],
         },
         {
-          week: 31,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 1,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'NONE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
           ],
         },
         {
-          week: 32,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'FIRST_QUARTILE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
           ],
         },
         {
-          week: 33,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'NONE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'SECOND_QUARTILE', weekday: 3 },
+            { level: 'FIRST_QUARTILE', weekday: 4 },
+            { level: 'FIRST_QUARTILE', weekday: 5 },
+            { level: 'FIRST_QUARTILE', weekday: 6 },
           ],
         },
         {
-          week: 34,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'FIRST_QUARTILE', weekday: 0 },
+            { level: 'FIRST_QUARTILE', weekday: 1 },
+            { level: 'SECOND_QUARTILE', weekday: 2 },
+            { level: 'FOURTH_QUARTILE', weekday: 3 },
+            { level: 'FIRST_QUARTILE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'SECOND_QUARTILE', weekday: 6 },
           ],
         },
         {
-          week: 35,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'SECOND_QUARTILE', weekday: 0 },
+            { level: 'FOURTH_QUARTILE', weekday: 1 },
+            { level: 'FOURTH_QUARTILE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'FIRST_QUARTILE', weekday: 4 },
+            { level: 'FIRST_QUARTILE', weekday: 5 },
+            { level: 'FIRST_QUARTILE', weekday: 6 },
           ],
         },
         {
-          week: 36,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'SECOND_QUARTILE', weekday: 0 },
+            { level: 'THIRD_QUARTILE', weekday: 1 },
+            { level: 'SECOND_QUARTILE', weekday: 2 },
+            { level: 'SECOND_QUARTILE', weekday: 3 },
+            { level: 'FIRST_QUARTILE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
           ],
         },
         {
-          week: 37,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'FIRST_QUARTILE', weekday: 0 },
+            { level: 'THIRD_QUARTILE', weekday: 1 },
+            { level: 'FIRST_QUARTILE', weekday: 2 },
+            { level: 'SECOND_QUARTILE', weekday: 3 },
+            { level: 'FIRST_QUARTILE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
           ],
         },
         {
-          week: 38,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'FIRST_QUARTILE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
           ],
         },
         {
-          week: 39,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'NONE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'FIRST_QUARTILE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
           ],
         },
         {
-          week: 40,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'NONE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
           ],
         },
         {
-          week: 41,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'NONE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'FIRST_QUARTILE', weekday: 5 },
+            { level: 'SECOND_QUARTILE', weekday: 6 },
           ],
         },
         {
-          week: 42,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'THIRD_QUARTILE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'SECOND_QUARTILE', weekday: 2 },
+            { level: 'SECOND_QUARTILE', weekday: 3 },
+            { level: 'FIRST_QUARTILE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'FIRST_QUARTILE', weekday: 6 },
           ],
         },
         {
-          week: 43,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'SECOND_QUARTILE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'FIRST_QUARTILE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'SECOND_QUARTILE', weekday: 5 },
+            { level: 'SECOND_QUARTILE', weekday: 6 },
           ],
         },
         {
-          week: 44,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'FOURTH_QUARTILE', weekday: 0 },
+            { level: 'FIRST_QUARTILE', weekday: 1 },
+            { level: 'SECOND_QUARTILE', weekday: 2 },
+            { level: 'FIRST_QUARTILE', weekday: 3 },
+            { level: 'FIRST_QUARTILE', weekday: 4 },
+            { level: 'SECOND_QUARTILE', weekday: 5 },
+            { level: 'SECOND_QUARTILE', weekday: 6 },
           ],
         },
         {
-          week: 45,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'NONE', weekday: 0 },
+            { level: 'FIRST_QUARTILE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
           ],
         },
         {
-          week: 46,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'NONE', weekday: 0 },
+            { level: 'FIRST_QUARTILE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
           ],
         },
         {
-          week: 47,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'NONE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
           ],
         },
         {
-          week: 48,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'NONE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'SECOND_QUARTILE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'FIRST_QUARTILE', weekday: 5 },
+            { level: 'FIRST_QUARTILE', weekday: 6 },
           ],
         },
         {
-          week: 49,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'NONE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'FIRST_QUARTILE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'FIRST_QUARTILE', weekday: 5 },
+            { level: 'FIRST_QUARTILE', weekday: 6 },
           ],
         },
         {
-          week: 50,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'NONE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
           ],
         },
         {
-          week: 51,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'FIRST_QUARTILE', weekday: 0 },
+            { level: 'FIRST_QUARTILE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'FIRST_QUARTILE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
           ],
         },
         {
-          week: 52,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'NONE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'FIRST_QUARTILE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
           ],
         },
       ],
+      year: 2021,
     },
     {
-      username: 'V21XY',
-      year: '2020',
-      min: 1,
-      max: 5,
-      median: 3,
-      p80: 3,
-      p90: 3,
-      p99: 3,
-      contributions: [
+      total: 1809,
+      weeks: [
         {
-          week: 0,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'FIRST_QUARTILE', weekday: 3 },
+            { level: 'FIRST_QUARTILE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'FIRST_QUARTILE', weekday: 6 },
           ],
         },
         {
-          week: 1,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'THIRD_QUARTILE', weekday: 0 },
+            { level: 'SECOND_QUARTILE', weekday: 1 },
+            { level: 'FOURTH_QUARTILE', weekday: 2 },
+            { level: 'THIRD_QUARTILE', weekday: 3 },
+            { level: 'THIRD_QUARTILE', weekday: 4 },
+            { level: 'FOURTH_QUARTILE', weekday: 5 },
+            { level: 'SECOND_QUARTILE', weekday: 6 },
           ],
         },
         {
-          week: 2,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'THIRD_QUARTILE', weekday: 0 },
+            { level: 'SECOND_QUARTILE', weekday: 1 },
+            { level: 'SECOND_QUARTILE', weekday: 2 },
+            { level: 'SECOND_QUARTILE', weekday: 3 },
+            { level: 'SECOND_QUARTILE', weekday: 4 },
+            { level: 'FIRST_QUARTILE', weekday: 5 },
+            { level: 'FOURTH_QUARTILE', weekday: 6 },
           ],
         },
         {
-          week: 3,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'FIRST_QUARTILE', weekday: 0 },
+            { level: 'FIRST_QUARTILE', weekday: 1 },
+            { level: 'FIRST_QUARTILE', weekday: 2 },
+            { level: 'FIRST_QUARTILE', weekday: 3 },
+            { level: 'FIRST_QUARTILE', weekday: 4 },
+            { level: 'FIRST_QUARTILE', weekday: 5 },
+            { level: 'SECOND_QUARTILE', weekday: 6 },
           ],
         },
         {
-          week: 4,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'FIRST_QUARTILE', weekday: 0 },
+            { level: 'SECOND_QUARTILE', weekday: 1 },
+            { level: 'SECOND_QUARTILE', weekday: 2 },
+            { level: 'THIRD_QUARTILE', weekday: 3 },
+            { level: 'FOURTH_QUARTILE', weekday: 4 },
+            { level: 'SECOND_QUARTILE', weekday: 5 },
+            { level: 'FOURTH_QUARTILE', weekday: 6 },
           ],
         },
         {
-          week: 5,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'THIRD_QUARTILE', weekday: 0 },
+            { level: 'FOURTH_QUARTILE', weekday: 1 },
+            { level: 'SECOND_QUARTILE', weekday: 2 },
+            { level: 'THIRD_QUARTILE', weekday: 3 },
+            { level: 'SECOND_QUARTILE', weekday: 4 },
+            { level: 'THIRD_QUARTILE', weekday: 5 },
+            { level: 'FOURTH_QUARTILE', weekday: 6 },
           ],
         },
         {
-          week: 6,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'FOURTH_QUARTILE', weekday: 0 },
+            { level: 'SECOND_QUARTILE', weekday: 1 },
+            { level: 'SECOND_QUARTILE', weekday: 2 },
+            { level: 'SECOND_QUARTILE', weekday: 3 },
+            { level: 'FOURTH_QUARTILE', weekday: 4 },
+            { level: 'SECOND_QUARTILE', weekday: 5 },
+            { level: 'FOURTH_QUARTILE', weekday: 6 },
           ],
         },
         {
-          week: 7,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'THIRD_QUARTILE', weekday: 0 },
+            { level: 'THIRD_QUARTILE', weekday: 1 },
+            { level: 'THIRD_QUARTILE', weekday: 2 },
+            { level: 'FIRST_QUARTILE', weekday: 3 },
+            { level: 'SECOND_QUARTILE', weekday: 4 },
+            { level: 'THIRD_QUARTILE', weekday: 5 },
+            { level: 'THIRD_QUARTILE', weekday: 6 },
           ],
         },
         {
-          week: 8,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'NONE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'FIRST_QUARTILE', weekday: 2 },
+            { level: 'FIRST_QUARTILE', weekday: 3 },
+            { level: 'FIRST_QUARTILE', weekday: 4 },
+            { level: 'FIRST_QUARTILE', weekday: 5 },
+            { level: 'SECOND_QUARTILE', weekday: 6 },
           ],
         },
         {
-          week: 9,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'SECOND_QUARTILE', weekday: 0 },
+            { level: 'SECOND_QUARTILE', weekday: 1 },
+            { level: 'FIRST_QUARTILE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'FIRST_QUARTILE', weekday: 4 },
+            { level: 'FIRST_QUARTILE', weekday: 5 },
+            { level: 'FIRST_QUARTILE', weekday: 6 },
           ],
         },
         {
-          week: 10,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'NONE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'FIRST_QUARTILE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
           ],
         },
         {
-          week: 11,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'NONE', weekday: 0 },
+            { level: 'FIRST_QUARTILE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
           ],
         },
         {
-          week: 12,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'FIRST_QUARTILE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
           ],
         },
         {
-          week: 13,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'FIRST_QUARTILE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'SECOND_QUARTILE', weekday: 6 },
           ],
         },
         {
-          week: 14,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'SECOND_QUARTILE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'FIRST_QUARTILE', weekday: 4 },
+            { level: 'FIRST_QUARTILE', weekday: 5 },
+            { level: 'FIRST_QUARTILE', weekday: 6 },
           ],
         },
         {
-          week: 15,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 1,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'FIRST_QUARTILE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'FIRST_QUARTILE', weekday: 6 },
           ],
         },
         {
-          week: 16,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'NONE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'FIRST_QUARTILE', weekday: 6 },
           ],
         },
         {
-          week: 17,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'FIRST_QUARTILE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
           ],
         },
         {
-          week: 18,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'FIRST_QUARTILE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'FIRST_QUARTILE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
           ],
         },
         {
-          week: 19,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'FIRST_QUARTILE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
           ],
         },
         {
-          week: 20,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'NONE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
           ],
         },
         {
-          week: 21,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'NONE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
           ],
         },
         {
-          week: 22,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'NONE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'FIRST_QUARTILE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'FIRST_QUARTILE', weekday: 6 },
           ],
         },
         {
-          week: 23,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'NONE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
           ],
         },
         {
-          week: 24,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'NONE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
           ],
         },
         {
-          week: 25,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'NONE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'FIRST_QUARTILE', weekday: 6 },
           ],
         },
         {
-          week: 26,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'FIRST_QUARTILE', weekday: 0 },
+            { level: 'FIRST_QUARTILE', weekday: 1 },
+            { level: 'FIRST_QUARTILE', weekday: 2 },
+            { level: 'FIRST_QUARTILE', weekday: 3 },
+            { level: 'FIRST_QUARTILE', weekday: 4 },
+            { level: 'FIRST_QUARTILE', weekday: 5 },
+            { level: 'FIRST_QUARTILE', weekday: 6 },
           ],
         },
         {
-          week: 27,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'FIRST_QUARTILE', weekday: 0 },
+            { level: 'FIRST_QUARTILE', weekday: 1 },
+            { level: 'FIRST_QUARTILE', weekday: 2 },
+            { level: 'FIRST_QUARTILE', weekday: 3 },
+            { level: 'FIRST_QUARTILE', weekday: 4 },
+            { level: 'FIRST_QUARTILE', weekday: 5 },
+            { level: 'FIRST_QUARTILE', weekday: 6 },
           ],
         },
         {
-          week: 28,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'FIRST_QUARTILE', weekday: 0 },
+            { level: 'FIRST_QUARTILE', weekday: 1 },
+            { level: 'FIRST_QUARTILE', weekday: 2 },
+            { level: 'FIRST_QUARTILE', weekday: 3 },
+            { level: 'FIRST_QUARTILE', weekday: 4 },
+            { level: 'FIRST_QUARTILE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
           ],
         },
         {
-          week: 29,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'NONE', weekday: 0 },
+            { level: 'SECOND_QUARTILE', weekday: 1 },
+            { level: 'THIRD_QUARTILE', weekday: 2 },
+            { level: 'FIRST_QUARTILE', weekday: 3 },
+            { level: 'FIRST_QUARTILE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
           ],
         },
         {
-          week: 30,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'NONE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'FIRST_QUARTILE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
           ],
         },
         {
-          week: 31,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'FIRST_QUARTILE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'FIRST_QUARTILE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'FIRST_QUARTILE', weekday: 6 },
           ],
         },
         {
-          week: 32,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'NONE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
           ],
         },
         {
-          week: 33,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'NONE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
           ],
         },
         {
-          week: 34,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'NONE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
           ],
         },
         {
-          week: 35,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'NONE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
           ],
         },
         {
-          week: 36,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'NONE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
           ],
         },
         {
-          week: 37,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'NONE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'FIRST_QUARTILE', weekday: 6 },
           ],
         },
         {
-          week: 38,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'NONE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
           ],
         },
         {
-          week: 39,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'NONE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
           ],
         },
         {
-          week: 40,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'NONE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
           ],
         },
         {
-          week: 41,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'FIRST_QUARTILE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'FIRST_QUARTILE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'FIRST_QUARTILE', weekday: 6 },
           ],
         },
         {
-          week: 42,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'FIRST_QUARTILE', weekday: 0 },
+            { level: 'FIRST_QUARTILE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'FIRST_QUARTILE', weekday: 4 },
+            { level: 'FIRST_QUARTILE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
           ],
         },
         {
-          week: 43,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'NONE', weekday: 0 },
+            { level: 'SECOND_QUARTILE', weekday: 1 },
+            { level: 'FIRST_QUARTILE', weekday: 2 },
+            { level: 'FIRST_QUARTILE', weekday: 3 },
+            { level: 'FIRST_QUARTILE', weekday: 4 },
+            { level: 'FIRST_QUARTILE', weekday: 5 },
+            { level: 'FIRST_QUARTILE', weekday: 6 },
           ],
         },
         {
-          week: 44,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'FIRST_QUARTILE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'FIRST_QUARTILE', weekday: 2 },
+            { level: 'FIRST_QUARTILE', weekday: 3 },
+            { level: 'FIRST_QUARTILE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'FIRST_QUARTILE', weekday: 6 },
           ],
         },
         {
-          week: 45,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'SECOND_QUARTILE', weekday: 0 },
+            { level: 'FIRST_QUARTILE', weekday: 1 },
+            { level: 'SECOND_QUARTILE', weekday: 2 },
+            { level: 'THIRD_QUARTILE', weekday: 3 },
+            { level: 'FIRST_QUARTILE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'FIRST_QUARTILE', weekday: 6 },
           ],
         },
         {
-          week: 46,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'FIRST_QUARTILE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'FIRST_QUARTILE', weekday: 2 },
+            { level: 'FIRST_QUARTILE', weekday: 3 },
+            { level: 'FIRST_QUARTILE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'FIRST_QUARTILE', weekday: 6 },
           ],
         },
         {
-          week: 47,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'NONE', weekday: 0 },
+            { level: 'FIRST_QUARTILE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
           ],
         },
         {
-          week: 48,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'NONE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
           ],
         },
         {
-          week: 49,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 5,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'FIRST_QUARTILE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'FIRST_QUARTILE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'FIRST_QUARTILE', weekday: 6 },
           ],
         },
         {
-          week: 50,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'NONE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
           ],
         },
         {
-          week: 51,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'FIRST_QUARTILE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'FIRST_QUARTILE', weekday: 6 },
           ],
         },
         {
-          week: 52,
           days: [
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
-            {
-              count: 0,
-            },
+            { level: 'NONE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'FIRST_QUARTILE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'FIRST_QUARTILE', weekday: 5 },
           ],
         },
       ],
+      year: 2020,
+    },
+    {
+      total: 3031,
+      weeks: [
+        {
+          days: [
+            { level: 'NONE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
+          ],
+        },
+        {
+          days: [
+            { level: 'NONE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
+          ],
+        },
+        {
+          days: [
+            { level: 'NONE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
+          ],
+        },
+        {
+          days: [
+            { level: 'NONE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
+          ],
+        },
+        {
+          days: [
+            { level: 'NONE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
+          ],
+        },
+        {
+          days: [
+            { level: 'NONE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
+          ],
+        },
+        {
+          days: [
+            { level: 'NONE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
+          ],
+        },
+        {
+          days: [
+            { level: 'NONE', weekday: 0 },
+            { level: 'FIRST_QUARTILE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
+          ],
+        },
+        {
+          days: [
+            { level: 'NONE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
+          ],
+        },
+        {
+          days: [
+            { level: 'NONE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
+          ],
+        },
+        {
+          days: [
+            { level: 'NONE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
+          ],
+        },
+        {
+          days: [
+            { level: 'NONE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
+          ],
+        },
+        {
+          days: [
+            { level: 'NONE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
+          ],
+        },
+        {
+          days: [
+            { level: 'NONE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
+          ],
+        },
+        {
+          days: [
+            { level: 'NONE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
+          ],
+        },
+        {
+          days: [
+            { level: 'NONE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
+          ],
+        },
+        {
+          days: [
+            { level: 'NONE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
+          ],
+        },
+        {
+          days: [
+            { level: 'NONE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
+          ],
+        },
+        {
+          days: [
+            { level: 'NONE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
+          ],
+        },
+        {
+          days: [
+            { level: 'NONE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
+          ],
+        },
+        {
+          days: [
+            { level: 'NONE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
+          ],
+        },
+        {
+          days: [
+            { level: 'NONE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
+          ],
+        },
+        {
+          days: [
+            { level: 'NONE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
+          ],
+        },
+        {
+          days: [
+            { level: 'NONE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
+          ],
+        },
+        {
+          days: [
+            { level: 'NONE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
+          ],
+        },
+        {
+          days: [
+            { level: 'NONE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
+          ],
+        },
+        {
+          days: [
+            { level: 'NONE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'FIRST_QUARTILE', weekday: 5 },
+            { level: 'SECOND_QUARTILE', weekday: 6 },
+          ],
+        },
+        {
+          days: [
+            { level: 'THIRD_QUARTILE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'SECOND_QUARTILE', weekday: 2 },
+            { level: 'FIRST_QUARTILE', weekday: 3 },
+            { level: 'FIRST_QUARTILE', weekday: 4 },
+            { level: 'FIRST_QUARTILE', weekday: 5 },
+            { level: 'FIRST_QUARTILE', weekday: 6 },
+          ],
+        },
+        {
+          days: [
+            { level: 'SECOND_QUARTILE', weekday: 0 },
+            { level: 'FIRST_QUARTILE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'FIRST_QUARTILE', weekday: 3 },
+            { level: 'FIRST_QUARTILE', weekday: 4 },
+            { level: 'FIRST_QUARTILE', weekday: 5 },
+            { level: 'SECOND_QUARTILE', weekday: 6 },
+          ],
+        },
+        {
+          days: [
+            { level: 'FIRST_QUARTILE', weekday: 0 },
+            { level: 'FIRST_QUARTILE', weekday: 1 },
+            { level: 'FIRST_QUARTILE', weekday: 2 },
+            { level: 'FIRST_QUARTILE', weekday: 3 },
+            { level: 'FIRST_QUARTILE', weekday: 4 },
+            { level: 'FIRST_QUARTILE', weekday: 5 },
+            { level: 'FIRST_QUARTILE', weekday: 6 },
+          ],
+        },
+        {
+          days: [
+            { level: 'NONE', weekday: 0 },
+            { level: 'FIRST_QUARTILE', weekday: 1 },
+            { level: 'FIRST_QUARTILE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
+          ],
+        },
+        {
+          days: [
+            { level: 'FIRST_QUARTILE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'FIRST_QUARTILE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'FIRST_QUARTILE', weekday: 4 },
+            { level: 'FIRST_QUARTILE', weekday: 5 },
+            { level: 'FIRST_QUARTILE', weekday: 6 },
+          ],
+        },
+        {
+          days: [
+            { level: 'FIRST_QUARTILE', weekday: 0 },
+            { level: 'FIRST_QUARTILE', weekday: 1 },
+            { level: 'SECOND_QUARTILE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'FIRST_QUARTILE', weekday: 4 },
+            { level: 'FIRST_QUARTILE', weekday: 5 },
+            { level: 'SECOND_QUARTILE', weekday: 6 },
+          ],
+        },
+        {
+          days: [
+            { level: 'FIRST_QUARTILE', weekday: 0 },
+            { level: 'FIRST_QUARTILE', weekday: 1 },
+            { level: 'FIRST_QUARTILE', weekday: 2 },
+            { level: 'FIRST_QUARTILE', weekday: 3 },
+            { level: 'FIRST_QUARTILE', weekday: 4 },
+            { level: 'FIRST_QUARTILE', weekday: 5 },
+            { level: 'FIRST_QUARTILE', weekday: 6 },
+          ],
+        },
+        {
+          days: [
+            { level: 'FIRST_QUARTILE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'FIRST_QUARTILE', weekday: 3 },
+            { level: 'FIRST_QUARTILE', weekday: 4 },
+            { level: 'NONE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
+          ],
+        },
+        {
+          days: [
+            { level: 'FIRST_QUARTILE', weekday: 0 },
+            { level: 'FIRST_QUARTILE', weekday: 1 },
+            { level: 'FIRST_QUARTILE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'NONE', weekday: 4 },
+            { level: 'FIRST_QUARTILE', weekday: 5 },
+            { level: 'FIRST_QUARTILE', weekday: 6 },
+          ],
+        },
+        {
+          days: [
+            { level: 'FIRST_QUARTILE', weekday: 0 },
+            { level: 'FIRST_QUARTILE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'SECOND_QUARTILE', weekday: 3 },
+            { level: 'FIRST_QUARTILE', weekday: 4 },
+            { level: 'FIRST_QUARTILE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
+          ],
+        },
+        {
+          days: [
+            { level: 'FIRST_QUARTILE', weekday: 0 },
+            { level: 'FIRST_QUARTILE', weekday: 1 },
+            { level: 'FIRST_QUARTILE', weekday: 2 },
+            { level: 'FIRST_QUARTILE', weekday: 3 },
+            { level: 'FIRST_QUARTILE', weekday: 4 },
+            { level: 'SECOND_QUARTILE', weekday: 5 },
+            { level: 'FIRST_QUARTILE', weekday: 6 },
+          ],
+        },
+        {
+          days: [
+            { level: 'FIRST_QUARTILE', weekday: 0 },
+            { level: 'FIRST_QUARTILE', weekday: 1 },
+            { level: 'SECOND_QUARTILE', weekday: 2 },
+            { level: 'FIRST_QUARTILE', weekday: 3 },
+            { level: 'SECOND_QUARTILE', weekday: 4 },
+            { level: 'FIRST_QUARTILE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
+          ],
+        },
+        {
+          days: [
+            { level: 'SECOND_QUARTILE', weekday: 0 },
+            { level: 'THIRD_QUARTILE', weekday: 1 },
+            { level: 'FOURTH_QUARTILE', weekday: 2 },
+            { level: 'FIRST_QUARTILE', weekday: 3 },
+            { level: 'SECOND_QUARTILE', weekday: 4 },
+            { level: 'FIRST_QUARTILE', weekday: 5 },
+            { level: 'FIRST_QUARTILE', weekday: 6 },
+          ],
+        },
+        {
+          days: [
+            { level: 'SECOND_QUARTILE', weekday: 0 },
+            { level: 'FIRST_QUARTILE', weekday: 1 },
+            { level: 'SECOND_QUARTILE', weekday: 2 },
+            { level: 'FIRST_QUARTILE', weekday: 3 },
+            { level: 'FIRST_QUARTILE', weekday: 4 },
+            { level: 'FIRST_QUARTILE', weekday: 5 },
+            { level: 'FIRST_QUARTILE', weekday: 6 },
+          ],
+        },
+        {
+          days: [
+            { level: 'SECOND_QUARTILE', weekday: 0 },
+            { level: 'SECOND_QUARTILE', weekday: 1 },
+            { level: 'SECOND_QUARTILE', weekday: 2 },
+            { level: 'THIRD_QUARTILE', weekday: 3 },
+            { level: 'FOURTH_QUARTILE', weekday: 4 },
+            { level: 'SECOND_QUARTILE', weekday: 5 },
+            { level: 'FIRST_QUARTILE', weekday: 6 },
+          ],
+        },
+        {
+          days: [
+            { level: 'FIRST_QUARTILE', weekday: 0 },
+            { level: 'SECOND_QUARTILE', weekday: 1 },
+            { level: 'SECOND_QUARTILE', weekday: 2 },
+            { level: 'SECOND_QUARTILE', weekday: 3 },
+            { level: 'FOURTH_QUARTILE', weekday: 4 },
+            { level: 'FOURTH_QUARTILE', weekday: 5 },
+            { level: 'SECOND_QUARTILE', weekday: 6 },
+          ],
+        },
+        {
+          days: [
+            { level: 'FIRST_QUARTILE', weekday: 0 },
+            { level: 'FIRST_QUARTILE', weekday: 1 },
+            { level: 'FIRST_QUARTILE', weekday: 2 },
+            { level: 'FOURTH_QUARTILE', weekday: 3 },
+            { level: 'FIRST_QUARTILE', weekday: 4 },
+            { level: 'FOURTH_QUARTILE', weekday: 5 },
+            { level: 'SECOND_QUARTILE', weekday: 6 },
+          ],
+        },
+        {
+          days: [
+            { level: 'FIRST_QUARTILE', weekday: 0 },
+            { level: 'FOURTH_QUARTILE', weekday: 1 },
+            { level: 'SECOND_QUARTILE', weekday: 2 },
+            { level: 'FIRST_QUARTILE', weekday: 3 },
+            { level: 'SECOND_QUARTILE', weekday: 4 },
+            { level: 'FOURTH_QUARTILE', weekday: 5 },
+            { level: 'FIRST_QUARTILE', weekday: 6 },
+          ],
+        },
+        {
+          days: [
+            { level: 'FIRST_QUARTILE', weekday: 0 },
+            { level: 'THIRD_QUARTILE', weekday: 1 },
+            { level: 'SECOND_QUARTILE', weekday: 2 },
+            { level: 'SECOND_QUARTILE', weekday: 3 },
+            { level: 'SECOND_QUARTILE', weekday: 4 },
+            { level: 'THIRD_QUARTILE', weekday: 5 },
+            { level: 'FIRST_QUARTILE', weekday: 6 },
+          ],
+        },
+        {
+          days: [
+            { level: 'FOURTH_QUARTILE', weekday: 0 },
+            { level: 'FOURTH_QUARTILE', weekday: 1 },
+            { level: 'FIRST_QUARTILE', weekday: 2 },
+            { level: 'NONE', weekday: 3 },
+            { level: 'THIRD_QUARTILE', weekday: 4 },
+            { level: 'SECOND_QUARTILE', weekday: 5 },
+            { level: 'FOURTH_QUARTILE', weekday: 6 },
+          ],
+        },
+        {
+          days: [
+            { level: 'THIRD_QUARTILE', weekday: 0 },
+            { level: 'THIRD_QUARTILE', weekday: 1 },
+            { level: 'FOURTH_QUARTILE', weekday: 2 },
+            { level: 'FIRST_QUARTILE', weekday: 3 },
+            { level: 'FIRST_QUARTILE', weekday: 4 },
+            { level: 'THIRD_QUARTILE', weekday: 5 },
+            { level: 'SECOND_QUARTILE', weekday: 6 },
+          ],
+        },
+        {
+          days: [
+            { level: 'THIRD_QUARTILE', weekday: 0 },
+            { level: 'SECOND_QUARTILE', weekday: 1 },
+            { level: 'THIRD_QUARTILE', weekday: 2 },
+            { level: 'THIRD_QUARTILE', weekday: 3 },
+            { level: 'FIRST_QUARTILE', weekday: 4 },
+            { level: 'FIRST_QUARTILE', weekday: 5 },
+            { level: 'NONE', weekday: 6 },
+          ],
+        },
+        {
+          days: [
+            { level: 'NONE', weekday: 0 },
+            { level: 'FIRST_QUARTILE', weekday: 1 },
+            { level: 'NONE', weekday: 2 },
+            { level: 'THIRD_QUARTILE', weekday: 3 },
+            { level: 'FOURTH_QUARTILE', weekday: 4 },
+            { level: 'SECOND_QUARTILE', weekday: 5 },
+            { level: 'THIRD_QUARTILE', weekday: 6 },
+          ],
+        },
+        {
+          days: [
+            { level: 'SECOND_QUARTILE', weekday: 0 },
+            { level: 'FIRST_QUARTILE', weekday: 1 },
+            { level: 'FIRST_QUARTILE', weekday: 2 },
+            { level: 'FIRST_QUARTILE', weekday: 3 },
+            { level: 'FIRST_QUARTILE', weekday: 4 },
+            { level: 'SECOND_QUARTILE', weekday: 5 },
+            { level: 'THIRD_QUARTILE', weekday: 6 },
+          ],
+        },
+        {
+          days: [
+            { level: 'FIRST_QUARTILE', weekday: 0 },
+            { level: 'NONE', weekday: 1 },
+            { level: 'SECOND_QUARTILE', weekday: 2 },
+            { level: 'FIRST_QUARTILE', weekday: 3 },
+            { level: 'SECOND_QUARTILE', weekday: 4 },
+            { level: 'SECOND_QUARTILE', weekday: 5 },
+            { level: 'FIRST_QUARTILE', weekday: 6 },
+          ],
+        },
+        {
+          days: [
+            { level: 'SECOND_QUARTILE', weekday: 0 },
+            { level: 'SECOND_QUARTILE', weekday: 1 },
+            { level: 'SECOND_QUARTILE', weekday: 2 },
+            { level: 'FIRST_QUARTILE', weekday: 3 },
+          ],
+        },
+      ],
+      year: 2019,
     },
   ],
 }
 
-export default data as any
+export default data

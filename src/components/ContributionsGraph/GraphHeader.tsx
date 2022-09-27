@@ -1,9 +1,9 @@
 import Link from 'next/link'
 
-import type { GraphRemoteData } from '../../types'
+import type { GitHubUsername } from '../../types'
 import styles from './Graph.module.css'
 
-export default function GraphHeader(props: { username: GraphRemoteData['username'] }) {
+export default function GraphHeader(props: { username: GitHubUsername }) {
   return (
     <div className="mb-4 flex items-center">
       <Link passHref href={`https://github.com/${props.username}`}>

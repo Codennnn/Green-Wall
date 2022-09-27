@@ -36,11 +36,12 @@ export default function AppearanceSetting({
       </fieldset>
 
       <fieldset className="fieldset">
-        <label htmlFor="origin">Attribution</label>
+        <label htmlFor="attribution">Attribution</label>
         <RadixSwitch
+          checked={settings?.showAttribution}
           defaultChecked={true}
-          id="origin"
-          onCheckedChange={(checked) => dispatch?.({ type: 'showOrigin', payload: checked })}
+          id="attribution"
+          onCheckedChange={(checked) => dispatch?.({ type: 'showAttribution', payload: checked })}
         />
       </fieldset>
 
