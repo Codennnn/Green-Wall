@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react'
 
 import ContributionsGraph from '../../components/ContributionsGraph'
 import Layout from '../../components/Layout'
-import type { ErrorData, GraphRemoteData, GraphSettings, GraphSize, Themes } from '../../types'
+import type { ErrorData, GraphSettings, GraphSize, RequestResult, Themes } from '../../types'
 
 interface Props {
   username: string
@@ -18,7 +18,7 @@ type NextPageWithLayout = NextPage<Props> & {
 }
 
 const UserSharePage: NextPageWithLayout = ({ username, settings }: Props) => {
-  const [graphData, setGraphData] = useState<GraphRemoteData>()
+  const [graphData, setGraphData] = useState<RequestResult>()
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -27,10 +27,10 @@ const UserSharePage: NextPageWithLayout = ({ username, settings }: Props) => {
         try {
           setLoading(true)
 
-          const res = await fetch(`/api/${username}`)
+          const res = await fetch(`/api/contribution/${username}`)
 
           if (res.status < 400) {
-            const data: GraphRemoteData = await res.json()
+            const data: RequestResult = await res.json()
             setGraphData(data)
           } else {
             const error: ErrorData = await res.json()

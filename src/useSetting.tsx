@@ -11,15 +11,15 @@ type Action =
       payload: GraphSettings['size']
     }
   | {
-      type: 'showOrigin'
-      payload: GraphSettings['showOrigin']
+      type: 'showAttribution'
+      payload: GraphSettings['showAttribution']
     }
   | {
       type: 'theme'
       payload: GraphSettings['theme']
     }
 
-const initialState: State = { size: DEFAULT_SIZE, theme: DEFAULT_THEME, showOrigin: true }
+const initialState: State = { size: DEFAULT_SIZE, theme: DEFAULT_THEME, showAttribution: true }
 
 export default function useSetting() {
   return useReducer((state: State, { type, payload }: Action): State => {
@@ -27,8 +27,8 @@ export default function useSetting() {
       case 'size':
         return { ...state, size: payload }
 
-      case 'showOrigin':
-        return { ...state, showOrigin: payload }
+      case 'showAttribution':
+        return { ...state, showAttribution: payload }
 
       case 'theme':
         return { ...state, theme: payload }

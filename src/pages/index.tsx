@@ -13,7 +13,7 @@ import SettingButton from '../components/SettingButton'
 import ShareButton from '../components/ShareButton'
 import TweetButton from '../components/TweetButton'
 import mockData from '../mock-data'
-import type { ErrorData, GraphRemoteData } from '../types'
+import type { ErrorData, RequestResult } from '../types'
 import useSetting from '../useSetting'
 
 export default function HomePage() {
@@ -31,7 +31,7 @@ export default function HomePage() {
 
   const [downloading, setDownloading] = useState(false)
 
-  const [graphData, setGraphData] = useState<GraphRemoteData>()
+  const [graphData, setGraphData] = useState<RequestResult>()
   const [error, setError] = useState<ErrorData>()
 
   const handleError = (errorData: ErrorData = {}) => {
@@ -51,12 +51,12 @@ export default function HomePage() {
         setError(undefined)
         setGraphData(undefined)
         setLoading(true)
-        const res = await fetch(`/api/${username}`)
+        const res = await fetch(`/api/contribution/${username}`)
         if (res.status >= 400) {
           const error: ErrorData = await res.json()
           handleError({ message: error.message })
         } else {
-          const data: GraphRemoteData = await res.json()
+          const data: RequestResult = await res.json()
           setGraphData(data)
         }
       } catch (e) {
@@ -76,7 +76,7 @@ export default function HomePage() {
         const dataURL = await toPng(graphRef.current)
         const trigger = document.createElement('a')
         trigger.href = dataURL
-        trigger.download = `${graphData.username}_contributions`
+        trigger.download = `${graphData.login}_contributions`
         trigger.click()
       } finally {
         setTimeout(() => {
@@ -149,7 +149,7 @@ export default function HomePage() {
                 </button>
                 <div className="flex flex-wrap items-center gap-x-6 md:justify-center">
                   <TweetButton />
-                  <ShareButton settings={settings} username={graphData.username} />
+                  <ShareButton settings={settings} username={graphData.login} />
                   <div className="relative">
                     <SettingButton
                       content={<AppearanceSetting value={settings} onChange={dispatch} />}
