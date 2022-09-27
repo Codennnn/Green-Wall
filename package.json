@@ -23,7 +23,6 @@
     "@radix-ui/react-toggle-group": "^1.0.0",
     "@radix-ui/react-tooltip": "^1.0.0",
     "@splitbee/web": "^0.3.0",
-    "date-fns": "^2.29.3",
     "framer-motion": "^7.3.5",
     "html-to-image": "^1.10.8",
     "next": "12.3.0",
