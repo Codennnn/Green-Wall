@@ -5,7 +5,7 @@ import type {
   ContributionYear,
   GitHubContributionsCollection,
   GitHubUser,
-  RequestResult,
+  GraphData,
 } from '../../../types'
 
 async function fetchGitHubUser(username: string): Promise<GitHubUser> {
@@ -103,7 +103,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
       years.map((year) => fetchContributionsCollection(username, year))
     )
 
-    const data: RequestResult = { ...githubUser, contributionCalendars }
+    const data: GraphData = { ...githubUser, contributionCalendars }
 
     return res.status(200).json(data)
   }

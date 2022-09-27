@@ -1,14 +1,14 @@
 import { forwardRef, memo, useImperativeHandle, useMemo, useRef } from 'react'
 
 import { DEFAULT_SIZE, DEFAULT_THEME, sizeProperties, THEMES } from '../../constants'
-import type { GraphSettings, RequestResult } from '../../types'
+import type { GraphData, GraphSettings } from '../../types'
 import Graph from './Graph'
 import GraphFooter from './GraphFooter'
 import GraphHeader from './GraphHeader'
 
 interface ContributionsGraphProps {
   className?: string
-  data: RequestResult
+  data: GraphData
   settings?: GraphSettings
 }
 
@@ -52,8 +52,8 @@ function ContributionsGraph(props: ContributionsGraphProps, ref: React.Ref<HTMLD
       <GraphHeader username={data.login} />
 
       <div className="flex flex-col gap-y-6">
-        {data.contributionCalendars.map((data) => (
-          <Graph key={data.year} data={data} />
+        {data.contributionCalendars.map((calendar) => (
+          <Graph key={calendar.year} data={calendar} />
         ))}
       </div>
 

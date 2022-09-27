@@ -72,7 +72,7 @@ export interface GitHubContributionsCollection {
   }
 }
 
-export interface RequestResult extends GitHubUser {
+export interface GraphData extends GitHubUser {
   contributionCalendars: ContributionCalendar[]
 }
 

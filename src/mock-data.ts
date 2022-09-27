@@ -1,6 +1,6 @@
-import type { RequestResult } from './types'
+import type { GraphData } from './types'
 
-const data: RequestResult = {
+const data: GraphData = {
   name: 'LeoKu',
   login: 'Codennnn',
   avatarUrl:

@@ -13,7 +13,7 @@ import SettingButton from '../components/SettingButton'
 import ShareButton from '../components/ShareButton'
 import TweetButton from '../components/TweetButton'
 import mockData from '../mock-data'
-import type { ErrorData, RequestResult } from '../types'
+import type { ErrorData, GraphData } from '../types'
 import useSetting from '../useSetting'
 
 export default function HomePage() {
@@ -31,7 +31,7 @@ export default function HomePage() {
 
   const [downloading, setDownloading] = useState(false)
 
-  const [graphData, setGraphData] = useState<RequestResult>()
+  const [graphData, setGraphData] = useState<GraphData>()
   const [error, setError] = useState<ErrorData>()
 
   const handleError = (errorData: ErrorData = {}) => {
@@ -56,7 +56,7 @@ export default function HomePage() {
           const error: ErrorData = await res.json()
           handleError({ message: error.message })
         } else {
-          const data: RequestResult = await res.json()
+          const data: GraphData = await res.json()
           setGraphData(data)
         }
       } catch (e) {

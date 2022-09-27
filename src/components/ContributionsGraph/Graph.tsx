@@ -10,11 +10,13 @@ interface GraphProps {
 }
 
 export default function Graph(props: GraphProps) {
+  const calendar = props.data
+
   return (
     <div>
       <div className="mb-2 text-sm">
-        <span className="mr-2 italic">{props.data.year}:</span>
-        {numberWithCommas(props.data.total)} Contributions
+        <span className="mr-2 italic">{calendar.year}:</span>
+        {numberWithCommas(calendar.total)} Contributions
       </div>
 
       <div className={`${styles['graph']}`}>
@@ -46,7 +48,7 @@ export default function Graph(props: GraphProps) {
         )}
 
         <ul className={`${styles['grids']} ${styles['blocks']}`}>
-          {props.data.weeks.reduce<React.ReactElement[]>((acc, week, i) => {
+          {calendar.weeks.reduce<React.ReactElement[]>((blocks, week, i) => {
             let days = week.days
 
             if (days.length < 7) {
@@ -61,10 +63,10 @@ export default function Graph(props: GraphProps) {
             }
 
             days.forEach((day, j) => {
-              acc.push(<li key={`${i}${j}`} data-level={levels[day.level]}></li>)
+              blocks.push(<li key={`${i}${j}`} data-level={levels[day.level]}></li>)
             })
 
-            return acc
+            return blocks
           }, [])}
         </ul>
       </div>
