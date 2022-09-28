@@ -49,7 +49,10 @@ function ContributionsGraph(props: ContributionsGraphProps, ref: React.Ref<HTMLD
         backgroundColor: 'var(--graph-bg, #fff)',
       }}
     >
-      <GraphHeader username={data.login} />
+      <GraphHeader
+        displayName={settings?.displayName === '1' ? data.name : data.login}
+        username={data.login}
+      />
 
       <div className="flex flex-col gap-y-6">
         {data.contributionCalendars.map((calendar) => (

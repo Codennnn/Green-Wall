@@ -31,10 +31,10 @@ export function RadixSelect(props: SelectProps) {
                 <Select.Item
                   key={it.value}
                   className="
-                relative flex cursor-pointer select-none items-center rounded-md px-7 py-2 text-sm font-medium
-                text-main-600 focus:bg-main-100/50 focus:outline-none
-                radix-disabled:opacity-50
-                "
+                  relative flex cursor-pointer select-none items-center rounded-md px-1 py-2 text-sm font-medium
+                  text-main-600 focus:bg-main-100/50 focus:outline-none
+                  radix-disabled:opacity-50
+                  "
                   disabled={it.disabled}
                   value={it.value}
                 >

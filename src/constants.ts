@@ -1,4 +1,5 @@
-import type { ContributionLevel, GraphSize, Theme, Themes } from './types'
+import type { ContributionLevel, Theme, Themes } from './types'
+import { DisplayName, GraphSize } from './types'
 
 export const levels: Record<ContributionLevel, -1 | 0 | 1 | 2 | 3 | 4> = {
   Null: -1,
@@ -17,25 +18,26 @@ export const sizeProperties: Record<
     ['--block-gap']: string
   }
 > = {
-  small: {
+  [GraphSize.Small]: {
     ['--block-size']: '10px',
     ['--block-round']: '2px',
     ['--block-gap']: '3px',
   },
-  medium: {
+  [GraphSize.Medium]: {
     ['--block-size']: '11px',
     ['--block-round']: '3px',
     ['--block-gap']: '3px',
   },
-  large: {
+  [GraphSize.Large]: {
     ['--block-size']: '12px',
     ['--block-round']: '3px',
     ['--block-gap']: '4px',
   },
 }
 
-export const DEFAULT_SIZE: GraphSize = 'small'
+export const DEFAULT_SIZE: GraphSize = GraphSize.Small
 export const DEFAULT_THEME: Themes = 'GitHub'
+export const DEFAULT_DISPLAY_NAME: DisplayName = DisplayName.Username
 
 export const THEMES: Theme[] = [
   {

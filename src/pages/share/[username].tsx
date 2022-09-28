@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react'
 
 import ContributionsGraph from '../../components/ContributionsGraph'
 import Layout from '../../components/Layout'
-import type { ErrorData, GraphSettings, GraphSize, GraphData, Themes } from '../../types'
+import type { ErrorData, GraphData, GraphSettings, GraphSize, Themes } from '../../types'
 
 interface Props {
   username: string
@@ -43,6 +43,10 @@ const UserSharePage: NextPageWithLayout = ({ username, settings }: Props) => {
     }
   }, [username])
 
+  const sharingTitle = `${username}'s GitHub contributions`
+  const sharingURL = `https://green-wall.vercel.app/share/${username}`
+  const sharingDescription = `I just made a GitHub contributions graph in review!`
+
   return (
     <>
       <Head>
@@ -51,8 +55,13 @@ const UserSharePage: NextPageWithLayout = ({ username, settings }: Props) => {
           {`'`}s GitHub contributions in review · Green Wall
         </title>
 
-        <meta content={`${username}'s GitHub contributions`} property="og:title" />
-        <meta content={`https://green-wall.vercel.app/share/${username}`} property="og:url" />
+        <meta content={sharingTitle} property="og:title" />
+        <meta content={sharingDescription} property="og:description" />
+        <meta content={sharingURL} property="og:url" />
+
+        <meta content={sharingTitle} name="twitter:title" />
+        <meta content={sharingDescription} name="twitter:description" />
+        <meta content={sharingURL} property="twitter:url" />
       </Head>
 
       {loading ? (

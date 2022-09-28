@@ -2,12 +2,11 @@ import { motion, useDragControls } from 'framer-motion'
 import { useEffect, useRef, useState } from 'react'
 
 import { iconClose } from '../icons'
-import AppearanceSetting, { type AppearanceSettingProps } from './AppearanceSetting'
 
 export default function DraggableAppearanceSetting(
-  props: AppearanceSettingProps & { onClose?: () => void }
+  props: React.PropsWithChildren<{ onClose?: () => void }>
 ) {
-  const { onClose, ...appearanceSetting } = props
+  const { children, onClose } = props
 
   const [fixed, setFixed] = useState(false)
   const [top, setTop] = useState(35)
@@ -71,9 +70,7 @@ export default function DraggableAppearanceSetting(
           </button>
         </motion.div>
 
-        <div className="p-5">
-          <AppearanceSetting {...appearanceSetting} />
-        </div>
+        <div className="p-5">{children}</div>
       </motion.div>
     </div>
   ) : null

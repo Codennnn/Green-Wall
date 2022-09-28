@@ -1,9 +1,12 @@
 import Link from 'next/link'
 
-import type { GitHubUsername } from '../../types'
+import type { GitHubUser, GitHubUsername } from '../../types'
 import styles from './Graph.module.css'
 
-export default function GraphHeader(props: { username: GitHubUsername }) {
+export default function GraphHeader(props: {
+  username: GitHubUsername
+  displayName?: GitHubUser['name'] | GitHubUser['login']
+}) {
   return (
     <div className="mb-4 flex items-center">
       <Link passHref href={`https://github.com/${props.username}`}>
@@ -19,7 +22,7 @@ export default function GraphHeader(props: { username: GitHubUsername }) {
             </svg>
           </span>
           <span className="text-xl font-bold group-hover:underline" translate="no">
-            {props.username}
+            {props.displayName}
           </span>
         </a>
       </Link>

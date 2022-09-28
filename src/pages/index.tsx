@@ -164,12 +164,12 @@ export default function HomePage() {
                     />
                     {settingPopUp && (
                       <DraggableAppearanceSetting
-                        value={settings}
-                        onChange={dispatch}
                         onClose={() => {
                           setSettingPopUp(false)
                         }}
-                      />
+                      >
+                        <AppearanceSetting value={settings} onChange={dispatch} />
+                      </DraggableAppearanceSetting>
                     )}
                   </div>
                 </div>

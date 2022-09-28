@@ -12,7 +12,7 @@
   }
 
   .fieldset {
-    @apply min-h-[30px] flex items-center justify-between py-1;
+    @apply min-h-[35px] flex items-center justify-between py-1 mb-3 last-of-type:mb-0;
   }
 
   .fieldset > label {

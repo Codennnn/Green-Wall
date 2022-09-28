@@ -18,6 +18,10 @@ type Action =
       type: 'theme'
       payload: GraphSettings['theme']
     }
+  | {
+      type: 'displayName'
+      payload: GraphSettings['displayName']
+    }
 
 const initialState: State = { size: DEFAULT_SIZE, theme: DEFAULT_THEME, showAttribution: true }
 
@@ -32,6 +36,9 @@ export default function useSetting() {
 
       case 'theme':
         return { ...state, theme: payload }
+
+      case 'displayName':
+        return { ...state, displayName: payload }
 
       default:
         throw new Error(`Not a valid type: ${type}.`)

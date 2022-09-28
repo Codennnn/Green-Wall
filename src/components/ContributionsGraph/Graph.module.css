@@ -1,5 +1,5 @@
 .graph {
-  --week-width: calc(var(--block-size) + var(--block-gap));
+  --week-width: calc(var(--block-size, 10px) + var(--block-gap, 3px));
 
   @apply text-xs gap-1;
 
@@ -44,7 +44,7 @@
 }
 
 .grids li {
-  border-radius: var(--block-round);
+  border-radius: var(--block-round, 2px);
 }
 
 .grids li[data-level='-1'] {
@@ -78,6 +78,6 @@
 .days,
 .blocks {
   display: grid;
-  grid-gap: var(--block-gap);
-  grid-template-rows: repeat(7, var(--block-size));
+  grid-gap: var(--block-gap, 3px);
+  grid-template-rows: repeat(7, var(--block-size, 10px));
 }

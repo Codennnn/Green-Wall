@@ -80,10 +80,20 @@ export interface ErrorData {
   message?: string
 }
 
-export type GraphSize = 'small' | 'medium' | 'large'
+export const enum GraphSize {
+  Small = 's',
+  Medium = 'm',
+  Large = 'l',
+}
+
+export const enum DisplayName {
+  Username = '0',
+  ProfileName = '1',
+}
 
 export interface GraphSettings {
   size?: GraphSize
   showAttribution?: boolean
+  displayName?: DisplayName
   theme?: Themes
 }
