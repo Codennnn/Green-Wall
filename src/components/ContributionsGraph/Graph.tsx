@@ -4,16 +4,16 @@ import type { ContributionCalendar, ContributionDay } from '../../types'
 import { ContributionLevel } from '../../types'
 import styles from './Graph.module.css'
 
-interface GraphProps {
+interface GraphProps extends React.ComponentProps<'div'> {
   data: ContributionCalendar
   daysLabel?: boolean
 }
 
 export default function Graph(props: GraphProps) {
-  const calendar = props.data
+  const { data: calendar, daysLabel, ...rest } = props
 
   return (
-    <div>
+    <div {...rest}>
       <div className="mb-2 text-sm">
         <span className="mr-2 italic">{calendar.year}:</span>
         {numberWithCommas(calendar.total)} Contributions
@@ -35,7 +35,7 @@ export default function Graph(props: GraphProps) {
           <li>Dec</li>
         </ul>
 
-        {props.daysLabel && (
+        {daysLabel && (
           <ul className={`${styles['days']}`}>
             <li>Sun</li>
             <li>Mon</li>

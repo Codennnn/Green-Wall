@@ -1,14 +1,15 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 
 import type {
+  ContributionBasic,
   ContributionCalendar,
   ContributionYear,
-  GitHubContributionsCollection,
+  GitHubContributionCalendar,
   GitHubUser,
   GraphData,
 } from '../../../types'
 
-async function fetchGitHubUser(username: string): Promise<GitHubUser> {
+async function fetchGitHubUser(username: string): Promise<ContributionBasic> {
   const res = await fetch('https://api.github.com/graphql', {
     method: 'post',
     body: JSON.stringify({
@@ -41,7 +42,9 @@ async function fetchGitHubUser(username: string): Promise<GitHubUser> {
     throw new Error()
   }
 
-  return json.data.user
+  const { contributionsCollection, ...rest } = json.data.user
+
+  return { contributionYears: contributionsCollection.years, ...rest }
 }
 
 async function fetchContributionsCollection(
@@ -78,7 +81,7 @@ async function fetchContributionsCollection(
   })
 
   type Json = {
-    data: { user: GitHubContributionsCollection | null }
+    data: { user: GitHubContributionCalendar | null }
     errors?: any[]
   }
   const json: Json = await res.json()
@@ -98,9 +101,8 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
   if (typeof username === 'string') {
     const githubUser = await fetchGitHubUser(username)
 
-    const years = githubUser.contributionsCollection.years
     const contributionCalendars = await Promise.all(
-      years.map((year) => fetchContributionsCollection(username, year))
+      githubUser.contributionYears.map((year) => fetchContributionsCollection(username, year))
     )
 
     const data: GraphData = { ...githubUser, contributionCalendars }

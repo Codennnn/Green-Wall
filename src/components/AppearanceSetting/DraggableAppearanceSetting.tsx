@@ -45,7 +45,7 @@ export default function DraggableAppearanceSetting(
         dragMomentum={false}
       >
         <motion.div
-          className="flex min-h-[35px] select-none items-center bg-accent-50 px-3 text-sm font-medium text-accent-500"
+          className="flex min-h-[2.5rem] select-none items-center bg-accent-50 px-3 font-medium text-accent-500"
           initial={{ cursor: 'grab' }}
           whileTap={{ cursor: 'grabbing' }}
           onPointerDown={(event) => {

@@ -43,6 +43,19 @@ export interface GitHubUser {
   }
 }
 
+export interface GitHubContributionCalendar {
+  contributionsCollection: {
+    contributionCalendar: ContributionCalendar
+  }
+}
+
+export interface ContributionBasic {
+  name?: string
+  login: GitHubUsername
+  avatarUrl: string
+  contributionYears: ContributionYear[]
+}
+
 /** Check out: {@link https://docs.github.com/en/graphql/reference/enums#contributionlevel} */
 export const enum ContributionLevel {
   Null = 'Null',
@@ -66,13 +79,7 @@ export interface ContributionCalendar {
   }[]
 }
 
-export interface GitHubContributionsCollection {
-  contributionsCollection: {
-    contributionCalendar: ContributionCalendar
-  }
-}
-
-export interface GraphData extends GitHubUser {
+export interface GraphData extends ContributionBasic {
   contributionCalendars: ContributionCalendar[]
 }
 
@@ -93,7 +100,8 @@ export const enum DisplayName {
 
 export interface GraphSettings {
   size?: GraphSize
-  showAttribution?: boolean
   displayName?: DisplayName
+  sinceYear?: string
+  showAttribution?: boolean
   theme?: Themes
 }

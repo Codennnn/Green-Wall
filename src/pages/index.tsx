@@ -34,9 +34,14 @@ export default function HomePage() {
   const [graphData, setGraphData] = useState<GraphData>()
   const [error, setError] = useState<ErrorData>()
 
-  const handleError = (errorData: ErrorData = {}) => {
-    console.log({ errorData })
+  const reset = () => {
     setGraphData(undefined)
+    setSettingPopUp(false)
+    dispatch({ type: 'reset' })
+  }
+
+  const handleError = (errorData: ErrorData = {}) => {
+    reset()
     setError(errorData)
   }
 
@@ -46,10 +51,10 @@ export default function HomePage() {
     e.preventDefault()
 
     if (username.trim() && !loading) {
+      reset()
       splitbee.track('Click Generate')
       try {
         setError(undefined)
-        setGraphData(undefined)
         setLoading(true)
         const res = await fetch(`/api/contribution/${username}`)
         if (res.status >= 400) {
@@ -152,7 +157,13 @@ export default function HomePage() {
                   <ShareButton settings={settings} username={graphData.login} />
                   <div className="relative">
                     <SettingButton
-                      content={<AppearanceSetting value={settings} onChange={dispatch} />}
+                      content={
+                        <AppearanceSetting
+                          graphData={graphData}
+                          value={settings}
+                          onChange={dispatch}
+                        />
+                      }
                       onClick={() => {
                         if (settingPopUp) {
                           setSettingPopUp(false)
@@ -168,7 +179,11 @@ export default function HomePage() {
                           setSettingPopUp(false)
                         }}
                       >
-                        <AppearanceSetting value={settings} onChange={dispatch} />
+                        <AppearanceSetting
+                          graphData={graphData}
+                          value={settings}
+                          onChange={dispatch}
+                        />
                       </DraggableAppearanceSetting>
                     )}
                   </div>

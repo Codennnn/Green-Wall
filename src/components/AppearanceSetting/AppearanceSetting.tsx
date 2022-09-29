@@ -1,6 +1,6 @@
 import splitbee from '@splitbee/web'
 
-import { DisplayName, GraphSize } from '../../types'
+import { type GraphData, DisplayName, GraphSize } from '../../types'
 import type useSetting from '../../useSetting'
 import ThemeSelector from '../ThemeSelector'
 import { RadixSelect } from '../ui-kit/RadixSelect'
@@ -13,11 +13,13 @@ type Dispatch = ReturnType<typeof useSetting>[1]
 export interface AppearanceSettingProps {
   value?: State
   onChange?: Dispatch
+  graphData: GraphData | undefined
 }
 
 export default function AppearanceSetting({
   value: settings,
   onChange: dispatch,
+  graphData,
 }: AppearanceSettingProps) {
   return (
     <div className="min-w-[min(40vw,220px)] max-w-[min(90vw,280px)] text-main-400">
@@ -37,15 +39,27 @@ export default function AppearanceSetting({
       </fieldset>
 
       <fieldset className="fieldset">
-        <label htmlFor="attribution">Display Name</label>
+        <label>Display Name</label>
         <RadixSelect
-          defaultValue="0"
           items={[
             { label: 'Username', value: DisplayName.Username },
             { label: 'Profile name', value: DisplayName.ProfileName },
           ]}
           value={settings?.displayName}
           onValueChange={(v) => dispatch?.({ type: 'displayName', payload: v as DisplayName })}
+        />
+      </fieldset>
+
+      <fieldset className="fieldset">
+        <label>Since Year</label>
+        <RadixSelect
+          defaultValue={graphData?.contributionYears.at(-1)?.toString()}
+          items={graphData?.contributionYears.map((year) => ({
+            label: `${year}`,
+            value: `${year}`,
+          }))}
+          value={settings?.sinceYear}
+          onValueChange={(v) => dispatch?.({ type: 'sinceYear', payload: v })}
         />
       </fieldset>
 

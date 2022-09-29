@@ -1,6 +1,6 @@
 import { useReducer } from 'react'
 
-import { DEFAULT_SIZE, DEFAULT_THEME } from './constants'
+import { DEFAULT_DISPLAY_NAME, DEFAULT_SIZE, DEFAULT_THEME } from './constants'
 import type { GraphSettings } from './types'
 
 type State = GraphSettings
@@ -11,6 +11,14 @@ type Action =
       payload: GraphSettings['size']
     }
   | {
+      type: 'displayName'
+      payload: GraphSettings['displayName']
+    }
+  | {
+      type: 'sinceYear'
+      payload: GraphSettings['sinceYear']
+    }
+  | {
       type: 'showAttribution'
       payload: GraphSettings['showAttribution']
     }
@@ -19,11 +27,16 @@ type Action =
       payload: GraphSettings['theme']
     }
   | {
-      type: 'displayName'
-      payload: GraphSettings['displayName']
+      type: 'reset'
+      payload?: never
     }
 
-const initialState: State = { size: DEFAULT_SIZE, theme: DEFAULT_THEME, showAttribution: true }
+const initialState: State = {
+  size: DEFAULT_SIZE,
+  theme: DEFAULT_THEME,
+  displayName: DEFAULT_DISPLAY_NAME,
+  showAttribution: true,
+}
 
 export default function useSetting() {
   return useReducer((state: State, { type, payload }: Action): State => {
@@ -31,14 +44,20 @@ export default function useSetting() {
       case 'size':
         return { ...state, size: payload }
 
+      case 'displayName':
+        return { ...state, displayName: payload }
+
+      case 'sinceYear':
+        return { ...state, sinceYear: payload }
+
       case 'showAttribution':
         return { ...state, showAttribution: payload }
 
       case 'theme':
         return { ...state, theme: payload }
 
-      case 'displayName':
-        return { ...state, displayName: payload }
+      case 'reset':
+        return initialState
 
       default:
         throw new Error(`Not a valid type: ${type}.`)

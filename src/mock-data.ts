@@ -5,7 +5,7 @@ const data: GraphData = {
   login: 'Codennnn',
   avatarUrl:
     'https://avatars.githubusercontent.com/u/47730755?u=b42b926a9de7d3d3161a9ddf9ba9e67fb74ee6b3&v=4',
-  contributionsCollection: { years: [2022, 2021, 2020, 2019] },
+  contributionYears: [2022, 2021, 2020, 2019],
   contributionCalendars: [
     {
       total: 589,

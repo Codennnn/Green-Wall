@@ -2,6 +2,7 @@ import { forwardRef, memo, useImperativeHandle, useMemo, useRef } from 'react'
 
 import { DEFAULT_SIZE, DEFAULT_THEME, sizeProperties, THEMES } from '../../constants'
 import type { GraphData, GraphSettings } from '../../types'
+import { DisplayName } from '../../types'
 import Graph from './Graph'
 import GraphFooter from './GraphFooter'
 import GraphHeader from './GraphHeader'
@@ -50,13 +51,17 @@ function ContributionsGraph(props: ContributionsGraphProps, ref: React.Ref<HTMLD
       }}
     >
       <GraphHeader
-        displayName={settings?.displayName === '1' ? data.name : data.login}
+        displayName={settings?.displayName === DisplayName.ProfileName ? data.name : data.login}
         username={data.login}
       />
 
       <div className="flex flex-col gap-y-6">
         {data.contributionCalendars.map((calendar) => (
-          <Graph key={calendar.year} data={calendar} />
+          <Graph
+            key={calendar.year}
+            className={`${(Number(settings?.sinceYear) ?? 0) > calendar.year ? 'hidden' : ''}`}
+            data={calendar}
+          />
         ))}
       </div>
 
