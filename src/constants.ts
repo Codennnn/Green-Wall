@@ -1,6 +1,7 @@
 import type { ContributionLevel, Theme, Themes } from './types'
 import { DisplayName, GraphSize } from './types'
 
+// TODO: Use satisfies Record<ContributionLevel, -1 | 0 | 1 | 2 | 3 | 4>
 export const levels: Record<ContributionLevel, -1 | 0 | 1 | 2 | 3 | 4> = {
   Null: -1,
   NONE: 0,

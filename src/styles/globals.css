@@ -11,11 +11,11 @@
     @apply content-[''] h-4 w-[1px] absolute top-1/2 -right-3 -translate-y-1/2 bg-main-300;
   }
 
-  .fieldset {
-    @apply min-h-[35px] flex items-center justify-between py-1 mb-3 last-of-type:mb-0;
+  .appearance-setting fieldset {
+    @apply min-h-[35px] flex items-center justify-between py-1 mb-2 last-of-type:mb-0;
   }
 
-  .fieldset > label {
+  .appearance-setting fieldset > label {
     @apply mr-5 text-sm font-medium;
   }
 

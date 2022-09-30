@@ -15,13 +15,7 @@ export type Themes =
 export interface Theme {
   name: Themes
   textColor: string
-  levelColors: [
-    string, // level 0
-    string, // level 1
-    string, // level 2
-    string, // level 3
-    string //  level 4
-  ]
+  levelColors: [level_0: string, level_1: string, level_2: string, level_3: string, level_4: string]
   background: string
   mode?: 'light' | 'dark'
 }

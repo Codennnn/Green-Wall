@@ -30,6 +30,8 @@ export default function DraggableAppearanceSetting(
     }
   }, [renderClientSide])
 
+  const [pressing, setPressing] = useState(false)
+
   return renderClientSide ? (
     <div
       ref={wrapper}
@@ -38,11 +40,15 @@ export default function DraggableAppearanceSetting(
     >
       <motion.div
         drag
+        animate={pressing ? 'scale' : undefined}
         className="absolute inline-block overflow-hidden rounded-lg bg-white shadow-overlay"
         dragConstraints={{ current: window.document.body }}
         dragControls={dragControls}
         dragListener={false}
         dragMomentum={false}
+        variants={{
+          scale: { scale: 0.97 },
+        }}
       >
         <motion.div
           className="flex min-h-[2.5rem] select-none items-center bg-accent-50 px-3 font-medium text-accent-500"
@@ -50,7 +56,9 @@ export default function DraggableAppearanceSetting(
           whileTap={{ cursor: 'grabbing' }}
           onPointerDown={(event) => {
             dragControls.start(event, { snapToCursor: false })
+            setPressing(true)
           }}
+          onPointerUp={() => setPressing(false)}
         >
           Appearance
           <button

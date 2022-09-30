@@ -22,8 +22,43 @@ export default function AppearanceSetting({
   graphData,
 }: AppearanceSettingProps) {
   return (
-    <div className="min-w-[min(40vw,220px)] max-w-[min(90vw,280px)] text-main-400">
-      <fieldset className="fieldset">
+    <div className="appearance-setting min-w-[min(40vw,220px)] max-w-[min(90vw,280px)] text-main-400">
+      <fieldset>
+        <label>Display Name</label>
+        <RadixSelect
+          items={[
+            { label: 'Username', value: DisplayName.Username },
+            { label: 'Profile name', value: DisplayName.ProfileName },
+          ]}
+          value={settings?.displayName}
+          onValueChange={(v) => dispatch?.({ type: 'displayName', payload: v as DisplayName })}
+        />
+      </fieldset>
+
+      <fieldset>
+        <label>Since Year</label>
+        <RadixSelect
+          defaultValue={graphData?.contributionYears.at(-1)?.toString()}
+          items={graphData?.contributionYears.map((year) => ({
+            label: `${year}`,
+            value: `${year}`,
+          }))}
+          value={settings?.sinceYear}
+          onValueChange={(v) => dispatch?.({ type: 'sinceYear', payload: v })}
+        />
+      </fieldset>
+
+      <fieldset>
+        <label htmlFor="attribution">Attribution</label>
+        <RadixSwitch
+          checked={settings?.showAttribution}
+          defaultChecked={true}
+          id="attribution"
+          onCheckedChange={(checked) => dispatch?.({ type: 'showAttribution', payload: checked })}
+        />
+      </fieldset>
+
+      <fieldset>
         <label>Graph Size</label>
         <RadixToggleGroup
           options={[
@@ -38,42 +73,7 @@ export default function AppearanceSetting({
         />
       </fieldset>
 
-      <fieldset className="fieldset">
-        <label>Display Name</label>
-        <RadixSelect
-          items={[
-            { label: 'Username', value: DisplayName.Username },
-            { label: 'Profile name', value: DisplayName.ProfileName },
-          ]}
-          value={settings?.displayName}
-          onValueChange={(v) => dispatch?.({ type: 'displayName', payload: v as DisplayName })}
-        />
-      </fieldset>
-
-      <fieldset className="fieldset">
-        <label>Since Year</label>
-        <RadixSelect
-          defaultValue={graphData?.contributionYears.at(-1)?.toString()}
-          items={graphData?.contributionYears.map((year) => ({
-            label: `${year}`,
-            value: `${year}`,
-          }))}
-          value={settings?.sinceYear}
-          onValueChange={(v) => dispatch?.({ type: 'sinceYear', payload: v })}
-        />
-      </fieldset>
-
-      <fieldset className="fieldset">
-        <label htmlFor="attribution">Attribution</label>
-        <RadixSwitch
-          checked={settings?.showAttribution}
-          defaultChecked={true}
-          id="attribution"
-          onCheckedChange={(checked) => dispatch?.({ type: 'showAttribution', payload: checked })}
-        />
-      </fieldset>
-
-      <fieldset className="fieldset flex-col items-start">
+      <fieldset className="flex-col !items-start">
         <label>Themes</label>
         <ThemeSelector
           className="mt-3 pl-1"
