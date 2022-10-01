@@ -10,7 +10,7 @@ import { RadixToggleGroup } from '../ui-kit/RadixToggleGroup'
 type State = ReturnType<typeof useSetting>[0]
 type Dispatch = ReturnType<typeof useSetting>[1]
 
-export interface AppearanceSettingProps {
+interface AppearanceSettingProps {
   value?: State
   onChange?: Dispatch
   graphData: GraphData | undefined

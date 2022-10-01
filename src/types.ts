@@ -20,11 +20,6 @@ export interface Theme {
   mode?: 'light' | 'dark'
 }
 
-export interface RemoteContribution {
-  week: number
-  days: { count: number }[]
-}
-
 export type GitHubUsername = string
 export type ContributionYear = number
 
