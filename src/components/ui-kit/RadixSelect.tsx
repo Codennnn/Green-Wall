@@ -1,6 +1,6 @@
 import * as Select from '@radix-ui/react-select'
 
-import { iconChevronDown, iconChevronUp } from '../icons'
+import { iconCheck, iconChevronDown, iconChevronUp } from '../icons'
 import SelectButton from './SelectButton'
 
 type SelectProps = Select.SelectProps & {
@@ -31,15 +31,15 @@ export function RadixSelect(props: SelectProps) {
                 <Select.Item
                   key={it.value}
                   className="
-                  relative flex cursor-pointer select-none items-center rounded-md px-1 py-2 text-sm font-medium
+                  relative flex cursor-pointer select-none items-center rounded-md px-1 py-2 pl-8 text-sm font-medium
                   text-main-600 focus:bg-main-100/50 focus:outline-none
                   radix-disabled:opacity-50
                   "
                   disabled={it.disabled}
                   value={it.value}
                 >
-                  <Select.ItemIndicator className="absolute inset-0 flex cursor-default items-center justify-center rounded-md bg-main-100">
-                    {it.label}
+                  <Select.ItemIndicator className="absolute left-2 inline-flex items-center">
+                    <span className="h-4 w-4">{iconCheck}</span>
                   </Select.ItemIndicator>
                   <Select.ItemText>{it.label}</Select.ItemText>
                 </Select.Item>
