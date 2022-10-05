@@ -1,6 +1,7 @@
 import * as Select from '@radix-ui/react-select'
 
 import { iconCheck, iconChevronDown, iconChevronUp } from '../icons'
+
 import SelectButton from './SelectButton'
 
 type SelectProps = Select.SelectProps & {

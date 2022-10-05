@@ -1,8 +1,8 @@
 import type { Placement } from '@floating-ui/react-dom-interactions'
 import {
+  FloatingFocusManager,
   autoUpdate,
   flip,
-  FloatingFocusManager,
   offset,
   shift,
   useClick,

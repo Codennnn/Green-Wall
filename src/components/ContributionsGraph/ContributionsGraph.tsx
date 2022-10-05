@@ -1,8 +1,9 @@
 import { forwardRef, memo, useImperativeHandle, useMemo, useRef } from 'react'
 
-import { DEFAULT_SIZE, DEFAULT_THEME, sizeProperties, THEMES } from '../../constants'
+import { DEFAULT_SIZE, DEFAULT_THEME, THEMES, sizeProperties } from '../../constants'
 import type { GraphData, GraphSettings } from '../../types'
 import { DisplayName } from '../../types'
+
 import Graph from './Graph'
 import GraphFooter from './GraphFooter'
 import GraphHeader from './GraphHeader'

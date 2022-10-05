@@ -1,10 +1,10 @@
-import '../styles/reset.css'
-import '../styles/globals.css'
-
 import splitbee from '@splitbee/web'
 import type { NextPage } from 'next'
 import type { AppProps } from 'next/app'
 import { useEffect } from 'react'
+
+import '../styles/globals.css'
+import '../styles/reset.css'
 
 type NextPageWithLayout = NextPage & {
   getLayout?: (page: React.ReactElement) => React.ReactNode

@@ -2,6 +2,7 @@ import { levels } from '../../constants'
 import { numberWithCommas } from '../../helpers'
 import type { ContributionCalendar, ContributionDay } from '../../types'
 import { ContributionLevel } from '../../types'
+
 import styles from './Graph.module.css'
 
 interface GraphProps extends React.ComponentProps<'div'> {

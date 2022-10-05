@@ -1,6 +1,6 @@
 import splitbee from '@splitbee/web'
 
-import { type GraphData, DisplayName, GraphSize } from '../../types'
+import { DisplayName, type GraphData, GraphSize } from '../../types'
 import type useSetting from '../../useSetting'
 import ThemeSelector from '../ThemeSelector'
 import { RadixSelect } from '../ui-kit/RadixSelect'

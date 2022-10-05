@@ -1,6 +1,7 @@
 import Link from 'next/link'
 
 import type { GitHubUser, GitHubUsername } from '../../types'
+
 import styles from './Graph.module.css'
 
 export default function GraphHeader(props: {
