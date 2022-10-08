@@ -1,4 +1,5 @@
 import splitbee from '@splitbee/web'
+import { useId } from 'react'
 
 import { DisplayName, type GraphData, GraphSize } from '../../types'
 import type useSetting from '../../useSetting'
@@ -21,6 +22,8 @@ export default function AppearanceSetting({
   onChange: dispatch,
   graphData,
 }: AppearanceSettingProps) {
+  const attribution = useId()
+
   return (
     <div className="appearance-setting min-w-[min(40vw,220px)] max-w-[min(90vw,280px)] text-main-400">
       <fieldset>
@@ -49,11 +52,11 @@ export default function AppearanceSetting({
       </fieldset>
 
       <fieldset>
-        <label htmlFor="attribution">Attribution</label>
+        <label htmlFor={attribution}>Attribution</label>
         <RadixSwitch
           checked={settings?.showAttribution}
           defaultChecked={true}
-          id="attribution"
+          id={attribution}
           onCheckedChange={(checked) => dispatch?.({ type: 'showAttribution', payload: checked })}
         />
       </fieldset>
