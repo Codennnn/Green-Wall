@@ -1,7 +1,8 @@
+import { useEffect } from 'react'
+
 import splitbee from '@splitbee/web'
 import type { NextPage } from 'next'
 import type { AppProps } from 'next/app'
-import { useEffect } from 'react'
 
 import '../styles/globals.css'
 import '../styles/reset.css'

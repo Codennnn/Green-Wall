@@ -1,5 +1,6 @@
-import splitbee from '@splitbee/web'
 import { useId } from 'react'
+
+import splitbee from '@splitbee/web'
 
 import { DisplayName, type GraphData, GraphSize } from '../../types'
 import type useSetting from '../../useSetting'

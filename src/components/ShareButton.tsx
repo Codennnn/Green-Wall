@@ -1,6 +1,7 @@
+import { useEffect, useState } from 'react'
+
 import splitbee from '@splitbee/web'
 import Link from 'next/link'
-import { useEffect, useState } from 'react'
 
 import { DEFAULT_DISPLAY_NAME, DEFAULT_SIZE, DEFAULT_THEME } from '../constants'
 import type { GraphSettings } from '../types'

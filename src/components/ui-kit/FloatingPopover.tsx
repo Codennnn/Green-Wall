@@ -1,3 +1,5 @@
+import { cloneElement, useId, useState } from 'react'
+
 import type { Placement } from '@floating-ui/react-dom-interactions'
 import {
   FloatingFocusManager,
@@ -11,7 +13,6 @@ import {
   useInteractions,
   useRole,
 } from '@floating-ui/react-dom-interactions'
-import { cloneElement, useId, useState } from 'react'
 
 interface PopoverProps {
   children: JSX.Element

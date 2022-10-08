@@ -1,6 +1,7 @@
+import { useEffect, useRef, useState } from 'react'
+
 import splitbee from '@splitbee/web'
 import { toPng } from 'html-to-image'
-import { useEffect, useRef, useState } from 'react'
 
 import { AppearanceSetting, DraggableAppearanceSetting } from '../components/AppearanceSetting'
 import ContributionsGraph from '../components/ContributionsGraph'

@@ -1,8 +1,9 @@
+import { useEffect, useState } from 'react'
+
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useEffect, useState } from 'react'
 
 import ContributionsGraph from '../../components/ContributionsGraph'
 import Layout from '../../components/Layout'
