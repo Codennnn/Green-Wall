@@ -4232,10 +4232,10 @@ postcss@^8.3.11, postcss@^8.4.16, postcss@^8.4.4:
     picocolors "^1.0.0"
     source-map-js "^1.0.2"
 
-prefer-code-style@0.6.8:
-  version "0.6.8"
-  resolved "https://registry.npmmirror.com/prefer-code-style/-/prefer-code-style-0.6.8.tgz#f19330b78ef9235e62617074110d0392dd1c5408"
-  integrity sha512-BW5QNMaG3pNWQJvJ324AKCpdn/t+z8D66LqbK2GwhODfQOWSd+59pDMwP7H0MSEBd3e2bOsopAIs3hwLgie3vw==
+prefer-code-style@0.6.9:
+  version "0.6.9"
+  resolved "https://registry.npmmirror.com/prefer-code-style/-/prefer-code-style-0.6.9.tgz#31e5cda5291172b58dbe01da11f3f608d38267d1"
+  integrity sha512-w1PVU0jV85t6m96D+PpSLknT2TuqSjlvIqAME4O1Hmo3MzRR1dDY48koFx+3/WmxbsCS6fLNFThW7JUT7hkGwg==
   dependencies:
     "@babel/core" "^7.19.3"
     "@babel/eslint-parser" "^7.19.1"
