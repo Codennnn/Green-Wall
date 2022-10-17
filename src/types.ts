@@ -94,3 +94,9 @@ export interface GraphSettings {
   showAttribution?: boolean
   theme?: Themes
 }
+
+export interface GitHubApiJson<Data> {
+  data?: Data
+  message?: string
+  errors?: unknown
+}

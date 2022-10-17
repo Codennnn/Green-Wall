@@ -4,6 +4,7 @@ import type {
   ContributionBasic,
   ContributionCalendar,
   ContributionYear,
+  GitHubApiJson,
   GitHubContributionCalendar,
   GitHubUser,
   GraphData,
@@ -32,14 +33,10 @@ async function fetchGitHubUser(username: string): Promise<ContributionBasic> {
     },
   })
 
-  type Json = {
-    data: { user: GitHubUser | null }
-    errors?: any[]
-  }
-  const json: Json = await res.json()
+  const json: GitHubApiJson<{ user: GitHubUser | null }> = await res.json()
 
-  if (!json.data.user) {
-    throw new Error()
+  if (!json.data?.user) {
+    throw new Error(json.message)
   }
 
   const { contributionsCollection, ...rest } = json.data.user
@@ -80,14 +77,10 @@ async function fetchContributionsCollection(
     },
   })
 
-  type Json = {
-    data: { user: GitHubContributionCalendar | null }
-    errors?: any[]
-  }
-  const json: Json = await res.json()
+  const json: GitHubApiJson<{ user: GitHubContributionCalendar | null }> = await res.json()
 
-  if (!json.data.user) {
-    throw new Error()
+  if (!json.data?.user) {
+    throw new Error(json.message)
   }
 
   const contributionCalendar = json.data.user.contributionsCollection.contributionCalendar
