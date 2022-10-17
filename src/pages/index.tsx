@@ -1,7 +1,7 @@
+import { useEffect, useRef, useState } from 'react'
+
 import splitbee from '@splitbee/web'
 import { toPng } from 'html-to-image'
-import { useEffect, useRef, useState } from 'react'
-import satori from 'satori'
 
 import { AppearanceSetting, DraggableAppearanceSetting } from '../components/AppearanceSetting'
 import ContributionsGraph from '../components/ContributionsGraph'
@@ -74,21 +74,6 @@ export default function HomePage() {
   }
 
   const handleDownload = async () => {
-    const svg = await satori(<div style={{ color: 'black' }}>hello, world</div>, {
-      width: 600,
-      height: 400,
-      fonts: [
-        {
-          name: 'Roboto',
-          // Use `fs` (Node.js only) or `fetch` to read the font as Buffer/ArrayBuffer and provide `data` here.
-          data: robotoArrayBuffer,
-          weight: 400,
-          style: 'normal',
-        },
-      ],
-    })
-    console.log(svg)
-    return
     if (graphRef.current && graphData) {
       try {
         setDownloading(true)
