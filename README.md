@@ -12,11 +12,9 @@ Green Wall is a web site tool that help you review the contributions you have ma
 
 ## Run this project
 
-This project uses the [GitHub API](https://docs.github.com/en/graphql) to fetch data, so you need to use [GitHub Access Token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token) as access credentials.
+This project uses the [GitHub API](https://docs.github.com/en/graphql) to fetch data, so you need a personal access token for authentication. For more information, see "[Creating a personal access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token) ."
 
-First, create a [Personal access tokens](https://github.com/settings/tokens) (without any scopes will also work).
-
-Then, create a file named `.env.local` at the top of this project, paste your token into it.
+After creating personal access token, create a file named `.env.local` at the top of this project, paste the token into it.
 
 ```sh
 # .env.local
@@ -27,4 +25,4 @@ Then, create a file named `.env.local` at the top of this project, paste your to
 GITHUB_ACCESS_TOKEN="ghp_eQ81YcyFcwVjdJwBgUj150VPnxBf1N48Sep7"
 ```
 
-After doing that, now you are ready to run `yarn dev` to develop.
+Now you are ready to run `yarn dev` to develop.
