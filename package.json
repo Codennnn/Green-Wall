@@ -7,7 +7,7 @@
     "build": "next build",
     "deps": "yarn upgrade-interactive --latest",
     "dev": "next dev",
-    "lint": "next lint && npm run lint:style && npm run lint:ts",
+    "lint": "next lint && npm run lint:ts && npm run lint:style",
     "lint:es": "eslint \"**/*.{mjs,js,jsx,ts,tsx}\"",
     "lint:prettier": "prettier --write \"**/*.{md,json,html}\"",
     "lint:style": "stylelint \"**/*.{css,.module.css}\"",
