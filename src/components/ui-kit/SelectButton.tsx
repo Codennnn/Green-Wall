@@ -1,8 +1,11 @@
 import { forwardRef } from 'react'
 
-type ButtonProps = Omit<React.ComponentProps<'button'>, 'className'>
+type SelectButtonProps = Omit<React.ComponentProps<'button'>, 'className'>
 
-function SelectButton({ children, ...props }: ButtonProps, ref: React.Ref<HTMLButtonElement>) {
+const SelectButton: React.ForwardRefRenderFunction<HTMLButtonElement, SelectButtonProps> = (
+  props,
+  ref
+) => {
   return (
     <button
       ref={ref}
@@ -14,9 +17,7 @@ function SelectButton({ children, ...props }: ButtonProps, ref: React.Ref<HTMLBu
       radix-state-delayed-open:bg-main-50 radix-state-instant-open:bg-main-100
       radix-state-on:bg-main-50 radix-state-open:bg-main-50
       "
-    >
-      {children}
-    </button>
+    />
   )
 }
 
