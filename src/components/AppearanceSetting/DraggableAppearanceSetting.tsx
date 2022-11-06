@@ -21,7 +21,6 @@ export default function DraggableAppearanceSetting(
   }, [])
 
   useEffect(() => {
-    // HACK:
     if (renderClientSide) {
       setFixed(true)
       const distanceToTop = wrapper.current?.getBoundingClientRect().top
