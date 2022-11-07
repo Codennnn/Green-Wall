@@ -1,7 +1,6 @@
 import { useId } from 'react'
 
-import splitbee from '@splitbee/web'
-
+import { trackEvent } from '../../helpers'
 import { DisplayName, type GraphData, GraphSize } from '../../types'
 import type useSetting from '../../useSetting'
 import ThemeSelector from '../ThemeSelector'
@@ -83,7 +82,7 @@ export default function AppearanceSetting({
           className="mt-3 pl-1"
           value={settings?.theme}
           onChange={(theme) => {
-            splitbee.track('Change theme', { themeName: theme })
+            trackEvent('Change theme', { themeName: theme })
             dispatch?.({ type: 'theme', payload: theme })
           }}
         />

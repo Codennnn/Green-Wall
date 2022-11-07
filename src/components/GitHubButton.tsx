@@ -1,11 +1,12 @@
-import splitbee from '@splitbee/web'
 import Link from 'next/link'
+
+import { trackEvent } from '../helpers'
 
 import { iconGitHub } from './icons'
 
 export default function GitHubButton() {
   const handleClick = () => {
-    splitbee.track('Click GitHub Source Code')
+    trackEvent('Click GitHub Source Code')
   }
 
   return (

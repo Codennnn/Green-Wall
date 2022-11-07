@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
 
-import splitbee from '@splitbee/web'
 import Link from 'next/link'
 
 import { DEFAULT_DISPLAY_NAME, DEFAULT_SIZE, DEFAULT_THEME } from '../constants'
+import { trackEvent } from '../helpers'
 import type { GraphSettings } from '../types'
 
 import { iconShare, iconUpRight } from './icons'
@@ -52,7 +52,7 @@ export default function ShareButton({ username, settings }: ShareButtonProps) {
                   <a className="h-full" target="_blank">
                     <button
                       className="flex h-full items-center gap-x-1 rounded bg-main-200 px-2"
-                      onClick={() => splitbee.track('Preview Share URL')}
+                      onClick={() => trackEvent('Preview Share URL')}
                     >
                       <span>Preview</span>
                       <span className="w-[10px] translate-y-[1px]">{iconUpRight}</span>
@@ -63,7 +63,7 @@ export default function ShareButton({ username, settings }: ShareButtonProps) {
                   className="inline-block h-full min-w-[3.5rem] rounded bg-accent-100 px-1 text-accent-600"
                   onClick={() => {
                     if (!copied) {
-                      splitbee.track('Copy Share URL')
+                      trackEvent('Copy Share URL')
                       navigator.clipboard.writeText(shareUrl.toString()).then(() => {
                         setCopied(true)
                         setTimeout(() => {

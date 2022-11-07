@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
 
-import splitbee from '@splitbee/web'
 import { toPng } from 'html-to-image'
 
 import { AppearanceSetting, DraggableAppearanceSetting } from '../components/AppearanceSetting'
@@ -13,6 +12,7 @@ import SettingButton from '../components/SettingButton'
 import ShareButton from '../components/ShareButton'
 import TweetButton from '../components/TweetButton'
 import { iconImage } from '../components/icons'
+import { trackEvent } from '../helpers'
 import mockData from '../mock-data'
 import type { ErrorData, GraphData } from '../types'
 import useSetting from '../useSetting'
@@ -53,7 +53,7 @@ export default function HomePage() {
 
     if (username.trim() && !loading) {
       reset()
-      splitbee.track('Click Generate')
+      trackEvent('Click Generate')
       try {
         setError(undefined)
         setLoading(true)
@@ -77,7 +77,7 @@ export default function HomePage() {
     if (graphRef.current && graphData) {
       try {
         setDownloading(true)
-        splitbee.track('Click Download')
+        trackEvent('Click Download')
 
         const dataURL = await toPng(graphRef.current)
         const trigger = document.createElement('a')
