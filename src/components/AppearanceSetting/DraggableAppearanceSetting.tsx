@@ -46,6 +46,7 @@ export default function DraggableAppearanceSetting(
         dragControls={dragControls}
         dragListener={false}
         dragMomentum={false}
+        dragTransition={{ bounceStiffness: 1000, bounceDamping: 40 }}
         variants={{
           scale: { scale: 0.97 },
         }}
