@@ -48,16 +48,14 @@ export default function ShareButton({ username, settings }: ShareButtonProps) {
               </div>
 
               <div className="mt-4 flex h-7 items-center justify-end gap-x-2">
-                <Link passHref href={shareUrl}>
-                  <a className="h-full" target="_blank">
-                    <button
-                      className="flex h-full items-center gap-x-1 rounded bg-main-200 px-2"
-                      onClick={() => trackEvent('Preview Share URL')}
-                    >
-                      <span>Preview</span>
-                      <span className="w-[10px] translate-y-[1px]">{iconUpRight}</span>
-                    </button>
-                  </a>
+                <Link passHref className="h-full" href={shareUrl} target="_blank">
+                  <button
+                    className="flex h-full items-center gap-x-1 rounded bg-main-200 px-2"
+                    onClick={() => trackEvent('Preview Share URL')}
+                  >
+                    <span>Preview</span>
+                    <span className="w-[10px] translate-y-[1px]">{iconUpRight}</span>
+                  </button>
                 </Link>
                 <button
                   className="inline-block h-full min-w-[3.5rem] rounded bg-accent-100 px-1 text-accent-600"

@@ -31,14 +31,8 @@ export default function Layout(props: React.PropsWithChildren) {
           <div className="flex h-[65px] items-center md:h-[80px]">
             <Link href="/">
               <span className="flex cursor-pointer select-none items-center bg-white  text-xl font-bold ring-4 ring-white">
-                <span className="pointer-events-none h-8 w-8 md:h-7 md:w-7">
-                  <Image
-                    alt="LOGO"
-                    height="100%"
-                    layout="responsive"
-                    src="/favicon.svg"
-                    width="100%"
-                  />
+                <span className="pointer-events-none relative h-8 w-8 md:h-7 md:w-7">
+                  <Image fill alt="LOGO" className="object-contain" src="/favicon.svg" />
                 </span>
                 <span className="ml-3 hidden md:inline" translate="no">
                   Green Wall
@@ -53,16 +47,22 @@ export default function Layout(props: React.PropsWithChildren) {
         <main>{props.children}</main>
 
         <footer className="sticky top-[100vh] py-3 text-center text-xs text-main-400/70 md:text-sm">
-          <Link passHref href="https://leoku.top">
-            <a className="transition-colors duration-200 hover:text-main-500/90" target="_blank">
-              Made by LeoKu.
-            </a>
+          <Link
+            passHref
+            className="transition-colors duration-200 hover:text-main-500/90"
+            href="https://leoku.top"
+            target="_blank"
+          >
+            Made by LeoKu.
           </Link>
           <span className="mx-2 font-medium md:mx-3">·</span>
-          <Link passHref href="https://github-contributions.vercel.app">
-            <a className="transition-colors duration-200 hover:text-main-500/90" target="_blank">
-              Inspired by GitHub Contributions Chart Generator.
-            </a>
+          <Link
+            passHref
+            className="transition-colors duration-200 hover:text-main-500/90"
+            href="https://github-contributions.vercel.app"
+            target="_blank"
+          >
+            Inspired by GitHub Contributions Chart Generator.
           </Link>
         </footer>
       </div>

@@ -6,11 +6,7 @@ class Document extends NextDocument {
       <Html lang="en">
         <Head>
           <link href="/favicon.svg" rel="icon" type="image/svg+xml" />
-          <link
-            crossOrigin="anonymous"
-            href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500&display=swap"
-            rel="stylesheet"
-          />
+
           <meta content="light" name="color-scheme" />
           <meta content="gitHub contribution graph,github api" name="keywords" />
           <meta content="Green Wall is a GitHub contribution graph generator." name="description" />
