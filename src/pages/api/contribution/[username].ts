@@ -10,7 +10,7 @@ import type {
   GraphData,
 } from '../../../types'
 
-async function fetchGitHubUser(username: string): Promise<ContributionBasic> {
+async function fetchGitHubUser(username: string): Promise<ContributionBasic | never> {
   const res = await fetch('https://api.github.com/graphql', {
     method: 'post',
     body: JSON.stringify({
@@ -36,6 +36,12 @@ async function fetchGitHubUser(username: string): Promise<ContributionBasic> {
   const json: GitHubApiJson<{ user: GitHubUser | null }> = await res.json()
 
   if (!json.data?.user) {
+    if (json.errors) {
+      const error = json.errors.at(0)
+      if (error) {
+        throw new Error(error.message)
+      }
+    }
     throw new Error(json.message)
   }
 
@@ -92,14 +98,18 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
   const { username } = req.query
 
   if (typeof username === 'string') {
-    const githubUser = await fetchGitHubUser(username)
+    try {
+      const githubUser = await fetchGitHubUser(username)
 
-    const contributionCalendars = await Promise.all(
-      githubUser.contributionYears.map((year) => fetchContributionsCollection(username, year))
-    )
+      const contributionCalendars = await Promise.all(
+        githubUser.contributionYears.map((year) => fetchContributionsCollection(username, year))
+      )
 
-    const data: GraphData = { ...githubUser, contributionCalendars }
+      const data: GraphData = { ...githubUser, contributionCalendars }
 
-    return res.status(200).json(data)
+      return res.status(200).json(data)
+    } catch (e: any) {
+      return res.status(400).json({ message: e.message })
+    }
   }
 }

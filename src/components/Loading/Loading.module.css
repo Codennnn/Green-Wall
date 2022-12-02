@@ -1,19 +1,16 @@
 @keyframes waterfall {
   0% {
     transform: translateY(-250%);
-    transform: translateY(-250%);
     opacity: 0;
   }
 
   40%,
   60% {
     transform: translateY(0);
-    transform: translateY(0);
     opacity: 1;
   }
 
   100% {
-    transform: translateY(250%);
     transform: translateY(250%);
     opacity: 0;
   }
@@ -26,7 +23,7 @@
   bottom: 0;
   left: 0;
   min-height: 10rem;
-  background-color: rgb(255 255 255 / 0.85);
+  background-color: rgb(255 255 255 / 85%);
 }
 
 .waterfall div {

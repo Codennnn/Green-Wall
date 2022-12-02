@@ -98,5 +98,5 @@ export interface GraphSettings {
 export interface GitHubApiJson<Data> {
   data?: Data
   message?: string
-  errors?: unknown
+  errors?: { type: string; message: string }[]
 }
