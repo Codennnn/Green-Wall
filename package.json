@@ -3,6 +3,7 @@
   "private": true,
   "description": "GitHub contribution graph generator. Review all the contributions you've made to GitHub over the years.",
   "license": "MIT",
+  "author": "LeoKu <czc12580520@gmail.com> (https://leoku.top)",
   "scripts": {
     "build": "next build",
     "deps": "yarn upgrade-interactive --latest",
@@ -15,6 +16,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@codennnn/tsconfig": "^1.0.2",
     "@next/font": "^13.0.5",
     "@radix-ui/react-popover": "^1.0.2",
     "@radix-ui/react-radio-group": "^1.1.0",

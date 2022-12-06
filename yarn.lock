@@ -320,6 +320,11 @@
     "@babel/helper-validator-identifier" "^7.19.1"
     to-fast-properties "^2.0.0"
 
+"@codennnn/tsconfig@^1.0.2":
+  version "1.0.2"
+  resolved "https://registry.npmmirror.com/@codennnn/tsconfig/-/tsconfig-1.0.2.tgz#d657ced4ff2f8dfbbbab05f8d64c39ac4fd34ae6"
+  integrity sha512-jrzWdBC8y2XwH3K33W4K2ZC9xtk+Stq9ZA7BcqmT/YGHQt23obMTQ2G742PuRO4SmI5AjZxwofP7RaXhUnCIkw==
+
 "@csstools/selector-specificity@^2.0.2":
   version "2.0.2"
   resolved "https://registry.npmmirror.com/@csstools/selector-specificity/-/selector-specificity-2.0.2.tgz#1bfafe4b7ed0f3e4105837e056e0a89b108ebe36"
