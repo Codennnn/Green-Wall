@@ -21,7 +21,7 @@ After creating personal access token, create a file named `.env.local` at the to
 
 # The format should be: GITHUB_ACCESS_TOKEN="[YOUR TOKEN]"
 
-# example:
+# Example:
 GITHUB_ACCESS_TOKEN="ghp_eQ81YcyFcwVjdJwBgUj150VPnxBf1N48Sep7"
 ```
 
