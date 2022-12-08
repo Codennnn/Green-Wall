@@ -1,15 +1,14 @@
 import type { ContributionLevel, Theme, Themes } from './types'
 import { DisplayName, GraphSize } from './types'
 
-// TODO: Use satisfies Record<ContributionLevel, -1 | 0 | 1 | 2 | 3 | 4>
-export const levels: Record<ContributionLevel, -1 | 0 | 1 | 2 | 3 | 4> = {
+export const levels = {
   Null: -1,
   NONE: 0,
   FIRST_QUARTILE: 1,
   SECOND_QUARTILE: 2,
   THIRD_QUARTILE: 3,
   FOURTH_QUARTILE: 4,
-}
+} satisfies Record<ContributionLevel, -1 | 0 | 1 | 2 | 3 | 4>
 
 export const sizeProperties: Record<
   GraphSize,
