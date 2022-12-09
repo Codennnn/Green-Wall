@@ -10,7 +10,6 @@ import Layout from '../components/Layout'
 import Loading from '../components/Loading'
 import SettingButton from '../components/SettingButton'
 import ShareButton from '../components/ShareButton'
-import TweetButton from '../components/TweetButton'
 import { iconImage } from '../components/icons'
 import { trackEvent } from '../helpers'
 import mockData from '../mock-data'
@@ -154,7 +153,6 @@ export default function HomePage() {
                   <span>Save as Image</span>
                 </button>
                 <div className="flex flex-wrap items-center gap-x-6 md:justify-center">
-                  <TweetButton />
                   <ShareButton settings={settings} username={graphData.login} />
                   <div className="relative">
                     <SettingButton
