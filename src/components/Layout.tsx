@@ -53,16 +53,16 @@ export default function Layout(props: React.PropsWithChildren) {
             href="https://github.com/Codennnn"
             target="_blank"
           >
-            Made by LeoKu.
+            Made by LeoKu
           </Link>
           <span className="mx-2 font-medium md:mx-3">·</span>
           <Link
             passHref
             className="transition-colors duration-200 hover:text-main-500/90"
-            href="https://github-contributions.vercel.app"
+            href="/about"
             target="_blank"
           >
-            Inspired by GitHub Contributions Chart Generator.
+            About this site
           </Link>
         </footer>
       </div>
