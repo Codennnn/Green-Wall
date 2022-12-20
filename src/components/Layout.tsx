@@ -56,13 +56,8 @@ export default function Layout(props: React.PropsWithChildren) {
             Made by LeoKu
           </Link>
           <span className="mx-2 font-medium md:mx-3">·</span>
-          <Link
-            passHref
-            className="transition-colors duration-200 hover:text-main-500/90"
-            href="/about"
-            target="_blank"
-          >
-            About this site
+          <Link className="transition-colors duration-200 hover:text-main-500/90" href="/about">
+            About
           </Link>
         </footer>
       </div>
