@@ -1,6 +1,7 @@
 export type Themes =
   | 'GitHub'
   | 'GitHubDark'
+  | 'Winter'
   | 'GitLab'
   | 'GitLabDark'
   | 'Halloween'

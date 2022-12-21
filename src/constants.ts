@@ -54,6 +54,19 @@ export const THEMES: Theme[] = [
     mode: 'dark',
   },
   {
+    name: 'Winter',
+    textColor: '#adbac7',
+    levelColors: ['#2d333b', '#0a3069', '#0969da', '#54aeff', '#b6e3ff'],
+    background: '#22272e',
+    mode: 'dark',
+  },
+  {
+    name: 'Halloween',
+    textColor: '#24292f',
+    levelColors: ['#ebedf0', '#ffee4a', '#ffc501', '#fe9600', '#03001c'],
+    background: '#fff',
+  },
+  {
     name: 'GitLab',
     textColor: '#2e2e2e',
     levelColors: ['#ededed', '#acd5f2', '#7fa8c9', '#527ba0', '#254e77'],
@@ -65,12 +78,6 @@ export const THEMES: Theme[] = [
     levelColors: ['#222222', '#263342', '#344e6c', '#416895', '#4f83bf'],
     background: '#181818',
     mode: 'dark',
-  },
-  {
-    name: 'Halloween',
-    textColor: '#24292f',
-    levelColors: ['#ebedf0', '#ffee4a', '#ffc501', '#fe9600', '#03001c'],
-    background: '#fff',
   },
   {
     name: 'Dracula',
@@ -86,7 +93,6 @@ export const THEMES: Theme[] = [
     background: '#f1f5f9',
     mode: 'dark',
   },
-
   {
     name: 'Rose',
     textColor: '#881337',
