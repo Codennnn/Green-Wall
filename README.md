@@ -5,10 +5,16 @@ _Take a picture 📸 of your GitHub contributions, then share it!_
 Green Wall is a web site tool that help you review the contributions you have made on GitHub :octocat: over the years, so you can generate the image to save and share.
 
 <a href="https://green-wall.vercel.app/">
-  <img alt="Green Wall Screenshot" src="https://user-images.githubusercontent.com/47730755/189281945-c61c9044-0cd7-473d-8bee-d442695103a4.png">
+  <img alt="Green Wall Screenshot" src="./screenshot.png">
 </a>
 
-💡 This project is inspired by [GitHub Contributions Chart Generator](https://github-contributions.vercel.app/).
+## How it works
+
+This project uses the GitHub GraphQL API to fetch data and uses Next.js API Routes to send requests, you can read [this file](./src/pages/api/contribution/%5Busername%5D.ts) to learn how we handle your data.
+
+## Credits
+
+Thanks to the [“GitHub Contributions Chart Generator”](https://github.com/sallar/github-contributions-chart) for the inspiration, this is a very interesting project !
 
 ## Run this project
 
