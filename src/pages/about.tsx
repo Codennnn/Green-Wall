@@ -32,7 +32,7 @@ export default function AboutPage() {
           >
             &ldquo;GitHub Contributions Chart Generator&rdquo;
           </Link>{' '}
-          for the inspiration, this is a very interesting project !
+          for the inspiration, it&apos;s a very interesting project !
         </p>
       </div>
     </div>
