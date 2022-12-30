@@ -14,7 +14,9 @@ This project uses the GitHub GraphQL API to fetch data and uses Next.js API Rout
 
 ## Credits
 
-Thanks to the [“GitHub Contributions Chart Generator”](https://github.com/sallar/github-contributions-chart) for the inspiration, it's a very interesting project !
+* _Inspired by:_ [GitHub Contributions Chart Generator.](https://github.com/sallar/github-contributions-chart)
+* _Framework:_ Next.js.
+* _Font:_ [Rubik](https://fonts.google.com/specimen/Rubik) by Google Fonts.
 
 ## Running Locally
 
