@@ -7,7 +7,14 @@ import Link from 'next/link'
 
 import ContributionsGraph from '../../components/ContributionsGraph'
 import Layout from '../../components/Layout'
-import type { ErrorData, GraphData, GraphSettings, GraphSize, Themes } from '../../types'
+import type {
+  DisplayName,
+  ErrorData,
+  GraphData,
+  GraphSettings,
+  GraphSize,
+  Themes,
+} from '../../types'
 
 interface Props {
   username: string
@@ -101,8 +108,10 @@ UserSharePage.getInitialProps = ({ query }) => {
 
   const size = typeof query.size === 'string' ? (query.size as GraphSize) : undefined
   const theme = typeof query.theme === 'string' ? (query.theme as Themes) : undefined
+  const displayName =
+    typeof query.displayName === 'string' ? (query.displayName as DisplayName) : undefined
 
-  return { username, settings: { size, theme } }
+  return { username, settings: { size, theme, displayName } }
 }
 
 UserSharePage.getLayout = (page: React.ReactElement) => {
