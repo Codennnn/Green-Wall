@@ -24,6 +24,8 @@ export default function AppearanceSetting({
 }: AppearanceSettingProps) {
   const attribution = useId()
 
+  const hasProfileName = Boolean(graphData?.name)
+
   return (
     <div className="appearance-setting min-w-[min(40vw,220px)] max-w-[min(90vw,280px)] text-main-400">
       <fieldset>
@@ -31,7 +33,7 @@ export default function AppearanceSetting({
         <RadixSelect
           items={[
             { label: 'Username', value: DisplayName.Username },
-            { label: 'Profile name', value: DisplayName.ProfileName },
+            { label: 'Profile name', value: DisplayName.ProfileName, disabled: !hasProfileName },
           ]}
           value={settings?.displayName}
           onValueChange={(v) => dispatch?.({ type: 'displayName', payload: v as DisplayName })}
