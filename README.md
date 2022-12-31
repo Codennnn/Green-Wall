@@ -22,7 +22,7 @@ This project uses the GitHub GraphQL API to fetch data and uses Next.js API Rout
 
 This project uses the [GitHub API](https://docs.github.com/en/graphql) to fetch data, so you need a personal access token for authentication. For more information, see "[Creating a personal access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token) ."
 
-After creating personal access token, create a file named `.env.local` at the top of this project, then paste the token into it.
+After creating personal access token, create a file named `.env.local` at the root of the project, then paste the token into it.
 
 ```sh
 # .env.local
