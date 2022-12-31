@@ -16,7 +16,9 @@ export default function Graph(props: GraphProps) {
   const { data: calendar, daysLabel, ...rest } = props
 
   const currentYear = new Date().getFullYear()
-  const isNewYear = (new Date(currentYear, 0, 2).getTime() - Date.now()) / 1000 / 60 / 60 / 24
+  const isNewYear =
+    currentYear === calendar.year &&
+    (new Date(currentYear, 0, 2).getTime() - Date.now()) / 1000 / 60 / 60 / 24 >= 0
 
   return (
     <div {...rest}>
