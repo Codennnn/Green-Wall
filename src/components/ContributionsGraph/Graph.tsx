@@ -10,14 +10,21 @@ interface GraphProps extends React.ComponentProps<'div'> {
   daysLabel?: boolean
 }
 
+const newYearText = 'Happy New Year 🎉 Go make the first contribution !'
+
 export default function Graph(props: GraphProps) {
   const { data: calendar, daysLabel, ...rest } = props
+
+  const currentYear = new Date().getFullYear()
+  const isNewYear = (new Date(currentYear, 0, 2).getTime() - Date.now()) / 1000 / 60 / 60 / 24
 
   return (
     <div {...rest}>
       <div className="mb-2 text-sm">
         <span className="mr-2 italic">{calendar.year}:</span>
-        {numberWithCommas(calendar.total)} Contributions
+        {isNewYear && calendar.total === 0
+          ? newYearText
+          : `${numberWithCommas(calendar.total)} Contributions`}
       </div>
 
       <div className={`${styles['graph']}`}>
