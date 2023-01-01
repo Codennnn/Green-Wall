@@ -8,27 +8,31 @@ type State = GraphSettings
 type Action =
   | {
       type: 'size'
-      payload: GraphSettings['size']
+      payload: State['size']
     }
   | {
       type: 'displayName'
-      payload: GraphSettings['displayName']
+      payload: State['displayName']
     }
   | {
-      type: 'sinceYear'
-      payload: GraphSettings['sinceYear']
+      type: 'yearRange'
+      payload: State['yearRange']
     }
   | {
       type: 'showAttribution'
-      payload: GraphSettings['showAttribution']
+      payload: State['showAttribution']
     }
   | {
       type: 'theme'
-      payload: GraphSettings['theme']
+      payload: State['theme']
     }
   | {
       type: 'reset'
       payload?: never
+    }
+  | {
+      type: 'replace'
+      payload?: State
     }
 
 const initialState: State = {
@@ -38,7 +42,7 @@ const initialState: State = {
   showAttribution: true,
 }
 
-export default function useSetting() {
+export function useGraphSetting() {
   return useReducer((state: State, { type, payload }: Action): State => {
     switch (type) {
       case 'size':
@@ -47,8 +51,8 @@ export default function useSetting() {
       case 'displayName':
         return { ...state, displayName: payload }
 
-      case 'sinceYear':
-        return { ...state, sinceYear: payload }
+      case 'yearRange':
+        return { ...state, yearRange: payload }
 
       case 'showAttribution':
         return { ...state, showAttribution: payload }
@@ -58,6 +62,12 @@ export default function useSetting() {
 
       case 'reset':
         return initialState
+
+      case 'replace':
+        if (payload) {
+          return payload
+        }
+        return state
 
       default:
         throw new Error(`Not a valid type: ${type}.`)

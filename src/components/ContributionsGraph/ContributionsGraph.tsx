@@ -1,7 +1,7 @@
 import { forwardRef, memo, useImperativeHandle, useMemo, useRef } from 'react'
 
+import { useData } from '../../DataContext'
 import { DEFAULT_SIZE, DEFAULT_THEME, THEMES, sizeProperties } from '../../constants'
-import type { GraphData, GraphSettings } from '../../types'
 import { DisplayName } from '../../types'
 
 import Graph from './Graph'
@@ -10,12 +10,12 @@ import GraphHeader from './GraphHeader'
 
 interface ContributionsGraphProps {
   className?: string
-  data: GraphData
-  settings?: GraphSettings
 }
 
 function ContributionsGraph(props: ContributionsGraphProps, ref: React.Ref<HTMLDivElement | null>) {
-  const { className = '', data, settings } = props
+  const { className = '' } = props
+
+  const { graphData, settings, firstYear, lastYear } = useData()
 
   const graphRef = useRef<HTMLDivElement>(null)
 
@@ -28,6 +28,10 @@ function ContributionsGraph(props: ContributionsGraphProps, ref: React.Ref<HTMLD
       )!,
     [settings?.theme]
   )
+
+  if (!graphData) {
+    return null
+  }
 
   const themeProperties = {
     '--graph-text-color': applyingTheme.textColor,
@@ -52,18 +56,31 @@ function ContributionsGraph(props: ContributionsGraphProps, ref: React.Ref<HTMLD
       }}
     >
       <GraphHeader
-        displayName={settings?.displayName === DisplayName.ProfileName ? data.name : data.login}
-        username={data.login}
+        displayName={
+          settings?.displayName === DisplayName.ProfileName ? graphData.name : graphData.login
+        }
+        username={graphData.login}
       />
 
       <div className="flex flex-col gap-y-6">
-        {data.contributionCalendars.map((calendar) => (
-          <Graph
-            key={calendar.year}
-            className={`${(Number(settings?.sinceYear) ?? 0) > calendar.year ? 'hidden' : ''}`}
-            data={calendar}
-          />
-        ))}
+        {graphData.contributionCalendars.map((calendar) => {
+          let [startYear, endYear] = settings?.yearRange || []
+          startYear =
+            startYear !== null && Number.isInteger(Number(startYear)) ? startYear : firstYear
+          endYear = endYear !== null && Number.isInteger(Number(endYear)) ? endYear : lastYear
+          const shouldDisplay =
+            startYear && endYear
+              ? calendar.year >= Number(startYear) && calendar.year <= Number(endYear)
+              : true
+
+          return (
+            <Graph
+              key={calendar.year}
+              className={`${shouldDisplay ? '' : 'hidden'}`}
+              data={calendar}
+            />
+          )
+        })}
       </div>
 
       {!(settings?.showAttribution === false) && <GraphFooter />}

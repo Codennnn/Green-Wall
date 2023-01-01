@@ -1,27 +1,18 @@
 import { useId } from 'react'
 
+import { useData } from '../../DataContext'
 import { trackEvent } from '../../helpers'
-import { DisplayName, type GraphData, GraphSize } from '../../types'
-import type useSetting from '../../useSetting'
+import { DisplayName, GraphSize } from '../../types'
 import ThemeSelector from '../ThemeSelector'
 import { RadixSelect } from '../ui-kit/RadixSelect'
 import { RadixSwitch } from '../ui-kit/RadixSwitch'
 import { RadixToggleGroup } from '../ui-kit/RadixToggleGroup'
 
-type State = ReturnType<typeof useSetting>[0]
-type Dispatch = ReturnType<typeof useSetting>[1]
+import { YearRangeSelect } from './YearRangeSelect'
 
-interface AppearanceSettingProps {
-  value?: State
-  onChange?: Dispatch
-  graphData: GraphData | undefined
-}
+export default function AppearanceSetting() {
+  const { graphData, settings, dispatchSettings } = useData()
 
-export default function AppearanceSetting({
-  value: settings,
-  onChange: dispatch,
-  graphData,
-}: AppearanceSettingProps) {
   const attribution = useId()
 
   const hasProfileName = Boolean(graphData?.name)
@@ -36,21 +27,15 @@ export default function AppearanceSetting({
             { label: 'Profile name', value: DisplayName.ProfileName, disabled: !hasProfileName },
           ]}
           value={settings?.displayName}
-          onValueChange={(v) => dispatch?.({ type: 'displayName', payload: v as DisplayName })}
+          onValueChange={(v) =>
+            dispatchSettings?.({ type: 'displayName', payload: v as DisplayName })
+          }
         />
       </fieldset>
 
       <fieldset>
-        <label>Since Year</label>
-        <RadixSelect
-          defaultValue={graphData?.contributionYears.at(-1)?.toString()}
-          items={graphData?.contributionYears.map((year) => ({
-            label: `${year}`,
-            value: `${year}`,
-          }))}
-          value={settings?.sinceYear}
-          onValueChange={(v) => dispatch?.({ type: 'sinceYear', payload: v })}
-        />
+        <label>Year Range</label>
+        <YearRangeSelect graphData={graphData} />
       </fieldset>
 
       <fieldset>
@@ -59,7 +44,9 @@ export default function AppearanceSetting({
           checked={settings?.showAttribution}
           defaultChecked={true}
           id={attribution}
-          onCheckedChange={(checked) => dispatch?.({ type: 'showAttribution', payload: checked })}
+          onCheckedChange={(checked) =>
+            dispatchSettings?.({ type: 'showAttribution', payload: checked })
+          }
         />
       </fieldset>
 
@@ -74,7 +61,7 @@ export default function AppearanceSetting({
           size="small"
           type="single"
           value={settings?.size}
-          onValueChange={(size) => dispatch?.({ type: 'size', payload: size as GraphSize })}
+          onValueChange={(size) => dispatchSettings?.({ type: 'size', payload: size as GraphSize })}
         />
       </fieldset>
 
@@ -85,7 +72,7 @@ export default function AppearanceSetting({
           value={settings?.theme}
           onChange={(theme) => {
             trackEvent('Change theme', { themeName: theme })
-            dispatch?.({ type: 'theme', payload: theme })
+            dispatchSettings?.({ type: 'theme', payload: theme })
           }}
         />
       </fieldset>

@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 
 import { toPng } from 'html-to-image'
 
+import { DataProvider, useData } from '../DataContext'
 import { AppearanceSetting, DraggableAppearanceSetting } from '../components/AppearanceSetting'
 import ContributionsGraph from '../components/ContributionsGraph'
 import ErrorMessage from '../components/ErrorMessage'
@@ -14,7 +15,6 @@ import { iconImage } from '../components/icons'
 import { trackEvent } from '../helpers'
 import mockData from '../mock-data'
 import type { ErrorData, GraphData } from '../types'
-import useSetting from '../useSetting'
 
 export default function HomePage() {
   const graphRef = useRef<HTMLDivElement>(null)
@@ -25,19 +25,19 @@ export default function HomePage() {
     inputRef.current?.focus()
   }, [])
 
+  const { graphData, setGraphData, dispatchSettings } = useData()
+
   const [username, setUsername] = useState('')
-  const [settings, dispatch] = useSetting()
   const [settingPopUp, setSettingPopUp] = useState(false)
 
   const [downloading, setDownloading] = useState(false)
 
-  const [graphData, setGraphData] = useState<GraphData>()
   const [error, setError] = useState<ErrorData>()
 
   const reset = () => {
     setGraphData(undefined)
     setSettingPopUp(false)
-    dispatch({ type: 'reset' })
+    dispatchSettings({ type: 'reset' })
   }
 
   const handleError = (errorData: ErrorData = {}) => {
@@ -153,16 +153,10 @@ export default function HomePage() {
                   <span>Save as Image</span>
                 </button>
                 <div className="flex flex-wrap items-center gap-x-6 md:justify-center">
-                  <ShareButton settings={settings} username={graphData.login} />
+                  <ShareButton />
                   <div className="relative">
                     <SettingButton
-                      content={
-                        <AppearanceSetting
-                          graphData={graphData}
-                          value={settings}
-                          onChange={dispatch}
-                        />
-                      }
+                      content={<AppearanceSetting />}
                       onClick={() => {
                         if (settingPopUp) {
                           setSettingPopUp(false)
@@ -178,11 +172,7 @@ export default function HomePage() {
                           setSettingPopUp(false)
                         }}
                       >
-                        <AppearanceSetting
-                          graphData={graphData}
-                          value={settings}
-                          onChange={dispatch}
-                        />
+                        <AppearanceSetting />
                       </DraggableAppearanceSetting>
                     )}
                   </div>
@@ -190,7 +180,7 @@ export default function HomePage() {
               </div>
 
               <div className="flex overflow-x-auto md:justify-center">
-                <ContributionsGraph ref={graphRef} data={graphData} settings={settings} />
+                <ContributionsGraph ref={graphRef} />
               </div>
             </>
           )}
@@ -201,5 +191,9 @@ export default function HomePage() {
 }
 
 HomePage.getLayout = (page: React.ReactElement) => {
-  return <Layout>{page}</Layout>
+  return (
+    <Layout>
+      <DataProvider key="home">{page}</DataProvider>
+    </Layout>
+  )
 }

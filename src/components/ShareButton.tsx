@@ -2,19 +2,17 @@ import { useEffect, useState } from 'react'
 
 import Link from 'next/link'
 
+import { useData } from '../DataContext'
 import { DEFAULT_DISPLAY_NAME, DEFAULT_SIZE, DEFAULT_THEME } from '../constants'
 import { trackEvent } from '../helpers'
-import type { GraphSettings } from '../types'
 
 import { iconShare, iconUpRight } from './icons'
 import { RadixPopover } from './ui-kit/RadixPopover'
 
-interface ShareButtonProps {
-  username?: string
-  settings?: GraphSettings
-}
+export default function ShareButton() {
+  const { graphData, settings, firstYear, lastYear } = useData()
+  const username = graphData?.login
 
-export default function ShareButton({ username, settings }: ShareButtonProps) {
   const [shareUrl, setShareUrl] = useState<URL>()
   const [copied, setCopied] = useState(false)
 
@@ -22,19 +20,28 @@ export default function ShareButton({ username, settings }: ShareButtonProps) {
     if (username && settings) {
       const Url = new URL(`${window.location.origin}/share/${username}`)
 
+      if (settings.displayName && settings.displayName !== DEFAULT_DISPLAY_NAME) {
+        Url.searchParams.set('displayName', settings.displayName)
+      }
+      if (Array.isArray(settings.yearRange)) {
+        const [startYear, endYear] = settings.yearRange
+        if (startYear && startYear !== firstYear) {
+          Url.searchParams.set('start', startYear)
+        }
+        if (endYear && endYear !== lastYear) {
+          Url.searchParams.set('end', endYear)
+        }
+      }
       if (settings.size && settings.size !== DEFAULT_SIZE) {
         Url.searchParams.set('size', settings.size)
       }
       if (settings.theme && settings.theme !== DEFAULT_THEME) {
         Url.searchParams.set('theme', settings.theme)
       }
-      if (settings.displayName && settings.displayName !== DEFAULT_DISPLAY_NAME) {
-        Url.searchParams.set('displayName', settings.displayName)
-      }
 
       setShareUrl(Url)
     }
-  }, [username, settings])
+  }, [username, settings, firstYear, lastYear])
 
   return (
     <RadixPopover

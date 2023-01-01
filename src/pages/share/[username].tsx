@@ -5,6 +5,7 @@ import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
 
+import { DataProvider, useData } from '../../DataContext'
 import ContributionsGraph from '../../components/ContributionsGraph'
 import Layout from '../../components/Layout'
 import type {
@@ -26,8 +27,13 @@ type NextPageWithLayout = NextPage<Props> & {
 }
 
 const UserSharePage: NextPageWithLayout = ({ username, settings }: Props) => {
-  const [graphData, setGraphData] = useState<GraphData>()
+  const { graphData, setGraphData, dispatchSettings } = useData()
+
   const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    dispatchSettings({ type: 'replace', payload: settings })
+  }, [dispatchSettings, settings])
 
   useEffect(() => {
     if (username) {
@@ -49,7 +55,7 @@ const UserSharePage: NextPageWithLayout = ({ username, settings }: Props) => {
         }
       })()
     }
-  }, [username])
+  }, [username, setGraphData])
 
   const sharingTitle = `${username}'s GitHub contributions`
   const sharingURL = `https://green-wall.vercel.app/share/${username}`
@@ -75,7 +81,7 @@ const UserSharePage: NextPageWithLayout = ({ username, settings }: Props) => {
       {loading ? (
         <div className="flex flex-col items-center justify-center py-20 text-main-400">
           <Image priority alt="loading" height={60} src="/mona-loading-default.gif" width={60} />
-          <span className="bg-white py-4 px-3">Loading Contributions...</span>
+          <span className="bg-white py-4 px-3">Loading contributions...</span>
         </div>
       ) : graphData ? (
         <div className="py-10 md:py-14">
@@ -89,33 +95,35 @@ const UserSharePage: NextPageWithLayout = ({ username, settings }: Props) => {
           </h1>
 
           <div className="flex w-full overflow-x-auto py-5 md:justify-center md:py-14">
-            <ContributionsGraph
-              className="md:shadow-2xl md:shadow-main-200"
-              data={graphData}
-              settings={settings}
-            />
+            <ContributionsGraph className="md:shadow-2xl md:shadow-main-200" />
           </div>
         </div>
       ) : null}
     </>
   )
-
-  return null
 }
 
 UserSharePage.getInitialProps = ({ query }) => {
   const username = query.username as string
 
-  const size = typeof query.size === 'string' ? (query.size as GraphSize) : undefined
-  const theme = typeof query.theme === 'string' ? (query.theme as Themes) : undefined
   const displayName =
     typeof query.displayName === 'string' ? (query.displayName as DisplayName) : undefined
+  const yearRange = [
+    Array.isArray(query.start) ? undefined : query.start,
+    Array.isArray(query.end) ? undefined : query.end,
+  ] as GraphSettings['yearRange']
+  const size = typeof query.size === 'string' ? (query.size as GraphSize) : undefined
+  const theme = typeof query.theme === 'string' ? (query.theme as Themes) : undefined
 
-  return { username, settings: { size, theme, displayName } }
+  return { username, settings: { displayName, yearRange, size, theme } }
 }
 
 UserSharePage.getLayout = (page: React.ReactElement) => {
-  return <Layout>{page}</Layout>
+  return (
+    <Layout>
+      <DataProvider key="share">{page}</DataProvider>
+    </Layout>
+  )
 }
 
 export default UserSharePage
