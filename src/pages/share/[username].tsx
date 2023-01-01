@@ -64,10 +64,7 @@ const UserSharePage: NextPageWithLayout = ({ username, settings }: Props) => {
   return (
     <>
       <Head>
-        <title>
-          {username}
-          {`'`}s GitHub contributions in review · Green Wall
-        </title>
+        <title>{`${username}'s GitHub contributions in review · Green Wall`}</title>
 
         <meta content={sharingTitle} property="og:title" />
         <meta content={sharingDescription} property="og:description" />
