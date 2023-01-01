@@ -2,7 +2,6 @@ import { forwardRef, memo, useImperativeHandle, useMemo, useRef } from 'react'
 
 import { useData } from '../../DataContext'
 import { DEFAULT_SIZE, DEFAULT_THEME, THEMES, sizeProperties } from '../../constants'
-import { DisplayName } from '../../types'
 
 import Graph from './Graph'
 import GraphFooter from './GraphFooter'
@@ -55,12 +54,7 @@ function ContributionsGraph(props: ContributionsGraphProps, ref: React.Ref<HTMLD
         backgroundColor: 'var(--graph-bg, #fff)',
       }}
     >
-      <GraphHeader
-        displayName={
-          settings?.displayName === DisplayName.ProfileName ? graphData.name : graphData.login
-        }
-        username={graphData.login}
-      />
+      <GraphHeader />
 
       <div className="flex flex-col gap-y-6">
         {graphData.contributionCalendars.map((calendar) => {

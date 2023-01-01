@@ -1,18 +1,27 @@
 import Link from 'next/link'
 
-import type { GitHubUser, GitHubUsername } from '../../types'
+import { useData } from '../../DataContext'
+import { DisplayName } from '../../types'
 
 import styles from './Graph.module.css'
 
-export default function GraphHeader(props: {
-  username: GitHubUsername
-  displayName?: GitHubUser['name'] | GitHubUser['login']
-}) {
+export default function GraphHeader() {
+  const { graphData, settings } = useData()
+
+  if (!graphData) {
+    return null
+  }
+
+  const displayName =
+    settings?.displayName === DisplayName.ProfileName ? graphData.name : graphData.login
+
+  const username = graphData.login
+
   return (
     <div className="mb-4 flex items-center">
       <Link
         className="group flex items-center"
-        href={`https://github.com/${props.username}`}
+        href={`https://github.com/${username}`}
         target="_blank"
       >
         <span className="mr-3 h-6 w-6">
@@ -25,8 +34,15 @@ export default function GraphHeader(props: {
             />
           </svg>
         </span>
+        <span className="mr-3 text-xl">·</span>
+        <span className="mr-3 flex items-center">
+          <span className="h-[1.7rem] w-[1.7rem] overflow-hidden rounded-full bg-[var(--level-0)]">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img alt="Avatar" className="h-full w-full" src={graphData.avatarUrl} />
+          </span>
+        </span>
         <span className="text-xl font-bold group-hover:underline" translate="no">
-          {props.displayName}
+          {displayName}
         </span>
       </Link>
 
