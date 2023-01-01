@@ -82,14 +82,20 @@ const UserSharePage: NextPageWithLayout = ({ username, settings }: Props) => {
         </div>
       ) : graphData ? (
         <div className="py-10 md:py-14">
-          <h1 className="text-center text-lg font-medium md:mx-auto md:px-20 md:text-3xl md:leading-[1.2]">
-            <div className="mb-2">Just got my GitHub contribution graph by GreenWall.</div>
-            <Link href="/">
-              <span className="cursor-pointer bg-gradient-to-br from-accent-500 to-accent-300/60 bg-clip-text text-transparent">
-                Generate Yours!
-              </span>
-            </Link>
+          <h1 className="mb-5 text-center text-lg font-medium md:mx-auto md:px-20 md:text-3xl md:leading-[1.2]">
+            Just got my GitHub contribution graph by GreenWall.
           </h1>
+
+          <div className="flex justify-center">
+            <Link href="/">
+              <button
+                className="cursor-pointer rounded-lg border-[3px] border-solid border-accent-400/70 bg-gradient-to-br from-accent-500 to-accent-300/60 bg-clip-text px-3 py-1 text-lg font-medium text-transparent outline-none transition-colors hover:border-accent-400 hover:bg-accent-400"
+                type="button"
+              >
+                Generate Yours
+              </button>
+            </Link>
+          </div>
 
           <div className="flex w-full overflow-x-auto py-5 md:justify-center md:py-14">
             <ContributionsGraph className="md:shadow-2xl md:shadow-main-200" />
