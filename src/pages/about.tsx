@@ -8,6 +8,8 @@ const SectionTitle = (props: React.PropsWithChildren) => (
   </h2>
 )
 
+const Paragraph = (props: React.PropsWithChildren) => <p className="py-2">{props.children}</p>
+
 const TextLink = ({
   children,
   ...props
@@ -25,7 +27,7 @@ export default function AboutPage() {
     <div className="py-10 md:py-14">
       <div className="px-2 md:px-20">
         <SectionTitle>How it works</SectionTitle>
-        <p className="py-2">
+        <Paragraph>
           This project uses the GitHub GraphQL API to fetch data and uses Next.js API Routes to send
           requests, you can read{' '}
           <Link
@@ -37,7 +39,7 @@ export default function AboutPage() {
             this file
           </Link>{' '}
           to learn how we handle your data.
-        </p>
+        </Paragraph>
 
         <SectionTitle>Credits</SectionTitle>
         <ul className="list-inside list-disc py-2 pl-1 marker:text-sm marker:text-main-700/90">
@@ -63,13 +65,26 @@ export default function AboutPage() {
           </li>
         </ul>
 
+        <SectionTitle>Support</SectionTitle>
+        <Paragraph>
+          Want to show your support for this project? You can star on{' '}
+          <TextLink passHref href="https://github.com/Codennnn/Green-Wall" target="_blank">
+            GitHub
+          </TextLink>{' '}
+          or vote on the{' '}
+          <TextLink passHref href="https://www.producthunt.com/posts/green-wall" target="_blank">
+            Product Hunt
+          </TextLink>
+          , or you can share this website!
+        </Paragraph>
+
         <SectionTitle>Reporting issues</SectionTitle>
-        <p className="py-2">
+        <Paragraph>
           Got bugs or have any suggestions for this project? Welcome to leave your message on the{' '}
           <TextLink passHref href="https://github.com/Codennnn/Green-Wall/issues" target="_blank">
             GitHub issues.
           </TextLink>
-        </p>
+        </Paragraph>
       </div>
     </div>
   )
