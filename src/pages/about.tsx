@@ -75,7 +75,7 @@ export default function AboutPage() {
           <TextLink passHref href="https://www.producthunt.com/posts/green-wall" target="_blank">
             Product Hunt
           </TextLink>
-          , or you can share this website!
+          , or you can share this website elsewhere!
         </Paragraph>
 
         <SectionTitle>Reporting issues</SectionTitle>
