@@ -66,15 +66,16 @@ export default function ShareButton() {
                 </Link>
                 <button
                   className="inline-block h-full min-w-[3.5rem] rounded bg-accent-100 px-1 text-accent-600"
-                  onClick={() => {
+                  onClick={async () => {
                     if (!copied) {
                       trackEvent('Copy Share URL')
-                      navigator.clipboard.writeText(shareUrl.toString()).then(() => {
-                        setCopied(true)
-                        setTimeout(() => {
-                          setCopied(false)
-                        }, 1500)
-                      })
+
+                      await navigator.clipboard.writeText(shareUrl.toString())
+
+                      setCopied(true)
+                      setTimeout(() => {
+                        setCopied(false)
+                      }, 1500)
                     }
                   }}
                 >
