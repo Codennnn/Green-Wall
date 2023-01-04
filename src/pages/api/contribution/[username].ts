@@ -1,13 +1,15 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 
-import type {
-  ContributionBasic,
-  ContributionCalendar,
-  ContributionYear,
-  GitHubApiJson,
-  GitHubContributionCalendar,
-  GitHubUser,
-  GraphData,
+import {
+  type ContributionBasic,
+  type ContributionCalendar,
+  type ContributionYear,
+  type ErrorData,
+  ErrorType,
+  type GitHubApiJson,
+  type GitHubContributionCalendar,
+  type GitHubUser,
+  type GraphData,
 } from '../../../types'
 
 async function fetchGitHubUser(username: string): Promise<ContributionBasic | never> {
@@ -109,7 +111,12 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
 
       return res.status(200).json(data)
     } catch (e: any) {
-      return res.status(400).json({ message: e.message })
+      console.log(e)
+      const errorData: ErrorData = { type: ErrorType.BadRequest, message: e.message }
+      if (e.message === 'Bad credentials') {
+        return res.status(401).json({ ...errorData, type: ErrorType.BadCredentials })
+      }
+      return res.status(400).json(errorData)
     }
   }
 }

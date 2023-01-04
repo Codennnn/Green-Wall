@@ -1,6 +1,5 @@
-import Link from 'next/link'
-
 import Layout from '../components/Layout'
+import TextLink from '../components/TextLink'
 
 const SectionTitle = (props: React.PropsWithChildren) => (
   <h2 className="mb-1 mt-5 text-lg font-bold first-of-type:mt-0 md:mt-8 md:mb-2 md:text-2xl">
@@ -10,18 +9,6 @@ const SectionTitle = (props: React.PropsWithChildren) => (
 
 const Paragraph = (props: React.PropsWithChildren) => <p className="py-2">{props.children}</p>
 
-const TextLink = ({
-  children,
-  ...props
-}: React.PropsWithChildren<React.ComponentProps<typeof Link>>) => (
-  <Link
-    className="underline decoration-current decoration-dotted underline-offset-[3px] transition-colors duration-200 hover:text-main-500/90"
-    {...props}
-  >
-    {children}
-  </Link>
-)
-
 export default function AboutPage() {
   return (
     <div className="py-10 md:py-14">
@@ -30,14 +17,14 @@ export default function AboutPage() {
         <Paragraph>
           This project uses the GitHub GraphQL API to fetch data and uses Next.js API Routes to send
           requests, you can read{' '}
-          <Link
+          <TextLink
             passHref
-            className="underline decoration-current decoration-dotted underline-offset-[3px] transition-colors duration-200 hover:text-main-500/90"
+            className="font-bold"
             href="https://github.com/Codennnn/Green-Wall/blob/3773c0dd49c09be78341a800f97b591b5b219efa/src/pages/api/contribution/%5Busername%5D.ts"
             target="_blank"
           >
             this file
-          </Link>{' '}
+          </TextLink>{' '}
           to learn how we handle your data.
         </Paragraph>
 
@@ -71,7 +58,7 @@ export default function AboutPage() {
           <TextLink passHref href="https://github.com/Codennnn/Green-Wall" target="_blank">
             GitHub
           </TextLink>{' '}
-          or vote on the{' '}
+          or vote on{' '}
           <TextLink passHref href="https://www.producthunt.com/posts/green-wall" target="_blank">
             Product Hunt
           </TextLink>

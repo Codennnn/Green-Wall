@@ -40,7 +40,7 @@ export default function HomePage() {
     dispatchSettings({ type: 'reset' })
   }
 
-  const handleError = (errorData: ErrorData = {}) => {
+  const handleError = (errorData?: ErrorData) => {
     reset()
     setError(errorData)
   }
@@ -59,7 +59,7 @@ export default function HomePage() {
         const res = await fetch(`/api/contribution/${username}`)
         if (res.status >= 400) {
           const error: ErrorData = await res.json()
-          handleError({ message: error.message })
+          handleError(error)
         } else {
           const data: GraphData = await res.json()
           setGraphData(data)
@@ -106,32 +106,34 @@ export default function HomePage() {
         Review the contributions you have made on GitHub over the years.
       </h1>
 
-      <form className="py-12 md:py-16" onSubmit={handleSubmit}>
-        <div className="flex flex-col items-center justify-center gap-y-6 md:flex-row md:gap-x-5">
-          <input
-            ref={inputRef}
-            required
-            className="
-              inline-block h-[2.8rem] overflow-hidden rounded-lg bg-main-100 px-5
-              text-center text-lg font-medium text-main-600 caret-main-500 shadow-main-300/90 outline-none
-              transition-all duration-300
-              placeholder:select-none placeholder:font-normal placeholder:text-main-400
-              focus:bg-white focus:shadow-[0_0_1.5rem_var(--tw-shadow-color)]
-            "
-            disabled={loading}
-            name="username"
-            placeholder="GitHub Username"
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            onFocus={() => inputRef.current?.select()}
-          />
-          <GenerateButton loading={loading} type="submit" />
-        </div>
-      </form>
+      <div className="py-12 md:py-16">
+        <form onSubmit={handleSubmit}>
+          <div className="flex flex-col items-center justify-center gap-y-6 md:flex-row md:gap-x-5">
+            <input
+              ref={inputRef}
+              required
+              className="
+                inline-block h-[2.8rem] overflow-hidden rounded-lg bg-main-100 px-5
+                text-center text-lg font-medium text-main-600 caret-main-500 shadow-main-300/90 outline-none
+                transition-all duration-300
+                placeholder:select-none placeholder:font-normal placeholder:text-main-400
+                focus:bg-white focus:shadow-[0_0_1.5rem_var(--tw-shadow-color)]
+              "
+              disabled={loading}
+              name="username"
+              placeholder="GitHub Username"
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              onFocus={() => inputRef.current?.select()}
+            />
+            <GenerateButton loading={loading} type="submit" />
+          </div>
+        </form>
+      </div>
 
       {error ? (
-        <ErrorMessage message={error.message} />
+        <ErrorMessage error={error} />
       ) : (
         <Loading active={loading}>
           {graphData && (

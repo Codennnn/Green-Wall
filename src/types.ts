@@ -73,7 +73,13 @@ export interface GraphData extends ContributionBasic {
   contributionCalendars: ContributionCalendar[]
 }
 
+export const enum ErrorType {
+  BadCredentials,
+  BadRequest,
+}
+
 export interface ErrorData {
+  type: ErrorType
   message?: string
 }
 
