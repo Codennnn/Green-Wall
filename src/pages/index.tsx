@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 
-import { toPng } from 'html-to-image'
+import { toBlob, toPng } from 'html-to-image'
 
 import { DataProvider, useData } from '../DataContext'
 import { AppearanceSetting, DraggableAppearanceSetting } from '../components/AppearanceSetting'
@@ -11,10 +11,11 @@ import Layout from '../components/Layout'
 import Loading from '../components/Loading'
 import SettingButton from '../components/SettingButton'
 import ShareButton from '../components/ShareButton'
-import { iconImage } from '../components/icons'
+import { iconClipboard, iconClipboardList, iconImage } from '../components/icons'
 import { trackEvent } from '../helpers'
-import mockData from '../mock-data'
 import type { ErrorData, GraphData } from '../types'
+
+const canUseClipboardItem = typeof ClipboardItem !== 'undefined'
 
 export default function HomePage() {
   const graphRef = useRef<HTMLDivElement>(null)
@@ -31,6 +32,9 @@ export default function HomePage() {
   const [settingPopUp, setSettingPopUp] = useState(false)
 
   const [downloading, setDownloading] = useState(false)
+
+  const [doingCopy, setDoingCopy] = useState(false)
+  const [copySuccess, setCopySuccess] = useState(false)
 
   const [error, setError] = useState<ErrorData>()
 
@@ -91,6 +95,28 @@ export default function HomePage() {
     }
   }
 
+  const handleCopyImage = async () => {
+    if (graphRef.current && graphData && canUseClipboardItem) {
+      try {
+        setDoingCopy(true)
+        trackEvent('Click Copy Image')
+
+        const blobData = await toBlob(graphRef.current)
+
+        if (blobData) {
+          const item = new ClipboardItem({ [blobData.type]: blobData })
+          await navigator.clipboard.write([item])
+          setCopySuccess(true)
+          setTimeout(() => {
+            setCopySuccess(false)
+          }, 2000)
+        }
+      } finally {
+        setDoingCopy(false)
+      }
+    }
+  }
+
   useEffect(() => {
     if (graphData && actionRef.current) {
       const offsetTop = actionRef.current.getBoundingClientRect().top
@@ -142,18 +168,35 @@ export default function HomePage() {
                 ref={actionRef}
                 className="flex flex-row-reverse flex-wrap items-center justify-center gap-x-6 gap-y-4 py-5"
               >
-                <button
-                  className={`
-                  inline-flex h-full items-center rounded-md bg-main-100 py-2 px-4 font-medium text-main-500
-                  disabled:pointer-events-none
-                  ${downloading ? 'animate-bounce' : ''}
-                  `}
-                  disabled={downloading}
-                  onClick={handleDownload}
-                >
-                  <span className="mr-2 h-6 w-6">{iconImage}</span>
-                  <span>Save as Image</span>
-                </button>
+                <div className="flex gap-x-3">
+                  <button
+                    className={`
+                    inline-flex h-full items-center rounded-md bg-main-100 py-2 px-4 text-sm font-medium text-main-500 disabled:pointer-events-none md:text-base
+                    ${downloading ? 'animate-bounce' : ''}
+                    `}
+                    disabled={downloading}
+                    onClick={handleDownload}
+                  >
+                    <span className="mr-2 h-5 w-5 shrink-0 md:h-6 md:w-6">{iconImage}</span>
+                    <span>Save as Image</span>
+                  </button>
+                  {canUseClipboardItem && (
+                    <button
+                      className={`
+                      inline-flex h-full items-center rounded-md py-2 px-4 text-sm font-medium transition-colors disabled:pointer-events-none md:text-base
+                      ${doingCopy ? 'animate-bounce' : ''}
+                      ${copySuccess ? 'bg-accent-100 text-accent-500' : 'bg-main-100 text-main-500'}
+                      `}
+                      disabled={doingCopy}
+                      onClick={handleCopyImage}
+                    >
+                      <span className="mr-2 h-5 w-5 shrink-0 md:h-6 md:w-6">
+                        {copySuccess ? iconClipboardList : iconClipboard}
+                      </span>
+                      <span>{copySuccess ? 'Copied' : 'Copy'} as Image</span>
+                    </button>
+                  )}
+                </div>
                 <div className="flex flex-wrap items-center gap-x-6 md:justify-center">
                   <ShareButton />
                   <div className="relative">

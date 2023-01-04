@@ -50,6 +50,12 @@ export default function AboutPage() {
             </TextLink>{' '}
             by Google Fonts.
           </li>
+          <li>
+            <i className="mr-3 opacity-90">Icons:</i>
+            <TextLink passHref href="https://heroicons.com" target="_blank">
+              heroicons.
+            </TextLink>
+          </li>
         </ul>
 
         <SectionTitle>Support</SectionTitle>
