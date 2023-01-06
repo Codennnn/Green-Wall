@@ -11,6 +11,7 @@ import '../styles/globals.css'
 const rubik = Rubik({
   weight: ['400', '500'],
   display: 'swap',
+  subsets: ['latin'],
 })
 
 type NextPageWithLayout = NextPage & {
@@ -34,7 +35,7 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
       <style global jsx>
         {`
           :root {
-            font-family: ${rubik.style.fontFamily};
+            font-family: ${rubik.style.fontFamily}, sans-serif;
           }
         `}
       </style>
