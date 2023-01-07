@@ -1,9 +1,53 @@
+import { useEffect, useRef, useState } from 'react'
+
 import Link from 'next/link'
 
 import { useData } from '../../DataContext'
 import { DisplayName } from '../../types'
 
 import styles from './Graph.module.css'
+
+const Avatar = () => {
+  const { graphData } = useData()
+
+  const init = useRef(false)
+  const avatarRoot = useRef<HTMLSpanElement>(null)
+  const [status, setStatus] = useState<'loading' | 'loaded' | 'error'>()
+
+  useEffect(() => {
+    const root = avatarRoot.current
+    if (root && graphData && !init.current) {
+      if (!root.hasChildNodes()) {
+        setStatus('loading')
+        const avatarImg = new window.Image()
+        avatarImg.onload = () => {
+          root.appendChild(avatarImg)
+          setStatus('loaded')
+        }
+        avatarImg.onerror = () => {
+          setStatus('error')
+        }
+        avatarImg.src = graphData.avatarUrl
+        avatarImg.alt = `${graphData.login}'s avatar.`
+        avatarImg.classList.add('h-full', 'w-full')
+        init.current = true
+      }
+    }
+  }, [graphData])
+
+  return (
+    <span
+      ref={avatarRoot}
+      className={`h-[1.7rem] w-[1.7rem] overflow-hidden rounded-full bg-[var(--level-0)] ${
+        status === 'loading' ? 'animate-pulse' : ''
+      }`}
+    >
+      {status === 'error' && (
+        <span className="inline-block h-full w-full bg-gradient-to-br from-[var(--level-1)] to-[var(--level-2)]"></span>
+      )}
+    </span>
+  )
+}
 
 export default function GraphHeader() {
   const { graphData, settings } = useData()
@@ -36,10 +80,7 @@ export default function GraphHeader() {
         </span>
         <span className="mr-3 text-xl">·</span>
         <span className="mr-3 flex items-center">
-          <span className="h-[1.7rem] w-[1.7rem] overflow-hidden rounded-full bg-[var(--level-0)]">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img alt="Avatar" className="h-full w-full" src={graphData.avatarUrl} />
-          </span>
+          <Avatar />
         </span>
         <span className="text-xl font-bold group-hover:underline" translate="no">
           {displayName}
