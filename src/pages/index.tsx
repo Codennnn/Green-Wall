@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
 import { toBlob, toPng } from 'html-to-image'
 
@@ -19,7 +19,7 @@ const canUseClipboardItem = typeof ClipboardItem !== 'undefined'
 
 export default function HomePage() {
   const graphRef = useRef<HTMLDivElement>(null)
-  const actionRef = useRef<HTMLDivElement>(null)
+  const actionRef = useRef<HTMLDivElement | null>(null)
   const inputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
@@ -117,14 +117,16 @@ export default function HomePage() {
     }
   }
 
-  useEffect(() => {
-    if (graphData && actionRef.current) {
+  const actionRefCallback = useCallback((node: HTMLDivElement | null) => {
+    actionRef.current = node
+
+    if (actionRef.current) {
       const offsetTop = actionRef.current.getBoundingClientRect().top
       if (offsetTop > 0) {
         window.scrollTo(0, offsetTop)
       }
     }
-  }, [graphData])
+  }, [])
 
   return (
     <div className="py-10 md:py-14">
@@ -165,7 +167,7 @@ export default function HomePage() {
           {graphData && (
             <>
               <div
-                ref={actionRef}
+                ref={actionRefCallback}
                 className="flex flex-row-reverse flex-wrap items-center justify-center gap-x-6 gap-y-4 py-5"
               >
                 <div className="flex gap-x-3">
