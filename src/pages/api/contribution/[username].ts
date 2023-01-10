@@ -35,6 +35,10 @@ async function fetchGitHubUser(username: string): Promise<ContributionBasic | ne
     },
   })
 
+  if (!res.ok) {
+    throw new Error(`fetch error: ${res.statusText}.`)
+  }
+
   const json: GitHubApiJson<{ user: GitHubUser | null }> = await res.json()
 
   if (!json.data?.user) {
@@ -84,6 +88,10 @@ async function fetchContributionsCollection(
       'content-type': 'application/json',
     },
   })
+
+  if (!res.ok) {
+    throw new Error(`fetch error: ${res.statusText}.`)
+  }
 
   const json: GitHubApiJson<{ user: GitHubContributionCalendar | null }> = await res.json()
 
