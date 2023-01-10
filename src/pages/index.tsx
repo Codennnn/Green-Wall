@@ -101,16 +101,30 @@ export default function HomePage() {
         setDoingCopy(true)
         trackEvent('Click Copy Image')
 
-        const blobData = await toBlob(graphRef.current)
+        const item = new ClipboardItem({
+          'image/png': (async () => {
+            /**
+             * To be able to use `ClipboardItem` in safari, need to pass promise directly into it.
+             * @see https://stackoverflow.com/questions/66312944/javascript-clipboard-api-write-does-not-work-in-safari
+             */
+            if (!graphRef.current) {
+              throw new Error()
+            }
 
-        if (blobData) {
-          const item = new ClipboardItem({ [blobData.type]: blobData })
-          await navigator.clipboard.write([item])
-          setCopySuccess(true)
-          setTimeout(() => {
-            setCopySuccess(false)
-          }, 2000)
-        }
+            const blobData = await toBlob(graphRef.current)
+
+            if (!blobData) {
+              throw new Error()
+            }
+
+            return blobData
+          })(),
+        })
+        await navigator.clipboard.write([item])
+        setCopySuccess(true)
+        setTimeout(() => {
+          setCopySuccess(false)
+        }, 2000)
       } finally {
         setDoingCopy(false)
       }
