@@ -7,15 +7,9 @@ import Link from 'next/link'
 
 import { DataProvider, useData } from '../../DataContext'
 import ContributionsGraph from '../../components/ContributionsGraph'
+import ErrorMessage from '../../components/ErrorMessage'
 import Layout from '../../components/Layout'
-import type {
-  DisplayName,
-  ErrorData,
-  GraphData,
-  GraphSettings,
-  GraphSize,
-  Themes,
-} from '../../types'
+import type { DisplayName, GraphSettings, GraphSize, ResponseData, Themes } from '../../types'
 
 interface Props {
   username: string
@@ -31,6 +25,8 @@ const UserSharePage: NextPageWithLayout = ({ username, settings }: Props) => {
 
   const [loading, setLoading] = useState(true)
 
+  const [error, setError] = useState<Pick<ResponseData, 'errorType' | 'message'>>()
+
   useEffect(() => {
     dispatchSettings({ type: 'replace', payload: settings })
   }, [dispatchSettings, settings])
@@ -42,13 +38,12 @@ const UserSharePage: NextPageWithLayout = ({ username, settings }: Props) => {
           setLoading(true)
 
           const res = await fetch(`/api/contribution/${username}`)
+          const resJson: ResponseData = await res.json()
 
-          if (res.status < 400) {
-            const data: GraphData = await res.json()
-            setGraphData(data)
+          if (res.ok) {
+            setGraphData(resJson.data)
           } else {
-            const error: ErrorData = await res.json()
-            console.log(error)
+            setError({ errorType: resJson.errorType, message: resJson.message })
           }
         } finally {
           setLoading(false)
@@ -101,6 +96,8 @@ const UserSharePage: NextPageWithLayout = ({ username, settings }: Props) => {
             <ContributionsGraph className="md:shadow-2xl md:shadow-main-200" />
           </div>
         </div>
+      ) : error ? (
+        <ErrorMessage errorType={error.errorType} text={error.message} />
       ) : null}
     </>
   )

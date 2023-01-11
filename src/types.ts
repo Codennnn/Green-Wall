@@ -78,9 +78,10 @@ export const enum ErrorType {
   BadRequest,
 }
 
-export interface ErrorData {
-  type: ErrorType
+export interface ResponseData {
+  errorType?: ErrorType
   message?: string
+  data?: GraphData
 }
 
 export const enum GraphSize {

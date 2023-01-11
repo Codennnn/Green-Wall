@@ -13,7 +13,7 @@ import SettingButton from '../components/SettingButton'
 import ShareButton from '../components/ShareButton'
 import { iconClipboard, iconClipboardList, iconImage } from '../components/icons'
 import { trackEvent } from '../helpers'
-import type { ErrorData, GraphData } from '../types'
+import type { ResponseData } from '../types'
 
 const canUseClipboardItem = typeof ClipboardItem !== 'undefined'
 
@@ -36,17 +36,17 @@ export default function HomePage() {
   const [doingCopy, setDoingCopy] = useState(false)
   const [copySuccess, setCopySuccess] = useState(false)
 
-  const [error, setError] = useState<ErrorData>()
+  const [error, setError] = useState<Pick<ResponseData, 'errorType' | 'message'>>()
 
   const reset = () => {
+    setError(undefined)
     setGraphData(undefined)
     setSettingPopUp(false)
     dispatchSettings({ type: 'reset' })
   }
 
-  const handleError = (errorData?: ErrorData) => {
+  const handleError = () => {
     reset()
-    setError(errorData)
   }
 
   const [loading, setLoading] = useState(false)
@@ -60,15 +60,16 @@ export default function HomePage() {
       try {
         setError(undefined)
         setLoading(true)
+
         const res = await fetch(`/api/contribution/${username}`)
-        if (res.status >= 400) {
-          const error: ErrorData = await res.json()
-          handleError(error)
+        const resJson: ResponseData = await res.json()
+
+        if (res.ok) {
+          setGraphData(resJson.data)
         } else {
-          const data: GraphData = await res.json()
-          setGraphData(data)
+          setError({ errorType: resJson.errorType, message: resJson.message })
         }
-      } catch (e) {
+      } catch {
         handleError()
       } finally {
         setLoading(false)
@@ -175,7 +176,7 @@ export default function HomePage() {
       </div>
 
       {error ? (
-        <ErrorMessage error={error} />
+        <ErrorMessage errorType={error.errorType} text={error.message} />
       ) : (
         <Loading active={loading}>
           {graphData && (

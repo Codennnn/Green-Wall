@@ -1,9 +1,9 @@
-import { type ErrorData, ErrorType } from '../types'
+import { ErrorType } from '../types'
 
 import TextLink from './TextLink'
 
-export default function ErrorMessage(props: { error: ErrorData }) {
-  const { error } = props
+export default function ErrorMessage(props: { errorType?: ErrorType; text?: string }) {
+  const { errorType, text } = props
 
   return (
     <div className="flex flex-col items-center justify-center text-main-400/80">
@@ -12,7 +12,7 @@ export default function ErrorMessage(props: { error: ErrorData }) {
       </div>
 
       <div className="max-w-[min(40%,90vw)] text-center">
-        {error.type === ErrorType.BadCredentials ? (
+        {errorType === ErrorType.BadCredentials ? (
           <div className="text-center">
             You need access token to get data, please read{' '}
             <TextLink
@@ -26,7 +26,7 @@ export default function ErrorMessage(props: { error: ErrorData }) {
             to learn how to set the token correctly.
           </div>
         ) : (
-          error.message ?? 'Something went wrong.'
+          text ?? 'Something went wrong.'
         )}
       </div>
     </div>
