@@ -7,8 +7,16 @@
     @apply relative py-1 flex items-center gap-x-1 text-xs md:text-sm text-main-400 hover:text-main-500 transition-colors duration-300;
   }
 
+  .simple-button::before {
+    @apply content-[''] absolute top-[2px] bottom-[2px] left-0 right-0 z-[-1] scale-[0.6] transition-all duration-300 rounded-md bg-main-100/80 opacity-0;
+  }
+
+  .simple-button:hover::before {
+    @apply scale-[1.1] opacity-100;
+  }
+
   .simple-button.divider::after {
-    @apply content-[''] h-4 w-[1px] absolute top-1/2 -right-3 -translate-y-1/2 bg-main-300;
+    @apply content-[''] absolute top-1/2 -right-3 h-4 w-[1px] -translate-y-1/2 bg-main-300;
   }
 
   .appearance-setting fieldset {
