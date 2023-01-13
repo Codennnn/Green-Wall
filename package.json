@@ -6,7 +6,7 @@
   "author": "LeoKu <czc12580520@gmail.com> (https://leoku.top)",
   "scripts": {
     "build": "next build",
-    "deps": "yarn upgrade-interactive --latest",
+    "deps": "pnpm up --interactive --latest",
     "dev": "next dev",
     "lint": "npm run lint:es && npm run lint:ts && npm run lint:style",
     "lint:es": "eslint \"**/*.{mjs,js,jsx,ts,tsx}\"",
