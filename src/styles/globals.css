@@ -8,11 +8,11 @@
   }
 
   .simple-button::before {
-    @apply content-[''] absolute top-[2px] bottom-[2px] left-0 right-0 z-[-1] scale-[0.6] transition-all duration-300 rounded-md bg-main-100/80 opacity-0;
+    @apply content-[''] absolute top-0 bottom-0 left-[-5px] right-[-5px] z-[-1] scale-[0.6] transition-all duration-300 rounded-md bg-main-100/80 opacity-0;
   }
 
   .simple-button:hover::before {
-    @apply scale-[1.1] opacity-100;
+    @apply scale-100 opacity-100;
   }
 
   .simple-button.divider::after {
