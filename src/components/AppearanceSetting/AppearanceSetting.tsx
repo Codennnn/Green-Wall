@@ -4,9 +4,11 @@ import { useData } from '../../DataContext'
 import { trackEvent } from '../../helpers'
 import { DisplayName, GraphSize } from '../../types'
 import ThemeSelector from '../ThemeSelector'
+import { iconQuestion } from '../icons'
 import { RadixSelect } from '../ui-kit/RadixSelect'
 import { RadixSwitch } from '../ui-kit/RadixSwitch'
 import { RadixToggleGroup } from '../ui-kit/RadixToggleGroup'
+import { RadixTooltip } from '../ui-kit/RadixTooltip'
 
 import { YearRangeSelect } from './YearRangeSelect'
 
@@ -51,7 +53,18 @@ export default function AppearanceSetting() {
       </fieldset>
 
       <fieldset>
-        <label>Graph Size</label>
+        <label className="flex items-center">
+          Graph Size
+          <RadixTooltip
+            label={
+              <span className="inline-block max-w-xs leading-5">
+                You can also adjust the web zoom to change the size of the saved image.
+              </span>
+            }
+          >
+            <span className="ml-1 inline-block h-4 w-4 cursor-help opacity-70">{iconQuestion}</span>
+          </RadixTooltip>
+        </label>
         <RadixToggleGroup
           options={[
             { label: 'S', value: GraphSize.Small, tooltip: 'Small' },

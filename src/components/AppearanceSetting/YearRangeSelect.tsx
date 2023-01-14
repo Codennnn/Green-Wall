@@ -37,7 +37,7 @@ export function YearRangeSelect(props: YearRangeSelectProps) {
   }
 
   return (
-    <>
+    <div className="flex items-center">
       <RadixSelect
         items={graphData?.contributionYears.map((year) => ({
           label: `${year}`,
@@ -47,7 +47,7 @@ export function YearRangeSelect(props: YearRangeSelectProps) {
         value={startYear}
         onValueChange={handleYearChange.bind(null, 'start')}
       />
-      <span>-</span>
+      <span className="mx-2">-</span>
       <RadixSelect
         items={graphData?.contributionYears.map((year) => ({
           label: `${year}`,
@@ -57,6 +57,6 @@ export function YearRangeSelect(props: YearRangeSelectProps) {
         value={endYear}
         onValueChange={handleYearChange.bind(null, 'end')}
       />
-    </>
+    </div>
   )
 }

@@ -24,7 +24,7 @@
   }
 
   .appearance-setting fieldset > label {
-    @apply mr-5 text-sm font-medium;
+    @apply mr-5 text-sm font-medium whitespace-nowrap;
   }
 
   .bg-decoration {

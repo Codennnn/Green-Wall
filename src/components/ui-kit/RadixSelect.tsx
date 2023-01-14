@@ -31,11 +31,12 @@ export function RadixSelect(props: SelectProps) {
               {items?.map((it) => (
                 <Select.Item
                   key={it.value}
-                  className="
-                  relative flex cursor-pointer select-none items-center rounded-md px-1 py-2 pl-8 text-sm font-medium
+                  className={`
+                  relative flex select-none items-center rounded-md px-1 py-2 pl-8 text-sm font-medium
                   text-main-600 focus:bg-main-100/50 focus:outline-none
                   radix-disabled:opacity-50
-                  "
+                  ${it.disabled ? 'cursor-not-allowed' : 'cursor-pointer'}
+                  `}
                   disabled={it.disabled}
                   value={it.value}
                 >
