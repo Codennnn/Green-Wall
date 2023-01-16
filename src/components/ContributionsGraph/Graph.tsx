@@ -73,7 +73,7 @@ export default function Graph(props: GraphProps) {
             }
 
             days.forEach((day, j) => {
-              blocks.push(<li key={`${i}${j}`} data-level={levels[day.level]}></li>)
+              blocks.push(<li key={`${i}${j}`} data-level={levels[day.level]} />)
             })
 
             return blocks

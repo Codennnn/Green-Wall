@@ -43,7 +43,7 @@ const Avatar = () => {
       }`}
     >
       {status === 'error' && (
-        <span className="inline-block h-full w-full bg-gradient-to-br from-[var(--level-1)] to-[var(--level-2)]"></span>
+        <span className="inline-block h-full w-full bg-gradient-to-br from-[var(--level-1)] to-[var(--level-2)]" />
       )}
     </span>
   )
