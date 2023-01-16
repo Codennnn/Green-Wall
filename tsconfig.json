@@ -1,5 +1,8 @@
 {
   "extends": "@codennnn/tsconfig/next.json",
-  "compilerOptions": { "baseUrl": "." },
-  "include": ["next-env.d.ts", "src/**/*"]
+  "compilerOptions": {
+    "baseUrl": "."
+  },
+  "include": ["next-env.d.ts", "src/**/*"],
+  "exclude": ["node_modules"]
 }
