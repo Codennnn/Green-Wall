@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 
 import type { NextPage } from 'next'
 import Head from 'next/head'
@@ -9,7 +9,8 @@ import { DataProvider, useData } from '../../DataContext'
 import ContributionsGraph from '../../components/ContributionsGraph'
 import ErrorMessage from '../../components/ErrorMessage'
 import Layout from '../../components/Layout'
-import type { DisplayName, GraphSettings, GraphSize, ResponseData, Themes } from '../../types'
+import type { DisplayName, GraphSettings, GraphSize, Themes } from '../../types'
+import { useGraphRequest } from '../../useGraphRequest'
 
 interface Props {
   username: string
@@ -23,9 +24,7 @@ type NextPageWithLayout = NextPage<Props> & {
 const UserSharePage: NextPageWithLayout = ({ username, settings }: Props) => {
   const { graphData, setGraphData, dispatchSettings } = useData()
 
-  const [loading, setLoading] = useState(true)
-
-  const [error, setError] = useState<Pick<ResponseData, 'errorType' | 'message'>>()
+  const { run, loading, error } = useGraphRequest()
 
   useEffect(() => {
     dispatchSettings({ type: 'replace', payload: settings })
@@ -34,23 +33,11 @@ const UserSharePage: NextPageWithLayout = ({ username, settings }: Props) => {
   useEffect(() => {
     if (username) {
       void (async () => {
-        try {
-          setLoading(true)
-
-          const res = await fetch(`/api/contribution/${username}`)
-          const resJson: ResponseData = await res.json()
-
-          if (res.ok) {
-            setGraphData(resJson.data)
-          } else {
-            setError({ errorType: resJson.errorType, message: resJson.message })
-          }
-        } finally {
-          setLoading(false)
-        }
+        const data = await run({ username })
+        setGraphData(data)
       })()
     }
-  }, [username, setGraphData])
+  }, [username, run, setGraphData])
 
   const sharingTitle = `${username}'s GitHub contributions`
   const sharingURL = `https://green-wall.vercel.app/share/${username}`

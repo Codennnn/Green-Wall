@@ -22,6 +22,7 @@ specifiers:
   prefer-code-style: 0.7.2
   react: 18.2.0
   react-dom: 18.2.0
+  react-use-event-hook: ^0.9.3
   stylelint: ^14.16.1
   tailwindcss: ^3.2.4
   tailwindcss-radix: ^2.6.2
@@ -43,6 +44,7 @@ dependencies:
   next: 13.1.1_biqbaboplfbrettd7655fr4n2y
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
+  react-use-event-hook: 0.9.3_react@18.2.0
   tailwindcss-radix: 2.6.2
 
 devDependencies:
@@ -4665,6 +4667,14 @@ packages:
       invariant: 2.2.4
       react: 18.2.0
       tslib: 2.4.1
+    dev: false
+
+  /react-use-event-hook/0.9.3_react@18.2.0:
+    resolution: {integrity: sha512-8edWglTZ9Z5kfl31EuRjr4MDkTcEczHvrbo2EG1WVrX/a1B2sP3S9RCXjtSwrEnYRw29ldErlvDQNbTOxHNcmQ==}
+    peerDependencies:
+      react: '>=16.8.0'
+    dependencies:
+      react: 18.2.0
     dev: false
 
   /react/18.2.0:

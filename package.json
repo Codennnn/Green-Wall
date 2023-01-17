@@ -30,6 +30,7 @@
     "next": "^13.1.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-use-event-hook": "^0.9.3",
     "tailwindcss-radix": "^2.6.2"
   },
   "devDependencies": {

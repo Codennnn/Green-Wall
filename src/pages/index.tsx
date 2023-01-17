@@ -13,7 +13,7 @@ import SettingButton from '../components/SettingButton'
 import ShareButton from '../components/ShareButton'
 import { iconClipboard, iconClipboardList, iconImage } from '../components/icons'
 import { trackEvent } from '../helpers'
-import type { ResponseData } from '../types'
+import { useGraphRequest } from '../useGraphRequest'
 
 const canUseClipboardItem = typeof ClipboardItem !== 'undefined'
 
@@ -36,10 +36,7 @@ export default function HomePage() {
   const [doingCopy, setDoingCopy] = useState(false)
   const [copySuccess, setCopySuccess] = useState(false)
 
-  const [error, setError] = useState<Pick<ResponseData, 'errorType' | 'message'>>()
-
   const reset = () => {
-    setError(undefined)
     setGraphData(undefined)
     setSettingPopUp(false)
     dispatchSettings({ type: 'reset' })
@@ -49,7 +46,7 @@ export default function HomePage() {
     reset()
   }
 
-  const [loading, setLoading] = useState(false)
+  const { run, loading, error } = useGraphRequest({ onError: handleError })
 
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault()
@@ -57,23 +54,8 @@ export default function HomePage() {
     if (username.trim() && !loading) {
       reset()
       trackEvent('Click Generate')
-      try {
-        setError(undefined)
-        setLoading(true)
-
-        const res = await fetch(`/api/contribution/${username}`)
-        const resJson: ResponseData = await res.json()
-
-        if (res.ok) {
-          setGraphData(resJson.data)
-        } else {
-          setError({ errorType: resJson.errorType, message: resJson.message })
-        }
-      } catch {
-        handleError()
-      } finally {
-        setLoading(false)
-      }
+      const data = await run({ username })
+      setGraphData(data)
     }
   }
 
@@ -88,6 +70,10 @@ export default function HomePage() {
         trigger.href = dataURL
         trigger.download = `${graphData.login}_contributions`
         trigger.click()
+      } catch (e) {
+        if (e instanceof Error) {
+          trackEvent('Error: Download Image', { msg: e.message })
+        }
       } finally {
         setTimeout(() => {
           setDownloading(false)
@@ -126,6 +112,10 @@ export default function HomePage() {
         setTimeout(() => {
           setCopySuccess(false)
         }, 2000)
+      } catch (e) {
+        if (e instanceof Error) {
+          trackEvent('Error: Copy Image', { msg: e.message })
+        }
       } finally {
         setDoingCopy(false)
       }
