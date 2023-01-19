@@ -34,4 +34,4 @@ After creating personal access token, create a file named `.env.local` at the ro
 GITHUB_ACCESS_TOKEN="ghp_eQ81YcyFcwVjdJwBgUj150VPnxBf1N48Sep7"
 ```
 
-Now you are ready to run `pnpm dev` to develop.
+Then you are ready to run `pnpm dev` to develop.
