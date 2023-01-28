@@ -12,7 +12,6 @@ const rubik = Rubik({
   weight: ['400', '500'],
   display: 'swap',
   subsets: ['latin'],
-  variable: '--font-rubik',
 })
 
 type NextPageWithLayout = NextPage & {
@@ -31,6 +30,18 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
   }, [])
 
   return (
-    <div className={`${rubik.variable} font-rubik`}>{getLayout(<Component {...pageProps} />)}</div>
+    <>
+      {/* eslint-disable react/no-unknown-property */}
+      <style global jsx>
+        {`
+          :root {
+            font-family: ${rubik.style.fontFamily}, ui-sans-serif, system-ui, -apple-system,
+              BlinkMacSystemFont, sans-serif;
+          }
+        `}
+      </style>
+
+      {getLayout(<Component {...pageProps} />)}
+    </>
   )
 }

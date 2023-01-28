@@ -1,5 +1,4 @@
 const colors = require('tailwindcss/colors')
-const { fontFamily } = require('tailwindcss/defaultTheme')
 const plugin = require('tailwindcss/plugin')
 
 /** @type {import('tailwindcss').Config} \*/
@@ -22,9 +21,6 @@ module.exports = {
         overlay: 'rgb(14 18 22 / 0.2) 0 6px 38px -10px, rgb(14 18 22 / 0.3) 0 8px 20px -15px',
         tooltip:
           'hsl(206 22% 7% / 35%) 0px 10px 38px -10px, hsl(206 22% 7% / 20%) 0px 10px 20px -15px',
-      },
-      fontFamily: {
-        rubik: ['var(--font-rubik)', ...fontFamily.sans],
       },
 
       keyframes: {
