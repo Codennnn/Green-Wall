@@ -49,7 +49,7 @@ const Avatar = () => {
   )
 }
 
-export default function GraphHeader() {
+export function GraphHeader() {
   const { graphData, settings } = useData()
 
   if (!graphData) {

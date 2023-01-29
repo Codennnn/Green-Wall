@@ -2,7 +2,7 @@ import { forwardRef } from 'react'
 
 type SelectButtonProps = Omit<React.ComponentProps<'button'>, 'className'>
 
-const SelectButton: React.ForwardRefRenderFunction<HTMLButtonElement, SelectButtonProps> = (
+const InnerSelectButton: React.ForwardRefRenderFunction<HTMLButtonElement, SelectButtonProps> = (
   props,
   ref
 ) => {
@@ -21,4 +21,4 @@ const SelectButton: React.ForwardRefRenderFunction<HTMLButtonElement, SelectButt
   )
 }
 
-export default forwardRef(SelectButton)
+export const SelectButton = forwardRef(InnerSelectButton)

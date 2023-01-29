@@ -6,9 +6,9 @@ import Image from 'next/image'
 import Link from 'next/link'
 
 import { DataProvider, useData } from '../../DataContext'
-import ContributionsGraph from '../../components/ContributionsGraph'
-import ErrorMessage from '../../components/ErrorMessage'
-import Layout from '../../components/Layout'
+import { ContributionsGraph } from '../../components/ContributionsGraph'
+import { ErrorMessage } from '../../components/ErrorMessage'
+import { Layout } from '../../components/Layout'
 import type { DisplayName, GraphSettings, GraphSize, Themes } from '../../types'
 import { useGraphRequest } from '../../useGraphRequest'
 

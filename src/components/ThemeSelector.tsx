@@ -6,7 +6,7 @@ interface ThemeSelectorProps extends Omit<React.ComponentProps<'div'>, 'onChange
   onChange?: (theme: Themes) => void
 }
 
-export default function ThemeSelector(props: ThemeSelectorProps) {
+export function ThemeSelector(props: ThemeSelectorProps) {
   const { value, onChange, ...rest } = props
 
   return (

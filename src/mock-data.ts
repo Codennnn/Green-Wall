@@ -1,6 +1,6 @@
 import type { GraphData } from './types'
 
-const data: GraphData = {
+export const mockGraphData: GraphData = {
   name: 'LeoKu',
   login: 'Codennnn',
   avatarUrl:
@@ -2341,5 +2341,3 @@ const data: GraphData = {
     },
   ],
 }
-
-export default data

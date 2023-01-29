@@ -9,7 +9,7 @@ import { trackEvent } from '../helpers'
 import { iconShare, iconUpRight } from './icons'
 import { RadixPopover } from './ui-kit/RadixPopover'
 
-export default function ShareButton() {
+export function ShareButton() {
   const { graphData, settings, firstYear, lastYear } = useData()
   const username = graphData?.login
 

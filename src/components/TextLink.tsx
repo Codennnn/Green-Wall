@@ -1,6 +1,6 @@
 import Link from 'next/link'
 
-export default function TextLink({
+export function TextLink({
   children,
   ...props
 }: React.PropsWithChildren<React.ComponentProps<typeof Link>>) {

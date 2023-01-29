@@ -4,7 +4,7 @@ import { trackEvent } from '../helpers'
 
 import { iconGitHub } from './icons'
 
-export default function GitHubButton() {
+export function GitHubButton() {
   const handleClick = () => {
     trackEvent('Click GitHub Source Code')
   }

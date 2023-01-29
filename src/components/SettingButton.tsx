@@ -8,7 +8,7 @@ interface SettingButtonProps extends React.ComponentProps<'button'> {
   onPopOut?: () => void
 }
 
-export default function SettingButton(props: SettingButtonProps) {
+export function SettingButton(props: SettingButtonProps) {
   const { content, onPopOut, ...buttonProps } = props
 
   return (

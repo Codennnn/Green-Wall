@@ -3,7 +3,7 @@ import { useId } from 'react'
 import { useData } from '../../DataContext'
 import { trackEvent } from '../../helpers'
 import { DisplayName, GraphSize } from '../../types'
-import ThemeSelector from '../ThemeSelector'
+import { ThemeSelector } from '../ThemeSelector'
 import { iconQuestion } from '../icons'
 import { RadixSelect } from '../ui-kit/RadixSelect'
 import { RadixSwitch } from '../ui-kit/RadixSwitch'
@@ -12,7 +12,7 @@ import { RadixTooltip } from '../ui-kit/RadixTooltip'
 
 import { YearRangeSelect } from './YearRangeSelect'
 
-export default function AppearanceSetting() {
+export function AppearanceSetting() {
   const { graphData, settings, dispatchSettings } = useData()
 
   const attribution = useId()

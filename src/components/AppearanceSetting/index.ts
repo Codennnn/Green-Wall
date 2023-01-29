@@ -1,2 +1,2 @@
-export { default as AppearanceSetting } from './AppearanceSetting'
-export { default as DraggableAppearanceSetting } from './DraggableAppearanceSetting'
+export { AppearanceSetting } from './AppearanceSetting'
+export { DraggableAppearanceSetting } from './DraggableAppearanceSetting'

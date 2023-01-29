@@ -4,7 +4,7 @@ interface GenerateButtonProps extends React.ComponentProps<'button'> {
   loading?: boolean
 }
 
-export default function GenerateButton({ loading = false, ...props }: GenerateButtonProps) {
+export function GenerateButton({ loading = false, ...props }: GenerateButtonProps) {
   return (
     <button
       className={`${styles['pushable']} select-none text-white ${

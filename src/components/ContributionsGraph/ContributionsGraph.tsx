@@ -3,15 +3,18 @@ import { forwardRef, memo, useImperativeHandle, useMemo, useRef } from 'react'
 import { useData } from '../../DataContext'
 import { DEFAULT_SIZE, DEFAULT_THEME, THEMES, sizeProperties } from '../../constants'
 
-import Graph from './Graph'
-import GraphFooter from './GraphFooter'
-import GraphHeader from './GraphHeader'
+import { Graph } from './Graph'
+import { GraphFooter } from './GraphFooter'
+import { GraphHeader } from './GraphHeader'
 
 interface ContributionsGraphProps {
   className?: string
 }
 
-function ContributionsGraph(props: ContributionsGraphProps, ref: React.Ref<HTMLDivElement | null>) {
+function InnerContributionsGraph(
+  props: ContributionsGraphProps,
+  ref: React.Ref<HTMLDivElement | null>
+) {
   const { className = '' } = props
 
   const { graphData, settings, firstYear, lastYear } = useData()
@@ -82,4 +85,4 @@ function ContributionsGraph(props: ContributionsGraphProps, ref: React.Ref<HTMLD
   )
 }
 
-export default memo(forwardRef(ContributionsGraph))
+export const ContributionsGraph = memo(forwardRef(InnerContributionsGraph))

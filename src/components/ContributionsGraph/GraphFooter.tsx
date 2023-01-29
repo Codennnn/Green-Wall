@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-export default function GraphFooter() {
+export function GraphFooter() {
   const [origin, setOrigin] = useState<string>()
 
   useEffect(() => {

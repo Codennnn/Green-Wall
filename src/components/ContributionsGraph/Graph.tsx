@@ -12,7 +12,7 @@ interface GraphProps extends React.ComponentProps<'div'> {
 
 const newYearText = 'Happy New Year 🎉 Go make the first contribution !'
 
-export default function Graph(props: GraphProps) {
+export function Graph(props: GraphProps) {
   const { data: calendar, daysLabel, ...rest } = props
 
   const currentYear = new Date().getFullYear()

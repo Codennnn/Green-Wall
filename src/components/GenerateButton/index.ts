@@ -1,1 +1,1 @@
-export { default } from './GenerateButton'
+export { GenerateButton as default } from './GenerateButton'

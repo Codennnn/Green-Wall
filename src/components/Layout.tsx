@@ -5,9 +5,9 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 
-import GitHubButton from './GitHubButton'
+import { GitHubButton } from './GitHubButton'
 
-export default function Layout(props: React.PropsWithChildren) {
+export function Layout(props: React.PropsWithChildren) {
   const router = useRouter()
 
   useEffect(() => {

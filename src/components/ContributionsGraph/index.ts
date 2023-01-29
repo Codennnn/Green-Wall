@@ -1,1 +1,1 @@
-export { default } from './ContributionsGraph'
+export { ContributionsGraph } from './ContributionsGraph'
