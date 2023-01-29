@@ -1,6 +1,6 @@
-import { useData } from '../../DataContext'
-import type { GraphData, GraphSettings } from '../../types'
-import { RadixSelect } from '../ui-kit/RadixSelect'
+import { useData } from '~/DataContext'
+import { RadixSelect } from '~/components/ui-kit/RadixSelect'
+import type { GraphData, GraphSettings } from '~/types'
 
 interface YearRangeSelectProps {
   graphData: GraphData | undefined

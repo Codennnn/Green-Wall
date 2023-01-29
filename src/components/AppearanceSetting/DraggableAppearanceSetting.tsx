@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 
 import { motion, useDragControls } from 'framer-motion'
 
-import { iconClose } from '../icons'
+import { iconClose } from '~/components/icons'
 
 export function DraggableAppearanceSetting(
   props: React.PropsWithChildren<{ onClose?: () => void }>

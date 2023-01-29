@@ -2,12 +2,12 @@ import { useEffect, useState } from 'react'
 
 import Link from 'next/link'
 
-import { useData } from '../DataContext'
-import { DEFAULT_DISPLAY_NAME, DEFAULT_SIZE, DEFAULT_THEME } from '../constants'
-import { trackEvent } from '../helpers'
-
 import { iconShare, iconUpRight } from './icons'
 import { RadixPopover } from './ui-kit/RadixPopover'
+
+import { useData } from '~/DataContext'
+import { DEFAULT_DISPLAY_NAME, DEFAULT_SIZE, DEFAULT_THEME } from '~/constants'
+import { trackEvent } from '~/helpers'
 
 export function ShareButton() {
   const { graphData, settings, firstYear, lastYear } = useData()

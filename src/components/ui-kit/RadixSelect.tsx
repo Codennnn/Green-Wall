@@ -1,8 +1,8 @@
 import * as Select from '@radix-ui/react-select'
 
-import { iconCheck, iconChevronDown, iconChevronUp } from '../icons'
-
 import { SelectButton } from './SelectButton'
+
+import { iconCheck, iconChevronDown, iconChevronUp } from '~/components/icons'
 
 type SelectProps = Select.SelectProps & {
   items?: { label: string; value: string; disabled?: boolean }[]

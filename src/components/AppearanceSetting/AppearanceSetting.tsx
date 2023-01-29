@@ -1,16 +1,16 @@
 import { useId } from 'react'
 
-import { useData } from '../../DataContext'
-import { trackEvent } from '../../helpers'
-import { DisplayName, GraphSize } from '../../types'
-import { ThemeSelector } from '../ThemeSelector'
-import { iconQuestion } from '../icons'
-import { RadixSelect } from '../ui-kit/RadixSelect'
-import { RadixSwitch } from '../ui-kit/RadixSwitch'
-import { RadixToggleGroup } from '../ui-kit/RadixToggleGroup'
-import { RadixTooltip } from '../ui-kit/RadixTooltip'
-
 import { YearRangeSelect } from './YearRangeSelect'
+
+import { useData } from '~/DataContext'
+import { ThemeSelector } from '~/components/ThemeSelector'
+import { iconQuestion } from '~/components/icons'
+import { RadixSelect } from '~/components/ui-kit/RadixSelect'
+import { RadixSwitch } from '~/components/ui-kit/RadixSwitch'
+import { RadixToggleGroup } from '~/components/ui-kit/RadixToggleGroup'
+import { RadixTooltip } from '~/components/ui-kit/RadixTooltip'
+import { trackEvent } from '~/helpers'
+import { DisplayName, GraphSize } from '~/types'
 
 export function AppearanceSetting() {
   const { graphData, settings, dispatchSettings } = useData()

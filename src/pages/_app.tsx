@@ -5,8 +5,8 @@ import splitbee from '@splitbee/web'
 import type { NextPage } from 'next'
 import type { AppProps } from 'next/app'
 
-import '../styles/reset.css'
-import '../styles/globals.css'
+import '~/styles/reset.css'
+import '~/styles/globals.css'
 
 const rubik = Rubik({
   weight: ['400', '500'],

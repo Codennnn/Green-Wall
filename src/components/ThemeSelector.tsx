@@ -1,5 +1,5 @@
-import { THEMES } from '../constants'
-import type { Themes } from '../types'
+import { THEMES } from '~/constants'
+import type { Themes } from '~/types'
 
 interface ThemeSelectorProps extends Omit<React.ComponentProps<'div'>, 'onChange'> {
   value?: Themes

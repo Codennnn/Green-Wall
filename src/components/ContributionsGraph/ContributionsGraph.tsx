@@ -1,11 +1,11 @@
 import { forwardRef, memo, useImperativeHandle, useMemo, useRef } from 'react'
 
-import { useData } from '../../DataContext'
-import { DEFAULT_SIZE, DEFAULT_THEME, THEMES, sizeProperties } from '../../constants'
-
 import { Graph } from './Graph'
 import { GraphFooter } from './GraphFooter'
 import { GraphHeader } from './GraphHeader'
+
+import { useData } from '~/DataContext'
+import { DEFAULT_SIZE, DEFAULT_THEME, THEMES, sizeProperties } from '~/constants'
 
 interface ContributionsGraphProps {
   className?: string

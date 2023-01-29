@@ -10,7 +10,7 @@ import {
   type GitHubUser,
   type GraphData,
   type ResponseData,
-} from '../../../types'
+} from '~/types'
 
 async function fetchGitHubUser(username: string): Promise<ContributionBasic | never> {
   const res = await fetch('https://api.github.com/graphql', {

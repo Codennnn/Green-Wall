@@ -1,8 +1,8 @@
 import Link from 'next/link'
 
-import { trackEvent } from '../helpers'
-
 import { iconGitHub } from './icons'
+
+import { trackEvent } from '~/helpers'
 
 export function GitHubButton() {
   const handleClick = () => {
