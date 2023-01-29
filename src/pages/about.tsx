@@ -13,6 +13,12 @@ export default function AboutPage() {
   return (
     <div className="py-10 md:py-14">
       <div className="px-2 md:px-20">
+        <SectionTitle>Goal</SectionTitle>
+        <Paragraph>
+          We want to provide an easy way to help people look back at their GitHub Contributions over
+          the years and share them with others on socials and beyond.
+        </Paragraph>
+
         <SectionTitle>How it works</SectionTitle>
         <Paragraph>
           This project uses the GitHub GraphQL API to fetch data and uses Next.js API Routes to send
