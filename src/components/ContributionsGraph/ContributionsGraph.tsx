@@ -26,9 +26,9 @@ function InnerContributionsGraph(
   const applyingTheme = useMemo(
     () =>
       THEMES.find(
-        (item) => item.name.toLowerCase() === (settings?.theme || DEFAULT_THEME).toLowerCase()
+        (item) => item.name.toLowerCase() === (settings.theme ?? DEFAULT_THEME).toLowerCase()
       )!,
-    [settings?.theme]
+    [settings.theme]
   )
 
   if (!graphData) {
@@ -45,7 +45,7 @@ function InnerContributionsGraph(
     '--level-4': applyingTheme.levelColors[4],
   }
 
-  const cssProperties = { ...themeProperties, ...sizeProperties[settings?.size || DEFAULT_SIZE] }
+  const cssProperties = { ...themeProperties, ...sizeProperties[settings.size ?? DEFAULT_SIZE] }
 
   return (
     <div
@@ -61,7 +61,7 @@ function InnerContributionsGraph(
 
       <div className="flex flex-col gap-y-6">
         {graphData.contributionCalendars.map((calendar) => {
-          let [startYear, endYear] = settings?.yearRange || []
+          let [startYear, endYear] = settings.yearRange ?? []
           startYear =
             startYear !== null && Number.isInteger(Number(startYear)) ? startYear : firstYear
           endYear = endYear !== null && Number.isInteger(Number(endYear)) ? endYear : lastYear
@@ -80,7 +80,7 @@ function InnerContributionsGraph(
         })}
       </div>
 
-      {!(settings?.showAttribution === false) && <GraphFooter />}
+      {!(settings.showAttribution === false) && <GraphFooter />}
     </div>
   )
 }

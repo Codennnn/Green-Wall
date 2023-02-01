@@ -1,6 +1,6 @@
 import * as Tooltip from '@radix-ui/react-tooltip'
 
-type RadixTooltipProps = {
+interface RadixTooltipProps {
   label?: React.ReactNode
 }
 

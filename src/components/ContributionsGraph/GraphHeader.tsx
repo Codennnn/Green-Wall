@@ -57,7 +57,7 @@ export function GraphHeader() {
   }
 
   const displayName =
-    settings?.displayName === DisplayName.ProfileName ? graphData.name : graphData.login
+    settings.displayName === DisplayName.ProfileName ? graphData.name : graphData.login
 
   const username = graphData.login
 

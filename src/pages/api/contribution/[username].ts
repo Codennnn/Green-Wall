@@ -12,7 +12,13 @@ import {
   type ResponseData,
 } from '~/types'
 
+const GAT = process.env.GITHUB_ACCESS_TOKEN
+
 async function fetchGitHubUser(username: string): Promise<ContributionBasic | never> {
+  if (!GAT) {
+    throw new Error('Require GITHUB ACCESS TOKEN.')
+  }
+
   const res = await fetch('https://api.github.com/graphql', {
     method: 'post',
     body: JSON.stringify({
@@ -30,7 +36,7 @@ async function fetchGitHubUser(username: string): Promise<ContributionBasic | ne
       `,
     }),
     headers: {
-      Authorization: `Bearer ${process.env.GITHUB_ACCESS_TOKEN}`,
+      Authorization: `Bearer ${GAT}`,
       'content-type': 'application/json',
     },
   })
@@ -60,6 +66,10 @@ async function fetchContributionsCollection(
   username: string,
   year: ContributionYear
 ): Promise<ContributionCalendar> {
+  if (!GAT) {
+    throw new Error('Require GITHUB ACCESS TOKEN.')
+  }
+
   const res = await fetch('https://api.github.com/graphql', {
     method: 'post',
     body: JSON.stringify({
@@ -84,7 +94,7 @@ async function fetchContributionsCollection(
       `,
     }),
     headers: {
-      Authorization: `Bearer ${process.env.GITHUB_ACCESS_TOKEN}`,
+      Authorization: `Bearer ${GAT}`,
       'content-type': 'application/json',
     },
   })

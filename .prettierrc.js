@@ -1,6 +1,1 @@
-const { prettier } = require('prefer-code-style')
-
-module.exports = {
-  ...prettier,
-  printWidth: 100,
-}
+module.exports = require('prefer-code-style/prettier')

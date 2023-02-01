@@ -17,7 +17,7 @@ export function ShareButton() {
   const [copied, setCopied] = useState(false)
 
   useEffect(() => {
-    if (username && settings) {
+    if (username) {
       const Url = new URL(`${window.location.origin}/share/${username}`)
 
       if (settings.displayName && settings.displayName !== DEFAULT_DISPLAY_NAME) {

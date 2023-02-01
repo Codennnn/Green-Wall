@@ -70,7 +70,7 @@ export function useGraphSetting() {
         return state
 
       default:
-        throw new Error(`Not a valid type: ${type}.`)
+        throw new Error(`Not a valid action type.`)
     }
   }, initialState)
 }

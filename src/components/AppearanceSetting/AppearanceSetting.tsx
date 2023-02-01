@@ -28,9 +28,9 @@ export function AppearanceSetting() {
             { label: 'Username', value: DisplayName.Username },
             { label: 'Profile name', value: DisplayName.ProfileName, disabled: !hasProfileName },
           ]}
-          value={settings?.displayName}
+          value={settings.displayName}
           onValueChange={(v) =>
-            dispatchSettings?.({ type: 'displayName', payload: v as DisplayName })
+            dispatchSettings({ type: 'displayName', payload: v as DisplayName })
           }
         />
       </fieldset>
@@ -43,11 +43,11 @@ export function AppearanceSetting() {
       <fieldset>
         <label htmlFor={attribution}>Attribution</label>
         <RadixSwitch
-          checked={settings?.showAttribution}
+          checked={settings.showAttribution}
           defaultChecked={true}
           id={attribution}
           onCheckedChange={(checked) =>
-            dispatchSettings?.({ type: 'showAttribution', payload: checked })
+            dispatchSettings({ type: 'showAttribution', payload: checked })
           }
         />
       </fieldset>
@@ -73,8 +73,8 @@ export function AppearanceSetting() {
           ]}
           size="small"
           type="single"
-          value={settings?.size}
-          onValueChange={(size) => dispatchSettings?.({ type: 'size', payload: size as GraphSize })}
+          value={settings.size}
+          onValueChange={(size) => dispatchSettings({ type: 'size', payload: size as GraphSize })}
         />
       </fieldset>
 
@@ -82,10 +82,10 @@ export function AppearanceSetting() {
         <label>Themes</label>
         <ThemeSelector
           className="mt-3 pl-1"
-          value={settings?.theme}
+          value={settings.theme}
           onChange={(theme) => {
             trackEvent('Change theme', { themeName: theme })
-            dispatchSettings?.({ type: 'theme', payload: theme })
+            dispatchSettings({ type: 'theme', payload: theme })
           }}
         />
       </fieldset>

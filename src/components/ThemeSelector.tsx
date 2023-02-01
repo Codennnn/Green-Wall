@@ -7,10 +7,10 @@ interface ThemeSelectorProps extends Omit<React.ComponentProps<'div'>, 'onChange
 }
 
 export function ThemeSelector(props: ThemeSelectorProps) {
-  const { value, onChange, ...rest } = props
+  const { value, onChange, className = '', ...rest } = props
 
   return (
-    <div {...rest} className={`flex flex-wrap gap-3 ${rest.className}`}>
+    <div {...rest} className={`flex flex-wrap gap-3 ${className}`}>
       {THEMES.map((theme) => {
         return (
           <div

@@ -4,13 +4,11 @@ export function numberWithCommas(num: number): string {
   return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
 }
 
-const isDev: boolean = !!process && process.env.NODE_ENV === 'development'
+const isDev: boolean = process.env.NODE_ENV === 'development'
 
 export function trackEvent(
   event: string,
-  data?: {
-    [key: string]: string | number | boolean | undefined | null
-  }
+  data?: Record<string, string | number | boolean | undefined | null>
 ): void {
   if (isDev) {
     return

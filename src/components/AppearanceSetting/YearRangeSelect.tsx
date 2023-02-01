@@ -11,7 +11,7 @@ export function YearRangeSelect(props: YearRangeSelectProps) {
 
   const { settings, dispatchSettings, firstYear, lastYear } = useData()
 
-  let [startYear, endYear] = settings.yearRange || []
+  let [startYear, endYear] = settings.yearRange ?? []
   startYear ||= firstYear
   endYear ||= lastYear
 
@@ -30,7 +30,7 @@ export function YearRangeSelect(props: YearRangeSelectProps) {
       payload = [startYear, year]
     }
 
-    dispatchSettings?.({
+    dispatchSettings({
       type: 'yearRange',
       payload,
     })
