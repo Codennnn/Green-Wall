@@ -2,7 +2,7 @@
 
 _Take a picture 📸 of your GitHub contributions, then share it!_
 
-Green Wall is a web site tool that help you review the contributions you have made on GitHub :octocat: over the years, so you can generate the image to save and share.
+Green Wall is a web site tool that helps you review the contributions you have made on GitHub :octocat: over the years, so you can generate the image to save and share.
 
 <a href="https://green-wall.vercel.app/">
   <img alt="Green Wall Screenshot" src="./screenshot.png">
@@ -10,7 +10,7 @@ Green Wall is a web site tool that help you review the contributions you have ma
 
 ## How it works
 
-This project uses the GitHub GraphQL API to fetch data and uses Next.js API Routes to send requests, you can read [this file](./src/pages/api/contribution/%5Busername%5D.ts) to learn how we handle your data.
+This project uses the GitHub GraphQL API to fetch data and uses Next.js API Routes to send requests. You can read [this file](./src/pages/api/contribution/%5Busername%5D.ts) to learn how we handle your data.
 
 ## Credits
 
