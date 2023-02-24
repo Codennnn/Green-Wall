@@ -1,5 +1,5 @@
-import { useData } from '~/DataContext'
 import { RadixSelect } from '~/components/ui-kit/RadixSelect'
+import { useData } from '~/DataContext'
 import type { GraphData, GraphSettings } from '~/types'
 
 interface YearRangeSelectProps {

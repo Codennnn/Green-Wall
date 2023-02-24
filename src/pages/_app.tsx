@@ -1,9 +1,9 @@
 import { useEffect } from 'react'
 
-import { Rubik } from '@next/font/google'
-import splitbee from '@splitbee/web'
 import type { NextPage } from 'next'
 import type { AppProps } from 'next/app'
+import { Rubik } from '@next/font/google'
+import splitbee from '@splitbee/web'
 
 import '~/styles/reset.css'
 import '~/styles/globals.css'

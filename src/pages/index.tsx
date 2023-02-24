@@ -2,16 +2,16 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 
 import { toBlob, toPng } from 'html-to-image'
 
-import { DataProvider, useData } from '~/DataContext'
 import { AppearanceSetting, DraggableAppearanceSetting } from '~/components/AppearanceSetting'
 import { ContributionsGraph } from '~/components/ContributionsGraph'
 import { ErrorMessage } from '~/components/ErrorMessage'
 import GenerateButton from '~/components/GenerateButton'
+import { iconClipboard, iconClipboardList, iconImage } from '~/components/icons'
 import { Layout } from '~/components/Layout'
 import Loading from '~/components/Loading'
 import { SettingButton } from '~/components/SettingButton'
 import { ShareButton } from '~/components/ShareButton'
-import { iconClipboard, iconClipboardList, iconImage } from '~/components/icons'
+import { DataProvider, useData } from '~/DataContext'
 import { trackEvent } from '~/helpers'
 import { useGraphRequest } from '~/useGraphRequest'
 
@@ -48,9 +48,7 @@ export default function HomePage() {
 
   const { run, loading, error } = useGraphRequest({ onError: handleError })
 
-  const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (e) => {
-    e.preventDefault()
-
+  const handleSubmit = async () => {
     if (username.trim() && !loading) {
       reset()
       trackEvent('Click Generate')
@@ -140,7 +138,12 @@ export default function HomePage() {
       </h1>
 
       <div className="py-12 md:py-16">
-        <form onSubmit={handleSubmit}>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault()
+            void handleSubmit()
+          }}
+        >
           <div className="flex flex-col items-center justify-center gap-y-6 md:flex-row md:gap-x-5">
             <input
               ref={inputRef}
@@ -180,7 +183,9 @@ export default function HomePage() {
                     className={`
                     inline-flex h-full items-center rounded-md bg-main-100 py-2 px-4 text-sm font-medium text-main-500 hover:bg-main-200 disabled:pointer-events-none motion-safe:transition-colors motion-safe:duration-300 md:text-base`}
                     disabled={downloading}
-                    onClick={handleDownload}
+                    onClick={() => {
+                      void handleDownload()
+                    }}
                   >
                     <span className="mr-2 h-5 w-5 shrink-0 md:h-6 md:w-6">{iconImage}</span>
                     <span>Save as Image</span>
@@ -196,7 +201,9 @@ export default function HomePage() {
                       }
                       `}
                       disabled={doingCopy}
-                      onClick={handleCopyImage}
+                      onClick={() => {
+                        void handleCopyImage()
+                      }}
                     >
                       <span className="mr-2 h-5 w-5 shrink-0 md:h-6 md:w-6">
                         {copySuccess ? iconClipboardList : iconClipboard}

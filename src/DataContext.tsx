@@ -1,4 +1,4 @@
-import { type Dispatch, type SetStateAction, createContext, useContext, useState } from 'react'
+import { createContext, type Dispatch, type SetStateAction, useContext, useState } from 'react'
 
 import type { GraphData, GraphSettings } from './types'
 import { useGraphSetting } from './useGraphSetting'

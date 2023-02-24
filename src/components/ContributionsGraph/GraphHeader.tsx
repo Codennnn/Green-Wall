@@ -2,10 +2,10 @@ import { useEffect, useRef, useState } from 'react'
 
 import Link from 'next/link'
 
-import styles from './Graph.module.css'
-
 import { useData } from '~/DataContext'
 import { DisplayName } from '~/types'
+
+import styles from './Graph.module.css'
 
 const Avatar = () => {
   const { graphData } = useData()

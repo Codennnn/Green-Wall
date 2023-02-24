@@ -1,7 +1,7 @@
 import * as Popover from '@radix-ui/react-popover'
 
-import { iconPopOut, iconSetting } from './icons'
 import { RadixPopover } from './ui-kit/RadixPopover'
+import { iconPopOut, iconSetting } from './icons'
 
 interface SettingButtonProps extends React.ComponentProps<'button'> {
   content: React.ReactNode

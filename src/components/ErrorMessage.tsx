@@ -1,6 +1,6 @@
-import { TextLink } from './TextLink'
-
 import { ErrorType } from '~/types'
+
+import { TextLink } from './TextLink'
 
 export function ErrorMessage(props: { errorType?: ErrorType; text?: string }) {
   const { errorType, text } = props

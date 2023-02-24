@@ -2,12 +2,12 @@ import { useEffect, useState } from 'react'
 
 import Link from 'next/link'
 
-import { iconShare, iconUpRight } from './icons'
-import { RadixPopover } from './ui-kit/RadixPopover'
-
-import { useData } from '~/DataContext'
 import { DEFAULT_DISPLAY_NAME, DEFAULT_SIZE, DEFAULT_THEME } from '~/constants'
+import { useData } from '~/DataContext'
 import { trackEvent } from '~/helpers'
+
+import { RadixPopover } from './ui-kit/RadixPopover'
+import { iconShare, iconUpRight } from './icons'
 
 export function ShareButton() {
   const { graphData, settings, firstYear, lastYear } = useData()
@@ -66,16 +66,16 @@ export function ShareButton() {
                 </Link>
                 <button
                   className="inline-block h-full min-w-[3.5rem] rounded bg-accent-100 px-1 text-accent-600"
-                  onClick={async () => {
+                  onClick={() => {
                     if (!copied) {
                       trackEvent('Copy Share URL')
 
-                      await navigator.clipboard.writeText(shareUrl.toString())
-
-                      setCopied(true)
-                      setTimeout(() => {
-                        setCopied(false)
-                      }, 1500)
+                      void navigator.clipboard.writeText(shareUrl.toString()).then(() => {
+                        setCopied(true)
+                        setTimeout(() => {
+                          setCopied(false)
+                        }, 1500)
+                      })
                     }
                   }}
                 >

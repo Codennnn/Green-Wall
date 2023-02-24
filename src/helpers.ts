@@ -14,5 +14,5 @@ export function trackEvent(
     return
   }
 
-  splitbee.track(event, data)
+  void splitbee.track(event, data)
 }

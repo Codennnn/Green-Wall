@@ -1,5 +1,4 @@
 import { useCallback, useState } from 'react'
-
 import useEvent from 'react-use-event-hook'
 
 import { trackEvent } from './helpers'
