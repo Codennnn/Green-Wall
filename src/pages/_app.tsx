@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 
 import type { NextPage } from 'next'
 import type { AppProps } from 'next/app'
-import { Rubik } from '@next/font/google'
+import { Rubik } from 'next/font/google'
 import splitbee from '@splitbee/web'
 
 import '~/styles/reset.css'

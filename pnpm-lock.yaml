@@ -3,7 +3,6 @@ lockfileVersion: 5.4
 specifiers:
   '@codennnn/tsconfig': 1.1.1
   '@next/eslint-plugin-next': ^13.1.4
-  '@next/font': ^13.2.1
   '@radix-ui/react-popover': ^1.0.4
   '@radix-ui/react-radio-group': ^1.1.1
   '@radix-ui/react-select': ^1.2.0
@@ -30,7 +29,6 @@ specifiers:
   typescript: ^4.9.4
 
 dependencies:
-  '@next/font': 13.2.1
   '@radix-ui/react-popover': 1.0.4_zula6vjvt3wdocc4mwcxqa6nzi
   '@radix-ui/react-radio-group': 1.1.1_biqbaboplfbrettd7655fr4n2y
   '@radix-ui/react-select': 1.2.0_zula6vjvt3wdocc4mwcxqa6nzi
@@ -438,10 +436,6 @@ packages:
     dependencies:
       glob: 7.1.7
     dev: true
-
-  /@next/font/13.2.1:
-    resolution: {integrity: sha512-4sergLt7xp9+mZuKME/xM4tLlHGTcmL7naCq0qCTcAlof6NnttshYgiLOdhSiy0NcI+/yM3BjvdEk++O96UzTg==}
-    dev: false
 
   /@next/swc-android-arm-eabi/13.2.1:
     resolution: {integrity: sha512-Yua7mUpEd1wzIT6Jjl3dpRizIfGp9NR4F2xeRuQv+ae+SDI1Em2WyM9m46UL+oeW5GpMiEHoaBagr47RScZFmQ==}
