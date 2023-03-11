@@ -2,7 +2,7 @@
 
 _Take a picture 📸 of your GitHub contributions, then share it!_
 
-Green Wall is a web site tool that helps you review the contributions you have made on GitHub :octocat: over the years, so you can generate the image to save and share.
+Green Wall is a powerful web tool designed to help you easily review your GitHub :octocat: contributions over the years. With this tool, you can generate an image of your contributions, which you can save and share with others.
 
 <a href="https://green-wall.vercel.app/">
   <img alt="Green Wall Screenshot" src="./screenshot.png">
