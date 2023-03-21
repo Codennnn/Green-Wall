@@ -1,7 +1,7 @@
 const colors = require('tailwindcss/colors')
 const plugin = require('tailwindcss/plugin')
 
-/** @type {import('tailwindcss').Config} \*/
+/** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ['./src/{pages,components}/**/*.{js,jsx,ts,tsx}'],
 
@@ -24,7 +24,7 @@ module.exports = {
       },
 
       keyframes: {
-        // Tooltip
+        // For radix tooltip
         'slide-up-fade': {
           '0%': { opacity: 0, transform: 'translateY(2px)' },
           '100%': { opacity: 1, transform: 'translateY(0)' },
@@ -43,7 +43,7 @@ module.exports = {
         },
       },
       animation: {
-        // Tooltip
+        // For radix tooltip
         'slide-up-fade': 'slide-up-fade 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
         'slide-right-fade': 'slide-right-fade 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
         'slide-down-fade': 'slide-down-fade 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
