@@ -48,13 +48,13 @@ export function ShareButton() {
       content={
         <div className="max-w-[90vw] rounded-md pt-2 md:max-w-[min(40vw,300px)]">
           {shareUrl && (
-            <div className="overflow-hidden rounded bg-main-100/80 p-3 text-xs text-main-500 md:text-sm">
+            <div className="overflow-hidden rounded bg-main-100/80 p-3 pb-2 text-xs text-main-500 md:text-sm">
               <div className="break-all">
                 <span>{shareUrl.href.replace(shareUrl.search, '')}</span>
                 <span className="opacity-60">{shareUrl.search}</span>
               </div>
 
-              <div className="mt-4 flex h-7 items-center justify-end gap-x-2">
+              <div className="-mr-1 mt-4 flex h-7 items-center justify-end gap-x-2">
                 <Link passHref className="h-full" href={shareUrl} target="_blank">
                   <button
                     className="flex h-full items-center gap-x-1 rounded bg-main-200 px-2"

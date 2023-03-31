@@ -53,7 +53,6 @@ module.exports = {
   },
 
   plugins: [
-    require('@tailwindcss/line-clamp'),
     require('tailwindcss-radix')(),
     plugin(function ({ addVariant }) {
       addVariant('toggle-on', ['&[data-state=on]'])
