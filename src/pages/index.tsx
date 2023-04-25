@@ -181,7 +181,7 @@ export default function HomePage() {
                 <div className="flex gap-x-3">
                   <button
                     className={`
-                    inline-flex h-full items-center rounded-md bg-main-100 py-2 px-4 text-sm font-medium text-main-500 hover:bg-main-200 disabled:pointer-events-none motion-safe:transition-colors motion-safe:duration-300 md:text-base`}
+                    inline-flex h-full items-center rounded-md bg-main-100 px-4 py-2 text-sm font-medium text-main-500 hover:bg-main-200 disabled:pointer-events-none motion-safe:transition-colors motion-safe:duration-300 md:text-base`}
                     disabled={downloading}
                     onClick={() => {
                       void handleDownload()
@@ -193,7 +193,7 @@ export default function HomePage() {
                   {canUseClipboardItem && (
                     <button
                       className={`
-                      inline-flex h-full items-center rounded-md py-2 px-4 text-sm font-medium transition-colors disabled:pointer-events-none md:text-base
+                      inline-flex h-full items-center rounded-md px-4 py-2 text-sm font-medium transition-colors disabled:pointer-events-none md:text-base
                       ${
                         copySuccess
                           ? 'bg-accent-100 text-accent-500'

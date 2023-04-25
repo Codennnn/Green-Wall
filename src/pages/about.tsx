@@ -2,7 +2,7 @@ import { Layout } from '~/components/Layout'
 import { TextLink } from '~/components/TextLink'
 
 const SectionTitle = (props: React.PropsWithChildren) => (
-  <h2 className="mb-1 mt-5 text-lg font-bold first-of-type:mt-0 md:mt-8 md:mb-2 md:text-2xl">
+  <h2 className="mb-1 mt-5 text-lg font-bold first-of-type:mt-0 md:mb-2 md:mt-8 md:text-2xl">
     {props.children}
   </h2>
 )

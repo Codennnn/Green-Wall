@@ -17,7 +17,7 @@ export function RadixTooltip(props: React.PropsWithChildren<RadixTooltipProps>) 
         <Tooltip.Portal>
           <Tooltip.Content
             className="
-            select-none rounded bg-white py-2 px-4 text-sm leading-[1] shadow-tooltip
+            select-none rounded bg-white px-4 py-2 text-sm leading-[1] shadow-tooltip
             radix-side-bottom:animate-slide-up-fade
             radix-side-left:animate-slide-right-fade
             radix-side-right:animate-slide-left-fade
