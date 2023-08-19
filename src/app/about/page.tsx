@@ -1,4 +1,3 @@
-import { Layout } from '~/components/Layout'
 import { TextLink } from '~/components/TextLink'
 
 const SectionTitle = (props: React.PropsWithChildren) => (
@@ -87,8 +86,4 @@ export default function AboutPage() {
       </div>
     </div>
   )
-}
-
-AboutPage.getLayout = (page: React.ReactElement) => {
-  return <Layout>{page}</Layout>
 }

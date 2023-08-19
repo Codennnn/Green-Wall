@@ -1,3 +1,5 @@
+'use client'
+
 import { useCallback, useEffect, useRef, useState } from 'react'
 
 import { toBlob, toPng } from 'html-to-image'
@@ -7,17 +9,16 @@ import { ContributionsGraph } from '~/components/ContributionsGraph'
 import { ErrorMessage } from '~/components/ErrorMessage'
 import GenerateButton from '~/components/GenerateButton'
 import { iconClipboard, iconClipboardList, iconImage } from '~/components/icons'
-import { Layout } from '~/components/Layout'
 import Loading from '~/components/Loading'
 import { SettingButton } from '~/components/SettingButton'
 import { ShareButton } from '~/components/ShareButton'
-import { DataProvider, useData } from '~/DataContext'
+import { useData } from '~/DataContext'
 import { trackEvent } from '~/helpers'
 import { useGraphRequest } from '~/useGraphRequest'
 
-const canUseClipboardItem = typeof ClipboardItem !== 'undefined'
+export function HomePage() {
+  const canUseClipboardItem = typeof ClipboardItem !== 'undefined'
 
-export default function HomePage() {
   const graphRef = useRef<HTMLDivElement>(null)
   const actionRef = useRef<HTMLDivElement | null>(null)
   const inputRef = useRef<HTMLInputElement>(null)
@@ -247,13 +248,5 @@ export default function HomePage() {
         </Loading>
       )}
     </div>
-  )
-}
-
-HomePage.getLayout = (page: React.ReactElement) => {
-  return (
-    <Layout>
-      <DataProvider key="home">{page}</DataProvider>
-    </Layout>
   )
 }

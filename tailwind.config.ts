@@ -4,7 +4,7 @@ import plugin from 'tailwindcss/plugin'
 import radix from 'tailwindcss-radix'
 
 export default {
-  content: ['./src/{pages,components}/**/*.{js,jsx,ts,tsx}'],
+  content: ['./src/{app,components}/**/*.{ts,tsx}'],
 
   theme: {
     extend: {

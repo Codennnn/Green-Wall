@@ -48,11 +48,3 @@
 ::selection {
   @apply bg-accent-500/20 text-current;
 }
-
-html {
-  @apply motion-safe:scroll-smooth;
-}
-
-body {
-  @apply text-main-700 bg-white;
-}

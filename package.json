@@ -8,10 +8,9 @@
     "build": "next build",
     "deps": "pnpm up --interactive --latest",
     "dev": "next dev",
-    "lint": "npm run lint:es && npm run lint:ts && npm run lint:style",
-    "lint:es": "eslint \"**/*.{mjs,js,jsx,ts,tsx}\"",
-    "lint:prettier": "prettier --write \"**/*.{md,json,html}\"",
-    "lint:style": "stylelint \"**/*.{css,module.css}\"",
+    "lint": "run-p lint:ts lint:es lint:css",
+    "lint:css": "stylelint **/*.css",
+    "lint:es": "eslint **/*.{ts,tsx}",
     "lint:ts": "tsc --noEmit --skipLibCheck",
     "start": "next start"
   },

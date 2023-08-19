@@ -10,9 +10,6 @@ module.exports = {
   overrides: [
     {
       files: TYPESCRIPT_FILES,
-      rules: {
-        '@typescript-eslint/consistent-type-definitions': 1,
-      },
       parserOptions: {
         project: resolve(__dirname, 'tsconfig.json'),
       },

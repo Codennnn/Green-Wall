@@ -97,7 +97,7 @@ export const enum DisplayName {
 
 export interface GraphSettings {
   displayName?: DisplayName
-  yearRange?: [start_year: string | null | undefined, end_year: string | null | undefined]
+  yearRange?: [start_year: string | undefined, end_year: string | undefined]
   showAttribution?: boolean
   size?: GraphSize
   theme?: Themes

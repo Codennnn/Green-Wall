@@ -1,3 +1,5 @@
+'use client'
+
 import { createContext, type Dispatch, type SetStateAction, useContext, useState } from 'react'
 
 import type { GraphData, GraphSettings } from './types'

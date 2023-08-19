@@ -31,6 +31,7 @@ type Action =
       payload?: never
     }
   | {
+      /** Replace all existing settings. */
       type: 'replace'
       payload?: State
     }
