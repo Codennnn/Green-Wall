@@ -6,6 +6,6 @@
       "~/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "src/**/*"],
+  "include": ["next-env.d.ts", "src/**/*", ".next/types/**/*.ts", "./tailwind.config.ts"],
   "exclude": ["node_modules"]
 }

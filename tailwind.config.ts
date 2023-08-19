@@ -1,8 +1,9 @@
-const colors = require('tailwindcss/colors')
-const plugin = require('tailwindcss/plugin')
+import type { Config } from 'tailwindcss'
+import colors from 'tailwindcss/colors'
+import plugin from 'tailwindcss/plugin'
+import radix from 'tailwindcss-radix'
 
-/** @type {import('tailwindcss').Config} */
-module.exports = {
+export default {
   content: ['./src/{pages,components}/**/*.{js,jsx,ts,tsx}'],
 
   theme: {
@@ -26,20 +27,20 @@ module.exports = {
       keyframes: {
         // For radix tooltip
         'slide-up-fade': {
-          '0%': { opacity: 0, transform: 'translateY(2px)' },
-          '100%': { opacity: 1, transform: 'translateY(0)' },
+          '0%': { opacity: '0', transform: 'translateY(2px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' },
         },
         'slide-right-fade': {
-          '0%': { opacity: 0, transform: 'translateX(-2px)' },
-          '100%': { opacity: 1, transform: 'translateX(0)' },
+          '0%': { opacity: '0', transform: 'translateX(-2px)' },
+          '100%': { opacity: '1', transform: 'translateX(0)' },
         },
         'slide-down-fade': {
-          '0%': { opacity: 0, transform: 'translateY(-2px)' },
-          '100%': { opacity: 1, transform: 'translateY(0)' },
+          '0%': { opacity: '0', transform: 'translateY(-2px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' },
         },
         'slide-left-fade': {
-          '0%': { opacity: 0, transform: 'translateX(2px)' },
-          '100%': { opacity: 1, transform: 'translateX(0)' },
+          '0%': { opacity: '0', transform: 'translateX(2px)' },
+          '100%': { opacity: '1', transform: 'translateX(0)' },
         },
       },
       animation: {
@@ -53,9 +54,9 @@ module.exports = {
   },
 
   plugins: [
-    require('tailwindcss-radix')(),
+    radix,
     plugin(function ({ addVariant }) {
       addVariant('toggle-on', ['&[data-state=on]'])
     }),
   ],
-}
+} satisfies Config
