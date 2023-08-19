@@ -3,7 +3,7 @@ import * as Popover from '@radix-ui/react-popover'
 import { RadixPopover } from './ui-kit/RadixPopover'
 import { iconPopOut, iconSetting } from './icons'
 
-interface SettingButtonProps extends React.ComponentProps<'button'> {
+interface SettingButtonProps extends Omit<React.ComponentProps<'button'>, 'content'> {
   content: React.ReactNode
   onPopOut?: () => void
 }

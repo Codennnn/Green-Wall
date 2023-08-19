@@ -14,7 +14,7 @@ import {
 
 const GAT = process.env.GITHUB_ACCESS_TOKEN
 
-async function fetchGitHubUser(username: string): Promise<ContributionBasic | never> {
+async function fetchGitHubUser(username: string): Promise<ContributionBasic> {
   if (!GAT) {
     throw new Error('Require GITHUB ACCESS TOKEN.')
   }

@@ -35,8 +35,13 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
       <style global jsx>
         {`
           :root {
-            font-family: ${rubik.style.fontFamily}, ui-sans-serif, system-ui, -apple-system,
-              BlinkMacSystemFont, sans-serif;
+            font-family:
+              ${rubik.style.fontFamily},
+              ui-sans-serif,
+              system-ui,
+              -apple-system,
+              BlinkMacSystemFont,
+              sans-serif;
           }
         `}
       </style>

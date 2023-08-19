@@ -2,7 +2,7 @@ import * as Popover from '@radix-ui/react-popover'
 
 import { iconClose } from '~/components/icons'
 
-type PopoverProps = Popover.PopoverProps & {
+interface PopoverProps extends Popover.PopoverProps {
   title?: React.ReactNode
   content?: React.ReactNode
 }
