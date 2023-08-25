@@ -7,8 +7,8 @@ import { RadixSwitch } from '~/components/ui-kit/RadixSwitch'
 import { RadixToggleGroup } from '~/components/ui-kit/RadixToggleGroup'
 import { RadixTooltip } from '~/components/ui-kit/RadixTooltip'
 import { useData } from '~/DataContext'
+import { DisplayName, GraphSize } from '~/enums'
 import { trackEvent } from '~/helpers'
-import { DisplayName, GraphSize } from '~/types'
 
 import { YearRangeSelect } from './YearRangeSelect'
 

@@ -10,7 +10,8 @@ import { ContributionsGraph } from '~/components/ContributionsGraph'
 import { ErrorMessage } from '~/components/ErrorMessage'
 import { DEFAULT_THEME, THEMES } from '~/constants'
 import { useData } from '~/DataContext'
-import type { DisplayName, GraphSettings, GraphSize, Themes } from '~/types'
+import { type DisplayName, type GraphSize } from '~/enums'
+import type { GraphSettings, Themes } from '~/types'
 import { useGraphRequest } from '~/useGraphRequest'
 
 export function SharePage() {

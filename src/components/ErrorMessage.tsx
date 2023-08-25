@@ -1,4 +1,4 @@
-import { ErrorType } from '~/types'
+import { ErrorType } from '~/enums'
 
 import { TextLink } from './TextLink'
 

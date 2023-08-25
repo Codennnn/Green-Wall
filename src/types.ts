@@ -1,3 +1,5 @@
+import type { ContributionLevel, DisplayName, ErrorType, GraphSize } from '~/enums'
+
 export type Themes =
   | 'GitHub'
   | 'GitHubDark'
@@ -46,16 +48,6 @@ export interface ContributionBasic {
   contributionYears: ContributionYear[]
 }
 
-/** Check out: {@link https://docs.github.com/en/graphql/reference/enums#contributionlevel} */
-export const enum ContributionLevel {
-  Null = 'Null',
-  NONE = 'NONE',
-  FIRST_QUARTILE = 'FIRST_QUARTILE',
-  SECOND_QUARTILE = 'SECOND_QUARTILE',
-  THIRD_QUARTILE = 'THIRD_QUARTILE',
-  FOURTH_QUARTILE = 'FOURTH_QUARTILE',
-}
-
 export interface ContributionDay {
   level: `${ContributionLevel}`
   weekday?: 0 | 1 | 2 | 3 | 4 | 5 | 6
@@ -73,26 +65,10 @@ export interface GraphData extends ContributionBasic {
   contributionCalendars: ContributionCalendar[]
 }
 
-export const enum ErrorType {
-  BadCredentials,
-  BadRequest,
-}
-
 export interface ResponseData {
   errorType?: ErrorType
   message?: string
   data?: GraphData
-}
-
-export const enum GraphSize {
-  Small = 's',
-  Medium = 'm',
-  Large = 'l',
-}
-
-export const enum DisplayName {
-  Username = '0',
-  ProfileName = '1',
 }
 
 export interface GraphSettings {

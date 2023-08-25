@@ -1,15 +1,15 @@
 import { type NextRequest, NextResponse } from 'next/server'
 
-import {
-  type ContributionBasic,
-  type ContributionCalendar,
-  type ContributionYear,
-  ErrorType,
-  type GitHubApiJson,
-  type GitHubContributionCalendar,
-  type GitHubUser,
-  type GraphData,
-  type ResponseData,
+import { ErrorType } from '~/enums'
+import type {
+  ContributionBasic,
+  ContributionCalendar,
+  ContributionYear,
+  GitHubApiJson,
+  GitHubContributionCalendar,
+  GitHubUser,
+  GraphData,
+  ResponseData,
 } from '~/types'
 
 const GAT = process.env.GITHUB_ACCESS_TOKEN

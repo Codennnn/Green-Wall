@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 
 import { useData } from '~/DataContext'
-import { DisplayName } from '~/types'
+import { DisplayName } from '~/enums'
 
 import styles from './Graph.module.css'
 

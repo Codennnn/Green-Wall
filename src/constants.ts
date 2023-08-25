@@ -1,5 +1,6 @@
-import type { ContributionLevel, Theme, Themes } from './types'
-import { DisplayName, GraphSize } from './types'
+import { type ContributionLevel, DisplayName, GraphSize } from '~/enums'
+
+import type { Theme, Themes } from './types'
 
 export const levels = {
   Null: -1,

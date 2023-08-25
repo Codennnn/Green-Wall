@@ -1,7 +1,7 @@
 import { levels } from '~/constants'
+import { ContributionLevel } from '~/enums'
 import { numberWithCommas } from '~/helpers'
 import type { ContributionCalendar, ContributionDay } from '~/types'
-import { ContributionLevel } from '~/types'
 
 import styles from './Graph.module.css'
 
