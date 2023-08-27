@@ -3,7 +3,7 @@
   "private": true,
   "description": "GitHub contribution graph generator. Review all the contributions you've made to GitHub over the years.",
   "license": "MIT",
-  "author": "LeoKu <leokudev@gmail.com> (https://leoku.top)",
+  "author": "LeoKu <leokudev@gmail.com> (https://leoku.dev)",
   "scripts": {
     "build": "next build",
     "deps": "pnpm up --interactive --latest",
