@@ -161,7 +161,9 @@ export function HomePage() {
               placeholder="GitHub Username"
               type="text"
               value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              onChange={(e) => {
+                setUsername(e.target.value)
+              }}
               onFocus={() => inputRef.current?.select()}
             />
             <GenerateButton loading={loading} type="submit" />

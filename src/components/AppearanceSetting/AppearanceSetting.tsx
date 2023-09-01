@@ -29,9 +29,9 @@ export function AppearanceSetting() {
             { label: 'Profile name', value: DisplayName.ProfileName, disabled: !hasProfileName },
           ]}
           value={settings.displayName}
-          onValueChange={(v) =>
+          onValueChange={(v) => {
             dispatchSettings({ type: 'displayName', payload: v as DisplayName })
-          }
+          }}
         />
       </fieldset>
 
@@ -46,9 +46,9 @@ export function AppearanceSetting() {
           checked={settings.showAttribution}
           defaultChecked={true}
           id={attribution}
-          onCheckedChange={(checked) =>
+          onCheckedChange={(checked) => {
             dispatchSettings({ type: 'showAttribution', payload: checked })
-          }
+          }}
         />
       </fieldset>
 
@@ -74,7 +74,9 @@ export function AppearanceSetting() {
           size="small"
           type="single"
           value={settings.size}
-          onValueChange={(size) => dispatchSettings({ type: 'size', payload: size as GraphSize })}
+          onValueChange={(size) => {
+            dispatchSettings({ type: 'size', payload: size as GraphSize })
+          }}
         />
       </fieldset>
 

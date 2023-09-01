@@ -58,7 +58,9 @@ export function ShareButton() {
                 <Link passHref className="h-full" href={shareUrl} target="_blank">
                   <button
                     className="flex h-full items-center gap-x-1 rounded bg-main-200 px-2"
-                    onClick={() => trackEvent('Preview Share URL')}
+                    onClick={() => {
+                      trackEvent('Preview Share URL')
+                    }}
                   >
                     <span>Preview</span>
                     <span className="w-[10px] translate-y-[1px]">{iconUpRight}</span>
