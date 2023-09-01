@@ -59,7 +59,9 @@ export function DraggableAppearanceSetting(
             dragControls.start(event, { snapToCursor: false })
             setPressing(true)
           }}
-          onPointerUp={() => setPressing(false)}
+          onPointerUp={() => {
+            setPressing(false)
+          }}
         >
           Appearance
           <button
