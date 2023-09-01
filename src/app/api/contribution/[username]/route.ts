@@ -128,17 +128,19 @@ export async function GET(_: NextRequest, { params }: { params: { username: stri
       const data: GraphData = { ...githubUser, contributionCalendars }
 
       return NextResponse.json({ data }, { status: 200 })
-    } catch (e: any) {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-      const errorData: ResponseData = { errorType: ErrorType.BadRequest, message: e.message }
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-      if (e.message === 'Bad credentials') {
-        return NextResponse.json(
-          { ...errorData, errorType: ErrorType.BadCredentials },
-          { status: 401 }
-        )
+    } catch (err) {
+      if (err instanceof Error) {
+        const errorData: ResponseData = { errorType: ErrorType.BadRequest, message: err.message }
+
+        if (err.message === 'Bad credentials') {
+          return NextResponse.json(
+            { ...errorData, errorType: ErrorType.BadCredentials },
+            { status: 401 }
+          )
+        }
+
+        return NextResponse.json(errorData, { status: 400 })
       }
-      return NextResponse.json(errorData, { status: 400 })
     }
   }
 }
