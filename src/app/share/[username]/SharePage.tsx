@@ -10,7 +10,7 @@ import { ContributionsGraph } from '~/components/ContributionsGraph'
 import { ErrorMessage } from '~/components/ErrorMessage'
 import { DEFAULT_THEME, THEMES } from '~/constants'
 import { useData } from '~/DataContext'
-import { type DisplayName, type GraphSize } from '~/enums'
+import type { DisplayName, GraphSize } from '~/enums'
 import type { GraphSettings, Themes } from '~/types'
 import { useGraphRequest } from '~/useGraphRequest'
 
@@ -18,10 +18,6 @@ export function SharePage() {
   const query = useSearchParams()
 
   const settings = useMemo<GraphSettings | null>(() => {
-    if (!query) {
-      return null
-    }
-
     const displayName = query.get('displayName') ?? undefined
     const start = query.get('start') ?? undefined
     const end = query.get('end') ?? undefined
@@ -48,7 +44,7 @@ export function SharePage() {
   }, [dispatchSettings, settings])
 
   const params = useParams()
-  const username = typeof params?.['username'] === 'string' ? params['username'] : undefined
+  const username = typeof params['username'] === 'string' ? params['username'] : undefined
 
   useEffect(() => {
     if (username) {
