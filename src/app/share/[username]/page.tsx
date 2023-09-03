@@ -21,6 +21,12 @@ export const generateMetadata: GenerateMetadata = ({ params }) => {
       url: sharingURL,
       images: image,
     },
+    twitter: {
+      title: sharingTitle,
+      description: sharingDescription,
+      card: 'summary',
+      images: image,
+    },
   }
 }
 
