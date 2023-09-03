@@ -68,8 +68,8 @@ devDependencies:
     specifier: ^8.4.29
     version: 8.4.29
   prefer-code-style:
-    specifier: 1.5.4
-    version: 1.5.4(tailwindcss@3.3.3)(typescript@5.2.2)
+    specifier: 1.5.5
+    version: 1.5.5(tailwindcss@3.3.3)(typescript@5.2.2)
   stylelint:
     specifier: ^15.10.3
     version: 15.10.3
@@ -1352,7 +1352,7 @@ packages:
     resolution: {integrity: sha512-b3nLFGaGkJ9rzOcuXRfHkZMdjsawuDD0ENL9fzTophtBg8FJHSGbH7daXkEpcwy3v7Xol3pAvsmlYyFhR4pqJw==}
     dependencies:
       '@types/node': 18.16.0
-      '@types/unist': 2.0.8
+      '@types/unist': 3.0.0
       '@types/vfile-message': 2.0.0
     dev: true
 
@@ -4982,8 +4982,8 @@ packages:
       source-map-js: 1.0.2
     dev: true
 
-  /prefer-code-style@1.5.4(tailwindcss@3.3.3)(typescript@5.2.2):
-    resolution: {integrity: sha512-XpzqQJiYBMqTGmpSl7RHq4kDjIwwzpkPB3Qb+38x/AadRNTKCqVXCGbyVWSUjdssMGEZzucWalZLq2pByBZEpw==}
+  /prefer-code-style@1.5.5(tailwindcss@3.3.3)(typescript@5.2.2):
+    resolution: {integrity: sha512-X8l0it2Y6UlfQpRVHJWcKDfAoEuZnryONQEh86gFJN4bQfbSFuiR6zlD2L+geCLG8NSzQe3p1vdZYmNOKUllnQ==}
     engines: {node: '>=14'}
     dependencies:
       '@babel/core': 7.22.11

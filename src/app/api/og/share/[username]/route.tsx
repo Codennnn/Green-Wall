@@ -1,6 +1,4 @@
 /* eslint-disable @next/next/no-img-element */
-/* eslint react/no-unknown-property: [1, { ignore: ['tw'] }] */
-/* eslint "tailwindcss/classnames-order": [1, { classRegex: /tw/ }] */
 
 import { ImageResponse, type NextRequest } from 'next/server'
 
