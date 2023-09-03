@@ -10,7 +10,7 @@ import { fetchContributionsCollection, fetchGitHubUser } from '~/services'
 export const runtime = 'edge'
 
 const IMAGE_WIDTH = 1200
-const IMAGE_HEIGHT = 628
+const IMAGE_HEIGHT = 630
 
 const levelColors = {
   [ContributionLevel.Null]: 'transparent',
