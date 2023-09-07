@@ -29,7 +29,7 @@ export async function GET(request: NextRequest, { params }: { params: { username
   const latestYear = user.contributionYears[0]
   const targetYear = year ? Number(year) : latestYear
 
-  const contribs = await fetchContributionsCollection(username, targetYear)
+  const contribution = await fetchContributionsCollection(username, targetYear)
 
   return new ImageResponse(
     (
@@ -57,7 +57,7 @@ export async function GET(request: NextRequest, { params }: { params: { username
         </div>
 
         <div tw="mt-20 flex">
-          {contribs.weeks.map(({ days }, widx) => (
+          {contribution.weeks.map(({ days }, widx) => (
             <div key={widx} tw="flex flex-col">
               {days.map(({ level }, didx) => (
                 <div
@@ -68,6 +68,12 @@ export async function GET(request: NextRequest, { params }: { params: { username
               ))}
             </div>
           ))}
+        </div>
+
+        <div tw="mt-4 flex items-center text-xl opacity-80">
+          <span>
+            {year}: {contribution.total} Contributions
+          </span>
         </div>
       </div>
     ),
