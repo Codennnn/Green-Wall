@@ -19,12 +19,17 @@ const levelColors = {
   [ContributionLevel.FOURTH_QUARTILE]: '#216e39',
 }
 
-export async function GET(_: NextRequest, { params }: { params: { username: string } }) {
+export async function GET(request: NextRequest, { params }: { params: { username: string } }) {
   const { username } = params
+
+  const { searchParams } = new URL(request.url)
+  const year = searchParams.get('year')
 
   const user = await fetchGitHubUser(username)
   const latestYear = user.contributionYears[0]
-  const contribs = await fetchContributionsCollection(username, latestYear)
+  const targetYear = year ? Number(year) : latestYear
+
+  const contribs = await fetchContributionsCollection(username, targetYear)
 
   return new ImageResponse(
     (
