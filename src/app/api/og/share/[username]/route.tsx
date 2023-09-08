@@ -74,7 +74,7 @@ export async function GET(request: NextRequest, { params }: { params: { username
 
         <div tw="mt-4 flex items-center text-xl opacity-80">
           <span>
-            {year}: {contribution.total} Contributions
+            {targetYear}: {contribution.total} Contributions
           </span>
         </div>
       </div>
