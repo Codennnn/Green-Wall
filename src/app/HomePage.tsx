@@ -127,7 +127,7 @@ export function HomePage() {
     if (actionRef.current) {
       const offsetTop = actionRef.current.getBoundingClientRect().top
       if (offsetTop > 0) {
-        window.scrollTo(0, offsetTop)
+        document.body.scrollTo({ left: 0, top: offsetTop, behavior: 'smooth' })
       }
     }
   }, [])
