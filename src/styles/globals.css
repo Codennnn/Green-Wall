@@ -34,7 +34,7 @@
     background-size:
       100% 100%,
       40px 40px;
-    background-attachment: scroll, scroll;
+    background-attachment: local;
   }
 }
 
