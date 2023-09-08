@@ -24,6 +24,8 @@ export async function GET(request: NextRequest, { params }: { params: { username
 
   const { searchParams } = new URL(request.url)
   const year = searchParams.get('year')
+  const width = searchParams.get('width')
+  const height = searchParams.get('height')
 
   const user = await fetchGitHubUser(username)
   const latestYear = user.contributionYears[0]
@@ -78,8 +80,8 @@ export async function GET(request: NextRequest, { params }: { params: { username
       </div>
     ),
     {
-      width: IMAGE_WIDTH,
-      height: IMAGE_HEIGHT,
+      width: width ? Number(width) : IMAGE_WIDTH,
+      height: height ? Number(height) : IMAGE_HEIGHT,
     }
   )
 }
