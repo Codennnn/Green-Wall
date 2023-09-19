@@ -8,7 +8,7 @@ export function RadixTooltip(props: React.PropsWithChildren<RadixTooltipProps>) 
   const { children, label } = props
 
   return (
-    <Tooltip.Provider>
+    <Tooltip.Provider delayDuration={300}>
       <Tooltip.Root>
         <Tooltip.Trigger asChild>
           <div className="inline-flex h-full w-full items-center justify-center">{children}</div>
@@ -17,6 +17,7 @@ export function RadixTooltip(props: React.PropsWithChildren<RadixTooltipProps>) 
         <Tooltip.Portal>
           <Tooltip.Content
             className="
+            z-50
             select-none rounded bg-white px-4 py-2 text-sm leading-[1] shadow-tooltip
             radix-side-bottom:animate-slide-up-fade
             radix-side-left:animate-slide-right-fade

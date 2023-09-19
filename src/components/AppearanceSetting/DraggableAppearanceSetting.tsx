@@ -35,7 +35,7 @@ export function DraggableAppearanceSetting(
   return renderClientSide ? (
     <div
       ref={wrapper}
-      className={`${fixed ? 'fixed' : 'absolute'} left-1/2 z-40 w-[300px] -translate-x-1/2`}
+      className={`${fixed ? 'fixed' : 'absolute'} left-1/2 z-50 w-[300px] -translate-x-1/2`}
       style={{ top }}
     >
       <motion.div
