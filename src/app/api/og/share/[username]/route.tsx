@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 
-import { ImageResponse, type NextRequest } from 'next/server'
+import { ImageResponse } from 'next/og'
+import type { NextRequest } from 'next/server'
 
 import { ContributionLevel } from '~/enums'
 import { fetchContributionsCollection, fetchGitHubUser } from '~/services'
