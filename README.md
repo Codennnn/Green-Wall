@@ -1,10 +1,10 @@
-# [Green Wall](https://green-wall.vercel.app/)
+# [Green Wall](https://green-wall.leoku.dev/)
 
 _Take a picture 📸 of your GitHub contributions, then share it!_
 
 **Green Wall** is a powerful web tool designed to help you easily review your GitHub :octocat: contributions over the years. With this tool, you can generate an image of your contributions, which you can save and share with others.
 
-<a href="https://green-wall.vercel.app/">
+<a href="https://green-wall.leoku.dev/">
   <picture>
     <source media="(prefers-color-scheme: )" srcset="./screenshot.png">
     <source media="(prefers-color-scheme: dark)" srcset="./screenshot-dark.png">
