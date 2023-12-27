@@ -14,25 +14,18 @@ export function DraggableAppearanceSetting(
   const wrapper = useRef<HTMLDivElement>(null)
 
   const dragControls = useDragControls()
-  const [renderClientSide, setRenderClientSide] = useState(false)
 
   useEffect(() => {
-    setRenderClientSide(true)
-  }, [])
-
-  useEffect(() => {
-    if (renderClientSide) {
-      setFixed(true)
-      const distanceToTop = wrapper.current?.getBoundingClientRect().top
-      if (typeof distanceToTop === 'number') {
-        setTop(distanceToTop)
-      }
+    setFixed(true)
+    const distanceToTop = wrapper.current?.getBoundingClientRect().top
+    if (typeof distanceToTop === 'number') {
+      setTop(distanceToTop)
     }
-  }, [renderClientSide])
+  }, [])
 
   const [pressing, setPressing] = useState(false)
 
-  return renderClientSide ? (
+  return (
     <div
       ref={wrapper}
       className={`${fixed ? 'fixed' : 'absolute'} left-1/2 z-50 w-[300px] -translate-x-1/2`}
@@ -84,5 +77,5 @@ export function DraggableAppearanceSetting(
         <div className="p-5">{children}</div>
       </motion.div>
     </div>
-  ) : null
+  )
 }
