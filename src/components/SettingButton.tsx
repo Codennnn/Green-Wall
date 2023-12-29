@@ -1,19 +1,21 @@
 import * as Popover from '@radix-ui/react-popover'
 
-import { RadixPopover } from './ui-kit/RadixPopover'
+import { type PopoverProps, RadixPopover } from './ui-kit/RadixPopover'
 import { iconPopOut, iconSetting } from './icons'
 
-interface SettingButtonProps extends Omit<React.ComponentProps<'button'>, 'content'> {
-  content: React.ReactNode
+interface SettingButtonProps
+  extends Omit<React.ComponentProps<'button'>, 'content'>,
+    Pick<PopoverProps, 'content' | 'popoverContentId'> {
   onPopOut?: () => void
 }
 
 export function SettingButton(props: SettingButtonProps) {
-  const { content, onPopOut, ...buttonProps } = props
+  const { content, popoverContentId, onPopOut, ...buttonProps } = props
 
   return (
     <RadixPopover
       content={content}
+      popoverContentId={popoverContentId}
       title={
         <div className="flex">
           <span>Appearance</span>

@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useId, useRef, useState } from 'react'
 
 import { toBlob, toPng } from 'html-to-image'
 
@@ -10,6 +10,7 @@ import { ErrorMessage } from '~/components/ErrorMessage'
 import GenerateButton from '~/components/GenerateButton'
 import { iconClipboard, iconClipboardList, iconImage } from '~/components/icons'
 import Loading from '~/components/Loading'
+import { SearchInput } from '~/components/SearchInput'
 import { SettingButton } from '~/components/SettingButton'
 import { ShareButton } from '~/components/ShareButton'
 import { useData } from '~/DataContext'
@@ -21,16 +22,11 @@ export function HomePage() {
 
   const graphRef = useRef<HTMLDivElement>(null)
   const actionRef = useRef<HTMLDivElement | null>(null)
-  const inputRef = useRef<HTMLInputElement>(null)
-
-  useEffect(() => {
-    inputRef.current?.focus()
-  }, [])
 
   const { graphData, setGraphData, dispatchSettings } = useData()
 
   const [username, setUsername] = useState('')
-  const [settingPopUp, setSettingPopUp] = useState(false)
+  const [settingPopUp, setSettingPopUp] = useState<{ offsetX: number; offsetY: number }>()
 
   const [downloading, setDownloading] = useState(false)
 
@@ -39,7 +35,7 @@ export function HomePage() {
 
   const reset = () => {
     setGraphData(undefined)
-    setSettingPopUp(false)
+    setSettingPopUp(undefined)
     dispatchSettings({ type: 'reset' })
   }
 
@@ -69,9 +65,9 @@ export function HomePage() {
         trigger.href = dataURL
         trigger.download = `${graphData.login}_contributions`
         trigger.click()
-      } catch (e) {
-        if (e instanceof Error) {
-          trackEvent('Error: Download Image', { msg: e.message })
+      } catch (err) {
+        if (err instanceof Error) {
+          trackEvent('Error: Download Image', { msg: err.message })
         }
       } finally {
         setTimeout(() => {
@@ -106,14 +102,16 @@ export function HomePage() {
             return blobData
           })(),
         })
+
         await navigator.clipboard.write([item])
+
         setCopySuccess(true)
         setTimeout(() => {
           setCopySuccess(false)
         }, 2000)
-      } catch (e) {
-        if (e instanceof Error) {
-          trackEvent('Error: Copy Image', { msg: e.message })
+      } catch (err) {
+        if (err instanceof Error) {
+          trackEvent('Error: Copy Image', { msg: err.message })
         }
       } finally {
         setDoingCopy(false)
@@ -132,6 +130,8 @@ export function HomePage() {
     }
   }, [])
 
+  const popoverContentId = useId()
+
   return (
     <div className="py-10 md:py-14">
       <h1 className="text-center text-3xl font-bold md:mx-auto md:px-20 md:text-6xl md:leading-[1.2]">
@@ -140,31 +140,18 @@ export function HomePage() {
 
       <div className="py-12 md:py-16">
         <form
-          onSubmit={(e) => {
-            e.preventDefault()
+          onSubmit={(ev) => {
+            ev.preventDefault()
             void handleSubmit()
           }}
         >
           <div className="flex flex-col items-center justify-center gap-y-6 md:flex-row md:gap-x-5">
-            <input
-              ref={inputRef}
-              required
-              className="
-                inline-block h-[2.8rem] overflow-hidden rounded-lg bg-main-100 px-5
-                text-center text-lg font-medium text-main-600 caret-main-500 shadow-main-300/90 outline-none
-                transition-all duration-300
-                placeholder:select-none placeholder:font-normal placeholder:text-main-400
-                focus:bg-white focus:shadow-[0_0_1.5rem_var(--tw-shadow-color)]
-              "
+            <SearchInput
               disabled={loading}
-              name="username"
-              placeholder="GitHub Username"
-              type="text"
               value={username}
-              onChange={(e) => {
-                setUsername(e.target.value)
+              onChange={(ev) => {
+                setUsername(ev.target.value)
               }}
-              onFocus={() => inputRef.current?.select()}
             />
             <GenerateButton loading={loading} type="submit" />
           </div>
@@ -183,8 +170,7 @@ export function HomePage() {
               >
                 <div className="flex gap-x-3">
                   <button
-                    className={`
-                    inline-flex h-full items-center rounded-md bg-main-100 px-4 py-2 text-sm font-medium text-main-500 hover:bg-main-200 disabled:pointer-events-none motion-safe:transition-colors motion-safe:duration-300 md:text-base`}
+                    className="inline-flex h-full items-center rounded-md bg-main-100 px-4 py-2 text-sm font-medium text-main-500 hover:bg-main-200 disabled:pointer-events-none motion-safe:transition-colors motion-safe:duration-300 md:text-base"
                     disabled={downloading}
                     onClick={() => {
                       void handleDownload()
@@ -193,6 +179,7 @@ export function HomePage() {
                     <span className="mr-2 h-5 w-5 shrink-0 md:h-6 md:w-6">{iconImage}</span>
                     <span>Save as Image</span>
                   </button>
+
                   {canUseClipboardItem && (
                     <button
                       className={`
@@ -217,22 +204,40 @@ export function HomePage() {
                 </div>
                 <div className="flex flex-wrap items-center gap-x-6 md:justify-center">
                   <ShareButton />
+
+                  <SettingButton
+                    content={<AppearanceSetting />}
+                    popoverContentId={popoverContentId}
+                    onClick={() => {
+                      if (settingPopUp) {
+                        setSettingPopUp(undefined)
+                      }
+                    }}
+                    onPopOut={() => {
+                      const popoverContentWrapper =
+                        window.document.getElementById(popoverContentId)?.parentNode
+
+                      if (popoverContentWrapper instanceof HTMLElement) {
+                        const style = window.getComputedStyle(popoverContentWrapper, null)
+                        const matrix = style.transform
+                        const values = matrix.split('(')[1].split(')')[0].split(',')
+                        const offsetX = values[4]
+                        const offsetY = values[5]
+
+                        setSettingPopUp({ offsetX: Number(offsetX), offsetY: Number(offsetY) })
+                      }
+                    }}
+                  />
+
                   <div className="relative">
-                    <SettingButton
-                      content={<AppearanceSetting />}
-                      onClick={() => {
-                        if (settingPopUp) {
-                          setSettingPopUp(false)
-                        }
-                      }}
-                      onPopOut={() => {
-                        setSettingPopUp(true)
-                      }}
-                    />
-                    {settingPopUp && (
+                    {!!settingPopUp && (
                       <DraggableAppearanceSetting
+                        initialPosition={{
+                          x: settingPopUp.offsetX,
+                          y: settingPopUp.offsetY,
+                        }}
                         onClose={() => {
-                          setSettingPopUp(false)
+                          setSettingPopUp(undefined)
                         }}
                       >
                         <AppearanceSetting />

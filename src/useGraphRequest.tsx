@@ -27,9 +27,9 @@ export function useGraphRequest(config: { onError?: () => void } = {}) {
         } else {
           setError({ errorType: resJson.errorType, message: resJson.message })
         }
-      } catch (e) {
-        if (e instanceof Error) {
-          trackEvent('Error: Fetch Ccontribution Data', { msg: e.message })
+      } catch (err) {
+        if (err instanceof Error) {
+          trackEvent('Error: Fetch Ccontribution Data', { msg: err.message })
         }
         onError()
       } finally {
