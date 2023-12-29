@@ -29,8 +29,8 @@ export function Graph(props: GraphProps) {
           : `${numberWithCommas(calendar.total)} Contributions`}
       </div>
 
-      <div className={`${styles['graph']}`}>
-        <ul className={`${styles['months']}`}>
+      <div className={styles['graph']}>
+        <ul className={styles['months']}>
           <li>Jan</li>
           <li>Feb</li>
           <li>Mar</li>
@@ -46,7 +46,7 @@ export function Graph(props: GraphProps) {
         </ul>
 
         {daysLabel && (
-          <ul className={`${styles['days']}`}>
+          <ul className={styles['days']}>
             <li>Sun</li>
             <li>Mon</li>
             <li>Tue</li>

@@ -17,19 +17,19 @@ export function RadixToggleGroup(props: RadixToggleGroupProps) {
     size === 'small'
       ? DEFAULT_ITEM_SIZE - 10
       : size === 'large'
-      ? DEFAULT_ITEM_SIZE + 10
-      : typeof size === 'number'
-      ? size
-      : DEFAULT_ITEM_SIZE
+        ? DEFAULT_ITEM_SIZE + 10
+        : typeof size === 'number'
+          ? size
+          : DEFAULT_ITEM_SIZE
 
   const fontSize =
     size === 'small'
       ? DEFAULT_ITEM_FONT_SIZE - 2
       : size === 'large'
-      ? DEFAULT_ITEM_FONT_SIZE + 2
-      : typeof size === 'number'
-      ? size
-      : DEFAULT_ITEM_FONT_SIZE
+        ? DEFAULT_ITEM_FONT_SIZE + 2
+        : typeof size === 'number'
+          ? size
+          : DEFAULT_ITEM_FONT_SIZE
 
   return (
     <ToggleGroup.Root

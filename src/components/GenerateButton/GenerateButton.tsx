@@ -13,8 +13,8 @@ export function GenerateButton({ loading = false, ...props }: GenerateButtonProp
       disabled={loading}
       {...props}
     >
-      <span className={`${styles['shadow']}`} />
-      <span className={`${styles['edge']}`} />
+      <span className={styles['shadow']} />
+      <span className={styles['edge']} />
       <span
         className={`${styles['front']} min-w-[max(30vw,200px)] text-center text-lg font-medium md:min-w-[120px] md:text-base`}
       >

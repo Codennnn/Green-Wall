@@ -71,11 +71,7 @@ function InnerContributionsGraph(
               : true
 
           return (
-            <Graph
-              key={calendar.year}
-              className={`${shouldDisplay ? '' : 'hidden'}`}
-              data={calendar}
-            />
+            <Graph key={calendar.year} className={shouldDisplay ? '' : 'hidden'} data={calendar} />
           )
         })}
       </div>
