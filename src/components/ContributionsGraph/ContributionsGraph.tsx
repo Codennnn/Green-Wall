@@ -9,13 +9,14 @@ import { GraphHeader } from './GraphHeader'
 
 interface ContributionsGraphProps {
   className?: string
+  wrapperId?: string
 }
 
 function InnerContributionsGraph(
   props: ContributionsGraphProps,
   ref: React.Ref<HTMLDivElement | null>
 ) {
-  const { className = '' } = props
+  const { className = '', wrapperId } = props
 
   const { graphData, settings, firstYear, lastYear } = useData()
 
@@ -51,6 +52,7 @@ function InnerContributionsGraph(
     <div
       ref={graphRef}
       className={`-mx-5 p-5 md:mx-0 ${className}`}
+      id={wrapperId}
       style={{
         ...cssProperties,
         color: 'var(--graph-text-color, #24292f)',

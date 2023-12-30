@@ -12,10 +12,10 @@ export function Layout(props: React.PropsWithChildren) {
 
   useEffect(() => {
     if (router.route === '/' || router.route.startsWith('/share')) {
-      window.document.body.classList.add('bg-decoration')
+      document.body.classList.add('bg-decoration')
 
       return () => {
-        window.document.body.classList.remove('bg-decoration')
+        document.body.classList.remove('bg-decoration')
       }
     }
   }, [router.route])

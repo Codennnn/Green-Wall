@@ -119,18 +119,38 @@ export function HomePage() {
     }
   }
 
-  const actionRefCallback = useCallback((node: HTMLDivElement | null) => {
-    actionRef.current = node
-
-    if (actionRef.current) {
-      const offsetTop = actionRef.current.getBoundingClientRect().top
-      if (offsetTop > 0) {
-        document.body.scrollTo({ left: 0, top: offsetTop, behavior: 'smooth' })
-      }
-    }
-  }, [])
-
   const popoverContentId = useId()
+  const graphWrapperId = useId()
+
+  const actionRefCallback = useCallback(
+    (node: HTMLDivElement | null) => {
+      actionRef.current = node
+
+      if (actionRef.current) {
+        const offsetTop = actionRef.current.getBoundingClientRect().top
+
+        if (offsetTop > 0) {
+          // When the graph appears, automatically scrolls to the position where the graph appears to avoid obscuring it.
+          document.body.scrollTo({ left: 0, top: offsetTop, behavior: 'smooth' })
+        }
+
+        setTimeout(() => {
+          // Automatically pop-up settings for users to discover the settings at first glance.
+          const graphWrapperEle = document.getElementById(graphWrapperId)
+
+          if (graphWrapperEle instanceof HTMLElement) {
+            const { top, right } = graphWrapperEle.getBoundingClientRect()
+
+            setSettingPopUp({
+              offsetX: right,
+              offsetY: top,
+            })
+          }
+        }, 500)
+      }
+    },
+    [graphWrapperId]
+  )
 
   return (
     <div className="py-10 md:py-14">
@@ -215,7 +235,7 @@ export function HomePage() {
                     }}
                     onPopOut={() => {
                       const popoverContentWrapper =
-                        window.document.getElementById(popoverContentId)?.parentNode
+                        document.getElementById(popoverContentId)?.parentNode
 
                       if (popoverContentWrapper instanceof HTMLElement) {
                         const style = window.getComputedStyle(popoverContentWrapper, null)
@@ -224,7 +244,10 @@ export function HomePage() {
                         const offsetX = values[4]
                         const offsetY = values[5]
 
-                        setSettingPopUp({ offsetX: Number(offsetX), offsetY: Number(offsetY) })
+                        setSettingPopUp({
+                          offsetX: Number(offsetX),
+                          offsetY: Number(offsetY),
+                        })
                       }
                     }}
                   />
@@ -248,7 +271,7 @@ export function HomePage() {
               </div>
 
               <div className="flex overflow-x-auto md:justify-center">
-                <ContributionsGraph ref={graphRef} />
+                <ContributionsGraph ref={graphRef} wrapperId={graphWrapperId} />
               </div>
             </>
           )}
