@@ -71,8 +71,8 @@ devDependencies:
     specifier: ^8.4.32
     version: 8.4.32
   prefer-code-style:
-    specifier: 1.5.11
-    version: 1.5.11(postcss@8.4.32)(tailwindcss@3.3.5)(typescript@5.2.2)
+    specifier: 1.5.12
+    version: 1.5.12(postcss@8.4.32)(tailwindcss@3.3.5)(typescript@5.2.2)
   stylelint:
     specifier: ^15.11.0
     version: 15.11.0(typescript@5.2.2)
@@ -1881,8 +1881,8 @@ packages:
     resolution: {integrity: sha512-eM9d/swFopRt5gdJ7jrpCwgvEMIayITpojhkkSMRsFHYuH5bkSQ4p/9qTEHtmNudUZh22Tehu7I6CxAW0IXTKA==}
     hasBin: true
     dependencies:
-      browserslist: 4.22.1
-      caniuse-lite: 1.0.30001561
+      browserslist: 4.22.2
+      caniuse-lite: 1.0.30001572
       normalize-range: 0.1.2
       num2fraction: 1.2.2
       picocolors: 0.2.1
@@ -1977,17 +1977,6 @@ packages:
       electron-to-chromium: 1.4.528
       node-releases: 2.0.13
       update-browserslist-db: 1.0.13(browserslist@4.21.11)
-    dev: true
-
-  /browserslist@4.22.1:
-    resolution: {integrity: sha512-FEVc202+2iuClEhZhrWy6ZiAcRLvNMyYcxZ8raemul1DYVOVdFsbqckWLdsixQZCpJlwe77Z3UTalE7jsjnKfQ==}
-    engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
-    hasBin: true
-    dependencies:
-      caniuse-lite: 1.0.30001561
-      electron-to-chromium: 1.4.581
-      node-releases: 2.0.13
-      update-browserslist-db: 1.0.13(browserslist@4.22.1)
     dev: true
 
   /browserslist@4.22.2:
@@ -2098,10 +2087,6 @@ packages:
 
   /caniuse-lite@1.0.30001539:
     resolution: {integrity: sha512-hfS5tE8bnNiNvEOEkm8HElUHroYwlqMMENEzELymy77+tJ6m+gA2krtHl5hxJaj71OlpC2cHZbdSMX1/YEqEkA==}
-    dev: true
-
-  /caniuse-lite@1.0.30001561:
-    resolution: {integrity: sha512-NTt0DNoKe958Q0BE0j0c1V9jbUzhBxHIEJy7asmGrpE0yG63KTV7PLHPnK2E1O9RsQrQ081I3NLuXGS6zht3cw==}
     dev: true
 
   /caniuse-lite@1.0.30001572:
@@ -2518,10 +2503,6 @@ packages:
 
   /electron-to-chromium@1.4.528:
     resolution: {integrity: sha512-UdREXMXzLkREF4jA8t89FQjA8WHI6ssP38PMY4/4KhXFQbtImnghh4GkCgrtiZwLKUKVD2iTVXvDVQjfomEQuA==}
-    dev: true
-
-  /electron-to-chromium@1.4.581:
-    resolution: {integrity: sha512-6uhqWBIapTJUxgPTCHH9sqdbxIMPt7oXl0VcAL1kOtlU6aECdcMncCrX5Z7sHQ/invtrC9jUQUef7+HhO8vVFw==}
     dev: true
 
   /electron-to-chromium@1.4.616:
@@ -5047,8 +5028,8 @@ packages:
       source-map-js: 1.0.2
     dev: true
 
-  /prefer-code-style@1.5.11(postcss@8.4.32)(tailwindcss@3.3.5)(typescript@5.2.2):
-    resolution: {integrity: sha512-QNGVXNMlRyu7qdC8PWwFLXj62yF1GsrtTP0DcPK8u8no+DYXEJ/KqA0oXw1R7L2H8JBmhS0VxkU6UQAFvbrwkQ==}
+  /prefer-code-style@1.5.12(postcss@8.4.32)(tailwindcss@3.3.5)(typescript@5.2.2):
+    resolution: {integrity: sha512-6ftwELVtJkOMe8NQ59hDKMi++M2DVd0E+bZbkxigaByXQjVMc9LFPY0QJwWdMOkmst8NctR1Amk820SA+KJ7Tg==}
     engines: {node: '>=14'}
     dependencies:
       '@babel/core': 7.23.6
@@ -6513,17 +6494,6 @@ packages:
       browserslist: '>= 4.21.0'
     dependencies:
       browserslist: 4.21.11
-      escalade: 3.1.1
-      picocolors: 1.0.0
-    dev: true
-
-  /update-browserslist-db@1.0.13(browserslist@4.22.1):
-    resolution: {integrity: sha512-xebP81SNcPuNpPP3uzeW1NYXxI3rxyJzF3pD6sH4jE7o/IX+WtSpwnVU+qIsDPyk0d3hmFQ7mjqc6AtV604hbg==}
-    hasBin: true
-    peerDependencies:
-      browserslist: '>= 4.21.0'
-    dependencies:
-      browserslist: 4.22.1
       escalade: 3.1.1
       picocolors: 1.0.0
     dev: true

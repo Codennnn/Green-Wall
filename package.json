@@ -38,7 +38,7 @@
     "autoprefixer": "^10.4.16",
     "npm-run-all": "^4.1.5",
     "postcss": "^8.4.32",
-    "prefer-code-style": "1.5.11",
+    "prefer-code-style": "1.5.12",
     "stylelint": "^15.11.0",
     "tailwindcss": "^3.3.5",
     "tslib": "^2.6.2",
