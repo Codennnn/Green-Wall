@@ -58,7 +58,7 @@ export function DraggableAppearanceSetting(
           }}
         >
           <span className="inline-flex items-center justify-center rounded p-[0.3rem] transition-colors duration-200 hover:bg-main-100/80">
-            <span className="h-4 w-4 text-main-500">{iconClose}</span>
+            <span className="size-4 text-main-500">{iconClose}</span>
           </span>
         </button>
       </motion.div>

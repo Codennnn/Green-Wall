@@ -16,7 +16,7 @@ export function ThemeSelector(props: ThemeSelectorProps) {
           <div
             key={theme.name}
             className={`
-            grid h-5 w-5 cursor-pointer grid-cols-2 grid-rows-2 ring-[2px] transition-shadow duration-200
+            grid size-5 cursor-pointer grid-cols-2 grid-rows-2 ring-[2px] transition-shadow duration-200
             ${
               value === theme.name
                 ? 'ring-main-400/60 ring-offset-2 hover:ring-main-400/60'

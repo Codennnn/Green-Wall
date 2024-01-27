@@ -28,14 +28,14 @@ export function SettingButton(props: SettingButtonProps) {
             }}
           >
             <span className="inline-flex items-center justify-center rounded p-[0.3rem] transition-colors duration-200 hover:bg-main-100/80">
-              <span className="h-4 w-4 text-main-500">{iconPopOut}</span>
+              <span className="size-4 text-main-500">{iconPopOut}</span>
             </span>
           </Popover.Close>
         </div>
       }
     >
       <button className="simple-button" {...buttonProps}>
-        <span className="h-5 w-5">{iconSetting}</span>
+        <span className="size-5">{iconSetting}</span>
         <span>Appearance</span>
       </button>
     </RadixPopover>

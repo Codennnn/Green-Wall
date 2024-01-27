@@ -38,12 +38,12 @@ const Avatar = () => {
   return (
     <span
       ref={avatarRoot}
-      className={`h-[1.7rem] w-[1.7rem] overflow-hidden rounded-full bg-[var(--level-0)] ${
+      className={`size-[1.7rem] overflow-hidden rounded-full bg-[var(--level-0)] ${
         status === 'loading' ? 'animate-pulse' : ''
       }`}
     >
       {status === 'error' && (
-        <span className="inline-block h-full w-full bg-gradient-to-br from-[var(--level-1)] to-[var(--level-2)]" />
+        <span className="inline-block size-full bg-gradient-to-br from-[var(--level-1)] to-[var(--level-2)]" />
       )}
     </span>
   )
@@ -68,7 +68,7 @@ export function GraphHeader() {
         href={`https://github.com/${username}`}
         target="_blank"
       >
-        <span className="mr-3 h-6 w-6">
+        <span className="mr-3 size-6">
           <svg viewBox="0 0 24 24">
             <path
               clipRule="evenodd"
@@ -90,11 +90,11 @@ export function GraphHeader() {
       <div className="ml-auto flex items-center text-xs">
         <span>Less</span>
         <ul className={`${styles['grids']} mx-2 grid grid-cols-5 gap-[3px]`}>
-          <li className="day h-3 w-3" data-level="0" />
-          <li className="day h-3 w-3" data-level="1" />
-          <li className="day h-3 w-3" data-level="2" />
-          <li className="day h-3 w-3" data-level="3" />
-          <li className="day h-3 w-3" data-level="4" />
+          <li className="day size-3" data-level="0" />
+          <li className="day size-3" data-level="1" />
+          <li className="day size-3" data-level="2" />
+          <li className="day size-3" data-level="3" />
+          <li className="day size-3" data-level="4" />
         </ul>
         <span>More</span>
       </div>

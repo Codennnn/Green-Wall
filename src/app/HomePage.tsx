@@ -196,7 +196,7 @@ export function HomePage() {
                       void handleDownload()
                     }}
                   >
-                    <span className="mr-2 h-5 w-5 shrink-0 md:h-6 md:w-6">{iconImage}</span>
+                    <span className="mr-2 size-5 shrink-0 md:size-6">{iconImage}</span>
                     <span>Save as Image</span>
                   </button>
 
@@ -215,7 +215,7 @@ export function HomePage() {
                         void handleCopyImage()
                       }}
                     >
-                      <span className="mr-2 h-5 w-5 shrink-0 md:h-6 md:w-6">
+                      <span className="mr-2 size-5 shrink-0 md:size-6">
                         {copySuccess ? iconClipboardList : iconClipboard}
                       </span>
                       <span>{copySuccess ? 'Copied' : 'Copy'} as Image</span>

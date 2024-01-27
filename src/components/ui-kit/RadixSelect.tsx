@@ -16,14 +16,14 @@ export function RadixSelect(props: SelectProps) {
       <Select.Trigger asChild>
         <SelectButton>
           <Select.Value />
-          <Select.Icon className="ml-2 h-4 w-4">{iconChevronDown}</Select.Icon>
+          <Select.Icon className="ml-2 size-4">{iconChevronDown}</Select.Icon>
         </SelectButton>
       </Select.Trigger>
 
       <Select.Portal>
         <Select.Content className="z-50">
           <Select.ScrollUpButton className="flex items-center justify-center text-main-600">
-            <span className="h-4 w-4">{iconChevronUp}</span>
+            <span className="size-4">{iconChevronUp}</span>
           </Select.ScrollUpButton>
 
           <Select.Viewport className="rounded-lg bg-white p-2 shadow-lg">
@@ -41,7 +41,7 @@ export function RadixSelect(props: SelectProps) {
                   value={it.value}
                 >
                   <Select.ItemIndicator className="absolute left-2 inline-flex items-center">
-                    <span className="h-4 w-4">{iconCheck}</span>
+                    <span className="size-4">{iconCheck}</span>
                   </Select.ItemIndicator>
                   <Select.ItemText>{it.label}</Select.ItemText>
                 </Select.Item>
@@ -50,7 +50,7 @@ export function RadixSelect(props: SelectProps) {
           </Select.Viewport>
 
           <Select.ScrollDownButton className="flex items-center justify-center text-gray-700">
-            <span className="h-4 w-4">{iconChevronDown}</span>
+            <span className="size-4">{iconChevronDown}</span>
           </Select.ScrollDownButton>
         </Select.Content>
       </Select.Portal>

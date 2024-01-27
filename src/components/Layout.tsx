@@ -31,7 +31,7 @@ export function Layout(props: React.PropsWithChildren) {
           <div className="flex h-[65px] items-center md:h-[80px]">
             <Link href="/">
               <span className="flex cursor-pointer select-none items-center bg-white  text-xl font-bold ring-4 ring-white">
-                <span className="pointer-events-none relative h-8 w-8 md:h-7 md:w-7">
+                <span className="pointer-events-none relative size-8 md:size-7">
                   <Image fill alt="LOGO" className="object-contain" src="/favicon.svg" />
                 </span>
                 <span className="ml-3 hidden md:inline" translate="no">

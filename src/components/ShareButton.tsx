@@ -91,7 +91,7 @@ export function ShareButton() {
       title="Share Your Graph"
     >
       <button className="simple-button divider">
-        <span className="h-5 w-5">{iconShare}</span>
+        <span className="size-5">{iconShare}</span>
         <span>Share it</span>
       </button>
     </RadixPopover>
