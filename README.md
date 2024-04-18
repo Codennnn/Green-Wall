@@ -16,6 +16,23 @@ _Take a picture 📸 of your GitHub contributions, then share it!_
 
 This project uses the GitHub GraphQL API to fetch data and uses Next.js API Routes to send requests. You can read [this file](./src/pages/api/contribution/%5Busername%5D.ts) to learn how we handle your data.
 
+## Usage 
+you can embed a live preview of your contributions into your github README or website by using the below examples
+
+**HTML**
+```html
+<img src="https://green-wall.leoku.dev/api/og/share/[YOUR USERNAME]" alt="My contributions">
+```
+
+**Markdown**
+```markdown
+![](https://green-wall.leoku.dev/api/og/share/[YOUR USERNAME])
+```
+
+which would give a preview similar to this
+
+![](https://green-wall.leoku.dev/api/og/share/Codennnn)
+
 ## Credits
 
 - _Inspired by:_ [GitHub Contributions Chart Generator](https://github.com/sallar/github-contributions-chart).
