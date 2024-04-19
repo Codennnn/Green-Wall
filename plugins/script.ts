@@ -311,7 +311,7 @@ if (profileArea instanceof HTMLElement && refNode instanceof HTMLElement) {
 
     const { dialog, dialogContent } = createDialog({ username })
 
-    let hasLoaded = false // 标志变量，用来判断是否已经加载过内容。
+    let hasLoaded = false
 
     const handleLoadError = () => {
       dialogContent.innerHTML = ''
@@ -322,11 +322,11 @@ if (profileArea instanceof HTMLElement && refNode instanceof HTMLElement) {
       errorBlock.style.alignItems = 'center'
 
       const tip = document.createElement('p')
-      tip.textContent = '获取数据的过程出现异常。'
+      tip.textContent = 'The process of obtaining data has an exception.'
 
       const retryBtn = document.createElement('button')
       retryBtn.classList.add('btn')
-      retryBtn.textContent = '点击重试'
+      retryBtn.textContent = 'Retry'
       retryBtn.addEventListener('click', () => {
         // eslint-disable-next-line @typescript-eslint/no-use-before-define
         handleLoadData()
@@ -387,5 +387,5 @@ if (profileArea instanceof HTMLElement && refNode instanceof HTMLElement) {
     })
   }
 } else {
-  console.warn('[Green Wall]: 未找到目标节点。')
+  console.warn('[Green Wall]: Target node not found.')
 }
