@@ -8,6 +8,7 @@
     "build": "next build",
     "deps": "pnpm up --interactive --latest",
     "dev": "next dev",
+    "dev:script": "tsc plugins/script --watch",
     "lint": "run-p lint:ts lint:es lint:css",
     "lint:css": "stylelint **/*.css",
     "lint:es": "eslint **/*.{ts,tsx}",
@@ -33,6 +34,7 @@
   },
   "devDependencies": {
     "@codennnn/tsconfig": "1.2.1",
+    "@types/greasemonkey": "^4.0.7",
     "@types/node": "18.16.0",
     "@types/react": "18.2.48",
     "autoprefixer": "^10.4.17",
