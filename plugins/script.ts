@@ -256,7 +256,7 @@ function createDialog(params: { username: string }): {
   btnContent.textContent = 'Open in Green Wall'
   openExtrnalBtn.classList.add('Button', 'Button--primary', 'Button--medium')
   openExtrnalBtn.addEventListener('click', () => {
-    window.open(`${ORIGIN}/share/${username}`, '_blank')
+    window.open(`${ORIGIN}/user/${username}`, '_blank')
   })
 
   titleWrap.append(title)
