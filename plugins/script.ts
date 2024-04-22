@@ -308,7 +308,7 @@ if (isProfile) {
 
       const openBtn = document.createElement('button')
       openBtn.classList.add('btn')
-      openBtn.textContent = ' ⬜ 🟩 View All Green'
+      openBtn.textContent = ' ⬜🟩 View All Green'
 
       block.appendChild(title)
       block.appendChild(openBtn)
