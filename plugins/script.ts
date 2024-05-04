@@ -12,6 +12,15 @@ if (isProfile) {
     FOURTH_QUARTILE = 'FOURTH_QUARTILE',
   }
 
+  type Weekday = 0 | 1 | 2 | 3 | 4 | 5 | 6
+
+  interface ContributionDay {
+    count: number
+    date: string
+    level: `${ContributionLevel}`
+    weekday?: Weekday
+  }
+
   interface ContributionBasic {
     name?: string
     login: string
@@ -21,10 +30,7 @@ if (isProfile) {
       total: number
       year: number
       weeks: {
-        days: {
-          level: `${ContributionLevel}`
-          weekday?: 0 | 1 | 2 | 3 | 4 | 5 | 6
-        }[]
+        days: ContributionDay[]
       }[]
     }[]
   }
@@ -33,15 +39,10 @@ if (isProfile) {
     data: ContributionBasic
   }
 
-  type Weekday = 0 | 1 | 2 | 3 | 4 | 5 | 6
-
   interface Calendar {
     total: number
     year: number
-    rows: {
-      level: `${ContributionLevel}`
-      weekday?: Weekday
-    }[][]
+    rows: ContributionDay[][]
   }
 
   interface ProducedData {
@@ -51,6 +52,7 @@ if (isProfile) {
   const produceData = ({ data }: Data): ProducedData => {
     const contributionCalendars = data.contributionCalendars.map<Calendar>((cur) => {
       const rows: Calendar['rows'] = [[], [], [], [], [], [], []]
+      const nullDay: ContributionDay = { count: 0, date: '', level: 'Null' }
 
       cur.weeks.forEach(({ days }) => {
         if (days.length !== 7) {
@@ -65,11 +67,11 @@ if (isProfile) {
               if (theDay.weekday === weekday) {
                 rows[theDay.weekday].push(theDay)
               } else {
-                newDays.splice(i, 0, { level: 'Null', weekday })
-                rows[i].push({ level: 'Null', weekday })
+                newDays.splice(i, 0, nullDay)
+                rows[i].push(nullDay)
               }
             } else {
-              rows[i].push({ level: 'Null', weekday })
+              rows[i].push(nullDay)
             }
           }
         } else {
@@ -133,15 +135,18 @@ if (isProfile) {
                     : 4
 
           td = `
-        <td
-          tabindex="-1"
-          data-ix="${idx}"
-          style="width: 10px"
-          data-level="${level}"
-          role="gridcell"
-          class="ContributionCalendar-day"
-        ></td>
-        `
+          <td
+            title="${col.count === 0 ? 'No' : col.count} contributions in ${col.date}"
+            tabindex="-1"
+            data-ix="${idx}"
+            style="width: 10px"
+            data-level="${level}"
+            class="ContributionCalendar-day"
+            data-date="${col.level}"
+            aria-selected="false"
+            role="gridcell"
+          ></td>
+          `
         }
 
         htmlStr += td
@@ -226,10 +231,10 @@ if (isProfile) {
     actionButton.classList.add('close-button', 'Overlay-closeButton')
     actionButton.setAttribute('type', 'button')
     actionButton.innerHTML = `
-  <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-x">
-    <path d="M3.72 3.72a.75.75 0 0 1 1.06 0L8 6.94l3.22-3.22a.749.749 0 0 1 1.275.326.749.749 0 0 1-.215.734L9.06 8l3.22 3.22a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215L8 9.06l-3.22 3.22a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042L6.94 8 3.72 4.78a.75.75 0 0 1 0-1.06Z"></path>
-  </svg>
-  `
+    <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-x">
+      <path d="M3.72 3.72a.75.75 0 0 1 1.06 0L8 6.94l3.22-3.22a.749.749 0 0 1 1.275.326.749.749 0 0 1-.215.734L9.06 8l3.22 3.22a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215L8 9.06l-3.22 3.22a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042L6.94 8 3.72 4.78a.75.75 0 0 1 0-1.06Z"></path>
+    </svg>
+    `
     actionButton.addEventListener('click', (ev) => {
       ev.stopPropagation()
       dialog.close()
