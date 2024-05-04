@@ -78,7 +78,9 @@ export async function fetchContributionsCollection(
                 total: totalContributions
                 weeks {
                   days: contributionDays {
+                    count: contributionCount
                     level: contributionLevel
+                    date
                     weekday
                   }
                 }
