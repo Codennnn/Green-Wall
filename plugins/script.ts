@@ -1,4 +1,4 @@
-const isProfile = new RegExp(/^https:\/\/github\.com\/([^/]+)$/).test(window.location.href)
+const isProfile = new RegExp(/^https:\/\/github\.com\/.+\/?$/).test(window.location.href)
 
 if (isProfile) {
   const ORIGIN = 'https://green-wall.leoku.dev'
