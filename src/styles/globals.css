@@ -31,10 +31,10 @@
     background:
       linear-gradient(180deg, transparent 18em, #fff 30em),
       url('/grid-cell.svg') 0 0 repeat;
+    background-attachment: local;
     background-size:
       100% 100%,
       40px 40px;
-    background-attachment: local;
   }
 }
 

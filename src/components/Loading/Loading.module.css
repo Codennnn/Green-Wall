@@ -27,9 +27,9 @@
   @apply bg-accent-400;
 
   position: absolute;
+  z-index: 10;
   top: 50%;
   left: 50%;
-  z-index: 10;
   width: 20px;
   height: 20px;
   margin-top: -10px;
