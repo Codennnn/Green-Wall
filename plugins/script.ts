@@ -195,9 +195,26 @@ if (isProfile) {
       document.body.classList.remove('has-modal')
     })
 
-    dialog.addEventListener('click', () => {
-      dialog.close()
-    })
+    let mouseDownTarget: HTMLElement
+
+    const mouseDownHandler = (ev: MouseEvent) => {
+      if (ev.target instanceof HTMLElement) {
+        mouseDownTarget = ev.target
+      }
+    }
+
+    const mouseUpHandler = (ev: MouseEvent) => {
+      if (
+        ev.target instanceof HTMLDialogElement &&
+        ev.target === mouseDownTarget &&
+        ev.target === dialog
+      ) {
+        dialog.close()
+      }
+    }
+
+    dialog.addEventListener('mousedown', mouseDownHandler)
+    dialog.addEventListener('mouseup', mouseUpHandler)
 
     // ---
 
@@ -205,9 +222,6 @@ if (isProfile) {
     wrap.style.display = 'flex'
     wrap.style.flexDirection = 'column'
     wrap.style.overflow = 'hidden'
-    wrap.addEventListener('click', (ev) => {
-      ev.stopPropagation()
-    })
 
     // ---
 
