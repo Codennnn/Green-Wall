@@ -324,7 +324,9 @@ const handler = () => {
       ?.nextSibling?.nextSibling
 
     if (profileArea instanceof HTMLElement && refNode instanceof HTMLElement) {
-      const username = profileArea.querySelector('.vcard-username')?.textContent?.trim()
+      const username = document
+        .querySelector('meta[name="octolytics-dimension-user_login"]')
+        ?.getAttribute('content')
 
       if (username) {
         const exists = !!document.querySelector('#green-wall-block')
