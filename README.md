@@ -40,6 +40,8 @@ This will produce a preview similar to the one shown below.
 
 We also offer a [Tampermonkey script](https://greasyfork.org/en/scripts/492478-greenwall-view-all-contribution-graphs-in-github) that enables you to view the 'Green Wall' on anyone's GitHub profile page. The script adds a button to the user's GitHub Profile page, and clicking it will display the user's contribution graphs over the years.
 
+The source code for the script is located in the file [`/plugins/script.ts`](./plugins/script.ts).
+
 https://github.com/user-attachments/assets/694a5653-348b-4bec-9736-21e777e3ede8
 
 ## Credits
@@ -51,7 +53,7 @@ https://github.com/user-attachments/assets/694a5653-348b-4bec-9736-21e777e3ede8
 
 ## Running Locally
 
-To run this project, which uses the [GitHub API](https://docs.github.com/en/graphql) to fetch data, you'll need a personal access token for authentication. For details on obtaining this token, see "[Creating a personal access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token)."
+To run this project, which uses the [GitHub API](https://docs.github.com/en/graphql) to fetch data, you'll need a personal access token for authentication. For details on obtaining this token, see "[Creating a personal access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token)".
 
 Once you have your personal access token, create a file named `.env.local` at the root of the project and insert the token as follows:
 
