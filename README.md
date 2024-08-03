@@ -1,8 +1,8 @@
 # [Green Wall](https://green-wall.leoku.dev/)
 
-_Take a picture 📸 of your GitHub contributions, then share it!_
+_Take a snapshot 📸 of your GitHub contributions, then share it!_
 
-**Green Wall** is a powerful web tool designed to help you easily review your GitHub :octocat: contributions over the years. With this tool, you can generate an image of your contributions, which you can save and share with others.
+**Green Wall** is a powerful web tool that simplifies the way you review your GitHub :octocat: contributions over time. This tool allows you to generate an image of your contributions, which you can save and share with others.
 
 <a href="https://green-wall.leoku.dev/">
   <picture>
@@ -14,29 +14,31 @@ _Take a picture 📸 of your GitHub contributions, then share it!_
 
 ## How it works
 
-This project uses the GitHub GraphQL API to fetch data and uses Next.js API Routes to send requests. You can read [this file](./src/pages/api/contribution/%5Busername%5D.ts) to learn how we handle your data.
+This project leverages the GitHub GraphQL API to retrieve data and employs Next.js API Routes to handle requests. For insights into how we manage your data, refer to [this file](./src/pages/api/contribution/%5Busername%5D.ts).
 
-## Usage 
+## Usage
 
-You can embed a live preview of your contributions into your github README or website by using the below examples.
+To showcase a live preview of your contributions on your GitHub README or website, you can use the following examples.
 
 **HTML**
+
 ```html
-<img src="https://green-wall.leoku.dev/api/og/share/[YOUR USERNAME]" alt="My contributions">
+<img src="https://green-wall.leoku.dev/api/og/share/[YOUR USERNAME]" alt="My contributions" />
 ```
 
 **Markdown**
+
 ```markdown
 ![](https://green-wall.leoku.dev/api/og/share/[YOUR USERNAME])
 ```
 
-Which would give a preview similar to this.
+This will produce a preview similar to the one shown below.
 
 ![](https://green-wall.leoku.dev/api/og/share/Codennnn)
 
 ## Tampermonkey
 
-We also provide a [script](https://greasyfork.org/en/scripts/492478-greenwall-view-all-contribution-graphs-in-github) that allows you to view the 'Green Wall' on anyone's GitHub profile page. This script will embed a button in the user's GitHub Profile page, and clicking this button will display the contribution graphs of the current user over the years.
+We also offer a [Tampermonkey script](https://greasyfork.org/en/scripts/492478-greenwall-view-all-contribution-graphs-in-github) that enables you to view the 'Green Wall' on anyone's GitHub profile page. The script adds a button to the user's GitHub Profile page, and clicking it will display the user's contribution graphs over the years.
 
 https://github.com/user-attachments/assets/694a5653-348b-4bec-9736-21e777e3ede8
 
@@ -49,9 +51,9 @@ https://github.com/user-attachments/assets/694a5653-348b-4bec-9736-21e777e3ede8
 
 ## Running Locally
 
-This project uses the [GitHub API](https://docs.github.com/en/graphql) to fetch data, so you need a personal access token for authentication. For more information, see "[Creating a personal access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token) ."
+To run this project, which uses the [GitHub API](https://docs.github.com/en/graphql) to fetch data, you'll need a personal access token for authentication. For details on obtaining this token, see "[Creating a personal access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token)."
 
-After creating personal access token, create a file named `.env.local` at the root of the project, then paste the token into it.
+Once you have your personal access token, create a file named `.env.local` at the root of the project and insert the token as follows:
 
 ```sh
 # .env.local
