@@ -17,7 +17,8 @@ _Take a picture 📸 of your GitHub contributions, then share it!_
 This project uses the GitHub GraphQL API to fetch data and uses Next.js API Routes to send requests. You can read [this file](./src/pages/api/contribution/%5Busername%5D.ts) to learn how we handle your data.
 
 ## Usage 
-you can embed a live preview of your contributions into your github README or website by using the below examples
+
+You can embed a live preview of your contributions into your github README or website by using the below examples.
 
 **HTML**
 ```html
@@ -29,9 +30,15 @@ you can embed a live preview of your contributions into your github README or we
 ![](https://green-wall.leoku.dev/api/og/share/[YOUR USERNAME])
 ```
 
-which would give a preview similar to this
+Which would give a preview similar to this.
 
 ![](https://green-wall.leoku.dev/api/og/share/Codennnn)
+
+## Tampermonkey
+
+We also provide a [script](https://greasyfork.org/en/scripts/492478-greenwall-view-all-contribution-graphs-in-github) that allows you to view the 'Green Wall' on anyone's GitHub profile page. This script will embed a button in the user's GitHub Profile page, and clicking this button will display the contribution graphs of the current user over the years.
+
+https://github.com/user-attachments/assets/694a5653-348b-4bec-9736-21e777e3ede8
 
 ## Credits
 
