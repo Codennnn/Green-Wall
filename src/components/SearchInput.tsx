@@ -10,6 +10,7 @@ export function SearchInput(props: React.ComponentProps<'input'>) {
   return (
     <input
       ref={inputRef}
+      autoComplete="off"
       {...props}
       required
       className="
