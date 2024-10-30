@@ -114,6 +114,8 @@ const handler = () => {
       }
     }
 
+    let isHalloween = false
+
     const createGraph = (
       params: Calendar
     ): {
@@ -182,6 +184,11 @@ const handler = () => {
       countText.style.marginBottom = '5px'
       countText.textContent = `${total} contributions in ${year}`
       graphItem.append(countText, table)
+
+      if (isHalloween) {
+        graphItem.classList.add('ContributionCalendar')
+        graphItem.setAttribute('data-holiday', 'halloween')
+      }
 
       return { graphItem }
     }
@@ -426,6 +433,10 @@ const handler = () => {
             document.body.classList.add('has-modal')
 
             if (!hasLoaded) {
+              isHalloween =
+                document.querySelector('.ContributionCalendar')?.getAttribute('data-holiday') ===
+                'halloween'
+
               handleLoadData()
             }
           }
