@@ -12,15 +12,17 @@ export function ThemeSelector(props: ThemeSelectorProps) {
   return (
     <div {...rest} className={`flex flex-wrap gap-3 ${className}`}>
       {THEMES.map((theme) => {
+        const isSelected = value === theme.name
+
         return (
           <div
             key={theme.name}
             className={`
-            grid size-5 cursor-pointer grid-cols-2 grid-rows-2 ring-[2px] transition-shadow duration-200
+            grid size-5 cursor-pointer grid-cols-2 grid-rows-2 overflow-hidden rounded-sm ring-2 transition-shadow duration-200
             ${
-              value === theme.name
-                ? 'ring-main-400/60 ring-offset-2 hover:ring-main-400/60'
-                : 'ring-transparent hover:ring-4 hover:ring-main-300/80'
+              isSelected
+                ? 'ring-main-400/60 ring-offset-2 hover:ring-main-300'
+                : 'ring-transparent hover:ring-4 hover:ring-main-200'
             }
             `}
             title={theme.name}
