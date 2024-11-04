@@ -4,18 +4,40 @@ import { ErrorType } from '~/enums'
 import { fetchContributionsCollection, fetchGitHubUser } from '~/services'
 import type { GraphData, ResponseData } from '~/types'
 
-export async function GET(_: NextRequest, { params }: { params: { username: string } }) {
+interface GetContributionRequestParams {
+  username: string
+}
+
+export async function GET(
+  request: NextRequest,
+  { params }: { params: GetContributionRequestParams }
+) {
   const { username } = params
 
   if (typeof username === 'string') {
+    const { searchParams } = new URL(request.url)
+
+    const queryYears = searchParams.getAll('years').map(Number)
+
     try {
       const githubUser = await fetchGitHubUser(username)
 
+      const contributionYears = githubUser.contributionYears
+
+      const filteredYears =
+        Array.isArray(queryYears) && queryYears.length > 0
+          ? contributionYears.filter((year) => queryYears.includes(year))
+          : contributionYears
+
       const contributionCalendars = await Promise.all(
-        githubUser.contributionYears.map((year) => fetchContributionsCollection(username, year))
+        filteredYears.map((year) => fetchContributionsCollection(username, year))
       )
 
-      const data: GraphData = { ...githubUser, contributionCalendars }
+      const data: GraphData = {
+        ...githubUser,
+        contributionYears: filteredYears,
+        contributionCalendars,
+      }
 
       return NextResponse.json({ data }, { status: 200 })
     } catch (err) {

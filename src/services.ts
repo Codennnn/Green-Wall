@@ -5,11 +5,12 @@ import type {
   GitHubApiJson,
   GitHubContributionCalendar,
   GitHubUser,
+  GitHubUsername,
 } from '~/types'
 
 const GAT = process.env.GITHUB_ACCESS_TOKEN
 
-export async function fetchGitHubUser(username: string): Promise<ContributionBasic> {
+export async function fetchGitHubUser(username: GitHubUsername): Promise<ContributionBasic> {
   if (!GAT) {
     throw new Error('Require GITHUB ACCESS TOKEN.')
   }
@@ -23,8 +24,15 @@ export async function fetchGitHubUser(username: string): Promise<ContributionBas
             name
             login
             avatarUrl
+            bio
             contributionsCollection {
               years: contributionYears
+            }
+            followers {
+              totalCount
+            }
+            following {
+              totalCount
             }
           }
         }
@@ -72,8 +80,8 @@ export async function fetchContributionsCollection(
         {
           user(login: "${username}") {
             contributionsCollection(from: "${new Date(
-              `${year}-01-01`
-            ).toISOString()}", to: "${new Date(`${year}-12-31`).toISOString()}") {
+        `${year}-01-01`
+      ).toISOString()}", to: "${new Date(`${year}-12-31`).toISOString()}") {
               contributionCalendar {
                 total: totalContributions
                 weeks {

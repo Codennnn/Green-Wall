@@ -2,12 +2,14 @@
 
 import { createContext, type Dispatch, type SetStateAction, useContext, useState } from 'react'
 
-import type { GraphData, GraphSettings } from './types'
+import type { GitHubUsername, GraphData, GraphSettings } from './types'
 import { useGraphSetting } from './useGraphSetting'
 
 type DispatchSettings = ReturnType<typeof useGraphSetting>[1]
 
 interface SettingContextData {
+  username: GitHubUsername
+  setUsername: Dispatch<SetStateAction<GitHubUsername>>
   graphData: GraphData | undefined
   setGraphData: Dispatch<SetStateAction<GraphData | undefined>>
   settings: GraphSettings
@@ -21,6 +23,8 @@ const Setting = createContext({} as SettingContextData)
 export function DataProvider(props: React.PropsWithChildren) {
   const { children } = props
 
+  const [username, setUsername] = useState('')
+
   const [graphData, setGraphData] = useState<GraphData>()
 
   const [settings, dispatchSettings] = useGraphSetting()
@@ -30,7 +34,16 @@ export function DataProvider(props: React.PropsWithChildren) {
 
   return (
     <Setting.Provider
-      value={{ graphData, setGraphData, settings, dispatchSettings, firstYear, lastYear }}
+      value={{
+        username,
+        setUsername,
+        graphData,
+        setGraphData,
+        settings,
+        dispatchSettings,
+        firstYear,
+        lastYear,
+      }}
     >
       {children}
     </Setting.Provider>

@@ -23,9 +23,8 @@ export function HomePage() {
   const graphRef = useRef<HTMLDivElement>(null)
   const actionRef = useRef<HTMLDivElement | null>(null)
 
-  const { graphData, setGraphData, dispatchSettings } = useData()
+  const { username, setUsername, graphData, setGraphData, dispatchSettings } = useData()
 
-  const [username, setUsername] = useState('')
   const [settingPopUp, setSettingPopUp] = useState<{ offsetX: number; offsetY: number }>()
 
   const [downloading, setDownloading] = useState(false)
@@ -204,11 +203,10 @@ export function HomePage() {
                     <button
                       className={`
                       inline-flex h-full items-center rounded-md px-4 py-2 text-sm font-medium transition-colors disabled:pointer-events-none md:text-base
-                      ${
-                        copySuccess
+                      ${copySuccess
                           ? 'bg-accent-100 text-accent-500'
                           : 'bg-main-100 text-main-500 duration-300 hover:bg-main-200 motion-safe:transition-colors'
-                      }
+                        }
                       `}
                       disabled={doingCopy}
                       onClick={() => {

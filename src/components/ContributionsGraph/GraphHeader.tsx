@@ -38,9 +38,8 @@ const Avatar = () => {
   return (
     <span
       ref={avatarRoot}
-      className={`size-[1.7rem] overflow-hidden rounded-full bg-[var(--level-0)] ${
-        status === 'loading' ? 'animate-pulse' : ''
-      }`}
+      className={`size-[1.7rem] overflow-hidden rounded-full bg-[var(--level-0)] ${status === 'loading' ? 'animate-pulse' : ''
+        }`}
     >
       {status === 'error' && (
         <span className="inline-block size-full bg-gradient-to-br from-[var(--level-1)] to-[var(--level-2)]" />
@@ -64,7 +63,7 @@ export function GraphHeader() {
   return (
     <div className="mb-4 flex items-center">
       <Link
-        className="group flex items-center"
+        className="flex items-center rounded-md px-2 py-1 hover:bg-main-100"
         href={`https://github.com/${username}`}
         target="_blank"
       >
@@ -82,7 +81,7 @@ export function GraphHeader() {
         <span className="mr-3 flex items-center">
           <Avatar />
         </span>
-        <span className="text-xl font-bold group-hover:underline" translate="no">
+        <span className="text-xl font-bold" translate="no">
           {displayName}
         </span>
       </Link>

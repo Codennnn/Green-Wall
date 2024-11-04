@@ -1,4 +1,7 @@
+import Link from 'next/link'
+
 import { levels } from '~/constants'
+import { useData } from '~/DataContext'
 import { ContributionLevel } from '~/enums'
 import { numberWithCommas } from '~/helpers'
 import type { ContributionCalendar, ContributionDay } from '~/types'
@@ -15,6 +18,8 @@ const newYearText = 'Happy New Year 🎉 Go make the first contribution !'
 export function Graph(props: GraphProps) {
   const { data: calendar, daysLabel, ...rest } = props
 
+  const { username } = useData()
+
   const currentYear = new Date().getFullYear()
   const isNewYear =
     currentYear === calendar.year &&
@@ -22,11 +27,17 @@ export function Graph(props: GraphProps) {
 
   return (
     <div {...rest}>
-      <div className="mb-2 text-sm">
-        <span className="mr-2 italic">{calendar.year}:</span>
-        {isNewYear && calendar.total === 0
-          ? newYearText
-          : `${numberWithCommas(calendar.total)} Contributions`}
+      <div className="mb-2">
+        <Link
+          className="text-sm"
+          href={`/year/${calendar.year}?username=${username}`}
+          target="_blank"
+        >
+          <span className="mr-2 italic">{calendar.year}:</span>
+          {isNewYear && calendar.total === 0
+            ? newYearText
+            : `${numberWithCommas(calendar.total)} Contributions`}
+        </Link>
       </div>
 
       <div className={styles['graph']}>
@@ -64,6 +75,8 @@ export function Graph(props: GraphProps) {
             if (days.length < 7) {
               const fills = Array.from(Array(7 - days.length)).map<ContributionDay>(() => ({
                 level: ContributionLevel.Null,
+                count: 0,
+                date: '',
               }))
               if (i === 0) {
                 days = [...fills, ...week.days]

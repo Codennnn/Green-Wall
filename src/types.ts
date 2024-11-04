@@ -23,13 +23,21 @@ export interface Theme {
   mode?: 'light' | 'dark'
 }
 
+type GitHubProfileName = string
 export type GitHubUsername = string
 export type ContributionYear = number
 
 export interface GitHubUser {
-  name?: string
+  name?: GitHubProfileName
   login: GitHubUsername
   avatarUrl: string
+  bio?: string
+  followers: {
+    totalCount: number
+  }
+  following: {
+    totalCount: number
+  }
   contributionsCollection: {
     years: ContributionYear[]
   }
@@ -41,16 +49,15 @@ export interface GitHubContributionCalendar {
   }
 }
 
-export interface ContributionBasic {
-  name?: string
-  login: GitHubUsername
-  avatarUrl: string
+export interface ContributionBasic extends Omit<GitHubUser, 'contributionsCollection'> {
   contributionYears: ContributionYear[]
 }
 
 export interface ContributionDay {
   level: `${ContributionLevel}`
   weekday?: 0 | 1 | 2 | 3 | 4 | 5 | 6
+  count: number
+  date: string
 }
 
 export interface ContributionCalendar {
