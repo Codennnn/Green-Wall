@@ -45,11 +45,18 @@ export function setSearchParamsToUrl(params: SearchParams) {
   return url
 }
 
-export function getMaxContributionStreak(graphData: GraphData): number {
+export function getLongestContributionStreak(graphData: GraphData): {
+  maxStreak: number
+  startDate: string | null
+  endDate: string | null
+} {
   // Current consecutive days.
   let currentStreak = 0
   // Maximum consecutive days.
   let maxStreak = 0
+
+  let startDate: string | null = null
+  let endDate: string | null = null
 
   // Iterate through all years of data.
   graphData.contributionCalendars.forEach((calendar) => {
@@ -62,6 +69,12 @@ export function getMaxContributionStreak(graphData: GraphData): number {
           currentStreak++
           // Update the maximum streak.
           maxStreak = Math.max(maxStreak, currentStreak)
+
+          if (currentStreak === 1) {
+            startDate = day.date
+          }
+
+          endDate = day.date
         } else {
           // If no contribution today, reset the streak.
           currentStreak = 0
@@ -70,5 +83,21 @@ export function getMaxContributionStreak(graphData: GraphData): number {
     })
   })
 
-  return maxStreak
+  return { maxStreak, startDate, endDate }
+}
+
+export function getMaxContributionsInADay(graphData: GraphData): { maxContributions: number } {
+  let maxContributions = 0
+
+  graphData.contributionCalendars.forEach((calendar) => {
+    calendar.weeks.forEach((week) => {
+      week.days.forEach((day) => {
+        if (day.level !== 'NONE') {
+          maxContributions = Math.max(maxContributions, day.count)
+        }
+      })
+    })
+  })
+
+  return { maxContributions }
 }
