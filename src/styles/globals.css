@@ -48,3 +48,17 @@
 ::selection {
   @apply bg-accent-500/20 text-current;
 }
+
+.graph-header-name {
+  @apply relative z-0;
+
+  &::after {
+    @apply content-[''] absolute -top-0.5 -bottom-0.5 left-0 right-0 z-[-1] scale-75 transition-all rounded bg-main-100 opacity-0;
+  }
+
+  &:hover {
+    &::after {
+      @apply opacity-100 scale-110;
+    }
+  }
+}

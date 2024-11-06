@@ -61,9 +61,9 @@ export function GraphHeader() {
   const username = graphData.login
 
   return (
-    <div className="mb-4 flex items-center">
+    <div className="mb-4 flex w-full items-center">
       <Link
-        className="flex items-center rounded-md px-2 py-1 hover:bg-main-100"
+        className="graph-header-name flex items-center"
         href={`https://github.com/${username}`}
         target="_blank"
       >
@@ -77,10 +77,13 @@ export function GraphHeader() {
             />
           </svg>
         </span>
+
         <span className="mr-3 text-xl">·</span>
+
         <span className="mr-3 flex items-center">
           <Avatar />
         </span>
+
         <span className="text-xl font-bold" translate="no">
           {displayName}
         </span>

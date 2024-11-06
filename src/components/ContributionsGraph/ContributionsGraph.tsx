@@ -10,13 +10,14 @@ import { GraphHeader } from './GraphHeader'
 interface ContributionsGraphProps {
   className?: string
   wrapperId?: string
+  showInspect?: boolean
 }
 
 function InnerContributionsGraph(
   props: ContributionsGraphProps,
   ref: React.Ref<HTMLDivElement | null>
 ) {
-  const { className = '', wrapperId } = props
+  const { className = '', wrapperId, showInspect } = props
 
   const { graphData, settings, firstYear, lastYear } = useData()
 
@@ -51,7 +52,7 @@ function InnerContributionsGraph(
   return (
     <div
       ref={graphRef}
-      className={`-mx-5 p-5 md:mx-0 ${className}`}
+      className={`-mx-5 flex flex-col items-center p-5 md:mx-0 ${className}`}
       id={wrapperId}
       style={{
         ...cssProperties,
@@ -73,7 +74,12 @@ function InnerContributionsGraph(
               : true
 
           return (
-            <Graph key={calendar.year} className={shouldDisplay ? '' : 'hidden'} data={calendar} />
+            <Graph
+              key={calendar.year}
+              className={shouldDisplay ? '' : 'hidden'}
+              data={calendar}
+              showInspect={showInspect}
+            />
           )
         })}
       </div>
