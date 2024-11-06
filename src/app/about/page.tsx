@@ -14,29 +14,30 @@ export default function AboutPage() {
       <div className="px-2 md:px-20">
         <SectionTitle>Goal</SectionTitle>
         <Paragraph>
-          We want to provide an easy way to help people look back at their GitHub Contributions over
-          the years and share them with others on socials and beyond.
+          Our goal is to make it easy for people to look back on their GitHub contributions over the
+          years and share their achievements on social media and beyond.
         </Paragraph>
 
         <SectionTitle>How it works</SectionTitle>
         <Paragraph>
-          This project uses the GitHub GraphQL API to fetch data and uses Next.js API Routes to send
-          requests, you can read{' '}
+          This project leverages the GitHub GraphQL API to retrieve contribution data and utilizes
+          Next.js API routes to process requests. For more details on our data handling practices,
+          you can check out the{' '}
           <TextLink
             passHref
             className="font-bold"
             href="https://github.com/Codennnn/Green-Wall/blob/3773c0dd49c09be78341a800f97b591b5b219efa/src/pages/api/contribution/%5Busername%5D.ts"
             target="_blank"
           >
-            this file
-          </TextLink>{' '}
-          to learn how we handle your data.
+            relevant files
+          </TextLink>
+          .
         </Paragraph>
 
         <SectionTitle>Credits</SectionTitle>
         <ul className="list-inside list-disc py-2 pl-1 marker:text-sm marker:text-main-700/90">
           <li>
-            <i className="mr-3 opacity-90">Inspired by:</i>
+            <i className="mr-3 opacity-90">Inspiration:</i>
             <TextLink
               passHref
               href="https://github.com/sallar/github-contributions-chart"
@@ -76,7 +77,7 @@ export default function AboutPage() {
           , or you can share this website elsewhere!
         </Paragraph>
 
-        <SectionTitle>Reporting issues</SectionTitle>
+        <SectionTitle>Reporting Issues</SectionTitle>
         <Paragraph>
           Got bugs or have any suggestions for this project? Welcome to leave your message on the{' '}
           <TextLink passHref href="https://github.com/Codennnn/Green-Wall/issues" target="_blank">
