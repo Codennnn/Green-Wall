@@ -47,7 +47,7 @@ export default function Layout(props: React.PropsWithChildren) {
         lang="en"
       >
         <body className="m-0 h-full overflow-y-auto bg-white text-main-700">
-          <div className="min-h-screen px-4 sm:px-5 md:mx-auto md:min-w-content md:max-w-content lg:px-0">
+          <div className="flex min-h-screen flex-col px-4 sm:px-5 md:mx-auto md:min-w-content md:max-w-content lg:px-0">
             <header>
               <div className="flex h-[65px] items-center md:h-[80px]">
                 <Link href="/">
@@ -65,7 +65,7 @@ export default function Layout(props: React.PropsWithChildren) {
               </div>
             </header>
 
-            <main>{props.children}</main>
+            <main className="flex-1">{props.children}</main>
 
             <footer className="sticky top-[100vh] py-3 text-center text-xs text-main-400/70 md:text-sm">
               <Link
