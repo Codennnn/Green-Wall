@@ -8,37 +8,19 @@ import {
   LoaderIcon,
   MessageSquareQuoteIcon,
 } from 'lucide-react'
-import { array, number, object, parse, string } from 'valibot'
+import { safeParse } from 'valibot'
 
 import { ContributionsGraph } from '~/components/ContributionsGraph'
 import Loading from '~/components/Loading'
 import { useData } from '~/DataContext'
 import { getLongestContributionStreak, getMaxContributionsInADay } from '~/helpers'
-import type { IssuesInYear, RepoCreatedInYear } from '~/types'
+import {
+  type IssuesInYear,
+  IssuesInYearSchema,
+  type RepoCreatedInYear,
+  ReposCreatedInYearSchema,
+} from '~/types'
 import { useGraphRequest } from '~/useGraphRequest'
-
-const ReposSchema = object({
-  count: number(),
-  repos: array(
-    object({
-      name: string(),
-      createdAt: string(),
-    })
-  ),
-})
-
-const IssuesSchema = object({
-  count: number(),
-  issues: array(
-    object({
-      title: string(),
-      createdAt: string(),
-      repository: object({
-        nameWithOwner: string(),
-      }),
-    })
-  ),
-})
 
 function StaticCardTitle(props: React.PropsWithChildren<{ icon: React.ReactNode }>) {
   const { children, icon } = props
@@ -100,17 +82,23 @@ export function GraphBlock() {
       void (async () => {
         fetch(`/api/repos?username=${githubUsername}&year=${queryYear}`).then(async (res) => {
           if (res.ok) {
-            const repos = parse(ReposSchema, await res.json())
-            setReposCreatedInYear(repos)
-            setLoadingRepos(false)
+            const repos = safeParse(ReposCreatedInYearSchema, await res.json())
+
+            if (repos.success) {
+              setReposCreatedInYear(repos.output)
+              setLoadingRepos(false)
+            }
           }
         })
 
         fetch(`/api/issues?username=${githubUsername}&year=${queryYear}`).then(async (res) => {
           if (res.ok) {
-            const issues = parse(IssuesSchema, await res.json())
-            setIssuesInYear(issues)
-            setLoadingIssues(false)
+            const issues = safeParse(IssuesInYearSchema, await res.json())
+
+            if (issues.success) {
+              setIssuesInYear(issues.output)
+              setLoadingIssues(false)
+            }
           }
         })
 
