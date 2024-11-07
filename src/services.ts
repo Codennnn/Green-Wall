@@ -4,43 +4,48 @@ import type {
   ContributionYear,
   GitHubApiJson,
   GitHubContributionCalendar,
+  GitHubRepo,
   GitHubUser,
   GitHubUsername,
+  RepoCreatedInYear,
 } from '~/types'
 
 const GAT = process.env.GITHUB_ACCESS_TOKEN
+const GQL_API_URL = 'https://api.github.com/graphql'
 
 export async function fetchGitHubUser(username: GitHubUsername): Promise<ContributionBasic> {
   if (!GAT) {
     throw new Error('Require GITHUB ACCESS TOKEN.')
   }
 
-  const res = await fetch('https://api.github.com/graphql', {
-    method: 'post',
-    body: JSON.stringify({
-      query: `
-        {
-          user(login: "${username}") {
-            name
-            login
-            avatarUrl
-            bio
-            contributionsCollection {
-              years: contributionYears
-            }
-            followers {
-              totalCount
-            }
-            following {
-              totalCount
-            }
-          }
+  const query = `
+    {
+      user(login: "${username}") {
+        name
+        login
+        avatarUrl
+        bio
+        contributionsCollection {
+          years: contributionYears
         }
-      `,
+        followers {
+          totalCount
+        }
+        following {
+          totalCount
+        }
+      }
+    }
+  `
+
+  const res = await fetch(GQL_API_URL, {
+    method: 'POST',
+    body: JSON.stringify({
+      query,
     }),
     headers: {
       Authorization: `Bearer ${GAT}`,
-      'content-type': 'application/json',
+      'Content-Type': 'application/json',
     },
   })
 
@@ -48,40 +53,37 @@ export async function fetchGitHubUser(username: GitHubUsername): Promise<Contrib
     throw new Error(`fetch error: ${res.statusText}.`)
   }
 
-  const json: GitHubApiJson<{ user: GitHubUser | null }> = await res.json()
+  const resJson: GitHubApiJson<{ user: GitHubUser | null }> = await res.json()
 
-  if (!json.data?.user) {
-    if (json.errors) {
-      const error = json.errors.at(0)
+  if (!resJson.data?.user) {
+    if (resJson.errors) {
+      const error = resJson.errors.at(0)
       if (error) {
         throw new Error(error.message)
       }
     }
-    throw new Error(json.message)
+    throw new Error(resJson.message)
   }
 
-  const { contributionsCollection, ...rest } = json.data.user
+  const { contributionsCollection, ...rest } = resJson.data.user
 
   return { contributionYears: contributionsCollection.years, ...rest }
 }
 
 export async function fetchContributionsCollection(
-  username: string,
+  username: GitHubUsername,
   year: ContributionYear
 ): Promise<ContributionCalendar> {
   if (!GAT) {
     throw new Error('Require GITHUB ACCESS TOKEN.')
   }
 
-  const res = await fetch('https://api.github.com/graphql', {
-    method: 'post',
-    body: JSON.stringify({
-      query: `
+  const query = `
         {
           user(login: "${username}") {
             contributionsCollection(from: "${new Date(
-        `${year}-01-01`
-      ).toISOString()}", to: "${new Date(`${year}-12-31`).toISOString()}") {
+    `${year}-01-01`
+  ).toISOString()}", to: "${new Date(`${year}-12-31`).toISOString()}") {
               contributionCalendar {
                 total: totalContributions
                 weeks {
@@ -96,11 +98,16 @@ export async function fetchContributionsCollection(
             }
           }
         }
-      `,
+      `
+
+  const res = await fetch(GQL_API_URL, {
+    method: 'POST',
+    body: JSON.stringify({
+      query,
     }),
     headers: {
       Authorization: `Bearer ${GAT}`,
-      'content-type': 'application/json',
+      'Content-Type': 'application/json',
     },
   })
 
@@ -108,13 +115,85 @@ export async function fetchContributionsCollection(
     throw new Error(`fetch error: ${res.statusText}.`)
   }
 
-  const json: GitHubApiJson<{ user: GitHubContributionCalendar | null }> = await res.json()
+  const resJson: GitHubApiJson<{ user: GitHubContributionCalendar | null }> = await res.json()
 
-  if (!json.data?.user) {
-    throw new Error(json.message)
+  if (!resJson.data?.user) {
+    throw new Error(resJson.message)
   }
 
-  const contributionCalendar = json.data.user.contributionsCollection.contributionCalendar
+  const contributionCalendar = resJson.data.user.contributionsCollection.contributionCalendar
 
   return { ...contributionCalendar, year }
+}
+
+export async function getReposCreatedInYear(
+  username: GitHubUsername,
+  year: ContributionYear
+): Promise<RepoCreatedInYear> {
+  if (!GAT) {
+    throw new Error('Require GITHUB ACCESS TOKEN.')
+  }
+
+  const query = `
+    query($username: String!, $after: String) {
+      user(login: $username) {
+        repositories(first: 100, after: $after, isFork: false, orderBy: {field: CREATED_AT, direction: ASC}) {
+          nodes {
+            name
+            createdAt
+          }
+          pageInfo {
+            hasNextPage
+            endCursor
+          }
+        }
+      }
+    }
+  `
+
+  let repoCount = 0
+  let hasNextPage = true
+  let cursor = null
+
+  const reposInYear = []
+
+  while (hasNextPage) {
+    const variables = {
+      username,
+      after: cursor,
+    }
+
+    const res = await fetch(GQL_API_URL, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${GAT}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ query, variables }),
+    })
+
+    const resJson: GitHubApiJson<{ user: GitHubRepo }> = await res.json()
+
+    if (resJson.errors) {
+      throw new Error(resJson.message)
+    }
+
+    const repositories = resJson.data?.user.repositories
+
+    if (!repositories) {
+      return { count: 0, repos: [] }
+    }
+
+    const filteredRepos = repositories.nodes.filter(
+      (repo) => new Date(repo.createdAt).getFullYear() === year
+    )
+
+    reposInYear.push(...filteredRepos)
+
+    repoCount += filteredRepos.length
+    hasNextPage = repositories.pageInfo.hasNextPage
+    cursor = repositories.pageInfo.endCursor
+  }
+
+  return { count: repoCount, repos: reposInYear }
 }

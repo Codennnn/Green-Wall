@@ -91,3 +91,18 @@ export interface GitHubApiJson<Data> {
   message?: string
   errors?: { type: string; message: string }[]
 }
+
+export interface GitHubRepo {
+  repositories: {
+    nodes: { name: string; createdAt: string }[]
+    pageInfo: {
+      hasNextPage: boolean
+      endCursor: string
+    }
+  }
+}
+
+export interface RepoCreatedInYear {
+  count: number
+  repos: GitHubRepo['repositories']['nodes']
+}

@@ -43,15 +43,15 @@ export default function Layout(props: React.PropsWithChildren) {
   return (
     <>
       <html
-        className={`h-full overflow-hidden bg-white text-main-800 motion-safe:scroll-smooth ${rubik.className}`}
+        className={`h-full overflow-hidden bg-pageBg text-main-800 motion-safe:scroll-smooth ${rubik.className}`}
         lang="en"
       >
-        <body className="m-0 h-full overflow-y-auto bg-white text-main-700">
+        <body className="m-0 h-full overflow-y-auto text-main-700">
           <div className="flex min-h-screen flex-col px-4 sm:px-5 md:mx-auto md:min-w-content md:max-w-content lg:px-0">
             <header>
               <div className="flex h-[65px] items-center md:h-[80px]">
                 <Link href="/">
-                  <span className="flex cursor-pointer select-none items-center bg-white  text-xl font-bold ring-4 ring-white">
+                  <span className="flex cursor-pointer select-none items-center bg-pageBg  text-xl font-bold ring-4 ring-pageBg">
                     <span className="pointer-events-none relative size-8 md:size-7">
                       <Image fill alt="LOGO" className="object-contain" src="/favicon.svg" />
                     </span>

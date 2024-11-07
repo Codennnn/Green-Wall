@@ -59,7 +59,7 @@ export function SharePage() {
     return (
       <div className="flex flex-col items-center justify-center py-20 text-main-400">
         <Image priority alt="loading" height={60} src="/mona-loading-default.gif" width={60} />
-        <span className="bg-white px-3 py-4">Loading contributions...</span>
+        <span className="bg-pageBg px-3 py-4">Loading contributions...</span>
       </div>
     )
   }

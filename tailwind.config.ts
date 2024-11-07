@@ -11,6 +11,7 @@ export default {
       colors: {
         accent: colors.emerald,
         main: colors.slate,
+        pageBg: colors.white,
       },
       minWidth: {
         content: 'var(--min-content-width)',
