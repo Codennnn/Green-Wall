@@ -34,6 +34,7 @@
     "valibot": "1.0.0-beta.3"
   },
   "devDependencies": {
+    "@babel/preset-react": "^7.25.9",
     "@codennnn/tsconfig": "1.2.1",
     "@types/greasemonkey": "^4.0.7",
     "@types/node": "18.16.0",
