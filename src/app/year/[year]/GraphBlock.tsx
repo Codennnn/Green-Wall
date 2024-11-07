@@ -1,7 +1,13 @@
 import { useEffect, useState } from 'react'
 
 import { useParams, useSearchParams } from 'next/navigation'
-import { LoaderIcon } from 'lucide-react'
+import {
+  ActivityIcon,
+  ChartNoAxesCombinedIcon,
+  FolderGit2Icon,
+  LoaderIcon,
+  MessageSquareQuoteIcon,
+} from 'lucide-react'
 import { array, number, object, parse, string } from 'valibot'
 
 import { ContributionsGraph } from '~/components/ContributionsGraph'
@@ -34,11 +40,22 @@ const IssuesSchema = object({
   ),
 })
 
-type StaticCardProps = React.PropsWithChildren<Pick<React.ComponentProps<'div'>, 'className'>>
+function StaticCardTitle(props: React.PropsWithChildren<{ icon: React.ReactNode }>) {
+  const { children, icon } = props
+
+  return (
+    <span className="flex items-center gap-3">
+      {icon}
+      <span className="text-current/80 font-semibold">{children}</span>
+    </span>
+  )
+}
 
 function SpinningLoader() {
   return <LoaderIcon className="size-4 animate-spin text-main-500" />
 }
+
+type StaticCardProps = React.PropsWithChildren<Pick<React.ComponentProps<'div'>, 'className'>>
 
 function StaticCard(props: StaticCardProps) {
   const { children, className = '' } = props
@@ -76,7 +93,7 @@ export function GraphBlock() {
   const [reposCreatedInYear, setReposCreatedInYear] = useState<RepoCreatedInYear>()
   const [issuesInYear, setIssuesInYear] = useState<IssuesInYear>()
 
-  const { setGraphData } = useData()
+  const { graphData, setGraphData } = useData()
 
   useEffect(() => {
     if (githubUsername) {
@@ -98,7 +115,6 @@ export function GraphBlock() {
         })
 
         const data = await run({ username: githubUsername, years: [queryYear] })
-        // const data = mockGraphData
         setGraphData(data)
 
         if (data) {
@@ -114,49 +130,61 @@ export function GraphBlock() {
 
   return (
     <div className="flex flex-col items-center py-5">
-      <Loading active={loading}>
-        <ContributionsGraph showInspect={false} />
-
-        <>
-          <div className="grid grid-cols-2 gap-3">
-            <StaticCard>
-              <span className="font-semibold">Longest Streak</span>
-              <span className="ml-auto">
-                {typeof maxContributionStreak === 'number' ? (
-                  maxContributionStreak
-                ) : (
-                  <SpinningLoader />
-                )}
-              </span>
-            </StaticCard>
-
-            <StaticCard>
-              <span className="font-semibold">Max Contributions in a Day</span>
-              <span className="ml-auto">
-                {typeof maxContributionsInADay === 'number' ? (
-                  maxContributionsInADay
-                ) : (
-                  <SpinningLoader />
-                )}
-              </span>
-            </StaticCard>
-
-            <StaticCard>
-              <span className="font-semibold">Repos Created in {queryYear}</span>
-              <span className="ml-auto">
-                {loadingRepos ? <SpinningLoader /> : reposCreatedInYear?.count}
-              </span>
-            </StaticCard>
-
-            <StaticCard>
-              <span className="font-semibold">Issues in {queryYear}</span>
-              <span className="ml-auto">
-                {loadingIssues ? <SpinningLoader /> : issuesInYear?.count}
-              </span>
-            </StaticCard>
-          </div>
-        </>
+      <Loading active={loading || !graphData}>
+        {loading || !graphData ? (
+          <div className="h-[265px] w-full" />
+        ) : (
+          <ContributionsGraph showInspect={false} />
+        )}
       </Loading>
+
+      <>
+        <div className="grid grid-cols-2 gap-3">
+          <StaticCard>
+            <StaticCardTitle icon={<ChartNoAxesCombinedIcon className="size-5" />}>
+              Longest Streak
+            </StaticCardTitle>
+            <span className="ml-auto">
+              {typeof maxContributionStreak === 'number' ? (
+                maxContributionStreak
+              ) : (
+                <SpinningLoader />
+              )}
+            </span>
+          </StaticCard>
+
+          <StaticCard>
+            <StaticCardTitle icon={<ActivityIcon className="size-5" />}>
+              Max Contributions in a Day
+            </StaticCardTitle>
+            <span className="ml-auto">
+              {typeof maxContributionsInADay === 'number' ? (
+                maxContributionsInADay
+              ) : (
+                <SpinningLoader />
+              )}
+            </span>
+          </StaticCard>
+
+          <StaticCard>
+            <StaticCardTitle icon={<FolderGit2Icon className="size-5" />}>
+              Repos Created in {queryYear}
+            </StaticCardTitle>
+            <span className="ml-auto">
+              {loadingRepos ? <SpinningLoader /> : reposCreatedInYear?.count}
+            </span>
+          </StaticCard>
+
+          <StaticCard>
+            <StaticCardTitle icon={<MessageSquareQuoteIcon className="size-5" />}>
+              Issues in {queryYear}
+            </StaticCardTitle>
+            <span className="ml-auto">
+              {loadingIssues ? <SpinningLoader /> : issuesInYear?.count}
+            </span>
+          </StaticCard>
+        </div>
+      </>
     </div>
   )
 }
