@@ -3,19 +3,20 @@
 import { useCallback, useId, useRef, useState } from 'react'
 
 import { toBlob, toPng } from 'html-to-image'
-import { DotIcon } from 'lucide-react'
+import { DotIcon, FileCheck2Icon, ImageIcon, ImagesIcon } from 'lucide-react'
 
 import { AppearanceSetting, DraggableAppearanceSetting } from '~/components/AppearanceSetting'
 import { ContributionsGraph } from '~/components/ContributionsGraph'
 import { ErrorMessage } from '~/components/ErrorMessage'
 import GenerateButton from '~/components/GenerateButton'
-import { iconClipboard, iconClipboardList, iconImage } from '~/components/icons'
+import { iconClipboard, iconClipboardList } from '~/components/icons'
 import Loading from '~/components/Loading'
 import { SearchInput } from '~/components/SearchInput'
 import { SettingButton } from '~/components/SettingButton'
 import { ShareButton } from '~/components/ShareButton'
 import { useData } from '~/DataContext'
 import { trackEvent } from '~/helpers'
+import type { GitHubUsername } from '~/types'
 import { useGraphRequest } from '~/useGraphRequest'
 
 function Divider() {
@@ -34,7 +35,8 @@ export function HomePage() {
   const graphRef = useRef<HTMLDivElement>(null)
   const actionRef = useRef<HTMLDivElement | null>(null)
 
-  const { username, setUsername, graphData, setGraphData, dispatchSettings } = useData()
+  const { graphData, setGraphData, dispatchSettings } = useData()
+  const [searchName, setSearchName] = useState<GitHubUsername>()
 
   const [settingPopUp, setSettingPopUp] = useState<{ offsetX: number; offsetY: number }>()
 
@@ -56,10 +58,10 @@ export function HomePage() {
   const { run, loading, error } = useGraphRequest({ onError: handleError })
 
   const handleSubmit = async () => {
-    if (username.trim() && !loading) {
+    if (searchName?.trim() && !loading) {
       reset()
       trackEvent('Click Generate')
-      const data = await run({ username })
+      const data = await run({ username: searchName })
       setGraphData(data)
     }
   }
@@ -178,9 +180,9 @@ export function HomePage() {
           <div className="flex flex-col items-center justify-center gap-y-6 md:flex-row md:gap-x-5">
             <SearchInput
               disabled={loading}
-              value={username}
+              value={searchName}
               onChange={(ev) => {
-                setUsername(ev.target.value)
+                setSearchName(ev.target.value)
               }}
             />
             <GenerateButton loading={loading} type="submit" />
@@ -206,7 +208,7 @@ export function HomePage() {
                       void handleDownload()
                     }}
                   >
-                    <span className="mr-2 size-5 shrink-0 md:size-6">{iconImage}</span>
+                    <ImageIcon className="mr-2 size-4 shrink-0 md:size-5" />
                     <span>Save as Image</span>
                   </button>
 
@@ -224,8 +226,12 @@ export function HomePage() {
                         void handleCopyImage()
                       }}
                     >
-                      <span className="mr-2 size-5 shrink-0 md:size-6">
-                        {copySuccess ? iconClipboardList : iconClipboard}
+                      <span className="mr-2">
+                        {copySuccess ? (
+                          <FileCheck2Icon className="size-4 shrink-0 md:size-5" />
+                        ) : (
+                          <ImagesIcon className="size-4 shrink-0 md:size-5" />
+                        )}
                       </span>
                       <span>{copySuccess ? 'Copied' : 'Copy'} as Image</span>
                     </button>

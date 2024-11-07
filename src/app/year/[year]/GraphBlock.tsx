@@ -143,7 +143,7 @@ export function GraphBlock() {
 
           <StaticCard>
             <StaticCardTitle icon={<ActivityIcon className="size-5" />}>
-              Max Contributions in a Day
+              Daily Max Contributions
             </StaticCardTitle>
             <span className="ml-auto">
               {typeof maxContributionsInADay === 'number' ? (
