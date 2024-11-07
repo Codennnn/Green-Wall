@@ -30,7 +30,8 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-use-event-hook": "^0.9.6",
-    "tailwindcss-radix": "^3.0.5"
+    "tailwindcss-radix": "^3.0.5",
+    "valibot": "1.0.0-beta.3"
   },
   "devDependencies": {
     "@codennnn/tsconfig": "1.2.1",
