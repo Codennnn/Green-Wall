@@ -40,12 +40,12 @@ export function Graph(props: GraphProps) {
         {showInspect && (
           <button className="ml-auto rounded bg-main-50 px-2 py-1 text-sm font-medium text-main-500 opacity-0 transition hover:bg-main-100 group-hover:opacity-100">
             <Link
-              className="inline-flex items-center gap-0.5"
+              className="group/inspect inline-flex items-center gap-0.5"
               href={`/year/${calendar.year}?username=${username}`}
               target="_blank"
             >
               <span>Inspect</span>
-              <ChevronRight className="size-4" />
+              <ChevronRight className="size-4 transition group-hover/inspect:translate-x-0.5" />
             </Link>
           </button>
         )}

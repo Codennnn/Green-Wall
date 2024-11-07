@@ -3,6 +3,7 @@
 import { useCallback, useId, useRef, useState } from 'react'
 
 import { toBlob, toPng } from 'html-to-image'
+import { DotIcon } from 'lucide-react'
 
 import { AppearanceSetting, DraggableAppearanceSetting } from '~/components/AppearanceSetting'
 import { ContributionsGraph } from '~/components/ContributionsGraph'
@@ -16,6 +17,16 @@ import { ShareButton } from '~/components/ShareButton'
 import { useData } from '~/DataContext'
 import { trackEvent } from '~/helpers'
 import { useGraphRequest } from '~/useGraphRequest'
+
+function Divider() {
+  return (
+    <div className="my-4 flex items-center justify-center gap-x-2 text-main-200">
+      <span className="to-current/0 h-px w-1/3 bg-gradient-to-l from-current" />
+      <DotIcon className="size-4 text-main-300" />
+      <span className="to-current/0 h-px w-1/3 bg-gradient-to-r from-current" />
+    </div>
+  )
+}
 
 export function HomePage() {
   const canUseClipboardItem = typeof ClipboardItem !== 'undefined'
@@ -220,6 +231,7 @@ export function HomePage() {
                     </button>
                   )}
                 </div>
+
                 <div className="flex flex-wrap items-center gap-x-6 md:justify-center">
                   <ShareButton />
 
@@ -267,6 +279,8 @@ export function HomePage() {
                   </div>
                 </div>
               </div>
+
+              <Divider />
 
               <div className="flex overflow-x-auto md:justify-center">
                 <ContributionsGraph ref={graphRef} wrapperId={graphWrapperId} />
