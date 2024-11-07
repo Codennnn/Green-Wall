@@ -4,11 +4,23 @@ import type {
   ContributionYear,
   GitHubApiJson,
   GitHubContributionCalendar,
+  GitHubIssue,
   GitHubRepo,
   GitHubUser,
   GitHubUsername,
+  IssuesInYear,
   RepoCreatedInYear,
 } from '~/types'
+
+/**
+ * The direction of the query.
+ */
+const enum Direction {
+  /** Data will be sorted from new to old. */
+  DESC = 'DESC',
+  /** Data will be sorted from old to new. */
+  ASC = 'ASC',
+}
 
 const GAT = process.env.GITHUB_ACCESS_TOKEN
 const GQL_API_URL = 'https://api.github.com/graphql'
@@ -126,18 +138,25 @@ export async function fetchContributionsCollection(
   return { ...contributionCalendar, year }
 }
 
-export async function getReposCreatedInYear(
-  username: GitHubUsername,
+interface GetReposCreatedInYearParams {
+  username: GitHubUsername
   year: ContributionYear
-): Promise<RepoCreatedInYear> {
+  pageSize?: number
+}
+
+export async function getReposCreatedInYear({
+  username,
+  year,
+  pageSize = 15,
+}: GetReposCreatedInYearParams): Promise<RepoCreatedInYear> {
   if (!GAT) {
     throw new Error('Require GITHUB ACCESS TOKEN.')
   }
 
   const query = `
-    query($username: String!, $after: String) {
+    query($username: String!, $after: String, $pageSize: Int!, $direction: OrderDirection!) {
       user(login: $username) {
-        repositories(first: 100, after: $after, isFork: false, orderBy: {field: CREATED_AT, direction: ASC}) {
+        repositories(first: $pageSize, after: $after, isFork: false, orderBy: {field: CREATED_AT, direction: $direction}) {
           nodes {
             name
             createdAt
@@ -155,11 +174,16 @@ export async function getReposCreatedInYear(
   let hasNextPage = true
   let cursor = null
 
+  const currentYear = new Date().getFullYear()
+  const direction = currentYear - year <= 4 ? Direction.DESC : Direction.ASC
+
   const reposInYear = []
 
   while (hasNextPage) {
     const variables = {
       username,
+      pageSize,
+      direction: Direction.DESC,
       after: cursor,
     }
 
@@ -179,21 +203,154 @@ export async function getReposCreatedInYear(
     }
 
     const repositories = resJson.data?.user.repositories
+    const repoNodes = repositories?.nodes
 
-    if (!repositories) {
-      return { count: 0, repos: [] }
+    if (!repositories || !Array.isArray(repoNodes)) {
+      break
     }
 
-    const filteredRepos = repositories.nodes.filter(
+    const filteredRepos = repoNodes.filter(
       (repo) => new Date(repo.createdAt).getFullYear() === year
     )
+    const filteredReposCount = filteredRepos.length
 
-    reposInYear.push(...filteredRepos)
+    if (filteredReposCount > 0) {
+      reposInYear.push(...filteredRepos)
+      repoCount += filteredReposCount
 
-    repoCount += filteredRepos.length
+      if (repoNodes.length !== filteredReposCount) {
+        // Once the data exceeds the target year, it can stop fetching because the remaining data will be updated and no longer need to continue paging.
+        break
+      }
+    } else {
+      const lastRepo = repoNodes.at(-1)
+
+      if (lastRepo) {
+        const lastRepoYear = new Date(lastRepo.createdAt).getFullYear()
+
+        if (direction === Direction.DESC && lastRepoYear < year) {
+          break
+        }
+
+        if (direction === Direction.ASC && lastRepoYear > year) {
+          break
+        }
+      }
+    }
+
     hasNextPage = repositories.pageInfo.hasNextPage
     cursor = repositories.pageInfo.endCursor
   }
 
   return { count: repoCount, repos: reposInYear }
+}
+
+interface GetIssuesInYearParams {
+  username: GitHubUsername
+  year: ContributionYear
+  pageSize?: number
+}
+
+export async function getIssuesInYear({
+  username,
+  year,
+  pageSize = 30,
+}: GetIssuesInYearParams): Promise<IssuesInYear> {
+  if (!GAT) {
+    throw new Error('Require GITHUB ACCESS TOKEN.')
+  }
+
+  const query = `
+    query($username: String!, $after: String, $pageSize: Int!, $direction: OrderDirection!) {
+      user(login: $username) {
+        issues(first: $pageSize, after: $after, orderBy: {field: CREATED_AT, direction: $direction}) {
+          nodes {
+            title
+            createdAt
+            repository {
+              nameWithOwner
+            }
+          }
+          pageInfo {
+            hasNextPage
+            endCursor
+          }
+        }
+      }
+    }
+  `
+
+  let issueCount = 0
+  let hasNextPage = true
+  let cursor = null
+
+  const currentYear = new Date().getFullYear()
+  const direction = currentYear - year <= 4 ? Direction.DESC : Direction.ASC
+
+  const issuesInYear = []
+
+  while (hasNextPage) {
+    const variables = {
+      username,
+      pageSize,
+      direction,
+      after: cursor,
+    }
+
+    const res = await fetch(GQL_API_URL, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${GAT}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ query, variables }),
+    })
+
+    const resJson: GitHubApiJson<{ user: GitHubIssue }> = await res.json()
+
+    if (resJson.errors) {
+      throw new Error(resJson.message)
+    }
+
+    const issues = resJson.data?.user.issues
+    const issueNodes = issues?.nodes
+
+    if (!issues || !Array.isArray(issueNodes)) {
+      return { count: 0, issues: [] }
+    }
+
+    const filteredIssues = issueNodes.filter(
+      (issue) => new Date(issue.createdAt).getFullYear() === year
+    )
+    const filteredIssuesCount = filteredIssues.length
+
+    if (filteredIssuesCount > 0) {
+      issuesInYear.push(...filteredIssues)
+      issueCount += filteredIssuesCount
+
+      if (issueNodes.length !== filteredIssuesCount) {
+        // Once the data exceeds the target year, it can stop fetching because the remaining data will be updated and no longer need to continue paging.
+        break
+      }
+    } else {
+      const lastIssue = issueNodes.at(-1)
+
+      if (lastIssue) {
+        const lastIssueYear = new Date(lastIssue.createdAt).getFullYear()
+
+        if (direction === Direction.DESC && lastIssueYear < year) {
+          break
+        }
+
+        if (direction === Direction.ASC && lastIssueYear > year) {
+          break
+        }
+      }
+    }
+
+    hasNextPage = issues.pageInfo.hasNextPage
+    cursor = issues.pageInfo.endCursor
+  }
+
+  return { count: issueCount, issues: issuesInYear }
 }

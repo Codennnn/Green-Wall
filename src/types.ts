@@ -106,3 +106,23 @@ export interface RepoCreatedInYear {
   count: number
   repos: GitHubRepo['repositories']['nodes']
 }
+
+export interface GitHubIssue {
+  issues: {
+    nodes: {
+      title: string
+      createdAt: string
+      repository: {
+        nameWithOwner: string
+      }
+    }[]
+    pageInfo: {
+      hasNextPage: boolean
+      endCursor: string
+    }
+  }
+}
+export interface IssuesInYear {
+  count: number
+  issues: GitHubIssue['issues']['nodes']
+}

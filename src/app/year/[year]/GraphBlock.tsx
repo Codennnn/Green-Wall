@@ -7,6 +7,8 @@ import Loading from '~/components/Loading'
 import { useData } from '~/DataContext'
 import { getLongestContributionStreak, getMaxContributionsInADay } from '~/helpers'
 import { mockGraphData } from '~/mock-data'
+import { getIssuesInYear, getReposCreatedInYear } from '~/services'
+import type { IssuesInYear, RepoCreatedInYear } from '~/types'
 import { useGraphRequest } from '~/useGraphRequest'
 
 type StaticCardProps = React.PropsWithChildren<Pick<React.ComponentProps<'div'>, 'className'>>
@@ -35,18 +37,34 @@ export function GraphBlock() {
   const { year } = useParams()
   const searchParams = useSearchParams()
   const githubUsername = searchParams.get('username')
+  const queryYear = Number(year)
 
   const { run, loading } = useGraphRequest()
 
   const [maxContributionStreak, setMaxContributionStreak] = useState<number>()
   const [maxContributionsInADay, setMaxContributionsInADay] = useState<number>()
 
+  const [reposCreatedInYear, setReposCreatedInYear] = useState<RepoCreatedInYear>()
+  const [issuesInYear, setIssuesInYear] = useState<IssuesInYear>()
+
   const { graphData, setGraphData } = useData()
 
   useEffect(() => {
-    if (githubUsername && typeof year === 'string') {
+    if (githubUsername) {
       void (async () => {
-        const data = await run({ username: githubUsername, years: [Number(year)] })
+        fetch(`/api/repos?username=${githubUsername}&year=${queryYear}`).then(async (res) => {
+          if (res.ok) {
+            setReposCreatedInYear(await res.json())
+          }
+        })
+
+        fetch(`/api/issues?username=${githubUsername}&year=${queryYear}`).then(async (res) => {
+          if (res.ok) {
+            setIssuesInYear(await res.json())
+          }
+        })
+
+        const data = await run({ username: githubUsername, years: [queryYear] })
         // const data = mockGraphData
         setGraphData(data)
 
@@ -59,7 +77,7 @@ export function GraphBlock() {
         }
       })()
     }
-  }, [year, githubUsername, run, setGraphData])
+  }, [githubUsername, queryYear, run, setGraphData])
 
   return (
     <div className="flex flex-col items-center py-5">
@@ -68,15 +86,25 @@ export function GraphBlock() {
 
         {!!graphData && (
           <>
-            <div className="flex flex-wrap items-center gap-3">
-              <StaticCard className="flex-1">
+            <div className="grid grid-cols-2 gap-3">
+              <StaticCard>
                 <span className="font-semibold">Longest Streak</span>
                 <span className="ml-auto">{maxContributionStreak}</span>
               </StaticCard>
 
-              <StaticCard className="flex-1">
+              <StaticCard>
                 <span className="font-semibold">Max Contributions in a Day</span>
                 <span className="ml-auto">{maxContributionsInADay}</span>
+              </StaticCard>
+
+              <StaticCard>
+                <span className="font-semibold">Repos Created in {queryYear}</span>
+                <span className="ml-auto">{reposCreatedInYear?.count}</span>
+              </StaticCard>
+
+              <StaticCard>
+                <span className="font-semibold">Issues in {queryYear}</span>
+                <span className="ml-auto">{issuesInYear?.count}</span>
               </StaticCard>
             </div>
           </>
