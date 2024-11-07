@@ -1,3 +1,5 @@
+import { array, type InferInput, number, object, string } from 'valibot'
+
 import type { ContributionLevel, DisplayName, ErrorType, GraphSize } from '~/enums'
 
 export type Themes =
@@ -92,37 +94,52 @@ export interface GitHubApiJson<Data> {
   errors?: { type: string; message: string }[]
 }
 
+const RepoInfoSchema = object({
+  name: string(),
+  createdAt: string(),
+})
+
+const IssueInfoSchema = object({
+  title: string(),
+  createdAt: string(),
+  repository: object({
+    nameWithOwner: string(),
+  }),
+})
+
+export const ReposCreatedInYearSchema = object({
+  count: number(),
+  repos: array(RepoInfoSchema),
+})
+
+export const IssuesInYearSchema = object({
+  count: number(),
+  issues: array(IssueInfoSchema),
+})
+
+type RepoInfo = InferInput<typeof RepoInfoSchema>
+type IssueInfo = InferInput<typeof IssueInfoSchema>
+
 export interface GitHubRepo {
   repositories: {
-    nodes: { name: string; createdAt: string }[]
+    nodes: RepoInfo[]
     pageInfo: {
       hasNextPage: boolean
       endCursor: string
     }
   }
-}
-
-export interface RepoCreatedInYear {
-  count: number
-  repos: GitHubRepo['repositories']['nodes']
 }
 
 export interface GitHubIssue {
   issues: {
-    nodes: {
-      title: string
-      createdAt: string
-      repository: {
-        nameWithOwner: string
-      }
-    }[]
+    nodes: IssueInfo[]
     pageInfo: {
       hasNextPage: boolean
       endCursor: string
     }
   }
 }
-export interface IssuesInYear {
-  count: number
-  issues: GitHubIssue['issues']['nodes']
-}
+
+export type RepoCreatedInYear = InferInput<typeof ReposCreatedInYearSchema>
+
+export type IssuesInYear = InferInput<typeof IssuesInYearSchema>
