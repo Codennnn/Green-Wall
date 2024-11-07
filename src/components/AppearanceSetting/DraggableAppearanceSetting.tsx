@@ -1,8 +1,7 @@
 import { useState } from 'react'
 
 import { motion, useDragControls } from 'framer-motion'
-
-import { iconClose } from '~/components/icons'
+import { XIcon } from 'lucide-react'
 
 export function DraggableAppearanceSetting(
   props: React.PropsWithChildren<{
@@ -34,7 +33,7 @@ export function DraggableAppearanceSetting(
       }}
     >
       <motion.div
-        className="flex min-h-[2.5rem] select-none items-center bg-accent-50 px-3 font-medium text-accent-500"
+        className="flex min-h-10 select-none items-center bg-accent-50 px-3 font-medium text-accent-500"
         initial={{ cursor: 'grab' }}
         whileTap={{ cursor: 'grabbing' }}
         onPointerDown={(event) => {
@@ -58,7 +57,7 @@ export function DraggableAppearanceSetting(
           }}
         >
           <span className="inline-flex items-center justify-center rounded p-[0.3rem] transition-colors duration-200 hover:bg-main-100/80">
-            <span className="size-4 text-main-500">{iconClose}</span>
+            <XIcon className="size-4 text-main-500" />
           </span>
         </button>
       </motion.div>

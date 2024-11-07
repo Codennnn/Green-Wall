@@ -3,21 +3,20 @@ import { forwardRef, memo, useImperativeHandle, useMemo, useRef } from 'react'
 import { DEFAULT_SIZE, DEFAULT_THEME, sizeProperties, THEMES } from '~/constants'
 import { useData } from '~/DataContext'
 
-import { Graph } from './Graph'
+import { Graph, type GraphProps } from './Graph'
 import { GraphFooter } from './GraphFooter'
 import { GraphHeader } from './GraphHeader'
 
-interface ContributionsGraphProps {
+interface ContributionsGraphProps extends Pick<GraphProps, 'showInspect' | 'titleRender'> {
   className?: string
   wrapperId?: string
-  showInspect?: boolean
 }
 
 function InnerContributionsGraph(
   props: ContributionsGraphProps,
   ref: React.Ref<HTMLDivElement | null>
 ) {
-  const { className = '', wrapperId, showInspect } = props
+  const { className = '', wrapperId, showInspect, titleRender } = props
 
   const { graphData, settings, firstYear, lastYear } = useData()
 
@@ -79,6 +78,7 @@ function InnerContributionsGraph(
               className={shouldDisplay ? '' : 'hidden'}
               data={calendar}
               showInspect={showInspect}
+              titleRender={titleRender}
             />
           )
         })}

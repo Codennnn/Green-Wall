@@ -9,16 +9,21 @@ import type { ContributionCalendar, ContributionDay } from '~/types'
 
 import styles from './Graph.module.css'
 
-interface GraphProps extends React.ComponentProps<'div'> {
+export interface GraphProps extends React.ComponentProps<'div'> {
   data: ContributionCalendar
   daysLabel?: boolean
   showInspect?: boolean
+  titleRender?: (params: {
+    year: number
+    total: number
+    isNewYear: boolean
+  }) => React.ReactNode | null
 }
 
 const newYearText = 'Happy New Year 🎉 Go make the first contribution !'
 
 export function Graph(props: GraphProps) {
-  const { data: calendar, daysLabel, showInspect = true, ...rest } = props
+  const { data: calendar, daysLabel, showInspect = true, titleRender, ...rest } = props
 
   const { username } = useData()
 
@@ -30,12 +35,20 @@ export function Graph(props: GraphProps) {
   return (
     <div {...rest} className={`${rest.className || ''} group`}>
       <div className="mb-2 flex items-center">
-        <div className="text-sm">
-          <span className="mr-2 italic">{calendar.year}:</span>
-          {isNewYear && calendar.total === 0
-            ? newYearText
-            : `${numberWithCommas(calendar.total)} Contributions`}
-        </div>
+        {typeof titleRender === 'function' ? (
+          titleRender({
+            year: calendar.year,
+            total: calendar.total,
+            isNewYear,
+          })
+        ) : (
+          <div className="text-sm">
+            <span className="mr-2 italic">{calendar.year}:</span>
+            {isNewYear && calendar.total === 0
+              ? newYearText
+              : `${numberWithCommas(calendar.total)} Contributions`}
+          </div>
+        )}
 
         {showInspect && (
           <button className="ml-auto rounded bg-main-50 px-2 py-1 text-sm font-medium text-main-500 opacity-0 transition hover:bg-main-100 group-hover:opacity-100">

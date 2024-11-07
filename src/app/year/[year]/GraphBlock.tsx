@@ -28,7 +28,7 @@ function StaticCardTitle(props: React.PropsWithChildren<{ icon: React.ReactNode 
   return (
     <span className="flex items-center gap-3">
       {icon}
-      <span className="text-current/80 font-semibold">{children}</span>
+      <span className="font-medium text-main-700">{children}</span>
     </span>
   )
 }
@@ -122,7 +122,7 @@ export function GraphBlock() {
         {loading || !graphData ? (
           <div className="h-[265px] w-full" />
         ) : (
-          <ContributionsGraph showInspect={false} />
+          <ContributionsGraph showInspect={false} titleRender={() => null} />
         )}
       </Loading>
 

@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react'
 
 import Link from 'next/link'
+import { ArrowUpRightIcon, MousePointerClickIcon } from 'lucide-react'
 
 import { DEFAULT_DISPLAY_NAME, DEFAULT_SIZE, DEFAULT_THEME } from '~/constants'
 import { useData } from '~/DataContext'
 import { trackEvent } from '~/helpers'
 
 import { RadixPopover } from './ui-kit/RadixPopover'
-import { iconShare, iconUpRight } from './icons'
 
 export function ShareButton() {
   const { graphData, settings, firstYear, lastYear } = useData()
@@ -63,11 +63,11 @@ export function ShareButton() {
                     }}
                   >
                     <span>Preview</span>
-                    <span className="w-[10px] translate-y-[1px]">{iconUpRight}</span>
+                    <ArrowUpRightIcon className="size-4 translate-y-px" />
                   </button>
                 </Link>
                 <button
-                  className="inline-block h-full min-w-[3.5rem] rounded bg-accent-100 px-1 text-accent-600"
+                  className="inline-block h-full min-w-14 rounded bg-accent-100 px-1 text-accent-600"
                   onClick={() => {
                     if (!copied) {
                       trackEvent('Copy Share URL')
@@ -91,7 +91,7 @@ export function ShareButton() {
       title="Share Your Graph"
     >
       <button className="simple-button divider">
-        <span className="size-5">{iconShare}</span>
+        <MousePointerClickIcon className="size-5" />
         <span>Share it</span>
       </button>
     </RadixPopover>

@@ -1,6 +1,7 @@
 import { useId } from 'react'
 
-import { iconQuestion } from '~/components/icons'
+import { CircleHelpIcon } from 'lucide-react'
+
 import { ThemeSelector } from '~/components/ThemeSelector'
 import { RadixSelect } from '~/components/ui-kit/RadixSelect'
 import { RadixSwitch } from '~/components/ui-kit/RadixSwitch'
@@ -62,7 +63,7 @@ export function AppearanceSetting() {
               </span>
             }
           >
-            <span className="ml-1 inline-block size-4 cursor-help opacity-70">{iconQuestion}</span>
+            <CircleHelpIcon className="ml-1 inline-block size-4 cursor-help opacity-90" />
           </RadixTooltip>
         </label>
         <RadixToggleGroup

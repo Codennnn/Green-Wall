@@ -9,7 +9,6 @@ import { AppearanceSetting, DraggableAppearanceSetting } from '~/components/Appe
 import { ContributionsGraph } from '~/components/ContributionsGraph'
 import { ErrorMessage } from '~/components/ErrorMessage'
 import GenerateButton from '~/components/GenerateButton'
-import { iconClipboard, iconClipboardList } from '~/components/icons'
 import Loading from '~/components/Loading'
 import { SearchInput } from '~/components/SearchInput'
 import { SettingButton } from '~/components/SettingButton'

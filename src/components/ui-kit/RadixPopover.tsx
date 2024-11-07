@@ -1,6 +1,5 @@
 import * as Popover from '@radix-ui/react-popover'
-
-import { iconClose } from '~/components/icons'
+import { XIcon } from 'lucide-react'
 
 export interface PopoverProps extends Popover.PopoverProps {
   title?: React.ReactNode
@@ -32,7 +31,7 @@ export function RadixPopover(props: React.PropsWithChildren<PopoverProps>) {
 
             <Popover.Close aria-label="Close" className="ml-auto" title="Close">
               <span className="inline-flex items-center justify-center rounded p-[0.3rem] transition-colors duration-200 hover:bg-main-100/80">
-                <span className="size-4 text-main-500">{iconClose}</span>
+                <XIcon className="size-4 text-main-500" />
               </span>
             </Popover.Close>
           </div>

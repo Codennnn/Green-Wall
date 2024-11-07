@@ -1,6 +1,5 @@
 import * as Select from '@radix-ui/react-select'
-
-import { iconCheck, iconChevronDown, iconChevronUp } from '~/components/icons'
+import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from 'lucide-react'
 
 import { SelectButton } from './SelectButton'
 
@@ -16,14 +15,16 @@ export function RadixSelect(props: SelectProps) {
       <Select.Trigger asChild>
         <SelectButton>
           <Select.Value />
-          <Select.Icon className="ml-2 size-4">{iconChevronDown}</Select.Icon>
+          <Select.Icon className="ml-2">
+            <ChevronDownIcon className="size-4" />
+          </Select.Icon>
         </SelectButton>
       </Select.Trigger>
 
       <Select.Portal>
         <Select.Content className="z-50">
           <Select.ScrollUpButton className="flex items-center justify-center text-main-600">
-            <span className="size-4">{iconChevronUp}</span>
+            <ChevronUpIcon className="size-4" />
           </Select.ScrollUpButton>
 
           <Select.Viewport className="rounded-lg bg-white p-2 shadow-lg">
@@ -41,7 +42,7 @@ export function RadixSelect(props: SelectProps) {
                   value={it.value}
                 >
                   <Select.ItemIndicator className="absolute left-2 inline-flex items-center">
-                    <span className="size-4">{iconCheck}</span>
+                    <CheckIcon className="size-4" />
                   </Select.ItemIndicator>
                   <Select.ItemText>{it.label}</Select.ItemText>
                 </Select.Item>
@@ -50,7 +51,7 @@ export function RadixSelect(props: SelectProps) {
           </Select.Viewport>
 
           <Select.ScrollDownButton className="flex items-center justify-center text-gray-700">
-            <span className="size-4">{iconChevronDown}</span>
+            <ChevronDownIcon className="size-4" />
           </Select.ScrollDownButton>
         </Select.Content>
       </Select.Portal>

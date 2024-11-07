@@ -1,11 +1,11 @@
 import * as Popover from '@radix-ui/react-popover'
+import { PictureInPicture2Icon, Settings2Icon } from 'lucide-react'
 
 import { type PopoverProps, RadixPopover } from './ui-kit/RadixPopover'
-import { iconPopOut, iconSetting } from './icons'
 
 interface SettingButtonProps
   extends Omit<React.ComponentProps<'button'>, 'content'>,
-    Pick<PopoverProps, 'content' | 'popoverContentId'> {
+  Pick<PopoverProps, 'content' | 'popoverContentId'> {
   onPopOut?: () => void
 }
 
@@ -20,22 +20,21 @@ export function SettingButton(props: SettingButtonProps) {
         <div className="flex">
           <span>Appearance</span>
           <Popover.Close
-            aria-label="Pop Out"
             className="ml-auto hidden md:block"
-            title="Pop Out"
+            title="Pop out"
             onClick={() => {
               onPopOut?.()
             }}
           >
             <span className="inline-flex items-center justify-center rounded p-[0.3rem] transition-colors duration-200 hover:bg-main-100/80">
-              <span className="size-4 text-main-500">{iconPopOut}</span>
+              <PictureInPicture2Icon className="size-4 text-main-500" />
             </span>
           </Popover.Close>
         </div>
       }
     >
       <button className="simple-button" {...buttonProps}>
-        <span className="size-5">{iconSetting}</span>
+        <Settings2Icon className="size-[18px]" />
         <span>Appearance</span>
       </button>
     </RadixPopover>
