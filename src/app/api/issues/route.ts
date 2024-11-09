@@ -1,6 +1,6 @@
 import { type NextRequest, NextResponse } from 'next/server'
 
-import { getIssuesInYear } from '~/services'
+import { fetchIssuesInYear } from '~/services'
 
 export async function GET(request: NextRequest) {
   const { searchParams } = request.nextUrl
@@ -9,7 +9,7 @@ export async function GET(request: NextRequest) {
   const year = searchParams.get('year')
 
   if (username && year) {
-    const issues = await getIssuesInYear({ username, year: Number(year) })
+    const issues = await fetchIssuesInYear({ username, year: Number(year) })
     return NextResponse.json(issues)
   }
 

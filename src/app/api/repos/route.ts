@@ -1,6 +1,6 @@
 import { type NextRequest, NextResponse } from 'next/server'
 
-import { getReposCreatedInYear } from '~/services'
+import { fetchReposCreatedInYear } from '~/services'
 
 export async function GET(request: NextRequest) {
   const { searchParams } = request.nextUrl
@@ -8,7 +8,7 @@ export async function GET(request: NextRequest) {
   const year = searchParams.get('year')
 
   if (username && year) {
-    const repos = await getReposCreatedInYear({ username, year: Number(year) })
+    const repos = await fetchReposCreatedInYear({ username, year: Number(year) })
     return NextResponse.json(repos)
   }
 

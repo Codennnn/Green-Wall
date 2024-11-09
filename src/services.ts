@@ -147,7 +147,7 @@ interface GetReposCreatedInYearParams {
 /**
  * Get the list of repositories created by the specified user in the specified year.
  */
-export async function getReposCreatedInYear({
+export async function fetchReposCreatedInYear({
   username,
   year,
   pageSize = 15,
@@ -266,7 +266,7 @@ interface GetIssuesInYearParams {
 /**
  * Get the list of issues participated in by the specified user in the specified year.
  */
-export async function getIssuesInYear({
+export async function fetchIssuesInYear({
   username,
   year,
   pageSize = 50,

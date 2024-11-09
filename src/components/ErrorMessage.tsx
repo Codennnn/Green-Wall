@@ -26,7 +26,7 @@ export function ErrorMessage(props: { errorType?: ErrorType; text?: string }) {
             to learn how to set the token correctly.
           </div>
         ) : (
-          text ?? 'Something went wrong.'
+          (text ?? 'Something went wrong.')
         )}
       </div>
     </div>
