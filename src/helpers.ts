@@ -83,7 +83,7 @@ export function getLongestContributionStreak(graphData: GraphData): {
   return { maxStreak, startDate, endDate }
 }
 
-export function getLongestContributionGapInADay(graphData: GraphData): {
+export function getLongestContributionGap(graphData: GraphData): {
   maxGap: number
   startDate: string | null
   endDate: string | null
@@ -157,4 +157,83 @@ export function getWeekendActivity(graphData: GraphData): { total: number; ratio
   })
 
   return { total: countOnWeekends, ratio: Math.round((countOnWeekends / total) * 100) }
+}
+
+export function getValuableStatistics(graphData: GraphData) {
+  let weekendContributions = 0
+  let totalContributions = 0
+
+  let longestStreak = 0
+  let currentStreak = 0
+  let longestStreakStartDate: string | null = null
+  let longestStreakEndDate: string | null = null
+
+  let longestGap = 0
+  let currentGap = 0
+  let longestGapStartDate: string | null = null
+  let longestGapEndDate: string | null = null
+
+  let maxContributionsInADay = 0
+  let maxContributionsDate: string | null = null
+
+  graphData.contributionCalendars.forEach((calendar) => {
+    calendar.weeks.forEach((week) => {
+      week.days.forEach((day) => {
+        const isWeekend = day.weekday === 0 || day.weekday === 6
+
+        if (isWeekend) {
+          weekendContributions += day.count
+        }
+
+        if (day.level !== 'NONE') {
+          // If there's a contribution today, increment the streak.
+          currentStreak++
+          // Update the maximum streak.
+          longestStreak = Math.max(longestStreak, currentStreak)
+
+          if (currentStreak === 1) {
+            longestStreakStartDate = day.date
+          }
+
+          longestStreakEndDate = day.date
+        } else {
+          // If no contribution today, reset the streak.
+          currentStreak = 0
+        }
+
+        if (day.level !== 'NONE') {
+          maxContributionsInADay = Math.max(maxContributionsInADay, day.count)
+          maxContributionsDate = day.date
+        }
+
+        if (day.level === 'NONE') {
+          currentGap++
+          longestGap = Math.max(longestGap, currentGap)
+
+          if (currentGap === 1) {
+            longestGapStartDate = day.date
+          }
+
+          longestGapEndDate = day.date
+        } else {
+          currentGap = 0
+        }
+      })
+    })
+
+    totalContributions += calendar.total
+  })
+
+  return {
+    weekendContributions,
+    totalContributions,
+    longestStreak,
+    longestStreakStartDate,
+    longestStreakEndDate,
+    longestGap,
+    longestGapStartDate,
+    longestGapEndDate,
+    maxContributionsInADay,
+    maxContributionsDate,
+  }
 }
