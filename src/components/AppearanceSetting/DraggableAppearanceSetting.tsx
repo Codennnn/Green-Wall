@@ -56,8 +56,8 @@ export function DraggableAppearanceSetting(
             event.stopPropagation()
           }}
         >
-          <span className="inline-flex items-center justify-center rounded p-[0.3rem] transition-colors duration-200 hover:bg-main-100/80">
-            <XIcon className="size-4 text-main-500" />
+          <span className="inline-flex items-center justify-center rounded p-[0.3rem] text-main-500 transition-colors duration-200 hover:bg-red-100 hover:text-red-500">
+            <XIcon className="size-4" />
           </span>
         </button>
       </motion.div>

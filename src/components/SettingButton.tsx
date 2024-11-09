@@ -19,6 +19,7 @@ export function SettingButton(props: SettingButtonProps) {
       title={
         <div className="flex">
           <span>Appearance</span>
+
           <Popover.Close
             className="ml-auto hidden md:block"
             title="Pop out"
