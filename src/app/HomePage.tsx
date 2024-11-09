@@ -62,8 +62,8 @@ export function HomePage() {
       reset()
       trackEvent('Click Generate')
       setGraphData(mockGraphData)
-      // const data = await run({ username: searchName })
-      // setGraphData(data)
+      const data = await run({ username: searchName })
+      setGraphData(data)
     }
   }
 
