@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-import { useParams, useSearchParams } from 'next/navigation'
+import { useParams } from 'next/navigation'
 import {
   ActivityIcon,
   ChartNoAxesCombinedIcon,
@@ -141,9 +141,7 @@ export function GraphBlock() {
           </StaticCard>
 
           <StaticCard>
-            <StaticCardTitle icon={<ActivityIcon className="size-5" />}>
-              Daily Max Contributions
-            </StaticCardTitle>
+            <StaticCardTitle icon={<ActivityIcon className="size-5" />}>Top Record</StaticCardTitle>
             <span className="ml-auto">
               {typeof maxContributionsInADay === 'number' ? (
                 maxContributionsInADay

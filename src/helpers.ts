@@ -58,11 +58,8 @@ export function getLongestContributionStreak(graphData: GraphData): {
   let startDate: string | null = null
   let endDate: string | null = null
 
-  // Iterate through all years of data.
   graphData.contributionCalendars.forEach((calendar) => {
-    // Iterate through each week.
     calendar.weeks.forEach((week) => {
-      // Iterate through each day.
       week.days.forEach((day) => {
         if (day.level !== 'NONE') {
           // If there's a contribution today, increment the streak.
@@ -86,18 +83,55 @@ export function getLongestContributionStreak(graphData: GraphData): {
   return { maxStreak, startDate, endDate }
 }
 
-export function getMaxContributionsInADay(graphData: GraphData): { maxContributions: number } {
+export function getLongestContributionGapInADay(graphData: GraphData): {
+  maxGap: number
+  startDate: string | null
+  endDate: string | null
+} {
+  let currentGap = 0
+  let maxGap = 0
+  let startDate: string | null = null
+  let endDate: string | null = null
+
+  graphData.contributionCalendars.forEach((calendar) => {
+    calendar.weeks.forEach((week) => {
+      week.days.forEach((day) => {
+        if (day.level === 'NONE') {
+          currentGap++
+          maxGap = Math.max(maxGap, currentGap)
+
+          if (currentGap === 1) {
+            startDate = day.date
+          }
+
+          endDate = day.date
+        } else {
+          currentGap = 0
+        }
+      })
+    })
+  })
+
+  return { maxGap, startDate, endDate }
+}
+
+export function getMaxContributionsInADay(graphData: GraphData): {
+  maxContributions: number
+  maxDate: string | null
+} {
   let maxContributions = 0
+  let maxDate: string | null = null
 
   graphData.contributionCalendars.forEach((calendar) => {
     calendar.weeks.forEach((week) => {
       week.days.forEach((day) => {
         if (day.level !== 'NONE') {
           maxContributions = Math.max(maxContributions, day.count)
+          maxDate = day.date
         }
       })
     })
   })
 
-  return { maxContributions }
+  return { maxContributions, maxDate }
 }
