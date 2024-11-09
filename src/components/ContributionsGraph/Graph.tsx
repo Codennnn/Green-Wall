@@ -48,7 +48,7 @@ export function Graph(props: GraphProps) {
 
   const handleMouseLeave = () => {
     if (delayTimer.current) {
-      clearTimeout(delayTimer.current)
+      window.clearTimeout(delayTimer.current)
     }
     setRefEle(null)
   }

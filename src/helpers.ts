@@ -135,3 +135,26 @@ export function getMaxContributionsInADay(graphData: GraphData): {
 
   return { maxContributions, maxDate }
 }
+
+export function getWeekendActivity(graphData: GraphData): { total: number; ratio: number } {
+  let countOnWeekends = 0
+  let total = 0
+
+  graphData.contributionCalendars.forEach((calendar) => {
+    calendar.weeks.forEach((week) => {
+      week.days.forEach((day) => {
+        const isWeekend = day.weekday === 0 || day.weekday === 6
+
+        if (isWeekend) {
+          if (day.level !== 'NONE') {
+            countOnWeekends += day.count
+          }
+        }
+      })
+    })
+
+    total += calendar.total
+  })
+
+  return { total: countOnWeekends, ratio: Math.round((countOnWeekends / total) * 100) }
+}

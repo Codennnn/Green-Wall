@@ -63,7 +63,7 @@ export function GraphTooltip({
               left: x,
             },
           })}
-          className={`rounded border border-solid border-main-50 bg-main-800 px-2 text-pageBg ${className}`}
+          className={`whitespace-nowrap rounded border border-solid border-main-50 bg-main-800 px-2 text-pageBg ${className}`}
         >
           {label}
         </span>
