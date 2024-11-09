@@ -24,6 +24,7 @@ export async function GET(request: NextRequest, { params }: { params: { username
   const { username } = params
 
   const { searchParams } = new URL(request.url)
+
   const year = searchParams.get('year')
   const width = searchParams.get('width')
   const height = searchParams.get('height')

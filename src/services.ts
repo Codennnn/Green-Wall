@@ -144,6 +144,9 @@ interface GetReposCreatedInYearParams {
   pageSize?: number
 }
 
+/**
+ * Get the list of repositories created by the specified user in the specified year.
+ */
 export async function getReposCreatedInYear({
   username,
   year,
@@ -154,12 +157,21 @@ export async function getReposCreatedInYear({
   }
 
   const query = `
-    query($username: String!, $after: String, $pageSize: Int!, $direction: OrderDirection!) {
+    query($username: String!, $cursor: String, $pageSize: Int!, $direction: OrderDirection!) {
       user(login: $username) {
-        repositories(first: $pageSize, after: $after, isFork: false, orderBy: {field: CREATED_AT, direction: $direction}) {
+        repositories(
+          first: $pageSize,
+          after: $cursor,
+          isFork: false,
+          privacy: PUBLIC,
+          orderBy: {field: CREATED_AT, direction: $direction}
+        ) {
           nodes {
             name
             createdAt
+            url
+            description
+            stargazerCount
           }
           pageInfo {
             hasNextPage
@@ -184,7 +196,7 @@ export async function getReposCreatedInYear({
       username,
       pageSize,
       direction: Direction.DESC,
-      after: cursor,
+      cursor,
     }
 
     const res = await fetch(GQL_API_URL, {
@@ -251,30 +263,43 @@ interface GetIssuesInYearParams {
   pageSize?: number
 }
 
+/**
+ * Get the list of issues participated in by the specified user in the specified year.
+ */
 export async function getIssuesInYear({
   username,
   year,
-  pageSize = 30,
+  pageSize = 50,
 }: GetIssuesInYearParams): Promise<IssuesInYear> {
   if (!GAT) {
     throw new Error('Require GITHUB ACCESS TOKEN.')
   }
 
+  const currentYear = new Date().getFullYear()
+  const direction = currentYear - year <= 4 ? Direction.DESC : Direction.ASC
+
   const query = `
-    query($username: String!, $after: String, $pageSize: Int!, $direction: OrderDirection!) {
-      user(login: $username) {
-        issues(first: $pageSize, after: $after, orderBy: {field: CREATED_AT, direction: $direction}) {
-          nodes {
+    query($pageSize: Int!, $cursor: String) {
+      search(
+        query: "involves:${username} is:issue sort:created-${direction.toLowerCase()}"
+        type: ISSUE
+        first: $pageSize
+        after: $cursor
+      ) {
+        nodes {
+          ... on Issue {
             title
             createdAt
+            url
             repository {
               nameWithOwner
+              url
             }
           }
-          pageInfo {
-            hasNextPage
-            endCursor
-          }
+        }
+        pageInfo {
+          hasNextPage
+          endCursor
         }
       }
     }
@@ -284,17 +309,13 @@ export async function getIssuesInYear({
   let hasNextPage = true
   let cursor = null
 
-  const currentYear = new Date().getFullYear()
-  const direction = currentYear - year <= 4 ? Direction.DESC : Direction.ASC
-
   const issuesInYear = []
 
   while (hasNextPage) {
     const variables = {
-      username,
       pageSize,
       direction,
-      after: cursor,
+      cursor,
     }
 
     const res = await fetch(GQL_API_URL, {
@@ -306,13 +327,13 @@ export async function getIssuesInYear({
       body: JSON.stringify({ query, variables }),
     })
 
-    const resJson: GitHubApiJson<{ user: GitHubIssue }> = await res.json()
+    const resJson: GitHubApiJson<{ search: GitHubIssue }> = await res.json()
 
     if (resJson.errors) {
       throw new Error(resJson.message)
     }
 
-    const issues = resJson.data?.user.issues
+    const issues = resJson.data?.search
     const issueNodes = issues?.nodes
 
     if (!issues || !Array.isArray(issueNodes)) {

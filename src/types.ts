@@ -1,4 +1,4 @@
-import { array, type InferInput, number, object, string } from 'valibot'
+import { array, type InferInput, number, object, optional, string } from 'valibot'
 
 import type { ContributionLevel, DisplayName, ErrorType, GraphSize } from '~/enums'
 
@@ -97,13 +97,18 @@ export interface GitHubApiJson<Data> {
 const RepoInfoSchema = object({
   name: string(),
   createdAt: string(),
+  url: string(),
+  description: optional(string()),
+  stargazerCount: number(),
 })
 
 const IssueInfoSchema = object({
   title: string(),
   createdAt: string(),
+  url: string(),
   repository: object({
     nameWithOwner: string(),
+    url: string(),
   }),
 })
 
@@ -131,12 +136,10 @@ export interface GitHubRepo {
 }
 
 export interface GitHubIssue {
-  issues: {
-    nodes: IssueInfo[]
-    pageInfo: {
-      hasNextPage: boolean
-      endCursor: string
-    }
+  nodes: IssueInfo[]
+  pageInfo: {
+    hasNextPage: boolean
+    endCursor: string
   }
 }
 
