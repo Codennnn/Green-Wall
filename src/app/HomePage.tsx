@@ -15,6 +15,7 @@ import { SettingButton } from '~/components/SettingButton'
 import { ShareButton } from '~/components/ShareButton'
 import { useData } from '~/DataContext'
 import { trackEvent } from '~/helpers'
+import { mockGraphData } from '~/mock-data'
 import type { GitHubUsername } from '~/types'
 import { useGraphRequest } from '~/useGraphRequest'
 
@@ -60,8 +61,9 @@ export function HomePage() {
     if (searchName.trim() && !loading) {
       reset()
       trackEvent('Click Generate')
-      const data = await run({ username: searchName })
-      setGraphData(data)
+      setGraphData(mockGraphData)
+      // const data = await run({ username: searchName })
+      // setGraphData(data)
     }
   }
 

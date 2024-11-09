@@ -1,9 +1,12 @@
+import { useRef, useState } from 'react'
+
 import Link from 'next/link'
 import { ChevronRight } from 'lucide-react'
 
+import { GraphTooltip } from '~/components/ContributionsGraph/GraphTooltip'
 import { levels } from '~/constants'
 import { useData } from '~/DataContext'
-import { ContributionLevel } from '~/enums'
+import { ContributionLevel, GraphSize } from '~/enums'
 import { numberWithCommas } from '~/helpers'
 import type { ContributionCalendar, ContributionDay } from '~/types'
 
@@ -25,12 +28,30 @@ const newYearText = 'Happy New Year 🎉 Go make the first contribution !'
 export function Graph(props: GraphProps) {
   const { data: calendar, daysLabel, showInspect = true, titleRender, ...rest } = props
 
-  const { username } = useData()
+  const { username, settings } = useData()
 
   const currentYear = new Date().getFullYear()
   const isNewYear =
     currentYear === calendar.year &&
     (new Date(currentYear, 0, 2).getTime() - Date.now()) / 1000 / 60 / 60 / 24 >= 0
+
+  const [tooltipInfo, setTooltipInfo] = useState<ContributionDay>()
+  const [refEle, setRefEle] = useState<HTMLElement | null>(null)
+  const delayTimer = useRef<NodeJS.Timeout>()
+
+  const handleMouseEnter = (refTarget: HTMLElement, info: ContributionDay) => {
+    delayTimer.current = setTimeout(() => {
+      setRefEle(refTarget)
+      setTooltipInfo(info)
+    }, 50)
+  }
+
+  const handleMouseLeave = () => {
+    if (delayTimer.current) {
+      clearTimeout(delayTimer.current)
+    }
+    setRefEle(null)
+  }
 
   return (
     <div {...rest} className={`${rest.className || ''} group`}>
@@ -64,7 +85,20 @@ export function Graph(props: GraphProps) {
         )}
       </div>
 
+      <GraphTooltip
+        label={
+          tooltipInfo ? (
+            <span className={settings.size === GraphSize.Small ? 'text-xs' : 'text-sm'}>
+              <strong className="font-medium">{tooltipInfo.count}</strong> contributions in{' '}
+              {tooltipInfo.date}
+            </span>
+          ) : null
+        }
+        refElement={refEle}
+      />
+
       <div className={styles['graph']}>
+        {/* Months Label */}
         <ul className={styles['months']}>
           <li>Jan</li>
           <li>Feb</li>
@@ -80,6 +114,7 @@ export function Graph(props: GraphProps) {
           <li>Dec</li>
         </ul>
 
+        {/* Days Label */}
         {daysLabel && (
           <ul className={styles['days']}>
             <li>Sun</li>
@@ -92,6 +127,7 @@ export function Graph(props: GraphProps) {
           </ul>
         )}
 
+        {/* Day Blocks */}
         <ul className={`${styles['grids']} ${styles['blocks']}`}>
           {calendar.weeks.reduce<React.ReactElement[]>((blocks, week, i) => {
             let days = week.days
@@ -114,7 +150,10 @@ export function Graph(props: GraphProps) {
                 <li
                   key={`${i}${j}`}
                   data-level={levels[day.level]}
-                  title={`${day.count} contributions in ${day.date}`}
+                  onMouseEnter={(ev) => {
+                    handleMouseEnter(ev.currentTarget, day)
+                  }}
+                  onMouseLeave={handleMouseLeave}
                 />
               )
             })
