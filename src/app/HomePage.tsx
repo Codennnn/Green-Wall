@@ -35,7 +35,7 @@ export function HomePage() {
   const actionRef = useRef<HTMLDivElement | null>(null)
 
   const { graphData, setGraphData, dispatchSettings } = useData()
-  const [searchName, setSearchName] = useState<GitHubUsername>()
+  const [searchName, setSearchName] = useState<GitHubUsername>('')
 
   const [settingPopUp, setSettingPopUp] = useState<{ offsetX: number; offsetY: number }>()
 
@@ -57,7 +57,7 @@ export function HomePage() {
   const { run, loading, error } = useGraphRequest({ onError: handleError })
 
   const handleSubmit = async () => {
-    if (searchName?.trim() && !loading) {
+    if (searchName.trim() && !loading) {
       reset()
       trackEvent('Click Generate')
       const data = await run({ username: searchName })

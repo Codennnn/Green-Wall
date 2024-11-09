@@ -60,10 +60,9 @@ function StaticCard(props: StaticCardProps) {
 }
 
 export function GraphBlock() {
-  const { year } = useParams()
-  const searchParams = useSearchParams()
-  const githubUsername = searchParams.get('username')
+  const { year, username } = useParams()
   const queryYear = Number(year)
+  const githubUsername = String(username)
 
   const { run, loading } = useGraphRequest()
 
