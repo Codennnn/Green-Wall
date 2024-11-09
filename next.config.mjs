@@ -9,12 +9,9 @@ export default {
         source: '/:path*',
         headers: [
           {
-            key: 'X-Frame-Options',
-            value: 'DENY',
-          },
-          {
+            // Prevent the website from being embedded in an iframe.
             key: 'Content-Security-Policy',
-            value: "frame-ancestors 'none'",
+            value: "frame-ancestors 'self'",
           },
         ],
       },
