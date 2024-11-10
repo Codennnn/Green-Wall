@@ -83,6 +83,7 @@ export interface ResponseData {
 export interface GraphSettings {
   displayName?: DisplayName
   yearRange?: [start_year: string | undefined, end_year: string | undefined]
+  daysLabel?: boolean
   showAttribution?: boolean
   size?: GraphSize
   theme?: Themes

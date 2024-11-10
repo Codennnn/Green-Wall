@@ -7,39 +7,44 @@ type State = GraphSettings
 
 type Action =
   | {
-      type: 'size'
-      payload: State['size']
-    }
+    type: 'size'
+    payload: State['size']
+  }
   | {
-      type: 'displayName'
-      payload: State['displayName']
-    }
+    type: 'displayName'
+    payload: State['displayName']
+  }
   | {
-      type: 'yearRange'
-      payload: State['yearRange']
-    }
+    type: 'yearRange'
+    payload: State['yearRange']
+  }
   | {
-      type: 'showAttribution'
-      payload: State['showAttribution']
-    }
+    type: 'daysLabel'
+    payload: State['daysLabel']
+  }
   | {
-      type: 'theme'
-      payload: State['theme']
-    }
+    type: 'showAttribution'
+    payload: State['showAttribution']
+  }
   | {
-      type: 'reset'
-      payload?: never
-    }
+    type: 'theme'
+    payload: State['theme']
+  }
   | {
-      /** Replace all existing settings. */
-      type: 'replace'
-      payload?: State
-    }
+    type: 'reset'
+    payload?: never
+  }
+  | {
+    /** Replace all existing settings. */
+    type: 'replace'
+    payload?: State
+  }
 
 const initialState: State = {
   size: DEFAULT_SIZE,
   theme: DEFAULT_THEME,
   displayName: DEFAULT_DISPLAY_NAME,
+  daysLabel: false,
   showAttribution: true,
 }
 
@@ -54,6 +59,9 @@ export function useGraphSetting() {
 
       case 'yearRange':
         return { ...state, yearRange: payload }
+
+      case 'daysLabel':
+        return { ...state, daysLabel: payload }
 
       case 'showAttribution':
         return { ...state, showAttribution: payload }

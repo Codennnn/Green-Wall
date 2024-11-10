@@ -15,6 +15,7 @@ import styles from './Graph.module.css'
 export interface GraphProps extends React.ComponentProps<'div'> {
   data: ContributionCalendar
   daysLabel?: boolean
+  weekLabel?: boolean
   showInspect?: boolean
   titleRender?: (params: {
     year: number

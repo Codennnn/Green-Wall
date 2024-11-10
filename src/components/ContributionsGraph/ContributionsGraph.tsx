@@ -77,6 +77,7 @@ function InnerContributionsGraph(
               key={calendar.year}
               className={shouldDisplay ? '' : 'hidden'}
               data={calendar}
+              daysLabel={settings.daysLabel}
               showInspect={showInspect}
               titleRender={titleRender}
             />

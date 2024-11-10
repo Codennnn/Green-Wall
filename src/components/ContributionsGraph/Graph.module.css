@@ -71,6 +71,11 @@
   background-color: var(--level-4, #216e39);
 }
 
+.days li {
+  display: inline-flex;
+  align-items: center;
+}
+
 .days li:nth-child(odd) {
   visibility: hidden;
 }

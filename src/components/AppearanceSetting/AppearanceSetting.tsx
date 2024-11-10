@@ -16,8 +16,8 @@ import { YearRangeSelect } from './YearRangeSelect'
 export function AppearanceSetting() {
   const { graphData, settings, dispatchSettings } = useData()
 
-  const attribution = useId()
-
+  const daysLabelId = useId()
+  const attributionId = useId()
   const hasProfileName = Boolean(graphData?.name)
 
   return (
@@ -42,11 +42,23 @@ export function AppearanceSetting() {
       </fieldset>
 
       <fieldset>
-        <label htmlFor={attribution}>Attribution</label>
+        <label htmlFor={daysLabelId}>Days Label</label>
+        <RadixSwitch
+          checked={settings.daysLabel}
+          defaultChecked={true}
+          id={daysLabelId}
+          onCheckedChange={(checked) => {
+            dispatchSettings({ type: 'daysLabel', payload: checked })
+          }}
+        />
+      </fieldset>
+
+      <fieldset>
+        <label htmlFor={attributionId}>Attribution</label>
         <RadixSwitch
           checked={settings.showAttribution}
           defaultChecked={true}
-          id={attribution}
+          id={attributionId}
           onCheckedChange={(checked) => {
             dispatchSettings({ type: 'showAttribution', payload: checked })
           }}
