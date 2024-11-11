@@ -8,8 +8,10 @@ import type {
   GitHubRepo,
   GitHubUser,
   GitHubUsername,
+  IssueInfo,
   IssuesInYear,
   RepoCreatedInYear,
+  RepoInfo,
 } from '~/types'
 
 /**
@@ -138,7 +140,7 @@ export async function fetchContributionsCollection(
   return { ...contributionCalendar, year }
 }
 
-interface GetReposCreatedInYearParams {
+interface FetchReposCreatedInYearParams {
   username: GitHubUsername
   year: ContributionYear
   pageSize?: number
@@ -151,7 +153,7 @@ export async function fetchReposCreatedInYear({
   username,
   year,
   pageSize = 15,
-}: GetReposCreatedInYearParams): Promise<RepoCreatedInYear> {
+}: FetchReposCreatedInYearParams): Promise<RepoCreatedInYear> {
   if (!GAT) {
     throw new Error('Require GITHUB ACCESS TOKEN.')
   }
@@ -182,14 +184,13 @@ export async function fetchReposCreatedInYear({
     }
   `
 
-  let repoCount = 0
   let hasNextPage = true
   let cursor = null
 
   const currentYear = new Date().getFullYear()
   const direction = currentYear - year <= 4 ? Direction.DESC : Direction.ASC
 
-  const reposInYear = []
+  const reposInYear: RepoInfo[] = []
 
   while (hasNextPage) {
     const variables = {
@@ -228,7 +229,6 @@ export async function fetchReposCreatedInYear({
 
     if (filteredReposCount > 0) {
       reposInYear.push(...filteredRepos)
-      repoCount += filteredReposCount
 
       if (repoNodes.length !== filteredReposCount) {
         // Once the data exceeds the target year, it can stop fetching because the remaining data will be updated and no longer need to continue paging.
@@ -254,10 +254,10 @@ export async function fetchReposCreatedInYear({
     cursor = repositories.pageInfo.endCursor
   }
 
-  return { count: repoCount, repos: reposInYear }
+  return { count: reposInYear.length, repos: reposInYear }
 }
 
-interface GetIssuesInYearParams {
+interface FetchIssuesInYearParams {
   username: GitHubUsername
   year: ContributionYear
   pageSize?: number
@@ -270,7 +270,7 @@ export async function fetchIssuesInYear({
   username,
   year,
   pageSize = 50,
-}: GetIssuesInYearParams): Promise<IssuesInYear> {
+}: FetchIssuesInYearParams): Promise<IssuesInYear> {
   if (!GAT) {
     throw new Error('Require GITHUB ACCESS TOKEN.')
   }
@@ -305,11 +305,10 @@ export async function fetchIssuesInYear({
     }
   `
 
-  let issueCount = 0
   let hasNextPage = true
   let cursor = null
 
-  const issuesInYear = []
+  const issuesInYear: IssueInfo[] = []
 
   while (hasNextPage) {
     const variables = {
@@ -347,7 +346,6 @@ export async function fetchIssuesInYear({
 
     if (filteredIssuesCount > 0) {
       issuesInYear.push(...filteredIssues)
-      issueCount += filteredIssuesCount
 
       if (issueNodes.length !== filteredIssuesCount) {
         // Once the data exceeds the target year, it can stop fetching because the remaining data will be updated and no longer need to continue paging.
@@ -373,5 +371,5 @@ export async function fetchIssuesInYear({
     cursor = issues.pageInfo.endCursor
   }
 
-  return { count: issueCount, issues: issuesInYear }
+  return { count: issuesInYear.length, issues: issuesInYear }
 }

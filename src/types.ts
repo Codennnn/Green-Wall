@@ -123,8 +123,8 @@ export const IssuesInYearSchema = object({
   issues: array(IssueInfoSchema),
 })
 
-type RepoInfo = InferInput<typeof RepoInfoSchema>
-type IssueInfo = InferInput<typeof IssueInfoSchema>
+export type RepoInfo = InferInput<typeof RepoInfoSchema>
+export type IssueInfo = InferInput<typeof IssueInfoSchema>
 
 export interface GitHubRepo {
   repositories: {
