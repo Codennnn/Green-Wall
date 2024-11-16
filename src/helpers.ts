@@ -167,6 +167,14 @@ export function getWeekendActivity(graphData: GraphData): { total: number; ratio
   }
 }
 
+/**
+ * Calculate valuable statistics from contribution data including:
+ * - Weekend contributions
+ * - Longest contribution streak
+ * - Longest gap between contributions
+ * - Maximum contributions in a day
+ * - Average contributions per day
+ */
 export function getValuableStatistics(graphData: GraphData): ValuableStatistics {
   let weekendContributions = 0
   let totalContributions = 0
@@ -175,11 +183,13 @@ export function getValuableStatistics(graphData: GraphData): ValuableStatistics 
   let currentStreak = 0
   let longestStreakStartDate: string | undefined = undefined
   let longestStreakEndDate: string | undefined = undefined
+  let currentStreakStartDate: string | undefined = undefined
 
   let longestGap = 0
   let currentGap = 0
   let longestGapStartDate: string | undefined = undefined
   let longestGapEndDate: string | undefined = undefined
+  let currentGapStartDate: string | undefined = undefined
 
   let maxContributionsInADay = 0
   let maxContributionsDate: string | undefined = undefined
@@ -198,37 +208,46 @@ export function getValuableStatistics(graphData: GraphData): ValuableStatistics 
         }
 
         if (day.level !== 'NONE') {
-          // If there's a contribution today, increment the streak.
+          // Start of a new streak.
+          if (currentStreak === 0) {
+            currentStreakStartDate = day.date
+          }
+
           currentStreak++
-          // Update the maximum streak.
-          longestStreak = Math.max(longestStreak, currentStreak)
 
-          if (currentStreak === 1) {
-            longestStreakStartDate = day.date
+          // Update longest streak if current streak is longer.
+          if (currentStreak > longestStreak) {
+            longestStreak = currentStreak
+            longestStreakStartDate = currentStreakStartDate
+            longestStreakEndDate = day.date
           }
 
-          longestStreakEndDate = day.date
-        } else {
-          // If no contribution today, reset the streak.
-          currentStreak = 0
-        }
-
-        if (day.level !== 'NONE') {
-          maxContributionsInADay = Math.max(maxContributionsInADay, day.count)
-          maxContributionsDate = day.date
-        }
-
-        if (day.level === 'NONE') {
-          currentGap++
-          longestGap = Math.max(longestGap, currentGap)
-
-          if (currentGap === 1) {
-            longestGapStartDate = day.date
-          }
-
-          longestGapEndDate = day.date
-        } else {
+          // Reset gap tracking
           currentGap = 0
+          currentGapStartDate = undefined
+        } else {
+          // Start of a new gap
+          if (currentGap === 0) {
+            currentGapStartDate = day.date
+          }
+          currentGap++
+
+          // Update longest gap if current gap is longer.
+          if (currentGap > longestGap) {
+            longestGap = currentGap
+            longestGapStartDate = currentGapStartDate
+            longestGapEndDate = day.date
+          }
+
+          // Reset streak tracking.
+          currentStreak = 0
+          currentStreakStartDate = undefined
+        }
+
+        // Track maximum contributions in a day.
+        if (day.level !== 'NONE' && day.count > maxContributionsInADay) {
+          maxContributionsInADay = day.count
+          maxContributionsDate = day.date
         }
       })
     })
