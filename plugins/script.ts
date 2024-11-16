@@ -1,3 +1,5 @@
+import type { ContributionDay, GraphData } from '~/types'
+
 type T = History['replaceState']
 
 function addHistoryEvent(type: 'replaceState'): (...args: Parameters<T>) => ReturnType<T> {
@@ -31,29 +33,8 @@ const handler = () => {
 
     type Weekday = 0 | 1 | 2 | 3 | 4 | 5 | 6
 
-    interface ContributionDay {
-      count: number
-      date: string
-      level: `${ContributionLevel}`
-      weekday?: Weekday
-    }
-
-    interface ContributionBasic {
-      name?: string
-      login: string
-      avatarUrl: string
-      contributionYears: number[]
-      contributionCalendars: {
-        total: number
-        year: number
-        weeks: {
-          days: ContributionDay[]
-        }[]
-      }[]
-    }
-
     interface Data {
-      data: ContributionBasic
+      data: GraphData
     }
 
     interface Calendar {
@@ -403,12 +384,14 @@ const handler = () => {
 
             GM.xmlHttpRequest({
               method: 'GET',
-              url: `${ORIGIN}/api/contribution/${username}`,
+              url: `${ORIGIN}/api/contribution/${username}?statistics=true`,
               onload: (response) => {
                 try {
                   dialogContent.innerHTML = ''
 
                   const data: Data = JSON.parse(response.responseText)
+                  console.log(data.data.statistics, '123')
+
                   const xData = produceData(data)
 
                   xData.contributionCalendars.forEach((calendar) => {
@@ -452,4 +435,5 @@ const handler = () => {
   }
 }
 
+// In order to ensure that the script is still effective when the page is navigated forward and backward, we need to listen to the replaceState event of history to trigger the script.
 window.addEventListener('replaceState', handler)
