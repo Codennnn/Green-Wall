@@ -4,7 +4,7 @@ import { ErrorType } from '~/enums'
 import { getValuableStatistics } from '~/helpers'
 import { mockGraphData } from '~/mock-data'
 import { fetchContributionsCollection, fetchGitHubUser } from '~/services'
-import type { GraphData, ResponseData } from '~/types'
+import type { GraphData, ResponseData, ValuableStatistics } from '~/types'
 
 interface GetContributionRequestParams {
   username: string
@@ -46,9 +46,13 @@ export async function GET(
         contributionCalendars,
       }
 
-      const valuableStatistics = getValuableStatistics(graphData)
+      let valuableStatistics: ValuableStatistics | undefined
 
-      const data = statistics ? { ...graphData, statistics: valuableStatistics } : graphData
+      if (statistics) {
+        valuableStatistics = getValuableStatistics(graphData)
+      }
+
+      const data = valuableStatistics ? { ...graphData, statistics: valuableStatistics } : graphData
 
       return NextResponse.json({ data }, { status: 200 })
     } catch (err) {

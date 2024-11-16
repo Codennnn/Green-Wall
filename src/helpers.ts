@@ -1,6 +1,6 @@
 import splitbee from '@splitbee/web'
 
-import type { GraphData } from '~/types'
+import type { GraphData, ValuableStatistics } from '~/types'
 
 export function numberWithCommas(num: number): string {
   return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
@@ -167,26 +167,30 @@ export function getWeekendActivity(graphData: GraphData): { total: number; ratio
   }
 }
 
-export function getValuableStatistics(graphData: GraphData) {
+export function getValuableStatistics(graphData: GraphData): ValuableStatistics {
   let weekendContributions = 0
   let totalContributions = 0
 
   let longestStreak = 0
   let currentStreak = 0
-  let longestStreakStartDate: string | null = null
-  let longestStreakEndDate: string | null = null
+  let longestStreakStartDate: string | undefined = undefined
+  let longestStreakEndDate: string | undefined = undefined
 
   let longestGap = 0
   let currentGap = 0
-  let longestGapStartDate: string | null = null
-  let longestGapEndDate: string | null = null
+  let longestGapStartDate: string | undefined = undefined
+  let longestGapEndDate: string | undefined = undefined
 
   let maxContributionsInADay = 0
-  let maxContributionsDate: string | null = null
+  let maxContributionsDate: string | undefined = undefined
+
+  let totalDays = 0
 
   graphData.contributionCalendars.forEach((calendar) => {
     calendar.weeks.forEach((week) => {
       week.days.forEach((day) => {
+        totalDays++
+
         const isWeekend = day.weekday === 0 || day.weekday === 6
 
         if (isWeekend) {
@@ -232,6 +236,8 @@ export function getValuableStatistics(graphData: GraphData) {
     totalContributions += calendar.total
   })
 
+  const averageContributionsPerDay = Math.round(totalContributions / totalDays)
+
   return {
     weekendContributions,
     totalContributions,
@@ -243,5 +249,6 @@ export function getValuableStatistics(graphData: GraphData) {
     longestGapEndDate,
     maxContributionsInADay,
     maxContributionsDate,
+    averageContributionsPerDay,
   }
 }

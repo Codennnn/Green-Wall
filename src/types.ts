@@ -147,3 +147,17 @@ export interface GitHubIssue {
 export type RepoCreatedInYear = InferInput<typeof ReposCreatedInYearSchema>
 
 export type IssuesInYear = InferInput<typeof IssuesInYearSchema>
+
+export interface ValuableStatistics {
+  weekendContributions: number
+  totalContributions: number
+  longestStreak: number
+  longestStreakStartDate?: string
+  longestStreakEndDate?: string
+  longestGap: number
+  longestGapStartDate?: string
+  longestGapEndDate?: string
+  maxContributionsInADay: number
+  maxContributionsDate?: string
+  averageContributionsPerDay: number
+}
