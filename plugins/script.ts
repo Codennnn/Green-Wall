@@ -1,5 +1,3 @@
-import type { ContributionDay, GraphData } from '~/types'
-
 type T = History['replaceState']
 
 function addHistoryEvent(type: 'replaceState'): (...args: Parameters<T>) => ReturnType<T> {
@@ -32,6 +30,45 @@ const handler = () => {
     }
 
     type Weekday = 0 | 1 | 2 | 3 | 4 | 5 | 6
+
+    interface ContributionDay {
+      count: number
+      date: string
+      level: `${ContributionLevel}`
+      weekday?: Weekday
+    }
+
+    interface ContributionBasic {
+      name?: string
+      login: string
+      avatarUrl: string
+      contributionYears: number[]
+      contributionCalendars: {
+        total: number
+        year: number
+        weeks: {
+          days: ContributionDay[]
+        }[]
+      }[]
+    }
+
+    interface ValuableStatistics {
+      weekendContributions: number
+      totalContributions: number
+      longestStreak: number
+      longestStreakStartDate?: string
+      longestStreakEndDate?: string
+      longestGap: number
+      longestGapStartDate?: string
+      longestGapEndDate?: string
+      maxContributionsInADay: number
+      maxContributionsDate?: string
+      averageContributionsPerDay: number
+    }
+
+    interface GraphData extends ContributionBasic {
+      statistics?: ValuableStatistics
+    }
 
     interface Data {
       data: GraphData
@@ -390,7 +427,6 @@ const handler = () => {
                   dialogContent.innerHTML = ''
 
                   const data: Data = JSON.parse(response.responseText)
-                  console.log(data.data.statistics, '123')
 
                   const xData = produceData(data)
 
@@ -398,6 +434,36 @@ const handler = () => {
                     const { graphItem } = createGraph(calendar)
                     dialogContent.append(graphItem)
                   })
+
+                  const statistics = data.data.statistics
+
+                  if (statistics) {
+                    const p = document.createElement('p')
+
+                    p.textContent = `最长连续贡献：${statistics.longestStreak} 天（${statistics.longestStreakStartDate || 'Unknown'} - ${statistics.longestStreakEndDate || 'Unknown'}）`
+
+                    dialogContent.append(p)
+
+                    const p2 = p.cloneNode()
+                    p2.textContent = `最长间断贡献：${statistics.longestGap} 天（${statistics.longestGapStartDate || 'Unknown'} - ${statistics.longestGapEndDate || 'Unknown'}）`
+
+                    dialogContent.append(p2)
+
+                    const p3 = p.cloneNode()
+                    p3.textContent = `平均每天贡献：${statistics.averageContributionsPerDay} 次`
+
+                    dialogContent.append(p3)
+
+                    const p4 = p.cloneNode()
+                    p4.textContent = `周末贡献：${statistics.weekendContributions} 次，占 ${((statistics.weekendContributions / statistics.totalContributions) * 100).toFixed(0)}%`
+
+                    dialogContent.append(p4)
+
+                    const p5 = p.cloneNode()
+                    p5.textContent = `最大单日贡献：${statistics.maxContributionsInADay} 次（${statistics.maxContributionsDate || 'Unknown'}）`
+
+                    dialogContent.append(p5)
+                  }
 
                   hasLoaded = true
                 } catch {
