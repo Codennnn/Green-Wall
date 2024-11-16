@@ -136,6 +136,9 @@ export function getMaxContributionsInADay(graphData: GraphData): {
   return { maxContributions, maxDate }
 }
 
+/**
+ * Calculate the number of contributions made on weekends and their ratio to total contributions
+ */
 export function getWeekendActivity(graphData: GraphData): { total: number; ratio: number } {
   let countOnWeekends = 0
   let total = 0
@@ -156,7 +159,12 @@ export function getWeekendActivity(graphData: GraphData): { total: number; ratio
     total += calendar.total
   })
 
-  return { total: countOnWeekends, ratio: Math.round((countOnWeekends / total) * 100) }
+  return {
+    total: countOnWeekends,
+    // Calculate the percentage of weekend contributions.
+    // Round to nearest integer for cleaner display.
+    ratio: Math.round((countOnWeekends / total) * 100),
+  }
 }
 
 export function getValuableStatistics(graphData: GraphData) {
