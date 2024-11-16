@@ -72,6 +72,7 @@ export interface ContributionCalendar {
 
 export interface GraphData extends ContributionBasic {
   contributionCalendars: ContributionCalendar[]
+  statistics?: ValuableStatistics
 }
 
 export interface ResponseData {

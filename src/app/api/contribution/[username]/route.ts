@@ -8,14 +8,15 @@ import type { GraphData, ResponseData, ValuableStatistics } from '~/types'
 
 interface GetContributionRequestParams {
   username: string
-  statistics?: boolean
 }
 
 export async function GET(
   request: NextRequest,
   { params }: { params: GetContributionRequestParams }
 ) {
-  const { username, statistics = false } = params
+  const { username } = params
+
+  const statistics = request.nextUrl.searchParams.get('statistics') === 'true'
 
   if (typeof username === 'string') {
     const { searchParams } = new URL(request.url)
