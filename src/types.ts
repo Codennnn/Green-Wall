@@ -161,4 +161,6 @@ export interface ValuableStatistics {
   maxContributionsInADay: number
   maxContributionsDate?: string
   averageContributionsPerDay: number
+  maxContributionsMonth?: string
+  maxMonthlyContributions: number
 }

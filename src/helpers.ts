@@ -196,6 +196,11 @@ export function getValuableStatistics(graphData: GraphData): ValuableStatistics 
 
   let totalDays = 0
 
+  // Add new variables for tracking monthly contributions
+  const monthlyContributions: Record<string, number> = {}
+  let maxContributionsMonth: string | undefined = undefined
+  let maxMonthlyContributions = 0
+
   graphData.contributionCalendars.forEach((calendar) => {
     calendar.weeks.forEach((week) => {
       week.days.forEach((day) => {
@@ -249,6 +254,19 @@ export function getValuableStatistics(graphData: GraphData): ValuableStatistics 
           maxContributionsInADay = day.count
           maxContributionsDate = day.date
         }
+
+        // Track monthly contributions.
+        if (day.level !== 'NONE') {
+          // Extract month from date (format: YYYY-MM-DD).
+          const month = day.date.substring(0, 7) // Gets YYYY-MM.
+          monthlyContributions[month] = (monthlyContributions[month] || 0) + day.count
+
+          // Update max monthly contributions if this month has more.
+          if (monthlyContributions[month] > maxMonthlyContributions) {
+            maxMonthlyContributions = monthlyContributions[month]
+            maxContributionsMonth = month
+          }
+        }
       })
     })
 
@@ -269,5 +287,7 @@ export function getValuableStatistics(graphData: GraphData): ValuableStatistics 
     maxContributionsInADay,
     maxContributionsDate,
     averageContributionsPerDay,
+    maxContributionsMonth,
+    maxMonthlyContributions,
   }
 }
