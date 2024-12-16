@@ -64,7 +64,7 @@ export function Graph(props: GraphProps) {
             isNewYear,
           })
         ) : (
-          <div className="text-sm">
+          <div className="text-sm tabular-nums">
             <span className="mr-2 italic">{calendar.year}:</span>
             {isNewYear && calendar.total === 0
               ? newYearText
@@ -139,6 +139,7 @@ export function Graph(props: GraphProps) {
                 count: 0,
                 date: '',
               }))
+
               if (i === 0) {
                 days = [...fills, ...week.days]
               } else {
