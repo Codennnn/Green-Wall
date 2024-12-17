@@ -65,7 +65,7 @@ export function Graph(props: GraphProps) {
           })
         ) : (
           <div className="text-sm tabular-nums">
-            <span className="mr-2 italic">{calendar.year}:</span>
+            <span className="mr-2 font-medium">{calendar.year}:</span>
             {isNewYear && calendar.total === 0
               ? newYearText
               : `${numberWithCommas(calendar.total)} Contributions`}

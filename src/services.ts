@@ -72,6 +72,7 @@ export async function fetchGitHubUser(username: GitHubUsername): Promise<Contrib
   if (!resJson.data?.user) {
     if (resJson.errors) {
       const error = resJson.errors.at(0)
+
       if (error) {
         throw new Error(error.message)
       }
@@ -96,8 +97,8 @@ export async function fetchContributionsCollection(
         {
           user(login: "${username}") {
             contributionsCollection(from: "${new Date(
-    `${year}-01-01`
-  ).toISOString()}", to: "${new Date(`${year}-12-31`).toISOString()}") {
+              `${year}-01-01`
+            ).toISOString()}", to: "${new Date(`${year}-12-31`).toISOString()}") {
               contributionCalendar {
                 total: totalContributions
                 weeks {
