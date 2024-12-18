@@ -1,6 +1,6 @@
 import { array, type InferInput, number, object, optional, string } from 'valibot'
 
-import type { ContributionLevel, DisplayName, ErrorType, GraphSize } from '~/enums'
+import type { BlockShape, ContributionLevel, ErrorType, GraphSize } from '~/enums'
 
 export type Themes =
   | 'GitHub'
@@ -16,6 +16,8 @@ export type Themes =
   | 'Emerald'
   | 'Sky'
   | 'Amber'
+  | 'Midnight'
+  | 'Sunset'
 
 export interface Theme {
   name: Themes
@@ -82,11 +84,11 @@ export interface ResponseData {
 }
 
 export interface GraphSettings {
-  displayName?: DisplayName
   yearRange?: [start_year: string | undefined, end_year: string | undefined]
   daysLabel?: boolean
   showAttribution?: boolean
   size?: GraphSize
+  blockShape?: BlockShape
   theme?: Themes
 }
 
@@ -163,4 +165,16 @@ export interface ValuableStatistics {
   averageContributionsPerDay: number
   maxContributionsMonth?: string
   maxMonthlyContributions: number
+}
+
+export interface ThemePreset {
+  name: Themes
+  mode?: 'light' | 'dark'
+  colorForeground: string
+  colorBackground: string
+  colorSecondary: string
+  colorPrimary: string
+  colorBorder: string
+  colorBackgroundContainer: string
+  levelColors: [level_0: string, level_1: string, level_2: string, level_3: string, level_4: string]
 }

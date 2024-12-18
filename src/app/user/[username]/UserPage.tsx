@@ -40,7 +40,7 @@ export function UserPage() {
     return (
       <div className="py-10 md:py-14">
         <div className="flex w-full overflow-x-auto py-5 md:justify-center md:py-14">
-          <ContributionsGraph className="md:shadow-2xl md:shadow-main-200" />
+          <ContributionsGraph mockupClassName="md:shadow-2xl md:shadow-main-200" />
         </div>
       </div>
     )

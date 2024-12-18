@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { ArrowUpRightIcon, MousePointerClickIcon } from 'lucide-react'
 
-import { DEFAULT_DISPLAY_NAME, DEFAULT_SIZE, DEFAULT_THEME } from '~/constants'
+import { DEFAULT_SIZE, DEFAULT_THEME } from '~/constants'
 import { useData } from '~/DataContext'
 import { trackEvent } from '~/helpers'
 
@@ -20,21 +20,22 @@ export function ShareButton() {
     if (username) {
       const Url = new URL(`${window.location.origin}/share/${username}`)
 
-      if (settings.displayName && settings.displayName !== DEFAULT_DISPLAY_NAME) {
-        Url.searchParams.set('displayName', settings.displayName)
-      }
       if (Array.isArray(settings.yearRange)) {
         const [startYear, endYear] = settings.yearRange
+
         if (startYear && startYear !== firstYear) {
           Url.searchParams.set('start', startYear)
         }
+
         if (endYear && endYear !== lastYear) {
           Url.searchParams.set('end', endYear)
         }
       }
+
       if (settings.size && settings.size !== DEFAULT_SIZE) {
         Url.searchParams.set('size', settings.size)
       }
+
       if (settings.theme && settings.theme !== DEFAULT_THEME) {
         Url.searchParams.set('theme', settings.theme)
       }

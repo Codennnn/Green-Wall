@@ -19,7 +19,7 @@ export const enum GraphSize {
   Large = 'l',
 }
 
-export const enum DisplayName {
-  Username = '0',
-  ProfileName = '1',
+export const enum BlockShape {
+  Square = 'square',
+  Round = 'round',
 }

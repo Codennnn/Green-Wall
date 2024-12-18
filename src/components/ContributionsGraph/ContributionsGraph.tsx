@@ -1,22 +1,31 @@
 import { forwardRef, memo, useImperativeHandle, useMemo, useRef } from 'react'
 
-import { DEFAULT_SIZE, DEFAULT_THEME, sizeProperties, THEMES } from '~/constants'
+import { MockupSafari } from '~/components/mockup/MockupSafari'
+import { DEFAULT_SIZE, DEFAULT_THEME, sizeProperties, THEME_PRESETS } from '~/constants'
 import { useData } from '~/DataContext'
+import { BlockShape } from '~/enums'
 
 import { Graph, type GraphProps } from './Graph'
 import { GraphFooter } from './GraphFooter'
 import { GraphHeader } from './GraphHeader'
 
 interface ContributionsGraphProps extends Pick<GraphProps, 'showInspect' | 'titleRender'> {
-  className?: string
+  /** Unique ID for the contributions graph container. */
   wrapperId?: string
+  /**
+   * Custom Mockup component to wrap the contributions graph.
+   * @default MockupArc
+   */
+  Mockup?: React.ComponentType<React.ComponentProps<typeof MockupSafari>>
+  /** CSS class name to be applied to the Mockup component. */
+  mockupClassName?: string
 }
 
 function InnerContributionsGraph(
   props: ContributionsGraphProps,
   ref: React.Ref<HTMLDivElement | null>
 ) {
-  const { className = '', wrapperId, showInspect, titleRender } = props
+  const { mockupClassName = '', wrapperId, showInspect, titleRender, Mockup = MockupSafari } = props
 
   const { graphData, settings, firstYear, lastYear } = useData()
 
@@ -26,9 +35,9 @@ function InnerContributionsGraph(
 
   const applyingTheme = useMemo(
     () =>
-      THEMES.find(
+      THEME_PRESETS.find(
         (item) => item.name.toLowerCase() === (settings.theme ?? DEFAULT_THEME).toLowerCase()
-      )!,
+      ),
     [settings.theme]
   )
 
@@ -36,56 +45,74 @@ function InnerContributionsGraph(
     return null
   }
 
-  const themeProperties = {
-    '--graph-text-color': applyingTheme.textColor,
-    '--graph-bg': applyingTheme.background,
-    '--level-0': applyingTheme.levelColors[0],
-    '--level-1': applyingTheme.levelColors[1],
-    '--level-2': applyingTheme.levelColors[2],
-    '--level-3': applyingTheme.levelColors[3],
-    '--level-4': applyingTheme.levelColors[4],
-  }
+  const themeProperties = applyingTheme
+    ? {
+        '--theme-foreground': applyingTheme.colorForeground,
+        '--theme-background': applyingTheme.colorBackground,
+        '--theme-background-container': applyingTheme.colorBackgroundContainer,
+        '--theme-secondary': applyingTheme.colorSecondary,
+        '--theme-primary': applyingTheme.colorPrimary,
+        '--theme-border': applyingTheme.colorBorder,
+        '--level-0': applyingTheme.levelColors[0],
+        '--level-1': applyingTheme.levelColors[1],
+        '--level-2': applyingTheme.levelColors[2],
+        '--level-3': applyingTheme.levelColors[3],
+        '--level-4': applyingTheme.levelColors[4],
+      }
+    : {}
 
-  const cssProperties = { ...themeProperties, ...sizeProperties[settings.size ?? DEFAULT_SIZE] }
+  const cssProperties = {
+    ...themeProperties,
+    ...sizeProperties[settings.size ?? DEFAULT_SIZE],
+    ...(settings.blockShape === BlockShape.Round
+      ? {
+          '--block-round': '999px',
+        }
+      : {}),
+  }
 
   return (
     <div
       ref={graphRef}
-      className={`-mx-5 flex flex-col items-center p-5 md:mx-0 ${className}`}
       id={wrapperId}
       style={{
         ...cssProperties,
-        color: 'var(--graph-text-color, #24292f)',
-        backgroundColor: 'var(--graph-bg, #fff)',
+        color: 'var(--theme-foreground, #24292f)',
       }}
     >
-      <GraphHeader />
+      <Mockup className={mockupClassName}>
+        <div>
+          <div className="pb-10">
+            <GraphHeader />
+          </div>
 
-      <div className="flex flex-col gap-y-6">
-        {graphData.contributionCalendars.map((calendar) => {
-          let [startYear, endYear] = settings.yearRange ?? []
-          startYear = startYear && Number.isInteger(Number(startYear)) ? startYear : firstYear
-          endYear = endYear && Number.isInteger(Number(endYear)) ? endYear : lastYear
+          <div className="flex flex-col gap-y-6">
+            {graphData.contributionCalendars.map((calendar) => {
+              let [startYear, endYear] = settings.yearRange ?? []
+              startYear = startYear && Number.isInteger(Number(startYear)) ? startYear : firstYear
+              endYear = endYear && Number.isInteger(Number(endYear)) ? endYear : lastYear
 
-          const shouldDisplay =
-            startYear && endYear
-              ? calendar.year >= Number(startYear) && calendar.year <= Number(endYear)
-              : true
+              const shouldDisplay =
+                startYear && endYear
+                  ? calendar.year >= Number(startYear) && calendar.year <= Number(endYear)
+                  : true
 
-          return (
-            <Graph
-              key={calendar.year}
-              className={shouldDisplay ? '' : 'hidden'}
-              data={calendar}
-              daysLabel={settings.daysLabel}
-              showInspect={showInspect}
-              titleRender={titleRender}
-            />
-          )
-        })}
-      </div>
+              return (
+                <Graph
+                  key={calendar.year}
+                  className={shouldDisplay ? '' : 'hidden'}
+                  data={calendar}
+                  daysLabel={settings.daysLabel}
+                  showInspect={showInspect}
+                  titleRender={titleRender}
+                />
+              )
+            })}
+          </div>
 
-      {!(settings.showAttribution === false) && <GraphFooter />}
+          {!(settings.showAttribution === false) && <GraphFooter />}
+        </div>
+      </Mockup>
     </div>
   )
 }

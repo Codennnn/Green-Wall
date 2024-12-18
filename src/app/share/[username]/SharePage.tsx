@@ -10,7 +10,7 @@ import { ContributionsGraph } from '~/components/ContributionsGraph'
 import { ErrorMessage } from '~/components/ErrorMessage'
 import { DEFAULT_THEME, THEMES } from '~/constants'
 import { useData } from '~/DataContext'
-import type { DisplayName, GraphSize } from '~/enums'
+import type { GraphSize } from '~/enums'
 import type { GraphSettings, Themes } from '~/types'
 import { useGraphRequest } from '~/useGraphRequest'
 
@@ -18,7 +18,6 @@ export function SharePage() {
   const query = useSearchParams()
 
   const settings = useMemo<GraphSettings | null>(() => {
-    const displayName = query.get('displayName') ?? undefined
     const start = query.get('start') ?? undefined
     const end = query.get('end') ?? undefined
     const size = query.get('size') ?? undefined
@@ -26,7 +25,6 @@ export function SharePage() {
     theme = THEMES.findIndex((t) => t.name === theme) !== -1 ? theme : DEFAULT_THEME
 
     return {
-      displayName: displayName as DisplayName | undefined,
       yearRange: [start, end] as GraphSettings['yearRange'],
       size: size as GraphSize | undefined,
       theme: theme as Themes | undefined,
@@ -68,7 +66,9 @@ export function SharePage() {
     return (
       <div className="py-10 md:py-14">
         <h1 className="mb-5 text-center text-lg font-medium md:mx-auto md:px-20 md:text-3xl md:leading-[1.2]">
-          Just got my GitHub contribution graph by GreenWall.
+          Generated my GitHub graph with GreenWall
+          <br />
+          Try it and share yours! 🌱
         </h1>
 
         <div className="flex justify-center">
@@ -83,7 +83,7 @@ export function SharePage() {
         </div>
 
         <div className="flex w-full overflow-x-auto py-5 md:justify-center md:py-14">
-          <ContributionsGraph className="md:shadow-2xl md:shadow-main-200" />
+          <ContributionsGraph mockupClassName="md:shadow-2xl md:shadow-main-200" />
         </div>
       </div>
     )

@@ -4,6 +4,7 @@ export const mockGraphData: GraphData = {
   contributionYears: [2024, 2023],
   name: 'LeoKu',
   login: 'Codennnn',
+  bio: 'I am a software engineer and a full-stack developer.',
   avatarUrl:
     'https://avatars.githubusercontent.com/u/47730755?u=afcba075e1eaa9061b55ddb0820fb3b66ce8e883&v=4',
   followers: {

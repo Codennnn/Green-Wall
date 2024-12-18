@@ -1,6 +1,6 @@
 import { useReducer } from 'react'
 
-import { DEFAULT_DISPLAY_NAME, DEFAULT_SIZE, DEFAULT_THEME } from './constants'
+import { DEFAULT_BLOCK_SHAPE, DEFAULT_SIZE, DEFAULT_THEME } from './constants'
 import type { GraphSettings } from './types'
 
 type State = GraphSettings
@@ -9,10 +9,6 @@ type Action =
   | {
       type: 'size'
       payload: State['size']
-    }
-  | {
-      type: 'displayName'
-      payload: State['displayName']
     }
   | {
       type: 'yearRange'
@@ -25,6 +21,10 @@ type Action =
   | {
       type: 'showAttribution'
       payload: State['showAttribution']
+    }
+  | {
+      type: 'blockShape'
+      payload: State['blockShape']
     }
   | {
       type: 'theme'
@@ -43,7 +43,7 @@ type Action =
 const initialState: State = {
   size: DEFAULT_SIZE,
   theme: DEFAULT_THEME,
-  displayName: DEFAULT_DISPLAY_NAME,
+  blockShape: DEFAULT_BLOCK_SHAPE,
   daysLabel: false,
   showAttribution: true,
 }
@@ -54,9 +54,6 @@ export function useGraphSetting() {
       case 'size':
         return { ...state, size: payload }
 
-      case 'displayName':
-        return { ...state, displayName: payload }
-
       case 'yearRange':
         return { ...state, yearRange: payload }
 
@@ -65,6 +62,9 @@ export function useGraphSetting() {
 
       case 'showAttribution':
         return { ...state, showAttribution: payload }
+
+      case 'blockShape':
+        return { ...state, blockShape: payload }
 
       case 'theme':
         return { ...state, theme: payload }

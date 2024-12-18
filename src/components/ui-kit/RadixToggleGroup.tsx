@@ -7,7 +7,7 @@ const DEFAULT_ITEM_FONT_SIZE = 16
 
 type RadixToggleGroupProps = ToggleGroup.ToggleGroupSingleProps & {
   size?: 'default' | 'small' | 'large' | number
-  options?: { label: string; value: string; tooltip?: React.ReactNode }[]
+  options?: { label: string | React.ReactNode; value: string; tooltip?: React.ReactNode }[]
 }
 
 export function RadixToggleGroup(props: RadixToggleGroupProps) {

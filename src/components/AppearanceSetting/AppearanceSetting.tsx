@@ -3,12 +3,11 @@ import { useId } from 'react'
 import { CircleHelpIcon } from 'lucide-react'
 
 import { ThemeSelector } from '~/components/ThemeSelector'
-import { RadixSelect } from '~/components/ui-kit/RadixSelect'
 import { RadixSwitch } from '~/components/ui-kit/RadixSwitch'
 import { RadixToggleGroup } from '~/components/ui-kit/RadixToggleGroup'
 import { RadixTooltip } from '~/components/ui-kit/RadixTooltip'
 import { useData } from '~/DataContext'
-import { DisplayName, GraphSize } from '~/enums'
+import { BlockShape, GraphSize } from '~/enums'
 import { trackEvent } from '~/helpers'
 
 import { YearRangeSelect } from './YearRangeSelect'
@@ -18,24 +17,9 @@ export function AppearanceSetting() {
 
   const daysLabelId = useId()
   const attributionId = useId()
-  const hasProfileName = Boolean(graphData?.name)
 
   return (
     <div className="appearance-setting min-w-[min(40vw,220px)] max-w-[min(90vw,280px)] text-main-400">
-      <fieldset>
-        <label>Display Name</label>
-        <RadixSelect
-          items={[
-            { label: 'Username', value: DisplayName.Username },
-            { label: 'Profile name', value: DisplayName.ProfileName, disabled: !hasProfileName },
-          ]}
-          value={settings.displayName}
-          onValueChange={(v) => {
-            dispatchSettings({ type: 'displayName', payload: v as DisplayName })
-          }}
-        />
-      </fieldset>
-
       <fieldset>
         <label>Year Range</label>
         <YearRangeSelect graphData={graphData} />
@@ -89,6 +73,30 @@ export function AppearanceSetting() {
           value={settings.size}
           onValueChange={(size) => {
             dispatchSettings({ type: 'size', payload: size as GraphSize })
+          }}
+        />
+      </fieldset>
+
+      <fieldset>
+        <label className="flex items-center">Block Shape</label>
+        <RadixToggleGroup
+          options={[
+            {
+              label: <span className="inline-block size-4 rounded-[2px] bg-current" />,
+              value: BlockShape.Square,
+              tooltip: 'Square',
+            },
+            {
+              label: <span className="inline-block size-4 rounded-full bg-current" />,
+              value: BlockShape.Round,
+              tooltip: 'Round',
+            },
+          ]}
+          size="small"
+          type="single"
+          value={settings.blockShape}
+          onValueChange={(shape) => {
+            dispatchSettings({ type: 'blockShape', payload: shape as BlockShape })
           }}
         />
       </fieldset>
