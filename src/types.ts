@@ -2,22 +2,7 @@ import { array, type InferInput, number, object, optional, string } from 'valibo
 
 import type { BlockShape, ContributionLevel, ErrorType, GraphSize } from '~/enums'
 
-export type Themes =
-  | 'GitHub'
-  | 'GitHubDark'
-  | 'Winter'
-  | 'GitLab'
-  | 'GitLabDark'
-  | 'Halloween'
-  | 'Dracula'
-  | 'Slate'
-  | 'Rose'
-  | 'Indigo'
-  | 'Emerald'
-  | 'Sky'
-  | 'Amber'
-  | 'Midnight'
-  | 'Sunset'
+export type Themes = 'Classic' | 'Midnight' | 'Sunset' | 'Sunsetx' | 'Violet'
 
 export interface Theme {
   name: Themes

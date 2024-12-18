@@ -15,12 +15,12 @@ export const sizeProperties = {
   [GraphSize.Small]: {
     ['--block-size']: '10px',
     ['--block-round']: '2px',
-    ['--block-gap']: '3px',
+    ['--block-gap']: '2px',
   },
   [GraphSize.Medium]: {
     ['--block-size']: '11px',
     ['--block-round']: '3px',
-    ['--block-gap']: '3px',
+    ['--block-gap']: '2.5px',
   },
   [GraphSize.Large]: {
     ['--block-size']: '12px',
@@ -37,109 +37,29 @@ export const sizeProperties = {
 >
 
 export const DEFAULT_SIZE: GraphSize = GraphSize.Small
-export const DEFAULT_THEME: Themes = 'Midnight'
+export const DEFAULT_THEME: Themes = 'Classic'
 export const DEFAULT_BLOCK_SHAPE: BlockShape = BlockShape.Square
 
 export const THEMES = [
   {
-    name: 'GitHub',
+    name: 'Classic',
     textColor: '#24292f',
     levelColors: ['#ebedf0', '#9be9a8', '#40c463', '#30a14e', '#216e39'],
     background: '#fff',
-  },
-  {
-    name: 'GitHubDark',
-    textColor: '#adbac7',
-    levelColors: ['#2d333b', '#0e4429', '#006d32', '#26a641', '#39d353'],
-    background: '#22272e',
-    mode: 'dark',
-  },
-  {
-    name: 'Winter',
-    textColor: '#adbac7',
-    levelColors: ['#2d333b', '#0a3069', '#0969da', '#54aeff', '#b6e3ff'],
-    background: '#22272e',
-    mode: 'dark',
-  },
-  {
-    name: 'Halloween',
-    textColor: '#24292f',
-    levelColors: ['#ebedf0', '#ffee4a', '#ffc501', '#fe9600', '#03001c'],
-    background: '#fff',
-  },
-  {
-    name: 'GitLab',
-    textColor: '#2e2e2e',
-    levelColors: ['#ededed', '#acd5f2', '#7fa8c9', '#527ba0', '#254e77'],
-    background: '#fff',
-  },
-  {
-    name: 'GitLabDark',
-    textColor: '#c0c0c0',
-    levelColors: ['#222222', '#263342', '#344e6c', '#416895', '#4f83bf'],
-    background: '#181818',
-    mode: 'dark',
-  },
-  {
-    name: 'Dracula',
-    textColor: '#f8f8f2',
-    levelColors: ['#282a36', '#44475a', '#6272a4', '#bd93f9', '#ff79c6'],
-    background: '#181818',
-    mode: 'light',
-  },
-  {
-    name: 'Slate',
-    textColor: '#0f172a',
-    levelColors: ['#cbd5e1', '#94a3b8', '#64748b', '#475569', '#334155'],
-    background: '#f1f5f9',
-    mode: 'dark',
-  },
-  {
-    name: 'Rose',
-    textColor: '#881337',
-    levelColors: ['#ffe4e6', '#fecdd3', '#fda4af', '#fb7185', '#f43f5e'],
-    background: '#fff1f288',
-    mode: 'light',
-  },
-  {
-    name: 'Indigo',
-    textColor: '#312e81',
-    levelColors: ['#e0e7ff', '#c7d2fe', '#a5b4fc', '#818cf8', '#6366f1'],
-    background: '#eef2ff88',
-    mode: 'light',
-  },
-  {
-    name: 'Emerald',
-    textColor: '#064e3b',
-    levelColors: ['#d1fae5', '#a7f3d0', '#6ee7b7', '#10b981', '#059669'],
-    background: '#ecfdf588',
-    mode: 'light',
-  },
-  {
-    name: 'Sky',
-    textColor: '#0c4a6e',
-    levelColors: ['#e0f2fe', '#bae6fd', '#7dd3fc', '#38bdf8', '#06b6d4'],
-    background: '#f0f9ff88',
-    mode: 'light',
-  },
-  {
-    name: 'Amber',
-    textColor: '#78350f',
-    levelColors: ['#fef3c7', '#fde68a', '#fcd34d', '#fbbf24', '#f59e0b'],
-    background: '#fffbeb88',
-    mode: 'light',
   },
 ] satisfies Theme[]
 
 export const THEME_PRESETS = [
   {
-    name: 'GitHub',
+    name: 'Classic',
+    mode: 'light',
     colorForeground: '#24292f',
     colorBackground: '#fff',
     colorSecondary: 'rgba(245, 245, 245, 0.38)',
     colorPrimary: 'rgb(56, 56, 56)',
     colorBorder: 'color-mix(in srgb, rgba(218, 218, 218, 0.48), transparent 0%)',
-    colorBackgroundContainer: 'linear-gradient(140deg, rgb(76, 200, 200) 0%, rgb(32, 32, 51) 100%)',
+    colorBackgroundContainer:
+      'linear-gradient(140deg, rgb(241 245 249 / 0.8) 0%, rgb(241 245 249 / 0.5) 100%)',
     levelColors: ['#ebedf0', '#9be9a8', '#40c463', '#30a14e', '#216e39'],
   },
   {
@@ -151,7 +71,13 @@ export const THEME_PRESETS = [
     colorPrimary: 'rgba(135, 231, 242, 1)',
     colorBorder: 'rgba(105, 105, 105, 0.5)',
     colorBackgroundContainer: 'linear-gradient(140deg, rgb(76, 200, 200) 0%, rgb(32, 32, 51) 100%)',
-    levelColors: ['#1C292B', '#416C71', '#5D9BA3', '#6DB8C1', '#87E7F2'],
+    levelColors: [
+      'var(--theme-secondary)',
+      'color-mix(in srgb, var(--theme-primary) 35%, var(--theme-secondary))',
+      'color-mix(in srgb, var(--theme-primary) 60%, var(--theme-secondary))',
+      'color-mix(in srgb, var(--theme-primary) 75%, var(--theme-secondary))',
+      'var(--theme-primary)',
+    ],
   },
   {
     name: 'Sunset',
@@ -161,7 +87,30 @@ export const THEME_PRESETS = [
     colorSecondary: 'rgba(60, 32, 32, 0.85)',
     colorPrimary: 'rgba(251, 165, 157, 1)',
     colorBorder: 'color-mix(in srgb, rgba(176, 172, 172, 0.36), transparent 0%)',
-    colorBackgroundContainer: '#fff',
-    levelColors: ['#3B1E1D', '#7E4D4B', '#AE6F6A', '#CA837D', '#FBA59D'],
+    colorBackgroundContainer: 'url(/images/background/sunset.webp) no-repeat center center / cover',
+    levelColors: [
+      'var(--theme-secondary)',
+      'color-mix(in srgb, var(--theme-primary) 35%, var(--theme-secondary))',
+      'color-mix(in srgb, var(--theme-primary) 60%, var(--theme-secondary))',
+      'color-mix(in srgb, var(--theme-primary) 75%, var(--theme-secondary))',
+      'var(--theme-primary)',
+    ],
+  },
+  {
+    name: 'Violet',
+    mode: 'dark',
+    colorForeground: 'rgb(235, 234, 234)',
+    colorBackground: 'rgba(21, 21, 39, 0.92)',
+    colorSecondary: 'rgba(38, 38, 64, 0.8)',
+    colorPrimary: 'rgba(131, 131, 185, 1)',
+    colorBorder: 'color-mix(in srgb, rgba(97, 97, 121, 0.55), transparent 0%)',
+    colorBackgroundContainer: 'url(/images/background/lead.webp) no-repeat center center / cover',
+    levelColors: [
+      'var(--theme-secondary)',
+      'color-mix(in srgb, var(--theme-primary) 35%, var(--theme-secondary))',
+      'color-mix(in srgb, var(--theme-primary) 60%, var(--theme-secondary))',
+      'color-mix(in srgb, var(--theme-primary) 75%, var(--theme-secondary))',
+      'var(--theme-primary)',
+    ],
   },
 ] satisfies ThemePreset[]

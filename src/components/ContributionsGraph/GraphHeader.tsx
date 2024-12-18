@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { AtSignIcon, DotIcon, UserIcon } from 'lucide-react'
 
 import { useData } from '~/DataContext'
+import { GraphSize } from '~/enums'
 import { numberWithCommas } from '~/helpers'
 
 const GitHubIcon = () => {
@@ -72,7 +73,7 @@ const Avatar = () => {
 }
 
 export function GraphHeader() {
-  const { graphData, totalYears, totalContributions } = useData()
+  const { graphData, totalYears, totalContributions, settings } = useData()
 
   if (!graphData) {
     return null
@@ -124,7 +125,13 @@ export function GraphHeader() {
         </div>
 
         {!!graphData.bio && (
-          <div className="line-clamp-3 w-full text-sm opacity-70">{graphData.bio}</div>
+          <div
+            className={`line-clamp-3 text-sm opacity-70 ${
+              settings.size === GraphSize.Small ? 'max-w-[300px]' : 'max-w-[400px]'
+            }`}
+          >
+            {graphData.bio}
+          </div>
         )}
       </div>
 

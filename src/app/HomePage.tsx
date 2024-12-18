@@ -117,6 +117,7 @@ export function HomePage() {
         await navigator.clipboard.write([item])
 
         setCopySuccess(true)
+
         setTimeout(() => {
           setCopySuccess(false)
         }, 2000)
@@ -153,7 +154,7 @@ export function HomePage() {
             const { top, right } = graphWrapperEle.getBoundingClientRect()
 
             setSettingPopUp({
-              offsetX: right,
+              offsetX: right + 20,
               offsetY: top,
             })
           }

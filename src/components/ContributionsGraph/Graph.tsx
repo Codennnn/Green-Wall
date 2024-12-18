@@ -66,14 +66,16 @@ export function Graph(props: GraphProps) {
         ) : (
           <div className="text-sm tabular-nums">
             <span className="mr-2 font-medium">{calendar.year}:</span>
-            {isNewYear && calendar.total === 0
-              ? newYearText
-              : `${numberWithCommas(calendar.total)} Contributions`}
+            <span className="opacity-80">
+              {isNewYear && calendar.total === 0
+                ? newYearText
+                : `${numberWithCommas(calendar.total)} Contributions`}
+            </span>
           </div>
         )}
 
         {showInspect && (
-          <button className="ml-auto rounded bg-main-50 px-2 py-1 text-sm font-medium text-main-500 opacity-0 transition hover:bg-main-100 group-hover:opacity-100">
+          <button className="ml-auto rounded bg-[var(--theme-secondary)] px-2 py-1 text-sm text-current opacity-0 transition hover:outline hover:outline-[var(--theme-border)] group-hover:opacity-100">
             <Link
               className="group/inspect inline-flex items-center gap-0.5"
               href={`/year/${calendar.year}/${username}`}
