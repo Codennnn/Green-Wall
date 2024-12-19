@@ -75,13 +75,13 @@ export function Graph(props: GraphProps) {
         )}
 
         {showInspect && (
-          <button className="ml-auto rounded bg-[var(--theme-secondary)] px-2 py-1 text-sm text-current opacity-0 transition hover:outline hover:outline-[var(--theme-border)] group-hover:opacity-100">
+          <button className="group/inspect ml-auto rounded bg-[var(--theme-secondary)] px-2 py-1 text-sm text-current opacity-0 outline outline-transparent transition-all hover:outline-[var(--theme-border)] group-hover:opacity-100">
             <Link
-              className="group/inspect inline-flex items-center gap-0.5"
+              className="inline-flex items-center gap-0.5"
               href={`/year/${calendar.year}/${username}`}
               target="_blank"
             >
-              <span>Inspect</span>
+              <span className="opacity-70 transition group-hover/inspect:opacity-100">Inspect</span>
               <ChevronRight className="size-4 transition group-hover/inspect:translate-x-0.5" />
             </Link>
           </button>
