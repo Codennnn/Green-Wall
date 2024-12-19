@@ -36,7 +36,7 @@ export function MockupSafari(props: MockupSafariProps) {
             {!!graphData?.login && (
               <div className="absolute inset-x-0 mx-auto flex w-fit min-w-[290px] items-center justify-between gap-2 rounded-lg border-2 border-[color-mix(in_srgb,_var(--theme-border),_transparent_50%)] bg-[var(--theme-secondary)] p-1 px-2">
                 <LockIcon className="size-3.5 opacity-70" />
-                <div className="text-xs opacity-70">{`githu.com/${graphData.login}`}</div>
+                <div className="text-xs opacity-70">{`github.com/${graphData.login}`}</div>
                 <RotateCwIcon className="size-3.5 opacity-70" />
               </div>
             )}
