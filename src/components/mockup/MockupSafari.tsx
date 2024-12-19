@@ -48,7 +48,7 @@ export function MockupSafari(props: MockupSafariProps) {
             </div>
           </div>
 
-          <div className="p-6">{children}</div>
+          <div>{children}</div>
         </div>
       </div>
 

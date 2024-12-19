@@ -8,10 +8,10 @@ export function GraphFooter() {
   }, [])
 
   return (
-    <div className="mt-6 flex items-center justify-center whitespace-nowrap text-xs opacity-40">
+    <div className="flex items-center justify-end whitespace-nowrap text-xs opacity-40">
       <span>Made in - </span>
       <a className="ml-1" href={origin}>
-        {origin}.
+        {origin}
       </a>
     </div>
   )

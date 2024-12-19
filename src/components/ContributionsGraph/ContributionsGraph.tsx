@@ -82,11 +82,11 @@ function InnerContributionsGraph(
     >
       <Mockup className={mockupClassName}>
         <div>
-          <div className="pb-10">
+          <div className="px-6 pb-10">
             <GraphHeader />
           </div>
 
-          <div className="flex flex-col gap-y-6">
+          <div className="flex flex-col gap-y-6 p-6">
             {graphData.contributionCalendars.map((calendar) => {
               let [startYear, endYear] = settings.yearRange ?? []
               startYear = startYear && Number.isInteger(Number(startYear)) ? startYear : firstYear
@@ -110,7 +110,14 @@ function InnerContributionsGraph(
             })}
           </div>
 
-          {!(settings.showAttribution === false) && <GraphFooter />}
+          <div
+            className="border-t-[1.5px] px-6 py-3"
+            style={{
+              borderColor: 'color-mix(in srgb, var(--theme-border) 50%, transparent)',
+            }}
+          >
+            {!(settings.showAttribution === false) && <GraphFooter />}
+          </div>
         </div>
       </Mockup>
     </div>
