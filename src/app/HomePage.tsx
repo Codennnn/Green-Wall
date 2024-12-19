@@ -64,7 +64,7 @@ export function HomePage() {
 
       if (trimmedName.includes('/')) {
         // Extract username from GitHub URL if applicable.
-        const githubUrlPattern = /https:\/\/github\.com\/([^/\s]+)/
+        const githubUrlPattern = /^https:\/\/github\.com\/([^/?#]+)(?:[/?#]|$)/
         const match = trimmedName.match(githubUrlPattern)
 
         if (match) {
