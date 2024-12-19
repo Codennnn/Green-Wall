@@ -57,10 +57,34 @@ export function HomePage() {
   const { run, loading, error } = useGraphRequest({ onError: handleError })
 
   const handleSubmit = async () => {
-    if (searchName.trim() && !loading) {
+    const trimmedName = searchName.trim()
+
+    if (trimmedName && !loading) {
+      let username = trimmedName
+
+      if (trimmedName.includes('/')) {
+        // Extract username from GitHub URL if applicable.
+        const githubUrlPattern = /https:\/\/github\.com\/([^/\s]+)/
+        const match = trimmedName.match(githubUrlPattern)
+
+        if (match) {
+          username = match[1]
+        } else {
+          reset()
+          setSearchName('')
+          return
+        }
+      }
+
       reset()
       trackEvent('Click Generate')
-      const data = await run({ username: searchName })
+
+      const data = await run({ username })
+
+      if (data) {
+        setSearchName(data.login)
+      }
+
       setGraphData(data)
     }
   }
