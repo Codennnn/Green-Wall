@@ -18,7 +18,7 @@ export function MockupSafari(props: MockupSafariProps) {
   const { graphData } = useData()
 
   return (
-    <div className="relative overflow-hidden rounded-3xl p-7">
+    <div className="relative overflow-hidden rounded-3xl p-[calc(var(--block-size)_*_3.5)]">
       <div className={`relative z-10 overflow-hidden ${className}`}>
         <div className="rounded-2xl border-2 border-double border-[var(--theme-border)] bg-[var(--theme-background)]">
           <div className="relative flex h-14 items-center gap-x-2 px-6">

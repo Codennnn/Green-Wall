@@ -101,8 +101,8 @@ export const THEME_PRESETS = [
     mode: 'dark',
     colorForeground: 'rgb(235, 234, 234)',
     colorBackground: 'rgba(21, 21, 39, 0.92)',
-    colorSecondary: 'rgba(38, 38, 64, 0.8)',
-    colorPrimary: 'rgba(131, 131, 185, 1)',
+    colorSecondary: 'rgba(48, 48, 80, 0.8)',
+    colorPrimary: 'rgba(156, 156, 210, 1)',
     colorBorder: 'color-mix(in srgb, rgba(97, 97, 121, 0.55), transparent 0%)',
     colorBackgroundContainer: 'url(/images/background/lead.webp) no-repeat center center / cover',
     levelColors: [
