@@ -190,7 +190,7 @@ export function HomePage() {
 
   return (
     <div className="py-10 md:py-14">
-      <h1 className="text-center text-3xl font-bold md:mx-auto md:px-20 md:text-6xl md:leading-[1.2]">
+      <h1 className="text-center text-3xl font-bold md:mx-auto md:px-20 md:text-4xl md:leading-[1.2] lg:text-6xl">
         Review the contributions you have made on GitHub over the years.
       </h1>
 

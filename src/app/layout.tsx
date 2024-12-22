@@ -50,7 +50,7 @@ export default function Layout(props: React.PropsWithChildren) {
         <Initial />
 
         <body className="m-0 h-full overflow-y-auto text-main-700">
-          <div className="flex min-h-screen flex-col px-4 sm:px-5 md:mx-auto md:min-w-content md:max-w-content lg:px-0">
+          <div className="flex min-h-screen flex-col px-4 md:mx-auto md:min-w-content md:max-w-content md:px-5">
             <header>
               <div className="flex h-[65px] items-center md:h-[80px]">
                 <Link href="/">
