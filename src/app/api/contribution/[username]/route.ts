@@ -15,60 +15,55 @@ export async function GET(
   { params }: { params: GetContributionRequestParams }
 ) {
   const { username } = params
-
   const statistics = request.nextUrl.searchParams.get('statistics') === 'true'
+  const { searchParams } = new URL(request.url)
+  const queryYears = searchParams.getAll('years').map(Number)
 
-  if (typeof username === 'string') {
-    const { searchParams } = new URL(request.url)
+  if (process.env.NEXT_PUBLIC_DATA_MODE === 'mock') {
+    return NextResponse.json({ data: mockGraphData }, { status: 200 })
+  }
 
-    const queryYears = searchParams.getAll('years').map(Number)
+  try {
+    const githubUser = await fetchGitHubUser(username)
 
-    if (process.env.NEXT_PUBLIC_DATA_MODE === 'mock') {
-      return NextResponse.json({ data: mockGraphData }, { status: 200 })
+    const contributionYears = githubUser.contributionYears
+
+    const filteredYears =
+        Array.isArray(queryYears) && queryYears.length > 0
+            ? contributionYears.filter((year) => queryYears.includes(year))
+            : contributionYears
+
+    const contributionCalendars = await Promise.all(
+        filteredYears.map((year) => fetchContributionsCollection(username, year))
+    )
+
+    const graphData: GraphData = {
+      ...githubUser,
+      contributionYears: filteredYears,
+      contributionCalendars,
     }
 
-    try {
-      const githubUser = await fetchGitHubUser(username)
+    let valuableStatistics: ValuableStatistics | undefined
 
-      const contributionYears = githubUser.contributionYears
+    if (statistics) {
+      valuableStatistics = getValuableStatistics(graphData)
+    }
 
-      const filteredYears =
-        Array.isArray(queryYears) && queryYears.length > 0
-          ? contributionYears.filter((year) => queryYears.includes(year))
-          : contributionYears
+    const data = valuableStatistics ? { ...graphData, statistics: valuableStatistics } : graphData
 
-      const contributionCalendars = await Promise.all(
-        filteredYears.map((year) => fetchContributionsCollection(username, year))
-      )
+    return NextResponse.json({ data }, { status: 200 })
+  } catch (err) {
+    if (err instanceof Error) {
+      const errorData: ResponseData = { errorType: ErrorType.BadRequest, message: err.message }
 
-      const graphData: GraphData = {
-        ...githubUser,
-        contributionYears: filteredYears,
-        contributionCalendars,
-      }
-
-      let valuableStatistics: ValuableStatistics | undefined
-
-      if (statistics) {
-        valuableStatistics = getValuableStatistics(graphData)
-      }
-
-      const data = valuableStatistics ? { ...graphData, statistics: valuableStatistics } : graphData
-
-      return NextResponse.json({ data }, { status: 200 })
-    } catch (err) {
-      if (err instanceof Error) {
-        const errorData: ResponseData = { errorType: ErrorType.BadRequest, message: err.message }
-
-        if (err.message === 'Bad credentials') {
-          return NextResponse.json(
+      if (err.message === 'Bad credentials') {
+        return NextResponse.json(
             { ...errorData, errorType: ErrorType.BadCredentials },
-            { status: 401 }
-          )
-        }
-
-        return NextResponse.json(errorData, { status: 400 })
+            { status: 401}
+        )
       }
+
+      return NextResponse.json(errorData, { status: 400 })
     }
   }
 }

@@ -31,7 +31,7 @@ function InnerContributionsGraph(
 
   const graphRef = useRef<HTMLDivElement>(null)
 
-  useImperativeHandle(ref, () => graphRef.current)
+  useImperativeHandle(ref, () => graphRef.current!)
 
   const applyingTheme = useMemo(
     () =>

@@ -52,7 +52,7 @@ export async function GET(request: NextRequest, { params }: { params: { username
 
           <div tw="mx-6 text-6xl font-bold">·</div>
 
-          <img src={user.avatarUrl} tw="mb-4 h-24 w-24 overflow-hidden rounded-full" />
+          <img src={user.avatarUrl} tw="mb-4 h-24 w-24 overflow-hidden rounded-full" alt={`${user.name}'s avatar`} />
 
           <div tw="-mt-6 ml-10 flex flex-col">
             <div tw="text-5xl font-semibold leading-none">{user.name}</div>
