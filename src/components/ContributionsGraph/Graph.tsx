@@ -38,7 +38,7 @@ export function Graph(props: GraphProps) {
 
   const [tooltipInfo, setTooltipInfo] = useState<ContributionDay>()
   const [refEle, setRefEle] = useState<HTMLElement | null>(null)
-  const delayTimer = useRef<NodeJS.Timeout>()
+  const delayTimer = useRef<NodeJS.Timeout | null>(null)
 
   const handleMouseEnter = (refTarget: HTMLElement, info: ContributionDay) => {
     delayTimer.current = setTimeout(() => {
