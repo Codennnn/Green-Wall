@@ -13,7 +13,8 @@
     "lint:css": "stylelint **/*.css",
     "lint:es": "eslint **/*.{ts,tsx}",
     "lint:ts": "tsc --noEmit --skipLibCheck",
-    "start": "next start"
+    "start": "next start",
+    "prettier": "prettier --write ./src"
   },
   "dependencies": {
     "@floating-ui/react": "^0.27.4",

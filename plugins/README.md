@@ -25,17 +25,20 @@
 ### 2. 开发流程
 
 1. **克隆项目**
+
    ```bash
    git clone https://github.com/Codennnn/Green-Wall.git
    cd Green-Wall
    ```
 
 2. **安装依赖**
+
    ```bash
    pnpm install
    ```
 
 3. **启动开发服务**
+
    ```bash
    pnpm dev:script
    ```
@@ -60,6 +63,7 @@
 ### 5. 常见问题
 
 1. **脚本无法加载**
+
    - 检查文件路径是否正确
    - 确认油猴插件权限设置
    - 验证文件是否存在

@@ -50,7 +50,7 @@ export function MockupSafari(props: MockupSafariProps) {
             </div>
           )}
 
-          <div className={settings.showSafariHeader ? undefined : "pt-6"}>{children}</div>
+          <div className={settings.showSafariHeader ? undefined : 'pt-6'}>{children}</div>
         </div>
       </div>
 

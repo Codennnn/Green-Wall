@@ -20,8 +20,11 @@ const levelColors = {
   [ContributionLevel.FOURTH_QUARTILE]: '#216e39',
 }
 
-export async function GET(request: NextRequest, { params }: { params: { username: string } }) {
-  const { username } = params
+export async function GET(
+  request: NextRequest,
+  { params }: { params: Promise<{ username: string }> }
+) {
+  const { username } = await params
 
   const { searchParams } = new URL(request.url)
 
@@ -52,7 +55,11 @@ export async function GET(request: NextRequest, { params }: { params: { username
 
           <div tw="mx-6 text-6xl font-bold">·</div>
 
-          <img src={user.avatarUrl} tw="mb-4 h-24 w-24 overflow-hidden rounded-full" alt={`${user.name}'s avatar`} />
+          <img
+            alt={`${user.name || 'Unknown'}'s avatar`}
+            src={user.avatarUrl}
+            tw="mb-4 h-24 w-24 overflow-hidden rounded-full"
+          />
 
           <div tw="-mt-6 ml-10 flex flex-col">
             <div tw="text-5xl font-semibold leading-none">{user.name}</div>

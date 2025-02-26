@@ -1,5 +1,4 @@
-import type { Metadata } from 'next'
-import type { Viewport } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { Rubik } from 'next/font/google'
 import Image from 'next/image'
 import Link from 'next/link'

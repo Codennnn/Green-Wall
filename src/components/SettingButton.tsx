@@ -5,7 +5,7 @@ import { type PopoverProps, RadixPopover } from './ui-kit/RadixPopover'
 
 interface SettingButtonProps
   extends Omit<React.ComponentProps<'button'>, 'content'>,
-  Pick<PopoverProps, 'content' | 'popoverContentId'> {
+    Pick<PopoverProps, 'content' | 'popoverContentId'> {
   onPopOut?: () => void
 }
 

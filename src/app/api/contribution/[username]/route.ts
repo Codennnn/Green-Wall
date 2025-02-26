@@ -6,15 +6,11 @@ import { mockGraphData } from '~/mock-data'
 import { fetchContributionsCollection, fetchGitHubUser } from '~/services'
 import type { GraphData, ResponseData, ValuableStatistics } from '~/types'
 
-interface GetContributionRequestParams {
-  username: string
-}
-
 export async function GET(
   request: NextRequest,
-  { params }: { params: GetContributionRequestParams }
+  { params }: { params: Promise<{ username: string }> }
 ) {
-  const { username } = params
+  const { username } = await params
   const statistics = request.nextUrl.searchParams.get('statistics') === 'true'
   const { searchParams } = new URL(request.url)
   const queryYears = searchParams.getAll('years').map(Number)
@@ -29,12 +25,12 @@ export async function GET(
     const contributionYears = githubUser.contributionYears
 
     const filteredYears =
-        Array.isArray(queryYears) && queryYears.length > 0
-            ? contributionYears.filter((year) => queryYears.includes(year))
-            : contributionYears
+      Array.isArray(queryYears) && queryYears.length > 0
+        ? contributionYears.filter((year) => queryYears.includes(year))
+        : contributionYears
 
     const contributionCalendars = await Promise.all(
-        filteredYears.map((year) => fetchContributionsCollection(username, year))
+      filteredYears.map((year) => fetchContributionsCollection(username, year))
     )
 
     const graphData: GraphData = {
@@ -58,8 +54,8 @@ export async function GET(
 
       if (err.message === 'Bad credentials') {
         return NextResponse.json(
-            { ...errorData, errorType: ErrorType.BadCredentials },
-            { status: 401}
+          { ...errorData, errorType: ErrorType.BadCredentials },
+          { status: 401 }
         )
       }
 

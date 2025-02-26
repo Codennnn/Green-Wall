@@ -4,10 +4,12 @@ import { DataProvider } from '~/DataContext'
 
 import { UserPage } from './UserPage'
 
-type GenerateMetadata = (params: { params: { username: string } }) => Metadata
-
-export const generateMetadata: GenerateMetadata = ({ params }) => {
-  const username = params.username
+export const generateMetadata = async ({
+  params,
+}: {
+  params: Promise<{ username: string }>
+}): Promise<Metadata> => {
+  const { username } = await params
   const title = `${username}'s GitHub contributions`
   const description = `${username}'s GitHub contributions.`
   const sharingURL = `https://green-wall.leoku.dev/share/${username}`

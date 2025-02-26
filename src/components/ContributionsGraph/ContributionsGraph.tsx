@@ -110,11 +110,11 @@ function InnerContributionsGraph(
             })}
           </div>
 
-          {settings.showAttribution &&
-            <div className="border-t-[1.5px] px-6 py-3 border-t-[color-mix(in_srgb,var(--theme-border)_50%,transparent)]">
+          {settings.showAttribution && (
+            <div className="border-t-[1.5px] border-t-[color-mix(in_srgb,var(--theme-border)_50%,transparent)] px-6 py-3">
               <GraphFooter />
             </div>
-          }
+          )}
         </div>
       </Mockup>
     </div>
