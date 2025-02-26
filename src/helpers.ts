@@ -29,7 +29,7 @@ export function setSearchParamsToUrl(params: SearchParams) {
   const { url, paramName, paramValue } = params
 
   if (paramValue) {
-    const VirtualUrl = new URL(`http://x.com${url}`)
+    const VirtualUrl = new URL(`https://x.com${url}`)
 
     if (Array.isArray(paramValue)) {
       paramValue.forEach((val) => {

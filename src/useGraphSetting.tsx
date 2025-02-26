@@ -19,6 +19,10 @@ type Action =
       payload: State['daysLabel']
     }
   | {
+      type: 'showSafariHeader'
+      payload: State['showSafariHeader']
+    }
+  | {
       type: 'showAttribution'
       payload: State['showAttribution']
     }
@@ -46,6 +50,7 @@ const initialState: State = {
   blockShape: DEFAULT_BLOCK_SHAPE,
   daysLabel: false,
   showAttribution: true,
+  showSafariHeader: true,
 }
 
 export function useGraphSetting() {
@@ -59,6 +64,9 @@ export function useGraphSetting() {
 
       case 'daysLabel':
         return { ...state, daysLabel: payload }
+
+      case 'showSafariHeader':
+        return { ...state, showSafariHeader: payload }
 
       case 'showAttribution':
         return { ...state, showAttribution: payload }

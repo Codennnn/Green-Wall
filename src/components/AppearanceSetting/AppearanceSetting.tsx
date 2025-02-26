@@ -16,6 +16,7 @@ export function AppearanceSetting() {
   const { graphData, settings, dispatchSettings } = useData()
 
   const daysLabelId = useId()
+  const safariHeader = useId()
   const attributionId = useId()
 
   return (
@@ -33,6 +34,18 @@ export function AppearanceSetting() {
           id={daysLabelId}
           onCheckedChange={(checked) => {
             dispatchSettings({ type: 'daysLabel', payload: checked })
+          }}
+        />
+      </fieldset>
+
+      <fieldset>
+        <label htmlFor={safariHeader}>Safari Header</label>
+        <RadixSwitch
+          checked={settings.showSafariHeader}
+          defaultChecked={true}
+          id={safariHeader}
+          onCheckedChange={(checked) => {
+            dispatchSettings({ type: 'showSafariHeader', payload: checked })
           }}
         />
       </fieldset>

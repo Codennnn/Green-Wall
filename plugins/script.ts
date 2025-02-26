@@ -118,13 +118,12 @@ const handler = () => {
           }
         })
 
-        const calendar = {
+        // calendar
+        return {
           total: cur.total,
           year: cur.year,
           rows,
         }
-
-        return calendar
       })
 
       return {
@@ -411,13 +410,13 @@ const handler = () => {
           }
 
           const handleLoadData = () => {
-            const loading = `
+            // loading
+            dialogContent.innerHTML = `
             <svg aria-label="Loading" style="box-sizing: content-box; color: var(--color-icon-primary);" width="32" height="32" viewBox="0 0 16 16" fill="none" data-view-component="true" class="anim-rotate">
               <circle cx="8" cy="8" r="7" stroke="currentColor" stroke-opacity="0.25" stroke-width="2" vector-effect="non-scaling-stroke" fill="none"></circle>
               <path d="M15 8a7.002 7.002 0 00-7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" vector-effect="non-scaling-stroke"></path>
             </svg>
             `
-            dialogContent.innerHTML = loading
 
             GM.xmlHttpRequest({
               method: 'GET',

@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { Rubik } from 'next/font/google'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -16,9 +16,12 @@ const rubik = Rubik({
   subsets: ['latin'],
 })
 
+export const viewport: Viewport = {
+  colorScheme: 'light',
+}
+
 export const metadata: Metadata = {
   metadataBase: new URL('https://green-wall.leoku.dev'),
-  colorScheme: 'light',
   icons: [{ url: '/favicon.svg', type: 'image/svg+xml', media: '(prefers-color-scheme: light)' }],
   title: 'Green Wall · GitHub contribution graph generator',
   description: 'Green Wall is a GitHub contribution graph generator.',

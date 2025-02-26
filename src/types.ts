@@ -71,6 +71,7 @@ export interface ResponseData {
 export interface GraphSettings {
   yearRange?: [start_year: string | undefined, end_year: string | undefined]
   daysLabel?: boolean
+  showSafariHeader?: boolean
   showAttribution?: boolean
   size?: GraphSize
   blockShape?: BlockShape
