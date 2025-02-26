@@ -6,9 +6,13 @@ import { mockGraphData } from '~/mock-data'
 import { fetchContributionsCollection, fetchGitHubUser } from '~/services'
 import type { GraphData, ResponseData, ValuableStatistics } from '~/types'
 
+interface GetContributionRequestParams {
+  username: string
+}
+
 export async function GET(
   request: NextRequest,
-  { params }: { params: Promise<{ username: string }> }
+  { params }: { params: Promise<GetContributionRequestParams> }
 ) {
   const { username } = await params
   const statistics = request.nextUrl.searchParams.get('statistics') === 'true'

@@ -4,11 +4,9 @@ import { DataProvider } from '~/DataContext'
 
 import { UserPage } from './UserPage'
 
-export const generateMetadata = async ({
-  params,
-}: {
-  params: Promise<{ username: string }>
-}): Promise<Metadata> => {
+type GenerateMetadata = (params: { params: Promise<{ username: string }> }) => Promise<Metadata>
+
+export const generateMetadata: GenerateMetadata = async ({ params }): Promise<Metadata> => {
   const { username } = await params
   const title = `${username}'s GitHub contributions`
   const description = `${username}'s GitHub contributions.`
