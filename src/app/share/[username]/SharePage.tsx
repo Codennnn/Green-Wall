@@ -22,12 +22,19 @@ export function SharePage() {
     const end = query.get('end') ?? undefined
     const size = query.get('size') ?? undefined
     let theme = query.get('theme') ?? undefined
-    theme = THEME_PRESETS.findIndex((t) => t.name === theme) !== -1 ? theme : DEFAULT_THEME
+    theme = THEME_PRESETS.some((t) => t.name === theme) ? theme : DEFAULT_THEME
+
+    // default values
+    // only be hidden when the query is explicitly specified as 'false'
+    const showSafariHeader = query.get('showSafariHeader') !== 'false'
+    const showAttribution = query.get('showAttribution') !== 'false'
 
     return {
       yearRange: [start, end] as GraphSettings['yearRange'],
       size: size as GraphSize | undefined,
       theme: theme as Themes | undefined,
+      showSafariHeader,
+      showAttribution,
     }
   }, [query])
 
