@@ -126,7 +126,7 @@ export function GraphBlock() {
       </Loading>
 
       <>
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-2 gap-3 pt-4">
           <StaticCard>
             <StaticCardTitle icon={<ChartNoAxesCombinedIcon className="size-5" />}>
               Longest Streak

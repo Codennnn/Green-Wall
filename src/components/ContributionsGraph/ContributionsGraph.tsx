@@ -82,7 +82,7 @@ function InnerContributionsGraph(
     >
       <Mockup className={mockupClassName}>
         <div>
-          <div className="px-6 pb-10">
+          <div className="px-6 pt-2">
             <GraphHeader />
           </div>
 
