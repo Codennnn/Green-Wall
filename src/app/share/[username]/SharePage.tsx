@@ -8,7 +8,7 @@ import { useParams, useSearchParams } from 'next/navigation'
 
 import { ContributionsGraph } from '~/components/ContributionsGraph'
 import { ErrorMessage } from '~/components/ErrorMessage'
-import { DEFAULT_THEME, THEMES } from '~/constants'
+import { DEFAULT_THEME, THEME_PRESETS } from '~/constants'
 import { useData } from '~/DataContext'
 import type { GraphSize } from '~/enums'
 import type { GraphSettings, Themes } from '~/types'
@@ -22,12 +22,19 @@ export function SharePage() {
     const end = query.get('end') ?? undefined
     const size = query.get('size') ?? undefined
     let theme = query.get('theme') ?? undefined
-    theme = THEMES.findIndex((t) => t.name === theme) !== -1 ? theme : DEFAULT_THEME
+    theme = THEME_PRESETS.some((t) => t.name === theme) ? theme : DEFAULT_THEME
+
+    // default values
+    // only be hidden when the query is explicitly specified as 'false'
+    const showSafariHeader = query.get('showSafariHeader') !== 'false'
+    const showAttribution = query.get('showAttribution') !== 'false'
 
     return {
       yearRange: [start, end] as GraphSettings['yearRange'],
       size: size as GraphSize | undefined,
       theme: theme as Themes | undefined,
+      showSafariHeader,
+      showAttribution,
     }
   }, [query])
 
@@ -83,7 +90,7 @@ export function SharePage() {
         </div>
 
         <div className="flex w-full overflow-x-auto py-5 md:justify-center md:py-14">
-          <ContributionsGraph mockupClassName="md:shadow-2xl md:shadow-main-200" />
+          <ContributionsGraph />
         </div>
       </div>
     )

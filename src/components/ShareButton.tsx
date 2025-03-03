@@ -40,6 +40,14 @@ export function ShareButton() {
         Url.searchParams.set('theme', settings.theme)
       }
 
+      if (settings.showSafariHeader === false) {
+        Url.searchParams.set('showSafariHeader', 'false')
+      }
+
+      if (settings.showAttribution === false) {
+        Url.searchParams.set('showAttribution', 'false')
+      }
+
       setShareUrl(Url)
     }
   }, [username, settings, firstYear, lastYear])
