@@ -73,7 +73,7 @@ const Avatar = () => {
 }
 
 export function GraphHeader() {
-  const { graphData, totalYears, totalContributions, settings } = useData()
+  const { graphData, lastYear, totalYears, totalContributions, settings } = useData()
 
   if (!graphData) {
     return null
@@ -149,7 +149,11 @@ export function GraphHeader() {
         </span>
 
         <span className="opacity-70">
-          {typeof totalYears === 'number' ? `${totalYears} Years` : '-'}
+          {typeof totalYears === 'number'
+            ? totalYears === 1
+              ? `In ${lastYear ?? '-'}`
+              : `${totalYears} Years`
+            : '-'}
         </span>
       </div>
     </div>

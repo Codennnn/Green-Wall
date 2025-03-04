@@ -82,7 +82,7 @@ function InnerContributionsGraph(
     >
       <Mockup className={mockupClassName}>
         <div>
-          <div className="px-6 pt-2">
+          <div className={`px-6 ${settings.showSafariHeader ? 'pt-2' : 'pt-6'}`}>
             <GraphHeader />
           </div>
 
