@@ -47,6 +47,24 @@ export const THEMES = [
     levelColors: ['#ebedf0', '#9be9a8', '#40c463', '#30a14e', '#216e39'],
     background: '#fff',
   },
+  {
+    name: 'Midnight',
+    textColor: '#fafafa',
+    levelColors: ['#233133', '#3a5c60', '#589198', '#6ab2ba', '#87e7f2'],
+    background: '#091617',
+  },
+  {
+    name: 'Sunset',
+    textColor: '#fafafa',
+    levelColors: ['#331b1b', '#794b49', '#ab6e69', '#c9837d', '#fba59d'],
+    background: '#1d1210',
+  },
+  {
+    name: 'Violet',
+    textColor: '#fafafa',
+    levelColors: ['#262640', '#505073', '#6d6d98', '#7f7fae', '#9c9cd2'],
+    background: '#17151f',
+  },
 ] satisfies Theme[]
 
 export const THEME_PRESETS = [
