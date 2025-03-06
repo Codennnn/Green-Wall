@@ -1,7 +1,9 @@
 /** @type {import('next').NextConfig} */
 
 export default {
-  reactStrictMode: true,
+  experimental: {
+    reactCompiler: true,
+  },
 
   async headers() {
     return [
