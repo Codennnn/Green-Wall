@@ -4,32 +4,35 @@ _Take a snapshot 📸 of your GitHub contributions, then share it!_
 
 **Green Wall** is a powerful web tool that simplifies the way you review your GitHub :octocat: contributions over time. This tool allows you to generate an image of your contributions, which you can save and share with others.
 
-<a href="https://green-wall.leoku.dev/">
-  <picture>
-    <source media="(prefers-color-scheme: )" srcset="./screenshot.png">
-    <source media="(prefers-color-scheme: dark)" srcset="./screenshot-dark.png">
-    <img alt="Green Wall Screenshot" src="./screenshot.png">
-  </picture>
-</a>
+[![Screenshot](./screenshot.webp)](https://green-wall.leoku.dev/)
 
 ## How it works
 
-This project leverages the GitHub GraphQL API to retrieve data and employs Next.js API Routes to handle requests. For insights into how we manage your data, refer to [this file](./src/pages/api/contribution/%5Busername%5D.ts).
+This project leverages the GitHub GraphQL API to retrieve data and employs Next.js API Routes to handle requests. For insights into how we manage your data, refer to [this file](./src/app/api/contribution/%5Busername%5D/route.ts).
 
 ## Usage
 
 To showcase a live preview of your contributions on your GitHub README or website, you can use the following examples.
 
+**Optional Parameters**
+
+| Parameter | Description                      | Type     | Default Value | Example          |
+|-----------|----------------------------------|----------|---------------|------------------|
+| `year`    | Specify calendar year to display | `number` | Latest year   | `?year=2023`     |
+| `theme`   | Choose color theme for image     | `string` | `Classic`     | `?theme=Violet`  |
+| `width`   | Set custom image width           | `number` | 1200          | `?width=800`     |
+| `height`  | Set custom image height          | `number` | 630           | `?height=400`    |
+
 **HTML**
 
 ```html
-<img src="https://green-wall.leoku.dev/api/og/share/[YOUR USERNAME]" alt="My contributions" />
+<img src="https://green-wall.leoku.dev/api/og/share/[YOUR_USERNAME]" alt="My contributions" />
 ```
 
 **Markdown**
 
 ```markdown
-![](https://green-wall.leoku.dev/api/og/share/[YOUR USERNAME])
+![](https://green-wall.leoku.dev/api/og/share/[YOUR_USERNAME])
 ```
 
 This will produce a preview similar to the one shown below.
@@ -60,10 +63,10 @@ Once you have your personal access token, create a file named `.env.local` at th
 ```sh
 # .env.local
 
-# The format should be: GITHUB_ACCESS_TOKEN="[YOUR TOKEN]"
+# The format should be: GITHUB_ACCESS_TOKEN="[YOUR_TOKEN]"
 
 # Example:
-GITHUB_ACCESS_TOKEN="ghp_eQ81YcyFcwVjdJwBgUj150VPnxBf1N48Sep7"
+GITHUB_ACCESS_TOKEN="ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 ```
 
 Then you are ready to run `pnpm dev` to develop.

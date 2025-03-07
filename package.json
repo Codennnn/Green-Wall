@@ -17,7 +17,7 @@
     "prettier": "prettier --write ./src"
   },
   "dependencies": {
-    "@floating-ui/react": "^0.27.4",
+    "@floating-ui/react": "^0.27.5",
     "@radix-ui/react-popover": "^1.1.6",
     "@radix-ui/react-radio-group": "^1.2.3",
     "@radix-ui/react-select": "^2.1.6",
@@ -25,29 +25,30 @@
     "@radix-ui/react-toggle-group": "^1.1.2",
     "@radix-ui/react-tooltip": "^1.1.8",
     "@splitbee/web": "^0.3.0",
-    "framer-motion": "^12.4.7",
+    "babel-plugin-react-compiler": "^19.0.0-beta",
+    "framer-motion": "^12.4.10",
     "html-to-image": "^1.11.13",
-    "lucide-react": "^0.475.0",
-    "next": "^15.1.7",
+    "lucide-react": "^0.477.0",
+    "next": "^15.2.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-use-event-hook": "^0.9.6",
     "tailwindcss-radix": "^3.0.5",
-    "valibot": "1.0.0-rc.1"
+    "valibot": "1.0.0-rc.3"
   },
   "devDependencies": {
     "@babel/preset-react": "^7.26.3",
     "@codennnn/tsconfig": "1.2.1",
     "@types/greasemonkey": "^4.0.7",
-    "@types/node": "22.13.5",
+    "@types/node": "22.13.9",
     "@types/react": "19.0.10",
     "autoprefixer": "^10.4.20",
     "npm-run-all": "^4.1.5",
     "postcss": "^8.5.3",
     "prefer-code-style": "2.1.10",
-    "stylelint": "^16.14.1",
-    "tailwindcss": "^3.4.15",
+    "stylelint": "^16.15.0",
+    "tailwindcss": "^3.4.17",
     "tslib": "^2.8.1",
-    "typescript": "^5.7.3"
+    "typescript": "^5.8.2"
   }
 }
