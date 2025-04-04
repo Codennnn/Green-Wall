@@ -4,7 +4,7 @@ type SelectButtonProps = Omit<React.ComponentProps<'button'>, 'className'>
 
 const InnerSelectButton: React.ForwardRefRenderFunction<HTMLButtonElement, SelectButtonProps> = (
   props,
-  ref
+  ref,
 ) => {
   return (
     <button

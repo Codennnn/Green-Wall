@@ -66,11 +66,11 @@ export function AppearanceSetting() {
         <label className="flex items-center">
           Graph Size
           <RadixTooltip
-            label={
+            label={(
               <span className="inline-block max-w-xs leading-5">
                 You can also adjust the web zoom to change the size of the saved image.
               </span>
-            }
+            )}
           >
             <CircleHelpIcon className="ml-1 inline-block size-4 cursor-help opacity-90" />
           </RadixTooltip>

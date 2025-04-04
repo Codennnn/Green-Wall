@@ -16,7 +16,7 @@ export function UserPage() {
   const { run, loading, error } = useGraphRequest()
 
   const params = useParams()
-  const username = typeof params['username'] === 'string' ? params['username'] : undefined
+  const username = typeof params.username === 'string' ? params.username : undefined
 
   useEffect(() => {
     if (username) {

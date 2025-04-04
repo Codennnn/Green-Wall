@@ -20,13 +20,16 @@ const Avatar = () => {
       if (!root.hasChildNodes()) {
         setStatus('loading')
         const avatarImg = new window.Image()
+
         avatarImg.onload = () => {
           root.appendChild(avatarImg)
           setStatus('loaded')
         }
+
         avatarImg.onerror = () => {
           setStatus('error')
         }
+
         avatarImg.src = graphData.avatarUrl
         avatarImg.alt = `${graphData.login}'s avatar.`
         avatarImg.classList.add('h-full', 'w-full')

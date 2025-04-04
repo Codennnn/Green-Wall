@@ -56,8 +56,8 @@ export default {
 
   plugins: [
     radix,
-    plugin(function ({ addVariant }) {
-      addVariant('toggle-on', ['&[data-state=on]'])
+    plugin((api) => {
+      api.addVariant('toggle-on', ['&[data-state=on]'])
     }),
   ],
 } satisfies Config

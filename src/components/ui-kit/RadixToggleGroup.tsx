@@ -7,14 +7,14 @@ const DEFAULT_ITEM_FONT_SIZE = 16
 
 type RadixToggleGroupProps = ToggleGroup.ToggleGroupSingleProps & {
   size?: 'default' | 'small' | 'large' | number
-  options?: { label: string | React.ReactNode; value: string; tooltip?: React.ReactNode }[]
+  options?: { label: string | React.ReactNode, value: string, tooltip?: React.ReactNode }[]
 }
 
 export function RadixToggleGroup(props: RadixToggleGroupProps) {
   const { size = 'default', options, ...toggleGroupProps } = props
 
-  const itemSize =
-    size === 'small'
+  const itemSize
+    = size === 'small'
       ? DEFAULT_ITEM_SIZE - 10
       : size === 'large'
         ? DEFAULT_ITEM_SIZE + 10
@@ -22,8 +22,8 @@ export function RadixToggleGroup(props: RadixToggleGroupProps) {
           ? size
           : DEFAULT_ITEM_SIZE
 
-  const fontSize =
-    size === 'small'
+  const fontSize
+    = size === 'small'
       ? DEFAULT_ITEM_FONT_SIZE - 2
       : size === 'large'
         ? DEFAULT_ITEM_FONT_SIZE + 2
@@ -42,7 +42,7 @@ export function RadixToggleGroup(props: RadixToggleGroupProps) {
           <ToggleGroup.Item
             key={opt.value}
             className="
-            toggle-on:bg-success-300 flex-row-reverse items-center justify-center
+            flex-row-reverse items-center justify-center
             text-main-500 hover:bg-main-100/40
             focus-visible:z-10 toggle-on:bg-main-100 toggle-on:font-medium toggle-on:text-main-700
             "

@@ -32,9 +32,9 @@ export function Graph(props: GraphProps) {
   const { username, settings } = useData()
 
   const currentYear = new Date().getFullYear()
-  const isNewYear =
-    currentYear === calendar.year &&
-    (new Date(currentYear, 0, 2).getTime() - Date.now()) / 1000 / 60 / 60 / 24 >= 0
+  const isNewYear
+    = currentYear === calendar.year
+      && (new Date(currentYear, 0, 2).getTime() - Date.now()) / 1000 / 60 / 60 / 24 >= 0
 
   const [tooltipInfo, setTooltipInfo] = useState<ContributionDay>()
   const [refEle, setRefEle] = useState<HTMLElement | null>(null)
@@ -51,28 +51,31 @@ export function Graph(props: GraphProps) {
     if (delayTimer.current) {
       window.clearTimeout(delayTimer.current)
     }
+
     setRefEle(null)
   }
 
   return (
-    <div {...rest} className={`${rest.className || ''} group`}>
+    <div {...rest} className={`${rest.className ?? ''} group`}>
       <div className="mb-2 flex items-center">
-        {typeof titleRender === 'function' ? (
-          titleRender({
-            year: calendar.year,
-            total: calendar.total,
-            isNewYear,
-          })
-        ) : (
-          <div className="text-sm tabular-nums">
-            <span className="mr-2 font-medium">{calendar.year}:</span>
-            <span className="opacity-80">
-              {isNewYear && calendar.total === 0
-                ? newYearText
-                : `${numberWithCommas(calendar.total)} Contributions`}
-            </span>
-          </div>
-        )}
+        {typeof titleRender === 'function'
+          ? (
+              titleRender({
+                year: calendar.year,
+                total: calendar.total,
+                isNewYear,
+              })
+            )
+          : (
+              <div className="text-sm tabular-nums">
+                <span className="mr-2 font-medium">{calendar.year}:</span>
+                <span className="opacity-80">
+                  {isNewYear && calendar.total === 0
+                    ? newYearText
+                    : `${numberWithCommas(calendar.total)} Contributions`}
+                </span>
+              </div>
+            )}
 
         {showInspect && (
           <button className="group/inspect ml-auto rounded bg-[var(--theme-secondary)] px-2 py-1 text-sm text-current opacity-0 outline outline-transparent transition-all hover:outline-[var(--theme-border)] group-hover:opacity-100">
@@ -90,19 +93,24 @@ export function Graph(props: GraphProps) {
 
       <GraphTooltip
         label={
-          tooltipInfo ? (
-            <span className={settings.size === GraphSize.Small ? 'text-xs' : 'text-sm'}>
-              <strong className="font-medium">{tooltipInfo.count}</strong> contributions in{' '}
-              {tooltipInfo.date}
-            </span>
-          ) : null
+          tooltipInfo
+            ? (
+                <span className={settings.size === GraphSize.Small ? 'text-xs' : 'text-sm'}>
+                  <strong className="font-medium">{tooltipInfo.count}</strong>
+                  {' '}
+                  contributions in
+                  {' '}
+                  {tooltipInfo.date}
+                </span>
+              )
+            : null
         }
         refElement={refEle}
       />
 
-      <div className={styles['graph']}>
+      <div className={styles.graph}>
         {/* Months Label */}
-        <ul className={styles['months']}>
+        <ul className={styles.months}>
           <li>Jan</li>
           <li>Feb</li>
           <li>Mar</li>
@@ -119,7 +127,7 @@ export function Graph(props: GraphProps) {
 
         {/* Days Label */}
         {daysLabel && (
-          <ul className={styles['days']}>
+          <ul className={styles.days}>
             <li>Sun</li>
             <li>Mon</li>
             <li>Tue</li>
@@ -131,7 +139,7 @@ export function Graph(props: GraphProps) {
         )}
 
         {/* Day Blocks */}
-        <ul className={`${styles['grids']} ${styles['blocks']}`}>
+        <ul className={`${styles.grids} ${styles.blocks}`}>
           {calendar.weeks.reduce<React.ReactElement[]>((blocks, week, i) => {
             let days = week.days
 
@@ -144,7 +152,8 @@ export function Graph(props: GraphProps) {
 
               if (i === 0) {
                 days = [...fills, ...week.days]
-              } else {
+              }
+              else {
                 days = [...week.days, ...fills]
               }
             }
@@ -158,7 +167,7 @@ export function Graph(props: GraphProps) {
                     handleMouseEnter(ev.currentTarget, day)
                   }}
                   onMouseLeave={handleMouseLeave}
-                />
+                />,
               )
             })
 

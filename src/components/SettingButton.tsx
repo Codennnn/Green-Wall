@@ -5,7 +5,7 @@ import { type PopoverProps, RadixPopover } from './ui-kit/RadixPopover'
 
 interface SettingButtonProps
   extends Omit<React.ComponentProps<'button'>, 'content'>,
-    Pick<PopoverProps, 'content' | 'popoverContentId'> {
+  Pick<PopoverProps, 'content' | 'popoverContentId'> {
   onPopOut?: () => void
 }
 
@@ -16,7 +16,7 @@ export function SettingButton(props: SettingButtonProps) {
     <RadixPopover
       content={content}
       popoverContentId={popoverContentId}
-      title={
+      title={(
         <div className="flex">
           <span>Appearance</span>
 
@@ -32,7 +32,7 @@ export function SettingButton(props: SettingButtonProps) {
             </span>
           </Popover.Close>
         </div>
-      }
+      )}
     >
       <button className="simple-button" {...buttonProps}>
         <Settings2Icon className="size-[18px]" />

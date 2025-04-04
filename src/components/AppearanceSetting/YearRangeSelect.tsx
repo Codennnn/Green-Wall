@@ -12,8 +12,8 @@ export function YearRangeSelect(props: YearRangeSelectProps) {
   const { settings, dispatchSettings, firstYear, lastYear } = useData()
 
   let [startYear, endYear] = settings.yearRange ?? []
-  startYear ||= firstYear
-  endYear ||= lastYear
+  startYear ??= firstYear
+  endYear ??= lastYear
 
   if (!startYear || !endYear) {
     return null

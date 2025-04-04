@@ -88,8 +88,8 @@ importers:
         specifier: ^8.5.3
         version: 8.5.3
       prefer-code-style:
-        specifier: ^3.4.2
-        version: 3.4.2(@types/estree@1.0.7)(jiti@1.21.7)(jsonc-eslint-parser@2.4.0)(postcss@8.5.3)(prettier@3.5.3)(tailwindcss@3.4.17)(typescript@5.8.2)(vue-eslint-parser@10.1.2(eslint@9.23.0(jiti@1.21.7)))
+        specifier: ^3.4.4
+        version: 3.4.4(@types/estree@1.0.7)(jiti@1.21.7)(jsonc-eslint-parser@2.4.0)(postcss@8.5.3)(prettier@3.5.3)(tailwindcss@3.4.17)(typescript@5.8.2)(vue-eslint-parser@10.1.2(eslint@9.23.0(jiti@1.21.7)))
       stylelint:
         specifier: ^16.15.0
         version: 16.17.0(typescript@5.8.2)
@@ -2416,8 +2416,8 @@ packages:
     resolution: {integrity: sha512-dle9A3yYxlBSrt8Fu+IpjGT8SY8hN0mlaA6GY8t0P5PjIOZemULz/E2Bnm/2dcUOena75OTNkHI76uZBNUUq3A==}
     engines: {node: ^10 || ^12 || >=14}
 
-  prefer-code-style@3.4.2:
-    resolution: {integrity: sha512-u3iL6dggCV+dVqNzRe2Q+ESoi6a56Odj2aXgSkaz5dI3Z586aG8WVLp1BqwPhu9c63EEEUxDitfyPhP7ZEqrPg==}
+  prefer-code-style@3.4.4:
+    resolution: {integrity: sha512-PIebm3eAnFXwrDhCplLnzFkIDwo9Jymj6Qbgwh7XDINhlgnC+JgkeCk1rMeHO7ij/sd0Cp04PomT94U4IE5O7Q==}
     engines: {node: '>=20'}
 
   prelude-ls@1.2.1:
@@ -5419,7 +5419,7 @@ snapshots:
       picocolors: 1.1.1
       source-map-js: 1.2.1
 
-  prefer-code-style@3.4.2(@types/estree@1.0.7)(jiti@1.21.7)(jsonc-eslint-parser@2.4.0)(postcss@8.5.3)(prettier@3.5.3)(tailwindcss@3.4.17)(typescript@5.8.2)(vue-eslint-parser@10.1.2(eslint@9.23.0(jiti@1.21.7))):
+  prefer-code-style@3.4.4(@types/estree@1.0.7)(jiti@1.21.7)(jsonc-eslint-parser@2.4.0)(postcss@8.5.3)(prettier@3.5.3)(tailwindcss@3.4.17)(typescript@5.8.2)(vue-eslint-parser@10.1.2(eslint@9.23.0(jiti@1.21.7))):
     dependencies:
       '@babel/core': 7.26.10
       '@eslint/js': 9.23.0

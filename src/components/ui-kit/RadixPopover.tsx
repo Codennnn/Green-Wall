@@ -17,10 +17,7 @@ export function RadixPopover(props: React.PropsWithChildren<PopoverProps>) {
 
         <Popover.Content
           align="center"
-          className="
-          radix-side-top:animate-slide-up radix-side-bottom:animate-slide-down
-          z-50 rounded-lg bg-white p-4 shadow-overlay
-          "
+          className="z-50 rounded-lg bg-white p-4 shadow-overlay"
           id={popoverContentId}
           sideOffset={4}
         >

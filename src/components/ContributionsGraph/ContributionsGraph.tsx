@@ -23,7 +23,7 @@ interface ContributionsGraphProps extends Pick<GraphProps, 'showInspect' | 'titl
 
 function InnerContributionsGraph(
   props: ContributionsGraphProps,
-  ref: React.Ref<HTMLDivElement | null>
+  ref: React.Ref<HTMLDivElement | null>,
 ) {
   const { mockupClassName = '', wrapperId, showInspect, titleRender, Mockup = MockupSafari } = props
 
@@ -31,14 +31,14 @@ function InnerContributionsGraph(
 
   const graphRef = useRef<HTMLDivElement>(null)
 
-  useImperativeHandle(ref, () => graphRef.current!)
+  useImperativeHandle<HTMLDivElement | null, HTMLDivElement | null>(ref, () => graphRef.current)
 
   const applyingTheme = useMemo(
     () =>
       THEME_PRESETS.find(
-        (item) => item.name.toLowerCase() === (settings.theme ?? DEFAULT_THEME).toLowerCase()
+        (item) => item.name.toLowerCase() === (settings.theme ?? DEFAULT_THEME).toLowerCase(),
       ),
-    [settings.theme]
+    [settings.theme],
   )
 
   if (!graphData) {
@@ -92,8 +92,8 @@ function InnerContributionsGraph(
               startYear = startYear && Number.isInteger(Number(startYear)) ? startYear : firstYear
               endYear = endYear && Number.isInteger(Number(endYear)) ? endYear : lastYear
 
-              const shouldDisplay =
-                startYear && endYear
+              const shouldDisplay
+                = startYear && endYear
                   ? calendar.year >= Number(startYear) && calendar.year <= Number(endYear)
                   : true
 

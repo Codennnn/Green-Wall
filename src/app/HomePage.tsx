@@ -21,9 +21,9 @@ import { useGraphRequest } from '~/useGraphRequest'
 function Divider() {
   return (
     <div className="my-4 flex items-center justify-center gap-x-2 text-main-200">
-      <span className="to-current/0 h-px w-1/3 bg-gradient-to-l from-current" />
+      <span className="h-px w-1/3 bg-gradient-to-l from-current to-transparent" />
       <DotIcon className="size-4 text-main-300" />
-      <span className="to-current/0 h-px w-1/3 bg-gradient-to-r from-current" />
+      <span className="h-px w-1/3 bg-gradient-to-r from-current to-transparent" />
     </div>
   )
 }
@@ -37,7 +37,7 @@ export function HomePage() {
   const { graphData, setGraphData, dispatchSettings } = useData()
   const [searchName, setSearchName] = useState<GitHubUsername>('')
 
-  const [settingPopUp, setSettingPopUp] = useState<{ offsetX: number; offsetY: number }>()
+  const [settingPopUp, setSettingPopUp] = useState<{ offsetX: number, offsetY: number }>()
 
   const [downloading, setDownloading] = useState(false)
 
@@ -65,13 +65,15 @@ export function HomePage() {
       if (trimmedName.includes('/')) {
         // Extract username from GitHub URL if applicable.
         const githubUrlPattern = /^https:\/\/github\.com\/([^/?#]+)(?:[/?#]|$)/
-        const match = trimmedName.match(githubUrlPattern)
+        const match = githubUrlPattern.exec(trimmedName)
 
         if (match) {
           username = match[1]
-        } else {
+        }
+        else {
           reset()
           setSearchName('')
+
           return
         }
       }
@@ -100,11 +102,13 @@ export function HomePage() {
         trigger.href = dataURL
         trigger.download = `${graphData.login}_contributions`
         trigger.click()
-      } catch (err) {
+      }
+      catch (err) {
         if (err instanceof Error) {
           trackEvent('Error: Download Image', { msg: err.message })
         }
-      } finally {
+      }
+      finally {
         setTimeout(() => {
           setDownloading(false)
         }, 2000)
@@ -145,11 +149,13 @@ export function HomePage() {
         setTimeout(() => {
           setCopySuccess(false)
         }, 2000)
-      } catch (err) {
+      }
+      catch (err) {
         if (err instanceof Error) {
           trackEvent('Error: Copy Image', { msg: err.message })
         }
-      } finally {
+      }
+      finally {
         setDoingCopy(false)
       }
     }
@@ -185,7 +191,7 @@ export function HomePage() {
         }, 500)
       }
     },
-    [graphWrapperId]
+    [graphWrapperId],
   )
 
   return (
@@ -214,112 +220,116 @@ export function HomePage() {
         </form>
       </div>
 
-      {error ? (
-        <ErrorMessage errorType={error.errorType} text={error.message} />
-      ) : (
-        <Loading active={loading}>
-          {graphData && (
-            <>
-              <div
-                ref={actionRefCallback}
-                className="flex flex-row-reverse flex-wrap items-center justify-center gap-x-6 gap-y-4 py-5"
-              >
-                <div className="flex gap-x-3">
-                  <button
-                    className="inline-flex h-full items-center rounded-md bg-main-100 px-4 py-2 text-sm font-medium text-main-500 hover:bg-main-200 disabled:pointer-events-none motion-safe:transition-colors motion-safe:duration-300 md:text-base"
-                    disabled={downloading}
-                    onClick={() => {
-                      void handleDownload()
-                    }}
+      {error
+        ? (
+            <ErrorMessage errorType={error.errorType} text={error.message} />
+          )
+        : (
+            <Loading active={loading}>
+              {graphData && (
+                <>
+                  <div
+                    ref={actionRefCallback}
+                    className="flex flex-row-reverse flex-wrap items-center justify-center gap-x-6 gap-y-4 py-5"
                   >
-                    <ImageIcon className="mr-2 size-4 shrink-0 md:size-5" />
-                    <span>Save as Image</span>
-                  </button>
+                    <div className="flex gap-x-3">
+                      <button
+                        className="inline-flex h-full items-center rounded-md bg-main-100 px-4 py-2 text-sm font-medium text-main-500 hover:bg-main-200 disabled:pointer-events-none motion-safe:transition-colors motion-safe:duration-300 md:text-base"
+                        disabled={downloading}
+                        onClick={() => {
+                          void handleDownload()
+                        }}
+                      >
+                        <ImageIcon className="mr-2 size-4 shrink-0 md:size-5" />
+                        <span>Save as Image</span>
+                      </button>
 
-                  {canUseClipboardItem && (
-                    <button
-                      className={`
+                      {canUseClipboardItem && (
+                        <button
+                          className={`
                       inline-flex h-full items-center rounded-md px-4 py-2 text-sm font-medium transition-colors disabled:pointer-events-none md:text-base
                       ${
                         copySuccess
                           ? 'bg-accent-100 text-accent-500'
                           : 'bg-main-100 text-main-500 duration-300 hover:bg-main-200 motion-safe:transition-colors'
-                      }
+                        }
                       `}
-                      disabled={doingCopy}
-                      onClick={() => {
-                        void handleCopyImage()
-                      }}
-                    >
-                      <span className="mr-2">
-                        {copySuccess ? (
-                          <FileCheck2Icon className="size-4 shrink-0 md:size-5" />
-                        ) : (
-                          <ImagesIcon className="size-4 shrink-0 md:size-5" />
+                          disabled={doingCopy}
+                          onClick={() => {
+                            void handleCopyImage()
+                          }}
+                        >
+                          <span className="mr-2">
+                            {copySuccess
+                              ? (
+                                  <FileCheck2Icon className="size-4 shrink-0 md:size-5" />
+                                )
+                              : (
+                                  <ImagesIcon className="size-4 shrink-0 md:size-5" />
+                                )}
+                          </span>
+                          <span>{copySuccess ? 'Copied' : 'Copy'} as Image</span>
+                        </button>
+                      )}
+                    </div>
+
+                    <div className="flex flex-wrap items-center gap-x-6 md:justify-center">
+                      <ShareButton />
+
+                      <SettingButton
+                        content={<AppearanceSetting />}
+                        popoverContentId={popoverContentId}
+                        onClick={() => {
+                          if (settingPopUp) {
+                            setSettingPopUp(undefined)
+                          }
+                        }}
+                        onPopOut={() => {
+                          const popoverContentWrapper
+                        = document.getElementById(popoverContentId)?.parentNode
+
+                          if (popoverContentWrapper instanceof HTMLElement) {
+                            const style = window.getComputedStyle(popoverContentWrapper, null)
+                            const matrix = style.transform
+                            const values = matrix.split('(')[1].split(')')[0].split(',')
+                            const offsetX = values[4]
+                            const offsetY = values[5]
+
+                            setSettingPopUp({
+                              offsetX: Number(offsetX),
+                              offsetY: Number(offsetY),
+                            })
+                          }
+                        }}
+                      />
+
+                      <div className="relative">
+                        {!!settingPopUp && (
+                          <DraggableAppearanceSetting
+                            initialPosition={{
+                              x: settingPopUp.offsetX,
+                              y: settingPopUp.offsetY,
+                            }}
+                            onClose={() => {
+                              setSettingPopUp(undefined)
+                            }}
+                          >
+                            <AppearanceSetting />
+                          </DraggableAppearanceSetting>
                         )}
-                      </span>
-                      <span>{copySuccess ? 'Copied' : 'Copy'} as Image</span>
-                    </button>
-                  )}
-                </div>
-
-                <div className="flex flex-wrap items-center gap-x-6 md:justify-center">
-                  <ShareButton />
-
-                  <SettingButton
-                    content={<AppearanceSetting />}
-                    popoverContentId={popoverContentId}
-                    onClick={() => {
-                      if (settingPopUp) {
-                        setSettingPopUp(undefined)
-                      }
-                    }}
-                    onPopOut={() => {
-                      const popoverContentWrapper =
-                        document.getElementById(popoverContentId)?.parentNode
-
-                      if (popoverContentWrapper instanceof HTMLElement) {
-                        const style = window.getComputedStyle(popoverContentWrapper, null)
-                        const matrix = style.transform
-                        const values = matrix.split('(')[1].split(')')[0].split(',')
-                        const offsetX = values[4]
-                        const offsetY = values[5]
-
-                        setSettingPopUp({
-                          offsetX: Number(offsetX),
-                          offsetY: Number(offsetY),
-                        })
-                      }
-                    }}
-                  />
-
-                  <div className="relative">
-                    {!!settingPopUp && (
-                      <DraggableAppearanceSetting
-                        initialPosition={{
-                          x: settingPopUp.offsetX,
-                          y: settingPopUp.offsetY,
-                        }}
-                        onClose={() => {
-                          setSettingPopUp(undefined)
-                        }}
-                      >
-                        <AppearanceSetting />
-                      </DraggableAppearanceSetting>
-                    )}
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
 
-              <Divider />
+                  <Divider />
 
-              <div className="flex overflow-x-auto md:justify-center">
-                <ContributionsGraph ref={graphRef} wrapperId={graphWrapperId} />
-              </div>
-            </>
+                  <div className="flex overflow-x-auto md:justify-center">
+                    <ContributionsGraph ref={graphRef} wrapperId={graphWrapperId} />
+                  </div>
+                </>
+              )}
+            </Loading>
           )}
-        </Loading>
-      )}
     </div>
   )
 }

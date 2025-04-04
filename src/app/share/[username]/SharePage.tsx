@@ -49,7 +49,7 @@ export function SharePage() {
   }, [dispatchSettings, settings])
 
   const params = useParams()
-  const username = typeof params['username'] === 'string' ? params['username'] : undefined
+  const username = typeof params.username === 'string' ? params.username : undefined
 
   useEffect(() => {
     if (username) {

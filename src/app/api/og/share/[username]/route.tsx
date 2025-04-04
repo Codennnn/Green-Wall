@@ -1,5 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
-
 import { ImageResponse } from 'next/og'
 import type { NextRequest } from 'next/server'
 
@@ -14,7 +12,7 @@ const IMAGE_HEIGHT = 630
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: Promise<{ username: string }> }
+  { params }: { params: Promise<{ username: string }> },
 ) {
   const { username } = await params
 
@@ -63,7 +61,7 @@ export async function GET(
           <div tw="mx-6 text-6xl font-bold">·</div>
 
           <img
-            alt={`${user.name || 'Unknown'}'s avatar`}
+            alt={`${user.name ?? 'Unknown'}'s avatar`}
             src={user.avatarUrl}
             tw="mb-4 h-24 w-24 overflow-hidden rounded-full"
           />
@@ -98,6 +96,6 @@ export async function GET(
     {
       width: width ? Number(width) : IMAGE_WIDTH,
       height: height ? Number(height) : IMAGE_HEIGHT,
-    }
+    },
   )
 }

@@ -54,7 +54,7 @@ export function ShareButton() {
 
   return (
     <RadixPopover
-      content={
+      content={(
         <div className="max-w-[90vw] rounded-md pt-2 md:max-w-[min(40vw,300px)]">
           {shareUrl && (
             <div className="overflow-hidden rounded bg-main-100/80 p-3 pb-2 text-xs text-main-500 md:text-sm">
@@ -96,7 +96,7 @@ export function ShareButton() {
             </div>
           )}
         </div>
-      }
+      )}
       title="Share Your Graph"
     >
       <button className="simple-button divider">

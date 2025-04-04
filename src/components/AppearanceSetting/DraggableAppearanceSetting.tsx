@@ -5,9 +5,9 @@ import { XIcon } from 'lucide-react'
 
 export function DraggableAppearanceSetting(
   props: React.PropsWithChildren<{
-    initialPosition: { x: number; y: number }
+    initialPosition: { x: number, y: number }
     onClose?: () => void
-  }>
+  }>,
 ) {
   const { children, initialPosition, onClose } = props
 

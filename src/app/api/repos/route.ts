@@ -9,6 +9,7 @@ export async function GET(request: NextRequest) {
 
   if (username && year) {
     const repos = await fetchReposCreatedInYear({ username, year: Number(year) })
+
     return NextResponse.json(repos)
   }
 

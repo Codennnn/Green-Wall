@@ -12,7 +12,7 @@ interface GetContributionRequestParams {
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: Promise<GetContributionRequestParams> }
+  { params }: { params: Promise<GetContributionRequestParams> },
 ) {
   const { username } = await params
   const statistics = request.nextUrl.searchParams.get('statistics') === 'true'
@@ -28,13 +28,13 @@ export async function GET(
 
     const contributionYears = githubUser.contributionYears
 
-    const filteredYears =
-      Array.isArray(queryYears) && queryYears.length > 0
+    const filteredYears
+      = Array.isArray(queryYears) && queryYears.length > 0
         ? contributionYears.filter((year) => queryYears.includes(year))
         : contributionYears
 
     const contributionCalendars = await Promise.all(
-      filteredYears.map((year) => fetchContributionsCollection(username, year))
+      filteredYears.map((year) => fetchContributionsCollection(username, year)),
     )
 
     const graphData: GraphData = {
@@ -52,14 +52,15 @@ export async function GET(
     const data = valuableStatistics ? { ...graphData, statistics: valuableStatistics } : graphData
 
     return NextResponse.json({ data }, { status: 200 })
-  } catch (err) {
+  }
+  catch (err) {
     if (err instanceof Error) {
       const errorData: ResponseData = { errorType: ErrorType.BadRequest, message: err.message }
 
       if (err.message === 'Bad credentials') {
         return NextResponse.json(
           { ...errorData, errorType: ErrorType.BadCredentials },
-          { status: 401 }
+          { status: 401 },
         )
       }
 

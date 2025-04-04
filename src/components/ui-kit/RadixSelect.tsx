@@ -4,7 +4,7 @@ import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from 'lucide-react'
 import { SelectButton } from './SelectButton'
 
 type SelectProps = Select.SelectProps & {
-  items?: { label: string; value: string; disabled?: boolean }[]
+  items?: { label: string, value: string, disabled?: boolean }[]
 }
 
 export function RadixSelect(props: SelectProps) {

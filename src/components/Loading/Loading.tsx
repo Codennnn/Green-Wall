@@ -8,7 +8,7 @@ export function Loading(props: React.PropsWithChildren<{ active?: boolean }>) {
       {props.children}
 
       {props.active && (
-        <div className={`${styles['waterfall']} ${active ? styles['active'] : ''}`}>
+        <div className={`${styles.waterfall} ${active ? styles.active : ''}`}>
           <div />
           <div />
           <div />

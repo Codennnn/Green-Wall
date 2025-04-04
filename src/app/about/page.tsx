@@ -22,7 +22,8 @@ export default function AboutPage() {
         <Paragraph>
           This project leverages the GitHub GraphQL API to retrieve contribution data and utilizes
           Next.js API routes to process requests. For more details on our data handling practices,
-          you can check out the{' '}
+          you can check out the
+          {' '}
           <TextLink
             passHref
             className="font-bold"
@@ -47,13 +48,15 @@ export default function AboutPage() {
             </TextLink>
           </li>
           <li>
-            <i className="mr-3 opacity-90">Framework:</i>Next.js.
+            <i className="mr-3 opacity-90">Framework:</i>
+            Next.js.
           </li>
           <li>
             <i className="mr-3 opacity-90">Font:</i>
             <TextLink passHref href="https://fonts.google.com/specimen/Rubik" target="_blank">
               Rubik
-            </TextLink>{' '}
+            </TextLink>
+            {' '}
             by Google Fonts.
           </li>
           <li>
@@ -66,11 +69,14 @@ export default function AboutPage() {
 
         <SectionTitle>Support</SectionTitle>
         <Paragraph>
-          Want to show your support for this project? You can star on{' '}
+          Want to show your support for this project? You can star on
+          {' '}
           <TextLink passHref href="https://github.com/Codennnn/Green-Wall" target="_blank">
             GitHub
-          </TextLink>{' '}
-          or vote on{' '}
+          </TextLink>
+          {' '}
+          or vote on
+          {' '}
           <TextLink passHref href="https://www.producthunt.com/posts/green-wall" target="_blank">
             Product Hunt
           </TextLink>
@@ -79,7 +85,8 @@ export default function AboutPage() {
 
         <SectionTitle>Reporting Issues</SectionTitle>
         <Paragraph>
-          Got bugs or have any suggestions for this project? Welcome to leave your message on the{' '}
+          Got bugs or have any suggestions for this project? Welcome to leave your message on the
+          {' '}
           <TextLink passHref href="https://github.com/Codennnn/Green-Wall/issues" target="_blank">
             GitHub issues.
           </TextLink>

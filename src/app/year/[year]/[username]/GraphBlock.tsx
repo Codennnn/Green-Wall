@@ -79,7 +79,7 @@ export function GraphBlock() {
   useEffect(() => {
     if (githubUsername) {
       void (async () => {
-        fetch(`/api/repos?username=${githubUsername}&year=${queryYear}`).then(async (res) => {
+        void fetch(`/api/repos?username=${githubUsername}&year=${queryYear}`).then(async (res) => {
           if (res.ok) {
             const repos = safeParse(ReposCreatedInYearSchema, await res.json())
 
@@ -90,7 +90,7 @@ export function GraphBlock() {
           }
         })
 
-        fetch(`/api/issues?username=${githubUsername}&year=${queryYear}`).then(async (res) => {
+        void fetch(`/api/issues?username=${githubUsername}&year=${queryYear}`).then(async (res) => {
           if (res.ok) {
             const issues = safeParse(IssuesInYearSchema, await res.json())
 
@@ -118,11 +118,13 @@ export function GraphBlock() {
   return (
     <div className="flex flex-col items-center py-5">
       <Loading active={loading || !graphData}>
-        {loading || !graphData ? (
-          <div className="h-[265px] w-full" />
-        ) : (
-          <ContributionsGraph showInspect={false} titleRender={() => null} />
-        )}
+        {loading || !graphData
+          ? (
+              <div className="h-[265px] w-full" />
+            )
+          : (
+              <ContributionsGraph showInspect={false} titleRender={() => null} />
+            )}
       </Loading>
 
       <>
@@ -132,22 +134,26 @@ export function GraphBlock() {
               Longest Streak
             </StaticCardTitle>
             <span className="ml-auto">
-              {typeof maxContributionStreak === 'number' ? (
-                maxContributionStreak
-              ) : (
-                <SpinningLoader />
-              )}
+              {typeof maxContributionStreak === 'number'
+                ? (
+                    maxContributionStreak
+                  )
+                : (
+                    <SpinningLoader />
+                  )}
             </span>
           </StaticCard>
 
           <StaticCard>
             <StaticCardTitle icon={<ActivityIcon className="size-5" />}>Top Record</StaticCardTitle>
             <span className="ml-auto">
-              {typeof maxContributionsInADay === 'number' ? (
-                maxContributionsInADay
-              ) : (
-                <SpinningLoader />
-              )}
+              {typeof maxContributionsInADay === 'number'
+                ? (
+                    maxContributionsInADay
+                  )
+                : (
+                    <SpinningLoader />
+                  )}
             </span>
           </StaticCard>
 

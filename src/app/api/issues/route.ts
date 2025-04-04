@@ -10,6 +10,7 @@ export async function GET(request: NextRequest) {
 
   if (username && year) {
     const issues = await fetchIssuesInYear({ username, year: Number(year) })
+
     return NextResponse.json(issues)
   }
 

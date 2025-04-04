@@ -34,10 +34,10 @@ export function ThemeSelector(props: ThemeSelectorProps) {
             className={`
             h-20 w-full cursor-pointer overflow-hidden rounded-lg ring-2 transition-shadow duration-200
             ${
-              isSelected
-                ? 'ring-main-400/60 ring-offset-2 hover:ring-main-300'
-                : 'ring-transparent hover:ring-4 hover:ring-main-200'
-            }
+          isSelected
+            ? 'ring-main-400/60 ring-offset-2 hover:ring-main-300'
+            : 'ring-transparent hover:ring-4 hover:ring-main-200'
+          }
             `}
             style={themeProperties}
             title={theme.name}
@@ -47,7 +47,7 @@ export function ThemeSelector(props: ThemeSelectorProps) {
               className="flex size-full justify-center p-5 pb-0"
               style={{ background: 'var(--theme-background-container)' }}
             >
-              <div className="border-1 flex size-full items-center justify-center gap-2 overflow-hidden rounded-t-md border-dashed border-[var(--theme-border)] bg-[var(--theme-background)] p-5">
+              <div className="flex size-full items-center justify-center gap-2 overflow-hidden rounded-t-md border-dashed border-[var(--theme-border)] bg-[var(--theme-background)] p-5">
                 <span className="size-3 rounded bg-[var(--level-0)]" />
                 <span className="size-3 rounded bg-[var(--level-1)]" />
                 <span className="size-3 rounded bg-[var(--level-2)]" />
@@ -75,10 +75,10 @@ export function ThemeLevelSelector(props: ThemeSelectorProps) {
             className={`
             grid size-5 cursor-pointer grid-cols-2 grid-rows-2 overflow-hidden rounded-sm ring-2 transition-shadow duration-200
             ${
-              isSelected
-                ? 'ring-main-400/60 ring-offset-2 hover:ring-main-300'
-                : 'ring-transparent hover:ring-4 hover:ring-main-200'
-            }
+          isSelected
+            ? 'ring-main-400/60 ring-offset-2 hover:ring-main-300'
+            : 'ring-transparent hover:ring-4 hover:ring-main-200'
+          }
             `}
             title={theme.name}
             onClick={() => onChange?.(theme.name)}
