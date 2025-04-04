@@ -45,21 +45,21 @@ export function DataProvider(props: React.PropsWithChildren) {
 
   const totalContributions = graphData?.contributionCalendars.reduce(
     (sum, calendar) => sum + calendar.total,
-    0
+    0,
   )
 
   const applyingTheme = useMemo(
     () =>
       THEME_PRESETS.find(
-        (item) => item.name.toLowerCase() === (settings.theme ?? DEFAULT_THEME).toLowerCase()
+        (item) => item.name.toLowerCase() === (settings.theme ?? DEFAULT_THEME).toLowerCase(),
       ),
-    [settings.theme]
+    [settings.theme],
   )
 
   return (
     <Setting.Provider
       value={{
-        username: graphData?.login || '',
+        username: graphData?.login ?? '',
         graphData,
         setGraphData,
         settings,

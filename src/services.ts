@@ -67,7 +67,7 @@ export async function fetchGitHubUser(username: GitHubUsername): Promise<Contrib
     throw new Error(`fetch error: ${res.statusText}.`)
   }
 
-  const resJson: GitHubApiJson<{ user: GitHubUser | null }> = await res.json()
+  const resJson = await res.json() as GitHubApiJson<{ user: GitHubUser | null }>
 
   if (!resJson.data?.user) {
     if (resJson.errors) {
@@ -77,6 +77,7 @@ export async function fetchGitHubUser(username: GitHubUsername): Promise<Contrib
         throw new Error(error.message)
       }
     }
+
     throw new Error(resJson.message)
   }
 
@@ -87,7 +88,7 @@ export async function fetchGitHubUser(username: GitHubUsername): Promise<Contrib
 
 export async function fetchContributionsCollection(
   username: GitHubUsername,
-  year: ContributionYear
+  year: ContributionYear,
 ): Promise<ContributionCalendar> {
   if (!GAT) {
     throw new Error('Require GITHUB ACCESS TOKEN.')
@@ -97,7 +98,7 @@ export async function fetchContributionsCollection(
         {
           user(login: "${username}") {
             contributionsCollection(from: "${new Date(
-              `${year}-01-01`
+              `${year}-01-01`,
             ).toISOString()}", to: "${new Date(`${year}-12-31`).toISOString()}") {
               contributionCalendar {
                 total: totalContributions
@@ -130,7 +131,7 @@ export async function fetchContributionsCollection(
     throw new Error(`fetch error: ${res.statusText}.`)
   }
 
-  const resJson: GitHubApiJson<{ user: GitHubContributionCalendar | null }> = await res.json()
+  const resJson = await res.json() as GitHubApiJson<{ user: GitHubContributionCalendar | null }>
 
   if (!resJson.data?.user) {
     throw new Error(resJson.message)
@@ -210,7 +211,7 @@ export async function fetchReposCreatedInYear({
       body: JSON.stringify({ query, variables }),
     })
 
-    const resJson: GitHubApiJson<{ user: GitHubRepo }> = await res.json()
+    const resJson = await res.json() as GitHubApiJson<{ user: GitHubRepo }>
 
     if (resJson.errors) {
       throw new Error(resJson.message)
@@ -224,7 +225,7 @@ export async function fetchReposCreatedInYear({
     }
 
     const filteredRepos = repoNodes.filter(
-      (repo) => new Date(repo.createdAt).getFullYear() === year
+      (repo) => new Date(repo.createdAt).getFullYear() === year,
     )
     const filteredReposCount = filteredRepos.length
 
@@ -235,7 +236,8 @@ export async function fetchReposCreatedInYear({
         // Once the data exceeds the target year, it can stop fetching because the remaining data will be updated and no longer need to continue paging.
         break
       }
-    } else {
+    }
+    else {
       const lastRepo = repoNodes.at(-1)
 
       if (lastRepo) {
@@ -327,7 +329,7 @@ export async function fetchIssuesInYear({
       body: JSON.stringify({ query, variables }),
     })
 
-    const resJson: GitHubApiJson<{ search: GitHubIssue }> = await res.json()
+    const resJson = await res.json() as GitHubApiJson<{ search: GitHubIssue }>
 
     if (resJson.errors) {
       throw new Error(resJson.message)
@@ -341,7 +343,7 @@ export async function fetchIssuesInYear({
     }
 
     const filteredIssues = issueNodes.filter(
-      (issue) => new Date(issue.createdAt).getFullYear() === year
+      (issue) => new Date(issue.createdAt).getFullYear() === year,
     )
     const filteredIssuesCount = filteredIssues.length
 
@@ -352,7 +354,8 @@ export async function fetchIssuesInYear({
         // Once the data exceeds the target year, it can stop fetching because the remaining data will be updated and no longer need to continue paging.
         break
       }
-    } else {
+    }
+    else {
       const lastIssue = issueNodes.at(-1)
 
       if (lastIssue) {

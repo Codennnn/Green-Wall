@@ -13,7 +13,9 @@ export interface Theme {
 }
 
 type GitHubProfileName = string
+
 export type GitHubUsername = string
+
 export type ContributionYear = number
 
 export interface GitHubUser {
@@ -81,7 +83,7 @@ export interface GraphSettings {
 export interface GitHubApiJson<Data> {
   data?: Data
   message?: string
-  errors?: { type: string; message: string }[]
+  errors?: { type: string, message: string }[]
 }
 
 const RepoInfoSchema = object({
@@ -113,6 +115,7 @@ export const IssuesInYearSchema = object({
 })
 
 export type RepoInfo = InferInput<typeof RepoInfoSchema>
+
 export type IssueInfo = InferInput<typeof IssueInfoSchema>
 
 export interface GitHubRepo {

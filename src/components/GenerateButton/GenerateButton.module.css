@@ -2,8 +2,8 @@
   cursor: pointer;
   position: relative;
   padding: 0;
-  background: transparent;
   border: none;
+  background: transparent;
   outline-offset: 4px;
   transition: filter 250ms;
 }
@@ -28,6 +28,7 @@
   left: 0;
   width: 100%;
   height: 100%;
+  border-radius: 12px;
   background: linear-gradient(
     to left,
     rgb(4 120 87) 0%,
@@ -35,7 +36,6 @@
     rgb(5 150 105) 92%,
     rgb(4 120 87) 100%
   );
-  border-radius: 12px;
 }
 
 .front {

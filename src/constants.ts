@@ -37,7 +37,9 @@ export const sizeProperties = {
 >
 
 export const DEFAULT_SIZE: GraphSize = GraphSize.Small
+
 export const DEFAULT_THEME: Themes = 'Classic'
+
 export const DEFAULT_BLOCK_SHAPE: BlockShape = BlockShape.Square
 
 export const THEMES = [

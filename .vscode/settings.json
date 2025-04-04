@@ -1,7 +1,7 @@
 {
-  "typescript.preferences.importModuleSpecifier": "non-relative",
-  "tailwindCSS.classAttributes": ["className", "tw"],
-  "files.readonlyInclude": {
-    "plugins/*.js": true
-  }
+  // "typescript.preferences.importModuleSpecifier": "non-relative",
+  // "tailwindCSS.classAttributes": ["className", "tw"],
+  // "files.readonlyInclude": {
+  //   "plugins/*.js": true
+  // }
 }

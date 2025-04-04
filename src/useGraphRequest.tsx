@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react'
-import useEvent from 'react-use-event-hook'
+import { useEvent } from 'react-use-event-hook'
 
 import { setSearchParamsToUrl, trackEvent } from './helpers'
 import type { ContributionYear, ResponseData } from './types'
@@ -18,7 +18,7 @@ export function useGraphRequest(config: UseGraphRequestConfig = {}) {
   const [error, setError] = useState<Pick<ResponseData, 'errorType' | 'message'>>()
 
   const run = useCallback(
-    async ({ username, years }: { username: string; years?: ContributionYear[] }) => {
+    async ({ username, years }: { username: string, years?: ContributionYear[] }) => {
       try {
         setError(undefined)
         setLoading(true)
@@ -26,27 +26,31 @@ export function useGraphRequest(config: UseGraphRequestConfig = {}) {
         const requestUrl = setSearchParamsToUrl({
           url: `/api/contribution/${username}`,
           paramName: 'years',
-          paramValue: years?.map((year) => year.toString()) || [],
+          paramValue: years?.map((year) => year.toString()) ?? [],
         })
 
         const res = await fetch(requestUrl)
-        const resJson: ResponseData = await res.json()
+        const resJson = await res.json() as ResponseData
 
         if (res.ok) {
           return resJson.data
-        } else {
+        }
+        else {
           setError({ errorType: resJson.errorType, message: resJson.message })
         }
-      } catch (err) {
+      }
+      catch (err) {
         if (err instanceof Error) {
           trackEvent('Error: Fetch Ccontribution Data', { msg: err.message })
         }
+
         onError()
-      } finally {
+      }
+      finally {
         setLoading(false)
       }
     },
-    [onError]
+    [onError],
   )
 
   return {

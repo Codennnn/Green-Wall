@@ -101,15 +101,18 @@ const handler = () => {
               if (theDay && typeof theDay.weekday === 'number') {
                 if (theDay.weekday === weekday) {
                   rows[theDay.weekday].push(theDay)
-                } else {
+                }
+                else {
                   newDays.splice(i, 0, nullDay)
                   rows[i].push(nullDay)
                 }
-              } else {
+              }
+              else {
                 rows[i].push(nullDay)
               }
             }
-          } else {
+          }
+          else {
             days.forEach((day) => {
               if (typeof day.weekday === 'number') {
                 rows[day.weekday].push(day)
@@ -134,7 +137,7 @@ const handler = () => {
     let isHalloween = false
 
     const createGraph = (
-      params: Calendar
+      params: Calendar,
     ): {
       graphItem: HTMLDivElement
     } => {
@@ -159,8 +162,8 @@ const handler = () => {
           let td = '<td></td>'
 
           if (col.level !== ContributionLevel.Null) {
-            const level =
-              col.level === ContributionLevel.NONE
+            const level
+              = col.level === ContributionLevel.NONE
                 ? 0
                 : col.level === ContributionLevel.FIRST_QUARTILE
                   ? 1
@@ -227,7 +230,7 @@ const handler = () => {
         'Overlay--motion-scaleFadeOverlay',
         'Overlay-whenNarrow',
         'Overlay--size-medium-portrait',
-        'Overlay--motion-scaleFade'
+        'Overlay--motion-scaleFade',
       )
       dialog.style.minWidth = '720px'
       dialog.style.maxHeight = 'calc(100vh - 50px)'
@@ -246,9 +249,9 @@ const handler = () => {
 
       const mouseUpHandler = (ev: MouseEvent) => {
         if (
-          ev.target instanceof HTMLDialogElement &&
-          ev.target === mouseDownTarget &&
-          ev.target === dialog
+          ev.target instanceof HTMLDialogElement
+          && ev.target === mouseDownTarget
+          && ev.target === dialog
         ) {
           dialog.close()
         }
@@ -314,7 +317,7 @@ const handler = () => {
       dialogFooter.classList.add(
         'Overlay-footer',
         'Overlay-footer--alignEnd',
-        'Overlay-footer--divided'
+        'Overlay-footer--divided',
       )
       const openExtrnalBtn = document.createElement('button')
       const btnContent = document.createElement('span')
@@ -342,7 +345,7 @@ const handler = () => {
     }
 
     const profileArea = document.querySelector(
-      '.Layout-sidebar .h-card .js-profile-editable-replace'
+      '.Layout-sidebar .h-card .js-profile-editable-replace',
     )
     const refNode = document.querySelector('.js-profile-editable-replace > .d-flex.flex-column')
       ?.nextSibling?.nextSibling
@@ -365,7 +368,7 @@ const handler = () => {
             'mt-3',
             'clearfix',
             'hide-sm',
-            'hide-md'
+            'hide-md',
           )
 
           const title = document.createElement('h2')
@@ -425,7 +428,7 @@ const handler = () => {
                 try {
                   dialogContent.innerHTML = ''
 
-                  const data: Data = JSON.parse(response.responseText)
+                  const data: Data = JSON.parse(response.responseText) as Data
 
                   const xData = produceData(data)
 
@@ -439,12 +442,12 @@ const handler = () => {
                   if (statistics) {
                     const p = document.createElement('p')
 
-                    p.textContent = `最长连续贡献：${statistics.longestStreak} 天（${statistics.longestStreakStartDate || 'Unknown'} - ${statistics.longestStreakEndDate || 'Unknown'}）`
+                    p.textContent = `最长连续贡献：${statistics.longestStreak} 天（${statistics.longestStreakStartDate ?? 'Unknown'} - ${statistics.longestStreakEndDate ?? 'Unknown'}）`
 
                     dialogContent.append(p)
 
                     const p2 = p.cloneNode()
-                    p2.textContent = `最长间断贡献：${statistics.longestGap} 天（${statistics.longestGapStartDate || 'Unknown'} - ${statistics.longestGapEndDate || 'Unknown'}）`
+                    p2.textContent = `最长间断贡献：${statistics.longestGap} 天（${statistics.longestGapStartDate ?? 'Unknown'} - ${statistics.longestGapEndDate ?? 'Unknown'}）`
 
                     dialogContent.append(p2)
 
@@ -459,13 +462,14 @@ const handler = () => {
                     dialogContent.append(p4)
 
                     const p5 = p.cloneNode()
-                    p5.textContent = `最大单日贡献：${statistics.maxContributionsInADay} 次（${statistics.maxContributionsDate || 'Unknown'}）`
+                    p5.textContent = `最大单日贡献：${statistics.maxContributionsInADay} 次（${statistics.maxContributionsDate ?? 'Unknown'}）`
 
                     dialogContent.append(p5)
                   }
 
                   hasLoaded = true
-                } catch {
+                }
+                catch {
                   handleLoadError()
                 }
               },
@@ -481,9 +485,9 @@ const handler = () => {
             document.body.classList.add('has-modal')
 
             if (!hasLoaded) {
-              isHalloween =
-                document.querySelector('.ContributionCalendar')?.getAttribute('data-holiday') ===
-                'halloween'
+              isHalloween
+                = document.querySelector('.ContributionCalendar')?.getAttribute('data-holiday')
+                  === 'halloween'
 
               handleLoadData()
             }
@@ -494,7 +498,8 @@ const handler = () => {
           })
         }
       }
-    } else {
+    }
+    else {
       console.warn('[Green Wall]: Target node not found.')
     }
   }

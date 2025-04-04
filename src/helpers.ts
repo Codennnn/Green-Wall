@@ -10,7 +10,7 @@ const isDev: boolean = process.env.NODE_ENV === 'development'
 
 export function trackEvent(
   event: string,
-  data?: Record<string, string | number | boolean | undefined | null>
+  data?: Record<string, string | number | boolean | undefined | null>,
 ): void {
   if (isDev) {
     return
@@ -35,7 +35,8 @@ export function setSearchParamsToUrl(params: SearchParams) {
       paramValue.forEach((val) => {
         VirtualUrl.searchParams.append(paramName, val)
       })
-    } else {
+    }
+    else {
       VirtualUrl.searchParams.set(paramName, paramValue)
     }
 
@@ -72,7 +73,8 @@ export function getLongestContributionStreak(graphData: GraphData): {
           }
 
           endDate = day.date
-        } else {
+        }
+        else {
           // If no contribution today, reset the streak.
           currentStreak = 0
         }
@@ -105,7 +107,8 @@ export function getLongestContributionGap(graphData: GraphData): {
           }
 
           endDate = day.date
-        } else {
+        }
+        else {
           currentGap = 0
         }
       })
@@ -139,7 +142,7 @@ export function getMaxContributionsInADay(graphData: GraphData): {
 /**
  * Calculate the number of contributions made on weekends and their ratio to total contributions
  */
-export function getWeekendActivity(graphData: GraphData): { total: number; ratio: number } {
+export function getWeekendActivity(graphData: GraphData): { total: number, ratio: number } {
   let countOnWeekends = 0
   let total = 0
 
@@ -230,11 +233,13 @@ export function getValuableStatistics(graphData: GraphData): ValuableStatistics 
           // Reset gap tracking
           currentGap = 0
           currentGapStartDate = undefined
-        } else {
+        }
+        else {
           // Start of a new gap
           if (currentGap === 0) {
             currentGapStartDate = day.date
           }
+
           currentGap++
 
           // Update longest gap if current gap is longer.
