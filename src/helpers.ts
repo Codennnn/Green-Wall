@@ -1,5 +1,3 @@
-import splitbee from '@splitbee/web'
-
 import type { GraphData, ValuableStatistics } from '~/types'
 
 export function numberWithCommas(num: number): string {
@@ -9,14 +7,16 @@ export function numberWithCommas(num: number): string {
 const isDev: boolean = process.env.NODE_ENV === 'development'
 
 export function trackEvent(
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   event: string,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   data?: Record<string, string | number | boolean | undefined | null>,
 ): void {
   if (isDev) {
     return
   }
 
-  void splitbee.track(event, data)
+  // TODO: Implement telemetry tracking system for monitoring user interactions and app performance.
 }
 
 interface SearchParams {

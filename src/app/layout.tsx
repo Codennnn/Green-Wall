@@ -5,7 +5,6 @@ import Link from 'next/link'
 
 import { BgDecoration } from '~/components/BgDecoration'
 import { GitHubButton } from '~/components/GitHubButton'
-import { Initial } from '~/components/Initial'
 
 import '~/styles/reset.css'
 import '~/styles/globals.css'
@@ -50,8 +49,6 @@ export default function Layout(props: React.PropsWithChildren) {
         className={`h-full overflow-hidden bg-pageBg text-main-800 motion-safe:scroll-smooth ${rubik.className}`}
         lang="en"
       >
-        <Initial />
-
         <body className="m-0 h-full overflow-y-auto text-main-700">
           <div className="flex min-h-screen flex-col px-4 md:mx-auto md:min-w-content md:max-w-content md:px-5">
             <header>
