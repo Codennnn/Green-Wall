@@ -19,7 +19,8 @@
     "src/**/*",
     "plugins/**/*",
     ".next/types/**/*.ts",
-    "./tailwind.config.ts"
+    "./tailwind.config.ts",
+    "./next.config.ts"
   ],
 
   "exclude": ["node_modules"]
