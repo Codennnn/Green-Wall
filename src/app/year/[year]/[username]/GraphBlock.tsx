@@ -14,13 +14,13 @@ import { ContributionsGraph } from '~/components/ContributionsGraph'
 import Loading from '~/components/Loading'
 import { useData } from '~/DataContext'
 import { getLongestContributionStreak, getMaxContributionsInADay } from '~/helpers'
+import { useGraphRequest } from '~/hooks/useGraphRequest'
 import {
   type IssuesInYear,
   IssuesInYearSchema,
   type RepoCreatedInYear,
   ReposCreatedInYearSchema,
 } from '~/types'
-import { useGraphRequest } from '~/useGraphRequest'
 
 function StaticCardTitle(props: React.PropsWithChildren<{ icon: React.ReactNode }>) {
   const { children, icon } = props

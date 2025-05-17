@@ -11,8 +11,8 @@ import { ErrorMessage } from '~/components/ErrorMessage'
 import { DEFAULT_THEME, THEME_PRESETS } from '~/constants'
 import { useData } from '~/DataContext'
 import type { GraphSize } from '~/enums'
+import { useGraphRequest } from '~/hooks/useGraphRequest'
 import type { GraphSettings, Themes } from '~/types'
-import { useGraphRequest } from '~/useGraphRequest'
 
 export function SharePage() {
   const query = useSearchParams()

@@ -15,8 +15,8 @@ import { SettingButton } from '~/components/SettingButton'
 import { ShareButton } from '~/components/ShareButton'
 import { useData } from '~/DataContext'
 import { trackEvent } from '~/helpers'
+import { useGraphRequest } from '~/hooks/useGraphRequest'
 import type { GitHubUsername } from '~/types'
-import { useGraphRequest } from '~/useGraphRequest'
 
 function Divider() {
   return (

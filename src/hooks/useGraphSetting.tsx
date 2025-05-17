@@ -1,7 +1,7 @@
 import { useReducer } from 'react'
 
-import { DEFAULT_BLOCK_SHAPE, DEFAULT_SIZE, DEFAULT_THEME } from './constants'
-import type { GraphSettings } from './types'
+import { DEFAULT_BLOCK_SHAPE, DEFAULT_SIZE, DEFAULT_THEME } from '~/constants'
+import type { GraphSettings } from '~/types'
 
 type State = GraphSettings
 

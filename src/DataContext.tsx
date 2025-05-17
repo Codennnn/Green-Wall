@@ -10,9 +10,8 @@ import {
 } from 'react'
 
 import { DEFAULT_THEME, THEME_PRESETS } from '~/constants'
-
-import type { GitHubUsername, GraphData, GraphSettings, ThemePreset } from './types'
-import { useGraphSetting } from './useGraphSetting'
+import { useGraphSetting } from '~/hooks/useGraphSetting'
+import type { GitHubUsername, GraphData, GraphSettings, ThemePreset } from '~/types'
 
 type DispatchSettings = ReturnType<typeof useGraphSetting>[1]
 

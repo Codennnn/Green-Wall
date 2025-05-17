@@ -1,8 +1,8 @@
 import { useCallback, useState } from 'react'
 import { useEvent } from 'react-use-event-hook'
 
-import { setSearchParamsToUrl, trackEvent } from './helpers'
-import type { ContributionYear, ResponseData } from './types'
+import { setSearchParamsToUrl, trackEvent } from '~/helpers'
+import type { ContributionYear, ResponseData } from '~/types'
 
 interface UseGraphRequestConfig {
   onError?: () => void

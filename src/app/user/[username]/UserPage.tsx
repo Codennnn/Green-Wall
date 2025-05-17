@@ -8,7 +8,7 @@ import { useParams } from 'next/navigation'
 import { ContributionsGraph } from '~/components/ContributionsGraph'
 import { ErrorMessage } from '~/components/ErrorMessage'
 import { useData } from '~/DataContext'
-import { useGraphRequest } from '~/useGraphRequest'
+import { useGraphRequest } from '~/hooks/useGraphRequest'
 
 export function UserPage() {
   const { graphData, setGraphData } = useData()
