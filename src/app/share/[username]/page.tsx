@@ -11,7 +11,7 @@ export const generateMetadata = async ({
 }): Promise<Metadata> => {
   const { username } = await params
   const sharingTitle = `${username}'s GitHub contributions`
-  const sharingDescription = `I just made a GitHub contributions graph in review!`
+  const sharingDescription = 'I just made a GitHub contributions graph in review!'
   const sharingURL = `https://green-wall.leoku.dev/share/${username}`
   const image = `https://green-wall.leoku.dev/api/og/share/${username}`
 
