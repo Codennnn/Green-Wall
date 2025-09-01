@@ -28,8 +28,8 @@
     "html-to-image": "^1.11.13",
     "lucide-react": "^0.514.0",
     "next": "^15.3.3",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
     "react-use-event-hook": "^0.9.6",
     "tailwindcss-radix": "^3.0.5",
     "valibot": "1.1.0"
@@ -39,19 +39,19 @@
     "@codennnn/tsconfig": "1.2.1",
     "@types/greasemonkey": "^4.0.7",
     "@types/node": "22.15.18",
-    "@types/react": "19.1.8",
+    "@types/react": "19.1.12",
     "autoprefixer": "^10.4.20",
     "next-secure-headers": "^2.2.0",
     "npm-run-all": "^4.1.5",
-    "postcss": "^8.5.5",
-    "prefer-code-style": "^3.8.0",
-    "stylelint": "^16.20.0",
+    "postcss": "^8.5.6",
+    "prefer-code-style": "^3.9.0",
+    "stylelint": "^16.23.1",
     "stylelint-config-clean-order": "^7.0.0",
-    "stylelint-config-standard": "^38.0.0",
+    "stylelint-config-standard": "^39.0.0",
     "stylelint-config-tailwindcss": "^1.0.0",
     "tailwindcss": "^3.4.17",
     "tslib": "^2.8.1",
-    "typescript": "^5.8.3"
+    "typescript": "^5.9.2"
   },
   "packageManager": "pnpm@9.15.3"
 }

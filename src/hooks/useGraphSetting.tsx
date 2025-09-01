@@ -5,8 +5,8 @@ import type { GraphSettings } from '~/types'
 
 type State = GraphSettings
 
-type Action =
-  | {
+type Action
+  = | {
     type: 'size'
     payload: State['size']
   }

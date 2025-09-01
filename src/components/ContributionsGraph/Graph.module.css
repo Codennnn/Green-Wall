@@ -83,6 +83,6 @@
 .days,
 .blocks {
   display: grid;
-  grid-gap: var(--block-gap, 3px);
   grid-template-rows: repeat(7, var(--block-size, 10px));
+  gap: var(--block-gap, 3px);
 }
