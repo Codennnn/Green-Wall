@@ -232,7 +232,7 @@ const handler = () => {
         'Overlay--size-medium-portrait',
         'Overlay--motion-scaleFade',
       )
-      dialog.style.minWidth = '720px'
+      dialog.style.minWidth = '777px'
       dialog.style.maxHeight = 'calc(100vh - 50px)'
 
       dialog.addEventListener('close', () => {
@@ -432,10 +432,26 @@ const handler = () => {
 
                   const xData = produceData(data)
 
-                  xData.contributionCalendars.forEach((calendar) => {
-                    const { graphItem } = createGraph(calendar)
-                    dialogContent.append(graphItem)
-                  })
+                  if (xData.contributionCalendars.length > 0) {
+                    const contributionCalendarsWrapper = document.createElement('div')
+
+                    contributionCalendarsWrapper.classList.add('contribution-calendars-wrapper')
+                    contributionCalendarsWrapper.style.width = '100%'
+                    contributionCalendarsWrapper.style.display = 'flex'
+                    contributionCalendarsWrapper.style.flexDirection = 'column'
+                    contributionCalendarsWrapper.style.rowGap = '10px'
+                    contributionCalendarsWrapper.style.alignItems = 'center'
+                    contributionCalendarsWrapper.style.padding = 'var(--stack-padding-normal, 1rem)'
+                    contributionCalendarsWrapper.style.borderRadius = 'var(--borderRadius-medium)'
+                    contributionCalendarsWrapper.style.backgroundColor = 'var(--bgColor-default, var(--color-canvas-default))'
+
+                    dialogContent.append(contributionCalendarsWrapper)
+
+                    xData.contributionCalendars.forEach((calendar) => {
+                      const { graphItem } = createGraph(calendar)
+                      contributionCalendarsWrapper.append(graphItem)
+                    })
+                  }
 
                   const statistics = data.data.statistics
 
