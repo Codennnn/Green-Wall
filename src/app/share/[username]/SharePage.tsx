@@ -11,7 +11,7 @@ import { ErrorMessage } from '~/components/ErrorMessage'
 import { DEFAULT_THEME, THEME_PRESETS } from '~/constants'
 import { useData } from '~/DataContext'
 import type { GraphSize } from '~/enums'
-import { useGraphRequest } from '~/hooks/useGraphRequest'
+import { useContributionQuery } from '~/hooks/useQueries'
 import type { GraphSettings, Themes } from '~/types'
 
 export function SharePage() {
@@ -38,9 +38,7 @@ export function SharePage() {
     }
   }, [query])
 
-  const { graphData, setGraphData, dispatchSettings } = useData()
-
-  const { run, loading, error } = useGraphRequest()
+  const { setGraphData, dispatchSettings } = useData()
 
   useEffect(() => {
     if (settings) {
@@ -49,21 +47,42 @@ export function SharePage() {
   }, [dispatchSettings, settings])
 
   const params = useParams()
-  const username = typeof params.username === 'string' ? params.username : undefined
+  const username = typeof params.username === 'string' ? params.username : ''
+
+  const {
+    data: graphData,
+    isLoading: loading,
+    error,
+    isError,
+  } = useContributionQuery(username, undefined, false, {
+    enabled: !!username,
+  })
 
   useEffect(() => {
-    if (username) {
-      void (async () => {
-        const data = await run({ username })
-        setGraphData(data)
-      })()
+    if (graphData) {
+      setGraphData(graphData)
     }
-  }, [username, run, setGraphData])
+  }, [graphData, setGraphData])
+
+  // 构造错误对象以兼容现有接口
+  const errorData
+    = isError
+      ? {
+          errorType: error.errorType,
+          message: error.message,
+        }
+      : undefined
 
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center py-20 text-main-400">
-        <Image priority alt="loading" height={60} src="/mona-loading-default.gif" width={60} />
+        <Image
+          priority
+          alt="loading"
+          height={60}
+          src="/mona-loading-default.gif"
+          width={60}
+        />
         <span className="bg-pageBg px-3 py-4">Loading contributions...</span>
       </div>
     )
@@ -96,8 +115,10 @@ export function SharePage() {
     )
   }
 
-  if (error) {
-    return <ErrorMessage errorType={error.errorType} text={error.message} />
+  if (errorData) {
+    return (
+      <ErrorMessage errorType={errorData.errorType} text={errorData.message} />
+    )
   }
 
   return null

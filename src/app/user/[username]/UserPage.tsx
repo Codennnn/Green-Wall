@@ -8,29 +8,48 @@ import { useParams } from 'next/navigation'
 import { ContributionsGraph } from '~/components/ContributionsGraph'
 import { ErrorMessage } from '~/components/ErrorMessage'
 import { useData } from '~/DataContext'
-import { useGraphRequest } from '~/hooks/useGraphRequest'
+import { useContributionQuery } from '~/hooks/useQueries'
 
 export function UserPage() {
-  const { graphData, setGraphData } = useData()
-
-  const { run, loading, error } = useGraphRequest()
+  const { setGraphData } = useData()
 
   const params = useParams()
-  const username = typeof params.username === 'string' ? params.username : undefined
+  const username = typeof params.username === 'string' ? params.username : ''
+
+  const {
+    data: graphData,
+    isLoading: loading,
+    error,
+    isError,
+  } = useContributionQuery(username, undefined, false, {
+    enabled: !!username,
+  })
 
   useEffect(() => {
-    if (username) {
-      void (async () => {
-        const data = await run({ username })
-        setGraphData(data)
-      })()
+    if (graphData) {
+      setGraphData(graphData)
     }
-  }, [username, run, setGraphData])
+  }, [graphData, setGraphData])
+
+  // 构造错误对象以兼容现有接口
+  const errorData
+    = isError
+      ? {
+          errorType: error.errorType,
+          message: error.message,
+        }
+      : undefined
 
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center py-20 text-main-400">
-        <Image priority alt="loading" height={60} src="/mona-loading-default.gif" width={60} />
+        <Image
+          priority
+          alt="loading"
+          height={60}
+          src="/mona-loading-default.gif"
+          width={60}
+        />
         <span className="bg-white px-3 py-4">Loading contributions...</span>
       </div>
     )
@@ -46,8 +65,10 @@ export function UserPage() {
     )
   }
 
-  if (error) {
-    return <ErrorMessage errorType={error.errorType} text={error.message} />
+  if (errorData) {
+    return (
+      <ErrorMessage errorType={errorData.errorType} text={errorData.message} />
+    )
   }
 
   return null

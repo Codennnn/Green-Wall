@@ -68,7 +68,8 @@ export function AppearanceSetting() {
           <RadixTooltip
             label={(
               <span className="inline-block max-w-xs leading-5">
-                You can also adjust the web zoom to change the size of the saved image.
+                You can also adjust the web zoom to change the size of the saved
+                image.
               </span>
             )}
           >
@@ -95,12 +96,16 @@ export function AppearanceSetting() {
         <RadixToggleGroup
           options={[
             {
-              label: <span className="inline-block size-4 rounded-[2px] bg-current" />,
+              label: (
+                <span className="inline-block size-4 rounded-[2px] bg-current" />
+              ),
               value: BlockShape.Square,
               tooltip: 'Square',
             },
             {
-              label: <span className="inline-block size-4 rounded-full bg-current" />,
+              label: (
+                <span className="inline-block size-4 rounded-full bg-current" />
+              ),
               value: BlockShape.Round,
               tooltip: 'Round',
             },
@@ -109,7 +114,10 @@ export function AppearanceSetting() {
           type="single"
           value={settings.blockShape}
           onValueChange={(shape) => {
-            dispatchSettings({ type: 'blockShape', payload: shape as BlockShape })
+            dispatchSettings({
+              type: 'blockShape',
+              payload: shape as BlockShape,
+            })
           }}
         />
       </fieldset>

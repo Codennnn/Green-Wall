@@ -1,11 +1,15 @@
 'use client'
 
-import { useCallback, useId, useRef, useState } from 'react'
+import { useCallback, useEffect, useId, useRef, useState } from 'react'
+import { useEvent } from 'react-use-event-hook'
 
 import { toBlob, toPng } from 'html-to-image'
 import { DotIcon, FileCheck2Icon, ImageIcon, ImagesIcon } from 'lucide-react'
 
-import { AppearanceSetting, DraggableAppearanceSetting } from '~/components/AppearanceSetting'
+import {
+  AppearanceSetting,
+  DraggableAppearanceSetting,
+} from '~/components/AppearanceSetting'
 import { ContributionsGraph } from '~/components/ContributionsGraph'
 import { ErrorMessage } from '~/components/ErrorMessage'
 import GenerateButton from '~/components/GenerateButton'
@@ -15,8 +19,8 @@ import { SettingButton } from '~/components/SettingButton'
 import { ShareButton } from '~/components/ShareButton'
 import { useData } from '~/DataContext'
 import { trackEvent } from '~/helpers'
-import { useGraphRequest } from '~/hooks/useGraphRequest'
-import type { GitHubUsername } from '~/types'
+import { useContributionQuery } from '~/hooks/useQueries'
+import type { ContributionYear, GitHubUsername } from '~/types'
 
 function Divider() {
   return (
@@ -37,7 +41,10 @@ export function HomePage() {
   const { graphData, setGraphData, dispatchSettings } = useData()
   const [searchName, setSearchName] = useState<GitHubUsername>('')
 
-  const [settingPopUp, setSettingPopUp] = useState<{ offsetX: number, offsetY: number }>()
+  const [settingPopUp, setSettingPopUp] = useState<{
+    offsetX: number
+    offsetY: number
+  }>()
 
   const [downloading, setDownloading] = useState(false)
 
@@ -50,13 +57,54 @@ export function HomePage() {
     dispatchSettings({ type: 'reset' })
   }
 
-  const handleError = () => {
-    reset()
-  }
+  const handleError = useEvent(
+    () => {
+      reset()
+    },
+  )
 
-  const { run, loading, error } = useGraphRequest({ onError: handleError })
+  const [queryParams, setQueryParams] = useState<{
+    username: string
+    years?: ContributionYear[]
+  } | null>(null)
 
-  const handleSubmit = async () => {
+  const {
+    data: contributionData,
+    isLoading: loading,
+    error: queryError,
+    isError,
+  } = useContributionQuery(
+    queryParams?.username || '',
+    queryParams?.years,
+    false,
+    {
+      enabled: !!queryParams?.username,
+    },
+  )
+
+  useEffect(() => {
+    if (contributionData && queryParams) {
+      setSearchName(contributionData.login)
+      setGraphData(contributionData)
+      setQueryParams(null)
+    }
+  }, [contributionData, queryParams, setGraphData])
+
+  useEffect(() => {
+    if (isError) {
+      handleError()
+    }
+  }, [isError, handleError])
+
+  const error
+    = isError
+      ? {
+          errorType: queryError.errorType,
+          message: queryError.message,
+        }
+      : undefined
+
+  const handleSubmit = () => {
     const trimmedName = searchName.trim()
 
     if (trimmedName && !loading) {
@@ -81,13 +129,7 @@ export function HomePage() {
       reset()
       trackEvent('Click Generate')
 
-      const data = await run({ username })
-
-      if (data) {
-        setSearchName(data.login)
-      }
-
-      setGraphData(data)
+      setQueryParams({ username })
     }
   }
 
@@ -173,7 +215,11 @@ export function HomePage() {
 
         if (offsetTop > 0) {
           // When the graph appears, automatically scrolls to the position where the graph appears to avoid obscuring it.
-          document.body.scrollTo({ left: 0, top: offsetTop, behavior: 'smooth' })
+          document.body.scrollTo({
+            left: 0,
+            top: offsetTop,
+            behavior: 'smooth',
+          })
         }
 
         setTimeout(() => {
@@ -204,7 +250,7 @@ export function HomePage() {
         <form
           onSubmit={(ev) => {
             ev.preventDefault()
-            void handleSubmit()
+            handleSubmit()
           }}
         >
           <div className="flex flex-col items-center justify-center gap-y-6 md:flex-row md:gap-x-5">
@@ -289,9 +335,15 @@ export function HomePage() {
                             = document.getElementById(popoverContentId)?.parentNode
 
                           if (popoverContentWrapper instanceof HTMLElement) {
-                            const style = window.getComputedStyle(popoverContentWrapper, null)
+                            const style = window.getComputedStyle(
+                              popoverContentWrapper,
+                              null,
+                            )
                             const matrix = style.transform
-                            const values = matrix.split('(')[1].split(')')[0].split(',')
+                            const values = matrix
+                              .split('(')[1]
+                              .split(')')[0]
+                              .split(',')
                             const offsetX = values[4]
                             const offsetY = values[5]
 
