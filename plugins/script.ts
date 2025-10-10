@@ -34,7 +34,7 @@ const handler = () => {
     interface ContributionDay {
       count: number
       date: string
-      level: `${ContributionLevel}`
+      level: ContributionLevel
       weekday?: Weekday
     }
 
@@ -87,7 +87,7 @@ const handler = () => {
     const produceData = ({ data }: Data): ProducedData => {
       const contributionCalendars = data.contributionCalendars.map<Calendar>((cur) => {
         const rows: Calendar['rows'] = [[], [], [], [], [], [], []]
-        const nullDay: ContributionDay = { count: 0, date: '', level: 'Null' }
+        const nullDay: ContributionDay = { count: 0, date: '', level: ContributionLevel.Null }
 
         cur.weeks.forEach(({ days }) => {
           if (days.length !== 7) {

@@ -286,7 +286,7 @@ export function HomePage() {
                         }}
                         onPopOut={() => {
                           const popoverContentWrapper
-                        = document.getElementById(popoverContentId)?.parentNode
+                            = document.getElementById(popoverContentId)?.parentNode
 
                           if (popoverContentWrapper instanceof HTMLElement) {
                             const style = window.getComputedStyle(popoverContentWrapper, null)
