@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useEffect, useId, useRef, useState } from 'react'
+import { useEffect, useId, useRef, useState } from 'react'
 import { useEvent } from 'react-use-event-hook'
 
 import { toBlob, toPng } from 'html-to-image'
@@ -17,6 +17,9 @@ import Loading from '~/components/Loading'
 import { SearchInput } from '~/components/SearchInput'
 import { SettingButton } from '~/components/SettingButton'
 import { ShareButton } from '~/components/ShareButton'
+import { FamousUsersSection } from '~/components/UserDiscovery/FamousUsersSection'
+import { RecentUsersSection } from '~/components/UserDiscovery/RecentUsersSection'
+import { useRecentUsers } from '~/components/UserDiscovery/useRecentUsers'
 import { useData } from '~/DataContext'
 import { trackEvent } from '~/helpers'
 import { useContributionQuery } from '~/hooks/useQueries'
@@ -51,6 +54,13 @@ export function HomePage() {
   const [doingCopy, setDoingCopy] = useState(false)
   const [copySuccess, setCopySuccess] = useState(false)
 
+  const {
+    recentUsers,
+    addRecentUser,
+    removeRecentUser,
+    clearRecentUsers,
+  } = useRecentUsers()
+
   const reset = () => {
     setGraphData(undefined)
     setSettingPopUp(undefined)
@@ -82,13 +92,46 @@ export function HomePage() {
     },
   )
 
+  function normalizeGitHubUsername(input: string): GitHubUsername | null {
+    /**
+     * 规范化 GitHub 用户名输入：支持直接输入 login，或粘贴 GitHub Profile URL。
+     * 返回 null 代表输入非法。
+     */
+    const trimmed = input.trim()
+    let normalized: GitHubUsername | null = null
+
+    if (trimmed.length > 0) {
+      const containsSlash = trimmed.includes('/')
+
+      if (!containsSlash) {
+        normalized = trimmed
+      }
+      else {
+        const githubUrlPattern = /^https:\/\/github\.com\/([^/?#]+)(?:[/?#]|$)/
+        const match = githubUrlPattern.exec(trimmed)
+
+        const extracted = match?.[1]
+
+        if (extracted) {
+          normalized = extracted
+        }
+      }
+    }
+
+    return normalized
+  }
+
   useEffect(() => {
     if (contributionData && queryParams) {
       setSearchName(contributionData.login)
       setGraphData(contributionData)
+      addRecentUser({
+        login: contributionData.login,
+        avatarUrl: contributionData.avatarUrl,
+      })
       setQueryParams(null)
     }
-  }, [contributionData, queryParams, setGraphData])
+  }, [addRecentUser, contributionData, queryParams, setGraphData])
 
   useEffect(() => {
     if (isError) {
@@ -105,32 +148,38 @@ export function HomePage() {
       : undefined
 
   const handleSubmit = () => {
-    const trimmedName = searchName.trim()
+    const username = normalizeGitHubUsername(searchName)
 
-    if (trimmedName && !loading) {
-      let username = trimmedName
-
-      if (trimmedName.includes('/')) {
-        // Extract username from GitHub URL if applicable.
-        const githubUrlPattern = /^https:\/\/github\.com\/([^/?#]+)(?:[/?#]|$)/
-        const match = githubUrlPattern.exec(trimmedName)
-
-        if (match) {
-          username = match[1]
-        }
-        else {
-          reset()
-          setSearchName('')
-
-          return
-        }
-      }
-
+    if (username && !loading) {
       reset()
       trackEvent('Click Generate')
-
       setQueryParams({ username })
     }
+    else if (!username) {
+      reset()
+      setSearchName('')
+    }
+  }
+
+  const handleQuickSearch = (raw: string) => {
+    const username = normalizeGitHubUsername(raw)
+
+    if (username && !loading) {
+      reset()
+      setSearchName(username)
+      trackEvent('Click Quick Search', { username })
+      setQueryParams({ username })
+    }
+  }
+
+  const handleRemoveRecentUser = (login: string) => {
+    removeRecentUser(login)
+    trackEvent('Click Remove Recent User', { username: login })
+  }
+
+  const handleClearRecentUsers = () => {
+    clearRecentUsers()
+    trackEvent('Click Clear Recent Users')
   }
 
   const handleDownload = async () => {
@@ -206,7 +255,7 @@ export function HomePage() {
   const popoverContentId = useId()
   const graphWrapperId = useId()
 
-  const actionRefCallback = useCallback(
+  const actionRefCallback = useEvent(
     (node: HTMLDivElement | null) => {
       actionRef.current = node
 
@@ -237,7 +286,6 @@ export function HomePage() {
         }, 500)
       }
     },
-    [graphWrapperId],
   )
 
   return (
@@ -264,6 +312,24 @@ export function HomePage() {
             <GenerateButton loading={loading} type="submit" />
           </div>
         </form>
+
+        {!graphData && !error && (
+          <div className="mx-auto mt-10 flex max-w-5xl flex-col gap-y-6">
+            <FamousUsersSection
+              isLoading={loading}
+              loadingLogin={queryParams?.username ?? null}
+              onSelect={handleQuickSearch}
+            />
+            <RecentUsersSection
+              isLoading={loading}
+              loadingLogin={queryParams?.username ?? null}
+              users={recentUsers}
+              onClear={handleClearRecentUsers}
+              onRemove={handleRemoveRecentUser}
+              onSelect={handleQuickSearch}
+            />
+          </div>
+        )}
       </div>
 
       {error

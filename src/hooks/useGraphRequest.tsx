@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useState } from 'react'
 import { useEvent } from 'react-use-event-hook'
 
 import { setSearchParamsToUrl, trackEvent } from '~/helpers'
@@ -17,7 +17,7 @@ export function useGraphRequest(config: UseGraphRequestConfig = {}) {
 
   const [error, setError] = useState<Pick<ResponseData, 'errorType' | 'message'>>()
 
-  const run = useCallback(
+  const run = useEvent(
     async ({ username, years }: { username: string, years?: ContributionYear[] }) => {
       try {
         setError(undefined)
@@ -50,7 +50,6 @@ export function useGraphRequest(config: UseGraphRequestConfig = {}) {
         setLoading(false)
       }
     },
-    [onError],
   )
 
   return {
