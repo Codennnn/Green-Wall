@@ -1,3 +1,5 @@
+import { Suspense } from 'react'
+
 import type { Metadata } from 'next'
 
 import { DataProvider } from '~/DataContext'
@@ -35,7 +37,9 @@ export const generateMetadata = async ({
 export default function Page() {
   return (
     <DataProvider key="share">
-      <SharePage />
+      <Suspense fallback={null}>
+        <SharePage />
+      </Suspense>
     </DataProvider>
   )
 }

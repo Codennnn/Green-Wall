@@ -1,3 +1,5 @@
+import { Suspense } from 'react'
+
 import { DataProvider } from '~/DataContext'
 
 import { HomePage } from './HomePage'
@@ -5,7 +7,9 @@ import { HomePage } from './HomePage'
 export default function IndexPage() {
   return (
     <DataProvider key="home">
-      <HomePage />
+      <Suspense fallback={null}>
+        <HomePage />
+      </Suspense>
     </DataProvider>
   )
 }
