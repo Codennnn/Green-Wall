@@ -4,6 +4,13 @@ export default [
   ...nextPreset,
 
   {
+    files: ['**/*.ts', '**/*.tsx'],
+    rules: {
+      'react-hooks/set-state-in-effect': 0,
+    },
+  },
+
+  {
     ignores: ['plugins/*.js'],
   },
 ]

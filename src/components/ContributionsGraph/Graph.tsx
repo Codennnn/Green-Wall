@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import Link from 'next/link'
 import { ChevronRight } from 'lucide-react'
@@ -31,10 +31,26 @@ export function Graph(props: GraphProps) {
 
   const { username, settings } = useData()
 
-  const currentYear = new Date().getFullYear()
-  const isNewYear
-    = currentYear === calendar.year
-      && (new Date(currentYear, 0, 2).getTime() - Date.now()) / 1000 / 60 / 60 / 24 >= 0
+  const [isNewYear, setIsNewYear] = useState(false)
+
+  useEffect(() => {
+    const checkNewYear = () => {
+      const now = Date.now()
+      const currentYear = new Date(now).getFullYear()
+      const isNew = currentYear === calendar.year
+        && (new Date(currentYear, 0, 2).getTime() - now) / 1000 / 60 / 60 / 24 >= 0
+
+      setIsNewYear(isNew)
+    }
+
+    checkNewYear()
+
+    const interval = setInterval(checkNewYear, 60000)
+
+    return () => {
+      clearInterval(interval)
+    }
+  }, [calendar.year])
 
   const [tooltipInfo, setTooltipInfo] = useState<ContributionDay>()
   const [refEle, setRefEle] = useState<HTMLElement | null>(null)

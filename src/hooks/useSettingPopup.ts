@@ -1,6 +1,6 @@
 'use client'
 
-import { type RefObject, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import { useEvent } from 'react-use-event-hook'
 
 export interface SettingPopupPosition {
