@@ -1,4 +1,4 @@
-import type { GraphData, ValuableStatistics } from '~/types'
+import type { GitHubUsername, GraphData, ValuableStatistics } from '~/types'
 
 export function numberWithCommas(num: number): string {
   return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
@@ -295,4 +295,29 @@ export function getValuableStatistics(graphData: GraphData): ValuableStatistics 
     maxContributionsMonth,
     maxMonthlyContributions,
   }
+}
+
+export function normalizeGitHubUsername(input: string): GitHubUsername | null {
+  const trimmed = input.trim()
+  let normalized: GitHubUsername | null = null
+
+  if (trimmed.length > 0) {
+    const containsSlash = trimmed.includes('/')
+
+    if (!containsSlash) {
+      normalized = trimmed
+    }
+    else {
+      const githubUrlPattern = /^https:\/\/github\.com\/([^/?#]+)(?:[/?#]|$)/
+      const match = githubUrlPattern.exec(trimmed)
+
+      const extracted = match?.[1]
+
+      if (extracted) {
+        normalized = extracted
+      }
+    }
+  }
+
+  return normalized
 }

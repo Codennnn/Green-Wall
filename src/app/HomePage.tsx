@@ -1,29 +1,22 @@
 'use client'
 
-import { useEffect, useId, useRef, useState } from 'react'
-import { useEvent } from 'react-use-event-hook'
+import { useId, useRef } from 'react'
 
-import { toBlob, toPng } from 'html-to-image'
-import { DotIcon, FileCheck2Icon, ImageIcon, ImagesIcon } from 'lucide-react'
+import { DotIcon } from 'lucide-react'
 
-import {
-  AppearanceSetting,
-  DraggableAppearanceSetting,
-} from '~/components/AppearanceSetting'
 import { ContributionsGraph } from '~/components/ContributionsGraph'
 import { ErrorMessage } from '~/components/ErrorMessage'
-import GenerateButton from '~/components/GenerateButton'
+import { GraphActionBar } from '~/components/GraphActionBar'
 import Loading from '~/components/Loading'
-import { SearchInput } from '~/components/SearchInput'
-import { SettingButton } from '~/components/SettingButton'
-import { ShareButton } from '~/components/ShareButton'
+import { SearchForm } from '~/components/SearchForm'
 import { FamousUsersSection } from '~/components/UserDiscovery/FamousUsersSection'
 import { RecentUsersSection } from '~/components/UserDiscovery/RecentUsersSection'
 import { useRecentUsers } from '~/components/UserDiscovery/useRecentUsers'
 import { useData } from '~/DataContext'
 import { trackEvent } from '~/helpers'
-import { useContributionQuery } from '~/hooks/useQueries'
-import type { ContributionYear, GitHubUsername } from '~/types'
+import { useContributionSearch } from '~/hooks/useContributionSearch'
+import { useSettingPopup } from '~/hooks/useSettingPopup'
+import { useUrlUsername } from '~/hooks/useUrlUsername'
 
 function Divider() {
   return (
@@ -36,257 +29,129 @@ function Divider() {
 }
 
 export function HomePage() {
-  const canUseClipboardItem = typeof ClipboardItem !== 'undefined'
-
   const graphRef = useRef<HTMLDivElement>(null)
-  const actionRef = useRef<HTMLDivElement | null>(null)
+
+  const settingPopoverContentId = useId()
+  const graphWrapperId = useId()
 
   const { graphData, setGraphData, dispatchSettings } = useData()
-  const [searchName, setSearchName] = useState<GitHubUsername>('')
 
-  const [settingPopUp, setSettingPopUp] = useState<{
-    offsetX: number
-    offsetY: number
-  }>()
-
-  const [downloading, setDownloading] = useState(false)
-
-  const [doingCopy, setDoingCopy] = useState(false)
-  const [copySuccess, setCopySuccess] = useState(false)
+  const {
+    urlUsername,
+    rawUrlUsername,
+    isInvalidUrlUsername,
+    setUsernameInUrl,
+  } = useUrlUsername()
 
   const {
     recentUsers,
     addRecentUser,
     removeRecentUser,
-    clearRecentUsers,
   } = useRecentUsers()
 
-  const reset = () => {
-    setGraphData(undefined)
-    setSettingPopUp(undefined)
-    dispatchSettings({ type: 'reset' })
-  }
-
-  const handleError = useEvent(
-    () => {
-      reset()
-    },
-  )
-
-  const [queryParams, setQueryParams] = useState<{
-    username: string
-    years?: ContributionYear[]
-  } | null>(null)
+  const {
+    settingPopupPosition,
+    closeSettingPopup,
+    graphActionsRefCallback,
+    handleSettingPopOut,
+  } = useSettingPopup(graphWrapperId)
 
   const {
-    data: contributionData,
-    isLoading: loading,
-    error: queryError,
-    isError,
-  } = useContributionQuery(
-    queryParams?.username || '',
-    queryParams?.years,
-    false,
-    {
-      enabled: !!queryParams?.username,
+    searchName,
+    setSearchName,
+    isLoading,
+    error,
+    queryParams,
+    handleSubmit,
+    handleQuickSearch,
+  } = useContributionSearch({
+    urlUsername,
+    isInvalidUrlUsername,
+    setUsernameInUrl,
+    graphData,
+    setGraphData,
+    resetSettings: () => {
+      closeSettingPopup()
+      dispatchSettings({ type: 'reset' })
     },
-  )
-
-  function normalizeGitHubUsername(input: string): GitHubUsername | null {
-    /**
-     * 规范化 GitHub 用户名输入：支持直接输入 login，或粘贴 GitHub Profile URL。
-     * 返回 null 代表输入非法。
-     */
-    const trimmed = input.trim()
-    let normalized: GitHubUsername | null = null
-
-    if (trimmed.length > 0) {
-      const containsSlash = trimmed.includes('/')
-
-      if (!containsSlash) {
-        normalized = trimmed
-      }
-      else {
-        const githubUrlPattern = /^https:\/\/github\.com\/([^/?#]+)(?:[/?#]|$)/
-        const match = githubUrlPattern.exec(trimmed)
-
-        const extracted = match?.[1]
-
-        if (extracted) {
-          normalized = extracted
-        }
-      }
-    }
-
-    return normalized
-  }
-
-  useEffect(() => {
-    if (contributionData && queryParams) {
-      setSearchName(contributionData.login)
-      setGraphData(contributionData)
-      addRecentUser({
-        login: contributionData.login,
-        avatarUrl: contributionData.avatarUrl,
-      })
-      setQueryParams(null)
-    }
-  }, [addRecentUser, contributionData, queryParams, setGraphData])
-
-  useEffect(() => {
-    if (isError) {
-      handleError()
-    }
-  }, [isError, handleError])
-
-  const error
-    = isError
-      ? {
-          errorType: queryError.errorType,
-          message: queryError.message,
-        }
-      : undefined
-
-  const handleSubmit = () => {
-    const username = normalizeGitHubUsername(searchName)
-
-    if (username && !loading) {
-      reset()
-      trackEvent('Click Generate')
-      setQueryParams({ username })
-    }
-    else if (!username) {
-      reset()
-      setSearchName('')
-    }
-  }
-
-  const handleQuickSearch = (raw: string) => {
-    const username = normalizeGitHubUsername(raw)
-
-    if (username && !loading) {
-      reset()
-      setSearchName(username)
-      trackEvent('Click Quick Search', { username })
-      setQueryParams({ username })
-    }
-  }
+    addRecentUser,
+  })
 
   const handleRemoveRecentUser = (login: string) => {
     removeRecentUser(login)
     trackEvent('Click Remove Recent User', { username: login })
   }
 
-  const handleClearRecentUsers = () => {
-    clearRecentUsers()
-    trackEvent('Click Clear Recent Users')
-  }
-
-  const handleDownload = async () => {
-    if (graphRef.current && graphData && !downloading) {
-      try {
-        setDownloading(true)
-        trackEvent('Click Download')
-
-        const dataURL = await toPng(graphRef.current)
-        const trigger = document.createElement('a')
-        trigger.href = dataURL
-        trigger.download = `${graphData.login}_contributions`
-        trigger.click()
-      }
-      catch (err) {
-        if (err instanceof Error) {
-          trackEvent('Error: Download Image', { msg: err.message })
-        }
-      }
-      finally {
-        setTimeout(() => {
-          setDownloading(false)
-        }, 2000)
-      }
+  const handleSettingClick = () => {
+    if (settingPopupPosition) {
+      closeSettingPopup()
     }
   }
 
-  const handleCopyImage = async () => {
-    if (graphRef.current && graphData && canUseClipboardItem && !doingCopy) {
-      try {
-        setDoingCopy(true)
-        trackEvent('Click Copy Image')
-
-        const item = new ClipboardItem({
-          'image/png': (async () => {
-            /**
-             * To be able to use `ClipboardItem` in safari, need to pass promise directly into it.
-             * @see https://stackoverflow.com/questions/66312944/javascript-clipboard-api-write-does-not-work-in-safari
-             */
-            if (!graphRef.current) {
-              throw new Error()
-            }
-
-            const blobData = await toBlob(graphRef.current)
-
-            if (!blobData) {
-              throw new Error()
-            }
-
-            return blobData
-          })(),
-        })
-
-        await navigator.clipboard.write([item])
-
-        setCopySuccess(true)
-
-        setTimeout(() => {
-          setCopySuccess(false)
-        }, 2000)
-      }
-      catch (err) {
-        if (err instanceof Error) {
-          trackEvent('Error: Copy Image', { msg: err.message })
-        }
-      }
-      finally {
-        setDoingCopy(false)
-      }
-    }
+  const handleSettingPopOutClick = () => {
+    handleSettingPopOut(settingPopoverContentId)
   }
 
-  const popoverContentId = useId()
-  const graphWrapperId = useId()
+  const renderContent = () => {
+    if (error) {
+      return <ErrorMessage errorType={error.errorType} text={error.message} />
+    }
 
-  const actionRefCallback = useEvent(
-    (node: HTMLDivElement | null) => {
-      actionRef.current = node
+    if (isLoading || graphData) {
+      return (
+        <Loading active={isLoading}>
+          {graphData && (
+            <>
+              <div
+                ref={graphActionsRefCallback}
+                className="flex flex-row-reverse flex-wrap items-center justify-center gap-x-6 gap-y-4 py-5"
+              >
+                <GraphActionBar
+                  graphRef={graphRef}
+                  settingPopoverContentId={settingPopoverContentId}
+                  settingPopupPosition={settingPopupPosition}
+                  username={graphData.login}
+                  onSettingClick={handleSettingClick}
+                  onSettingPopOut={handleSettingPopOutClick}
+                  onSettingPopupClose={closeSettingPopup}
+                />
+              </div>
 
-      if (actionRef.current) {
-        const offsetTop = actionRef.current.getBoundingClientRect().top
+              <Divider />
 
-        if (offsetTop > 0) {
-          // When the graph appears, automatically scrolls to the position where the graph appears to avoid obscuring it.
-          document.body.scrollTo({
-            left: 0,
-            top: offsetTop,
-            behavior: 'smooth',
-          })
-        }
+              <div className="flex overflow-x-auto md:justify-center">
+                <ContributionsGraph
+                  ref={graphRef}
+                  wrapperId={graphWrapperId}
+                />
+              </div>
+            </>
+          )}
+        </Loading>
+      )
+    }
 
-        setTimeout(() => {
-          // Automatically pop-up settings for users to discover the settings at first glance.
-          const graphWrapperEle = document.getElementById(graphWrapperId)
+    if (!rawUrlUsername) {
+      return (
+        <div className="mx-auto mt-10 flex max-w-5xl flex-col gap-y-6">
+          <FamousUsersSection
+            isLoading={isLoading}
+            loadingLogin={queryParams?.username ?? null}
+            onSelect={handleQuickSearch}
+          />
+          <RecentUsersSection
+            isLoading={isLoading}
+            loadingLogin={queryParams?.username ?? null}
+            users={recentUsers}
+            onRemove={handleRemoveRecentUser}
+            onSelect={handleQuickSearch}
+          />
+        </div>
+      )
+    }
 
-          if (graphWrapperEle instanceof HTMLElement) {
-            const { top, right } = graphWrapperEle.getBoundingClientRect()
-
-            setSettingPopUp({
-              offsetX: right + 20,
-              offsetY: top,
-            })
-          }
-        }, 500)
-      }
-    },
-  )
+    return null
+  }
 
   return (
     <div className="py-10 md:py-14">
@@ -294,160 +159,14 @@ export function HomePage() {
         Review the contributions you have made on GitHub over the years.
       </h1>
 
-      <div className="py-12 md:py-16">
-        <form
-          onSubmit={(ev) => {
-            ev.preventDefault()
-            handleSubmit()
-          }}
-        >
-          <div className="flex flex-col items-center justify-center gap-y-6 md:flex-row md:gap-x-5">
-            <SearchInput
-              disabled={loading}
-              value={searchName}
-              onChange={(ev) => {
-                setSearchName(ev.target.value)
-              }}
-            />
-            <GenerateButton loading={loading} type="submit" />
-          </div>
-        </form>
+      <SearchForm
+        isLoading={isLoading}
+        value={searchName}
+        onChange={setSearchName}
+        onSubmit={handleSubmit}
+      />
 
-        {!graphData && !error && (
-          <div className="mx-auto mt-10 flex max-w-5xl flex-col gap-y-6">
-            <FamousUsersSection
-              isLoading={loading}
-              loadingLogin={queryParams?.username ?? null}
-              onSelect={handleQuickSearch}
-            />
-            <RecentUsersSection
-              isLoading={loading}
-              loadingLogin={queryParams?.username ?? null}
-              users={recentUsers}
-              onClear={handleClearRecentUsers}
-              onRemove={handleRemoveRecentUser}
-              onSelect={handleQuickSearch}
-            />
-          </div>
-        )}
-      </div>
-
-      {error
-        ? (
-            <ErrorMessage errorType={error.errorType} text={error.message} />
-          )
-        : (
-            <Loading active={loading}>
-              {graphData && (
-                <>
-                  <div
-                    ref={actionRefCallback}
-                    className="flex flex-row-reverse flex-wrap items-center justify-center gap-x-6 gap-y-4 py-5"
-                  >
-                    <div className="flex gap-x-3">
-                      <button
-                        className="inline-flex h-full items-center rounded-md bg-main-100 px-4 py-2 text-sm font-medium text-main-500 hover:bg-main-200 disabled:pointer-events-none motion-safe:transition-colors motion-safe:duration-300 md:text-base"
-                        disabled={downloading}
-                        onClick={() => {
-                          void handleDownload()
-                        }}
-                      >
-                        <ImageIcon className="mr-2 size-4 shrink-0 md:size-5" />
-                        <span>Save as Image</span>
-                      </button>
-
-                      {canUseClipboardItem && (
-                        <button
-                          className={`
-                      inline-flex h-full items-center rounded-md px-4 py-2 text-sm font-medium transition-colors disabled:pointer-events-none md:text-base
-                      ${
-                        copySuccess
-                          ? 'bg-accent-100 text-accent-500'
-                          : 'bg-main-100 text-main-500 duration-300 hover:bg-main-200 motion-safe:transition-colors'
-                        }
-                      `}
-                          disabled={doingCopy}
-                          onClick={() => {
-                            void handleCopyImage()
-                          }}
-                        >
-                          <span className="mr-2">
-                            {copySuccess
-                              ? (
-                                  <FileCheck2Icon className="size-4 shrink-0 md:size-5" />
-                                )
-                              : (
-                                  <ImagesIcon className="size-4 shrink-0 md:size-5" />
-                                )}
-                          </span>
-                          <span>{copySuccess ? 'Copied' : 'Copy'} as Image</span>
-                        </button>
-                      )}
-                    </div>
-
-                    <div className="flex flex-wrap items-center gap-x-6 md:justify-center">
-                      <ShareButton />
-
-                      <SettingButton
-                        content={<AppearanceSetting />}
-                        popoverContentId={popoverContentId}
-                        onClick={() => {
-                          if (settingPopUp) {
-                            setSettingPopUp(undefined)
-                          }
-                        }}
-                        onPopOut={() => {
-                          const popoverContentWrapper
-                            = document.getElementById(popoverContentId)?.parentNode
-
-                          if (popoverContentWrapper instanceof HTMLElement) {
-                            const style = window.getComputedStyle(
-                              popoverContentWrapper,
-                              null,
-                            )
-                            const matrix = style.transform
-                            const values = matrix
-                              .split('(')[1]
-                              .split(')')[0]
-                              .split(',')
-                            const offsetX = values[4]
-                            const offsetY = values[5]
-
-                            setSettingPopUp({
-                              offsetX: Number(offsetX),
-                              offsetY: Number(offsetY),
-                            })
-                          }
-                        }}
-                      />
-
-                      <div className="relative">
-                        {!!settingPopUp && (
-                          <DraggableAppearanceSetting
-                            initialPosition={{
-                              x: settingPopUp.offsetX,
-                              y: settingPopUp.offsetY,
-                            }}
-                            onClose={() => {
-                              setSettingPopUp(undefined)
-                            }}
-                          >
-                            <AppearanceSetting />
-                          </DraggableAppearanceSetting>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-
-                  <Divider />
-
-                  <div className="flex overflow-x-auto md:justify-center">
-                    <ContributionsGraph ref={graphRef} wrapperId={graphWrapperId} />
-                  </div>
-                </>
-              )}
-            </Loading>
-          )}
+      {renderContent()}
     </div>
   )
 }
