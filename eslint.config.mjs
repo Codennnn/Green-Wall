@@ -1,7 +1,11 @@
-import nextPreset from 'prefer-code-style/eslint/preset/next'
+import next from 'prefer-code-style/eslint/next'
+import normal from 'prefer-code-style/eslint/preset/normal'
+import typescriptStrict from 'prefer-code-style/eslint/typescript-strict'
 
 export default [
-  ...nextPreset,
+  ...normal,
+  ...typescriptStrict,
+  ...next,
 
   {
     files: ['**/*.ts', '**/*.tsx'],

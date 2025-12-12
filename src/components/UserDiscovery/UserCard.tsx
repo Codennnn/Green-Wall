@@ -37,7 +37,7 @@ export function UserCard(props: UserCardProps) {
     <div className="group relative">
       <button
         className={[
-          'flex w-full items-center gap-x-3 rounded-xl border border-main-200 bg-main-50/70 p-3 text-left text-main-600 shadow-sm',
+          'flex w-full items-center gap-x-3 rounded-xl border border-main-200 bg-main-50/70 p-3 text-left text-main-600 shadow-xs',
           'hover:bg-main-100 motion-safe:transition-colors motion-safe:duration-200',
           'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-main-300',
           disabled ? 'cursor-wait opacity-70' : 'cursor-pointer',
@@ -46,7 +46,7 @@ export function UserCard(props: UserCardProps) {
         type="button"
         onClick={handleSelect}
       >
-        <div className="relative size-10 shrink-0 overflow-hidden rounded-full bg-main-100">
+        <div className="bg-main-100 relative size-10 shrink-0 overflow-hidden rounded-full">
           <img
             alt={login}
             className="size-10 object-cover"
@@ -65,7 +65,7 @@ export function UserCard(props: UserCardProps) {
           </div>
 
           {!!badgeText && (
-            <div className="mt-1 truncate text-xs text-main-400">
+            <div className="text-main-400 mt-1 truncate text-xs">
               {badgeText}
             </div>
           )}

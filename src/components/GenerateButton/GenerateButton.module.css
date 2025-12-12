@@ -1,3 +1,5 @@
+@reference "../../styles/globals.css";
+
 .pushable {
   cursor: pointer;
   position: relative;

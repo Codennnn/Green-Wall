@@ -40,13 +40,13 @@ export function RecentUsersSection(props: RecentUsersSectionProps) {
 
   if (hasUsers) {
     return (
-      <section className="rounded-2xl border border-main-200 bg-main-50/40 p-5 shadow-sm">
+      <section className="border-main-200 bg-main-50/40 rounded-2xl border p-5 shadow-xs">
         <div className="flex items-end justify-between gap-x-4">
           <div>
-            <h2 className="text-base font-semibold text-main-600">
+            <h2 className="text-main-600 text-base font-semibold">
               Recently viewed
             </h2>
-            <p className="mt-1 text-sm text-main-400">
+            <p className="text-main-400 mt-1 text-sm">
               Pick up where you left off
             </p>
           </div>

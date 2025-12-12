@@ -1,3 +1,5 @@
+@reference "../../styles/globals.css";
+
 .graph {
   --week-width: calc(var(--block-size, 10px) + var(--block-gap, 3px));
 

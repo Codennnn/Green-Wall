@@ -7,7 +7,6 @@ import { BgDecoration } from '~/components/BgDecoration'
 import { GitHubButton } from '~/components/GitHubButton'
 import { QueryProvider } from '~/components/QueryProvider'
 
-import '~/styles/reset.css'
 import '~/styles/globals.css'
 
 const rubik = Rubik({
@@ -47,7 +46,7 @@ export default function Layout(props: React.PropsWithChildren) {
   return (
     <>
       <html
-        className={`h-full overflow-hidden bg-pageBg text-main-800 motion-safe:scroll-smooth ${rubik.className}`}
+        className={`h-full overflow-hidden bg-page-background text-main-800 motion-safe:scroll-smooth ${rubik.className}`}
         lang="en"
       >
         <body className="m-0 h-full overflow-y-auto text-main-700">
@@ -56,7 +55,7 @@ export default function Layout(props: React.PropsWithChildren) {
               <header>
                 <div className="flex h-[65px] items-center md:h-[80px]">
                   <Link href="/">
-                    <span className="flex cursor-pointer select-none items-center bg-pageBg  text-xl font-bold ring-4 ring-pageBg">
+                    <span className="flex cursor-pointer select-none items-center bg-page-background  text-xl font-bold ring-4 ring-page-background">
                       <span className="pointer-events-none relative size-8 md:size-7">
                         <Image fill alt="LOGO" className="object-contain" src="/favicon.svg" />
                       </span>

@@ -1,3 +1,5 @@
+@reference "../../styles/globals.css";
+
 @keyframes waterfall {
   0% {
     transform: translateY(-250%);

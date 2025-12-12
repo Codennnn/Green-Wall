@@ -8,7 +8,7 @@ export function MockupArc(props: MockupArcProps) {
       <div
         className={`relative z-10 overflow-hidden rounded-[12px] border border-solid border-main-200 ${className}`}
       >
-        <div className="rounded-[11px] border border-pageBg">
+        <div className="rounded-[11px] border border-page-background">
           <div className="rounded-[10px] border border-main-300">
             <div className="overflow-hidden rounded-[9px] border border-white/50">
               <div className="flex items-center gap-x-5 gap-y-2 bg-gradient-to-b from-main-100/80 to-main-100/5 p-2">

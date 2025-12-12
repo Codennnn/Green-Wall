@@ -1,6 +1,43 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+
+@plugin "tailwindcss-radix";
+
+@source "../../src/{app,components}/**/*.{ts,tsx}";
+
+@theme {
+  --color-accent-50: var(--color-emerald-50);
+  --color-accent-100: var(--color-emerald-100);
+  --color-accent-200: var(--color-emerald-200);
+  --color-accent-300: var(--color-emerald-300);
+  --color-accent-400: var(--color-emerald-400);
+  --color-accent-500: var(--color-emerald-500);
+  --color-accent-600: var(--color-emerald-600);
+  --color-accent-700: var(--color-emerald-700);
+  --color-accent-800: var(--color-emerald-800);
+  --color-accent-900: var(--color-emerald-900);
+  --color-accent-950: var(--color-emerald-950);
+  --color-main-50: var(--color-slate-50);
+  --color-main-100: var(--color-slate-100);
+  --color-main-200: var(--color-slate-200);
+  --color-main-300: var(--color-slate-300);
+  --color-main-400: var(--color-slate-400);
+  --color-main-500: var(--color-slate-500);
+  --color-main-600: var(--color-slate-600);
+  --color-main-700: var(--color-slate-700);
+  --color-main-800: var(--color-slate-800);
+  --color-main-900: var(--color-slate-900);
+  --color-main-950: var(--color-slate-950);
+  --color-page-background: var(--color-white);
+
+  /* Custom min/max widths */
+  --min-width-content: var(--min-content-width);
+  --max-width-content: var(--max-content-width);
+
+  /* Custom box shadows */
+  --shadow-overlay: rgb(14 18 22 / 20%) 0 6px 38px -10px, rgb(14 18 22 / 30%) 0 8px 20px -15px;
+  --shadow-tooltip:
+    hsl(206deg 22% 7% / 35%) 0px 10px 38px -10px, hsl(206deg 22% 7% / 20%) 0px 10px 20px -15px;
+}
 
 @layer components {
   .simple-button {
@@ -16,7 +53,7 @@
   }
 
   .simple-button.divider::after {
-    @apply content-[''] absolute top-1/2 -right-3 h-4 w-[1px] -translate-y-1/2 bg-main-300;
+    @apply content-[''] absolute top-1/2 -right-3 h-4 w-px -translate-y-1/2 bg-main-300;
   }
 
   .appearance-setting fieldset {
