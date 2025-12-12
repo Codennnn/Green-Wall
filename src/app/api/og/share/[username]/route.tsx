@@ -44,7 +44,7 @@ export async function GET(
     (
       <div
         style={{ backgroundColor: background, color: textColor }}
-        tw="flex h-full w-full flex-col items-center justify-center bg-white p-8 text-3xl text-black"
+        tw="flex h-full w-full flex-col items-center justify-center bg-background p-8 text-3xl text-black"
       >
         <div tw="flex items-center">
           <div tw="mb-4 flex h-24 w-24">

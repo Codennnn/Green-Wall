@@ -19,7 +19,7 @@ export function DraggableAppearanceSetting(
     <motion.div
       drag
       animate={pressing ? 'scale' : undefined}
-      className="fixed left-0 top-0 z-50 inline-block overflow-hidden rounded-lg bg-white shadow-overlay"
+      className="fixed left-0 top-0 z-50 inline-block overflow-hidden rounded-lg bg-background shadow-muted shadow border border-brand-900/10"
       dragConstraints={{ current: document.body }}
       dragControls={dragControls}
       dragListener={false}
@@ -33,7 +33,7 @@ export function DraggableAppearanceSetting(
       }}
     >
       <motion.div
-        className="flex min-h-10 select-none items-center bg-accent-50 px-3 font-medium text-accent-500"
+        className="flex min-h-10 select-none items-center bg-brand-50 px-3 font-medium text-brand-500"
         initial={{ cursor: 'grab' }}
         whileTap={{ cursor: 'grabbing' }}
         onPointerDown={(event) => {

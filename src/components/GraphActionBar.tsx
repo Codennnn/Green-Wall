@@ -2,10 +2,8 @@ import type { RefObject } from 'react'
 
 import { FileCheck2Icon, ImageIcon, ImagesIcon } from 'lucide-react'
 
-import {
-  AppearanceSetting,
-  DraggableAppearanceSetting,
-} from '~/components/AppearanceSetting'
+import { AppearanceSetting } from '~/components/AppearanceSetting/AppearanceSetting'
+import { DraggableAppearanceSetting } from '~/components/AppearanceSetting/DraggableAppearanceSetting'
 import { SettingButton } from '~/components/SettingButton'
 import { ShareButton } from '~/components/ShareButton'
 import { useImageExport } from '~/hooks/useImageExport'
@@ -59,7 +57,7 @@ export function GraphActionBar({
               inline-flex h-full items-center rounded-md px-4 py-2 text-sm font-medium transition-colors disabled:pointer-events-none md:text-base
               ${
           copySuccess
-            ? 'bg-accent-100 text-accent-500'
+            ? 'bg-brand-100 text-brand-500'
             : 'bg-main-100 text-main-500 duration-300 hover:bg-main-200 motion-safe:transition-colors'
           }
             `}

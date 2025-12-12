@@ -26,7 +26,7 @@
 }
 
 .waterfall div {
-  @apply bg-accent-400;
+  @apply bg-brand-400;
 
   position: absolute;
   z-index: 10;

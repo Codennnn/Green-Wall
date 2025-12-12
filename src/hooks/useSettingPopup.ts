@@ -58,14 +58,24 @@ export function useSettingPopup(graphWrapperId: string) {
     if (popoverContentWrapper instanceof HTMLElement) {
       const style = window.getComputedStyle(popoverContentWrapper, null)
       const matrix = style.transform
-      const values = matrix.split('(')[1].split(')')[0].split(',')
-      const offsetX = values[4]
-      const offsetY = values[5]
 
-      setSettingPopupPosition({
-        offsetX: Number(offsetX),
-        offsetY: Number(offsetY),
-      })
+      if (matrix && matrix !== 'none' && matrix.includes('(')) {
+        const values = matrix.split('(')[1].split(')')[0].split(',')
+        const offsetX = values[4]
+        const offsetY = values[5]
+
+        setSettingPopupPosition({
+          offsetX: Number(offsetX),
+          offsetY: Number(offsetY),
+        })
+      }
+      else {
+        const rect = popoverContentWrapper.getBoundingClientRect()
+        setSettingPopupPosition({
+          offsetX: rect.left,
+          offsetY: rect.top,
+        })
+      }
     }
   })
 

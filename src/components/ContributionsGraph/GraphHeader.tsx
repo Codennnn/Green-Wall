@@ -112,14 +112,14 @@ export function GraphHeader() {
 
           <span className="flex items-center gap-1 whitespace-nowrap">
             <UserIcon className="size-4" />
-            <span>{graphData.followers.totalCount}</span>
+            <span>{numberWithCommas(graphData.followers.totalCount)}</span>
             <span className="opacity-70">followers</span>
           </span>
 
           <DotIcon className="size-5" />
 
           <span className="flex items-center gap-1 whitespace-nowrap">
-            <span>{graphData.following.totalCount}</span>
+            <span>{numberWithCommas(graphData.following.totalCount)}</span>
             <span className="opacity-70">following</span>
           </span>
         </div>

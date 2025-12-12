@@ -50,7 +50,7 @@ export function UserPage() {
           src="/mona-loading-default.gif"
           width={60}
         />
-        <span className="bg-white px-3 py-4">Loading contributions...</span>
+        <span className="bg-background px-3 py-4">Loading contributions...</span>
       </div>
     )
   }

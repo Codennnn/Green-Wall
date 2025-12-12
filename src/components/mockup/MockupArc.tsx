@@ -11,7 +11,7 @@ export function MockupArc(props: MockupArcProps) {
         <div className="rounded-[11px] border border-page-background">
           <div className="rounded-[10px] border border-main-300">
             <div className="overflow-hidden rounded-[9px] border border-white/50">
-              <div className="flex items-center gap-x-5 gap-y-2 bg-gradient-to-b from-main-100/80 to-main-100/5 p-2">
+              <div className="flex items-center gap-x-5 gap-y-2 bg-linear-to-b from-main-100/80 to-main-100/5 p-2">
                 <div className="flex gap-2">
                   <div>xxx</div>
 
@@ -23,7 +23,7 @@ export function MockupArc(props: MockupArcProps) {
         </div>
       </div>
 
-      <div className="absolute inset-0 bg-gradient-to-b from-[var(--level-1)] to-[var(--level-0)] opacity-20 blur-lg" />
+      <div className="absolute inset-0 bg-linear-to-b from-(--level-1) to-(--level-0) opacity-20 blur-lg" />
     </div>
   )
 }

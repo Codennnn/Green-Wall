@@ -1,4 +1,10 @@
-import { RadixSelect } from '~/components/ui-kit/RadixSelect'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '~/components/ui/select'
 import { useData } from '~/DataContext'
 import type { GraphData, GraphSettings } from '~/types'
 
@@ -19,7 +25,11 @@ export function YearRangeSelect(props: YearRangeSelectProps) {
     return null
   }
 
-  const handleYearChange = (se: 'start' | 'end', year: string) => {
+  const handleYearChange = (se: 'start' | 'end', year: string | null) => {
+    if (!year) {
+      return
+    }
+
     let payload: GraphSettings['yearRange'] = undefined
 
     if (se === 'start') {
@@ -38,25 +48,47 @@ export function YearRangeSelect(props: YearRangeSelectProps) {
 
   return (
     <div className="flex items-center">
-      <RadixSelect
-        items={graphData?.contributionYears.map((year) => ({
-          label: `${year}`,
-          value: `${year}`,
-          disabled: year > Number(endYear),
-        }))}
+      <Select
         value={startYear}
         onValueChange={handleYearChange.bind(null, 'start')}
-      />
+      >
+        <SelectTrigger className="w-20 min-w-auto">
+          <SelectValue />
+        </SelectTrigger>
+        <SelectContent>
+          {graphData?.contributionYears.map((year) => (
+            <SelectItem
+              key={year}
+              disabled={year > Number(endYear)}
+              value={`${year}`}
+            >
+              {year}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+
       <span className="mx-2">-</span>
-      <RadixSelect
-        items={graphData?.contributionYears.map((year) => ({
-          label: `${year}`,
-          value: `${year}`,
-          disabled: year < Number(startYear),
-        }))}
+
+      <Select
         value={endYear}
         onValueChange={handleYearChange.bind(null, 'end')}
-      />
+      >
+        <SelectTrigger className="w-20 min-w-auto">
+          <SelectValue />
+        </SelectTrigger>
+        <SelectContent>
+          {graphData?.contributionYears.map((year) => (
+            <SelectItem
+              key={year}
+              disabled={year < Number(startYear)}
+              value={`${year}`}
+            >
+              {year}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
     </div>
   )
 }

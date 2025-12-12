@@ -52,7 +52,7 @@ function StaticCard(props: StaticCardProps) {
       <div className="rounded-[11px] border border-page-background">
         <div className="rounded-[10px] border border-main-300">
           <div className="overflow-hidden rounded-[9px] border border-white/50">
-            <div className="flex items-center gap-x-6 gap-y-2 bg-gradient-to-b from-main-100/80 to-main-100/5 p-3">
+            <div className="flex items-center gap-x-6 gap-y-2 bg-linear-to-b from-main-100/80 to-main-100/5 p-3">
               {props.children}
             </div>
           </div>
