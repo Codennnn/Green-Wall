@@ -5,7 +5,7 @@ import { useEvent } from 'react-use-event-hook'
 
 import { normalizeGitHubUsername, trackEvent } from '~/helpers'
 import { useContributionQuery } from '~/hooks/useQueries'
-import type { ContributionYear, GitHubUsername, GraphData } from '~/types'
+import type { GitHubUsername, GraphData } from '~/types'
 
 interface UseContributionSearchOptions {
   urlUsername: string
@@ -17,38 +17,32 @@ interface UseContributionSearchOptions {
   addRecentUser: (user: { login: string, avatarUrl: string }) => void
 }
 
-interface QueryParams {
-  username: GitHubUsername
-  years?: ContributionYear[]
-}
-
 export function useContributionSearch({
   urlUsername,
   isInvalidUrlUsername,
   setUsernameInUrl,
-  graphData,
   setGraphData,
   resetSettings,
   addRecentUser,
 }: UseContributionSearchOptions) {
   const [searchName, setSearchName] = useState<GitHubUsername>('')
-  const searchNameRef = useRef<GitHubUsername>('')
-  const [queryParams, setQueryParams] = useState<QueryParams | null>(null)
 
-  useEffect(() => {
-    searchNameRef.current = searchName
-  }, [searchName])
+  // 防止重复处理相同数据
+  const lastProcessedUsernameRef = useRef<string>('')
 
-  const reset = useEvent(() => {
-    setGraphData(undefined)
-    resetSettings()
-  })
+  const resetPreviousUserDataIfNeeded = useEvent((nextUsername: string) => {
+    const lastProcessed = lastProcessedUsernameRef.current
 
-  const handleError = useEvent(() => {
-    reset()
-    setQueryParams(null)
-    setSearchName('')
-    setUsernameInUrl('', { replace: true })
+    const hasPreviousUser = lastProcessed.length > 0
+    const isSwitchingToAnotherUser
+      = nextUsername.length > 0
+        && nextUsername.toLowerCase() !== lastProcessed.toLowerCase()
+
+    if (hasPreviousUser && isSwitchingToAnotherUser) {
+      lastProcessedUsernameRef.current = ''
+      setGraphData(undefined)
+      resetSettings()
+    }
   })
 
   const {
@@ -57,92 +51,80 @@ export function useContributionSearch({
     error: queryError,
     isError,
   } = useContributionQuery(
-    queryParams?.username ?? '',
-    queryParams?.years,
+    urlUsername,
+    undefined,
     false,
     {
-      enabled: !!queryParams?.username,
+      enabled: urlUsername.length > 0 && !isInvalidUrlUsername,
     },
   )
 
+  // 同步 URL 用户名到输入框
+  useEffect(() => {
+    setSearchName((currentSearchName) => {
+      const targetValue = urlUsername.length > 0 ? urlUsername : ''
+
+      // 只有值不同时才更新，避免中断滚动动画
+      return currentSearchName === targetValue ? currentSearchName : targetValue
+    })
+  }, [urlUsername])
+
+  useEffect(() => {
+    resetPreviousUserDataIfNeeded(urlUsername)
+  }, [urlUsername, resetPreviousUserDataIfNeeded])
+
+  // 处理无效 URL 用户名
   useEffect(() => {
     if (isInvalidUrlUsername) {
       setUsernameInUrl('', { replace: true })
-
-      return
     }
-
-    const graphUsername = graphData?.login ?? ''
-    const queryUsername = queryParams?.username ?? ''
-
-    if (urlUsername.length > 0) {
-      if (searchNameRef.current !== urlUsername) {
-        setSearchName(urlUsername)
-      }
-
-      if (graphUsername !== urlUsername && queryUsername !== urlUsername) {
-        reset()
-        setQueryParams({ username: urlUsername })
-      }
-    }
-    else {
-      if (graphData) {
-        reset()
-      }
-
-      if (searchNameRef.current.length > 0) {
-        setSearchName('')
-      }
-
-      if (queryParams) {
-        setQueryParams(null)
-      }
-    }
-  }, [
-    urlUsername,
-    isInvalidUrlUsername,
-    graphData,
-    queryParams,
-    reset,
-    setUsernameInUrl,
-  ])
+  }, [isInvalidUrlUsername, setUsernameInUrl])
 
   useEffect(() => {
-    if (contributionData && queryParams) {
-      setSearchName(contributionData.login)
-      setUsernameInUrl(contributionData.login, { replace: true })
+    if (contributionData && contributionData.login !== lastProcessedUsernameRef.current) {
+      lastProcessedUsernameRef.current = contributionData.login
       setGraphData(contributionData)
+
       addRecentUser({
         login: contributionData.login,
         avatarUrl: contributionData.avatarUrl,
       })
-      setQueryParams(null)
+
+      if (contributionData.login !== urlUsername) {
+        setUsernameInUrl(contributionData.login, { replace: true })
+      }
     }
-  }, [addRecentUser, contributionData, queryParams, setGraphData, setUsernameInUrl])
+  }, [contributionData, urlUsername, setGraphData, addRecentUser, setUsernameInUrl])
+
+  // 处理 URL 清空
+  useEffect(() => {
+    if (urlUsername.length === 0 && lastProcessedUsernameRef.current.length > 0) {
+      lastProcessedUsernameRef.current = ''
+      setGraphData(undefined)
+      resetSettings()
+    }
+  }, [urlUsername, setGraphData, resetSettings])
 
   useEffect(() => {
     if (isError) {
-      handleError()
+      lastProcessedUsernameRef.current = ''
+      setGraphData(undefined)
+      resetSettings()
+      setSearchName('')
+      setUsernameInUrl('', { replace: true })
     }
-  }, [isError, handleError])
-
-  const error = isError
-    ? {
-        errorType: queryError.errorType,
-        message: queryError.message,
-      }
-    : undefined
+  }, [isError, setGraphData, resetSettings, setUsernameInUrl])
 
   const handleSubmit = useEvent(() => {
     const username = normalizeGitHubUsername(searchName)
 
     if (username && !isLoading) {
-      reset()
+      resetPreviousUserDataIfNeeded(username)
+      setSearchName(username)
       trackEvent('Click Generate')
       setUsernameInUrl(username, { replace: false })
     }
     else if (!username) {
-      reset()
       setSearchName('')
       setUsernameInUrl('', { replace: true })
     }
@@ -152,20 +134,25 @@ export function useContributionSearch({
     const username = normalizeGitHubUsername(raw)
 
     if (username && !isLoading) {
-      reset()
+      resetPreviousUserDataIfNeeded(username)
       setSearchName(username)
       trackEvent('Click Quick Search', { username })
       setUsernameInUrl(username, { replace: false })
     }
   })
 
+  const error = isError
+    ? {
+        errorType: queryError.errorType,
+        message: queryError.message,
+      }
+    : undefined
+
   return {
     searchName,
     setSearchName,
     isLoading,
     error,
-    queryParams,
-    reset,
     handleSubmit,
     handleQuickSearch,
   }

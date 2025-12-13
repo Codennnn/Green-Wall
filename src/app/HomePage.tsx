@@ -61,7 +61,6 @@ export function HomePage() {
     setSearchName,
     isLoading,
     error,
-    queryParams,
     handleSubmit,
     handleQuickSearch,
   } = useContributionSearch({
@@ -76,6 +75,8 @@ export function HomePage() {
     },
     addRecentUser,
   })
+
+  const loadingUsername = isLoading ? urlUsername : null
 
   const handleRemoveRecentUser = (login: string) => {
     removeRecentUser(login)
@@ -136,12 +137,12 @@ export function HomePage() {
         <div className="mx-auto mt-10 flex max-w-5xl flex-col gap-y-6">
           <FamousUsersSection
             isLoading={isLoading}
-            loadingLogin={queryParams?.username ?? null}
+            loadingLogin={loadingUsername}
             onSelect={handleQuickSearch}
           />
           <RecentUsersSection
             isLoading={isLoading}
-            loadingLogin={queryParams?.username ?? null}
+            loadingLogin={loadingUsername}
             users={recentUsers}
             onRemove={handleRemoveRecentUser}
             onSelect={handleQuickSearch}

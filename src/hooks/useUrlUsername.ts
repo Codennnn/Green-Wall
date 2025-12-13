@@ -36,10 +36,10 @@ export function useUrlUsername() {
         const nextUrl = url.pathname + url.search
 
         if (replace) {
-          router.replace(nextUrl)
+          router.replace(nextUrl, { scroll: false })
         }
         else {
-          router.push(nextUrl)
+          router.push(nextUrl, { scroll: false })
         }
       }
     },

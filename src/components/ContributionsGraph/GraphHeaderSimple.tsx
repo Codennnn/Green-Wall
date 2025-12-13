@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import Link from 'next/link'
 
@@ -9,44 +9,36 @@ import { GraphLegend } from './GraphLegend'
 const Avatar = () => {
   const { graphData } = useData()
 
-  const init = useRef(false)
-  const avatarRoot = useRef<HTMLSpanElement>(null)
-  const [status, setStatus] = useState<'loading' | 'loaded' | 'error'>()
+  const [status, setStatus] = useState<'loading' | 'loaded' | 'error'>('loading')
 
   useEffect(() => {
-    const root = avatarRoot.current
-
-    if (root && graphData && !init.current) {
-      if (!root.hasChildNodes()) {
-        setStatus('loading')
-        const avatarImg = new window.Image()
-
-        avatarImg.onload = () => {
-          root.appendChild(avatarImg)
-          setStatus('loaded')
-        }
-
-        avatarImg.onerror = () => {
-          setStatus('error')
-        }
-
-        avatarImg.src = graphData.avatarUrl
-        avatarImg.alt = `${graphData.login}'s avatar.`
-        avatarImg.classList.add('h-full', 'w-full')
-        init.current = true
-      }
+    if (graphData?.avatarUrl) {
+      setStatus('loading')
     }
-  }, [graphData])
+    else {
+      setStatus('loading')
+    }
+  }, [graphData?.avatarUrl])
 
   return (
     <span
-      ref={avatarRoot}
-      className={`size-[1.7rem] overflow-hidden rounded-full bg-[var(--level-0)] ${
-        status === 'loading' ? 'animate-pulse' : ''
-      }`}
+      className="size-[1.7rem] overflow-hidden rounded-full bg-(--level-0)"
     >
+      {graphData && status !== 'error' && (
+        <img
+          alt={`${graphData.login}'s avatar.`}
+          className="h-full w-full"
+          src={graphData.avatarUrl}
+          onError={() => {
+            setStatus('error')
+          }}
+          onLoad={() => {
+            setStatus('loaded')
+          }}
+        />
+      )}
       {status === 'error' && (
-        <span className="inline-block size-full bg-gradient-to-br from-[var(--level-1)] to-[var(--level-2)]" />
+        <span className="inline-block size-full bg-linear-to-br from-(--level-1) to-(--level-2)" />
       )}
     </span>
   )
