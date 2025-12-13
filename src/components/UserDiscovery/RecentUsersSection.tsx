@@ -18,11 +18,19 @@ function formatLastSearchedAt(ms: number) {
     return ''
   }
 
-  // 使用固定的 locale 和格式，确保服务器端和客户端输出一致
-  const month = String(date.getMonth() + 1).padStart(2, '0')
-  const day = String(date.getDate()).padStart(2, '0')
-  const hour = String(date.getHours()).padStart(2, '0')
-  const minute = String(date.getMinutes()).padStart(2, '0')
+  const parts = new Intl.DateTimeFormat('en-US', {
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+    timeZone: 'UTC',
+  }).formatToParts(date)
+
+  const month = parts.find((p) => p.type === 'month')?.value ?? '00'
+  const day = parts.find((p) => p.type === 'day')?.value ?? '00'
+  const hour = parts.find((p) => p.type === 'hour')?.value ?? '00'
+  const minute = parts.find((p) => p.type === 'minute')?.value ?? '00'
 
   return `${month}/${day} ${hour}:${minute}`
 }

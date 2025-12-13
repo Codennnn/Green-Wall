@@ -23,6 +23,8 @@ export function UserPage() {
     isError,
   } = useContributionQuery(username, undefined, false, {
     enabled: !!username,
+    staleTime: 10 * 60 * 1000, // 10 分钟
+    gcTime: 60 * 60 * 1000, // 1 小时
   })
 
   useEffect(() => {

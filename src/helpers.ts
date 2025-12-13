@@ -128,8 +128,8 @@ export function getMaxContributionsInADay(graphData: GraphData): {
   graphData.contributionCalendars.forEach((calendar) => {
     calendar.weeks.forEach((week) => {
       week.days.forEach((day) => {
-        if (day.level !== 'NONE') {
-          maxContributions = Math.max(maxContributions, day.count)
+        if (day.level !== 'NONE' && day.count > maxContributions) {
+          maxContributions = day.count
           maxDate = day.date
         }
       })

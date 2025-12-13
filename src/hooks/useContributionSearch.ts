@@ -56,6 +56,8 @@ export function useContributionSearch({
     false,
     {
       enabled: urlUsername.length > 0 && !isInvalidUrlUsername,
+      staleTime: 10 * 60 * 1000, // 10 分钟
+      gcTime: 60 * 60 * 1000, // 1 小时
     },
   )
 

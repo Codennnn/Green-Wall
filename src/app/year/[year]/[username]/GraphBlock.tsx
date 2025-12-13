@@ -1,26 +1,29 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo } from 'react'
 
 import { useParams } from 'next/navigation'
 import {
   ActivityIcon,
+  CalendarIcon,
   ChartNoAxesCombinedIcon,
   FolderGit2Icon,
   LoaderIcon,
   MessageSquareQuoteIcon,
+  TrendingUpIcon,
 } from 'lucide-react'
 
 import { ContributionsGraph } from '~/components/ContributionsGraph'
 import Loading from '~/components/Loading'
 import { useData } from '~/DataContext'
 import {
-  getLongestContributionStreak,
-  getMaxContributionsInADay,
-} from '~/helpers'
-import {
   useContributionQuery,
   useIssuesQuery,
   useReposQuery,
 } from '~/hooks/useQueries'
+import {
+  deriveStatistics,
+  formatStatDate,
+  formatStatMonth,
+} from '~/lib/statistics'
 
 function SpinningLoader() {
   return <LoaderIcon className="size-4 animate-spin text-main-300" />
@@ -63,15 +66,15 @@ function StaticCard(props: StaticCardProps) {
 }
 
 interface StatValueProps {
-  value: number | undefined
+  value: number | string | undefined
   isLoading: boolean
-  fallback?: number
+  fallback?: number | string
 }
 
 /**
  * 统计数值显示组件
  * 根据加载状态显示加载图标或实际数值
- * @param value - 要显示的数值
+ * @param value - 要显示的数值或文本
  * @param isLoading - 是否正在加载
  * @param fallback - 当 value 为 undefined 时的默认值,默认为 0
  */
@@ -80,7 +83,11 @@ function StatValue(props: StatValueProps) {
 
   return (
     <span className="ml-auto tabular-nums">
-      {isLoading ? <SpinningLoader /> : (value ?? fallback)}
+      {
+        isLoading
+          ? <SpinningLoader />
+          : (value ?? fallback)
+      }
     </span>
   )
 }
@@ -88,9 +95,9 @@ function StatValue(props: StatValueProps) {
 interface StatCardProps {
   icon: React.ReactNode
   title: React.ReactNode
-  value: number | undefined
+  value: number | string | undefined
   isLoading: boolean
-  fallback?: number
+  fallback?: number | string
 }
 
 /**
@@ -98,7 +105,7 @@ interface StatCardProps {
  * 封装了卡片容器、标题和数值显示的完整结构
  * @param icon - 卡片图标
  * @param title - 卡片标题
- * @param value - 统计数值
+ * @param value - 统计数值或文本
  * @param isLoading - 是否正在加载
  * @param fallback - 默认值
  */
@@ -120,14 +127,15 @@ export function GraphBlock() {
   const queryYear = Number(year)
   const githubUsername = String(username)
 
-  const [maxContributionStreak, setMaxContributionStreak] = useState<number>()
-  const [maxContributionsInADay, setMaxContributionsInADay]
-    = useState<number>()
-
   const { setGraphData } = useData()
 
-  const { data: contributionData, isLoading: contributionLoading }
-    = useContributionQuery(githubUsername, [queryYear])
+  const {
+    data: contributionData,
+    isLoading: contributionLoading,
+  } = useContributionQuery(githubUsername, [queryYear], true, {
+    staleTime: 10 * 60 * 1000, // 10 分钟
+    gcTime: 60 * 60 * 1000, // 1 小时
+  })
 
   const { data: reposData, isLoading: reposLoading } = useReposQuery(
     githubUsername,
@@ -139,15 +147,11 @@ export function GraphBlock() {
     queryYear,
   )
 
+  const statistics = useMemo(() => deriveStatistics(contributionData), [contributionData])
+
   useEffect(() => {
     if (contributionData) {
       setGraphData(contributionData)
-
-      const { maxStreak } = getLongestContributionStreak(contributionData)
-      setMaxContributionStreak(maxStreak)
-
-      const { maxContributions } = getMaxContributionsInADay(contributionData)
-      setMaxContributionsInADay(maxContributions)
     }
   }, [contributionData, setGraphData])
 
@@ -161,24 +165,55 @@ export function GraphBlock() {
               <div className="h-[265px] w-full" />
             )
           : (
-              <ContributionsGraph showInspect={false} titleRender={() => null} />
+              <ContributionsGraph
+                showInspect={false}
+                titleRender={() => null}
+              />
             )}
       </Loading>
 
       <>
         <div className="grid grid-cols-2 gap-3 pt-4">
           <StatCard
-            icon={<ChartNoAxesCombinedIcon className="size-5" />}
-            isLoading={typeof maxContributionStreak !== 'number'}
-            title="Longest Streak"
-            value={maxContributionStreak}
+            icon={<ActivityIcon className="size-5" />}
+            isLoading={!statistics}
+            title="Top Record"
+            value={statistics?.maxContributionsInADay}
           />
 
           <StatCard
-            icon={<ActivityIcon className="size-5" />}
-            isLoading={typeof maxContributionsInADay !== 'number'}
-            title="Top Record"
-            value={maxContributionsInADay}
+            icon={<TrendingUpIcon className="size-5" />}
+            isLoading={!statistics}
+            title="Average Per Day"
+            value={statistics?.averageContributionsPerDay}
+          />
+
+          <StatCard
+            icon={<CalendarIcon className="size-5" />}
+            isLoading={!statistics}
+            title="Most Active Day"
+            value={formatStatDate(statistics?.maxContributionsDate)}
+          />
+
+          <StatCard
+            icon={<CalendarIcon className="size-5" />}
+            isLoading={!statistics}
+            title="Most Active Month"
+            value={formatStatMonth(statistics?.maxContributionsMonth)}
+          />
+
+          <StatCard
+            icon={<ChartNoAxesCombinedIcon className="size-5" />}
+            isLoading={!statistics}
+            title="Longest Streak"
+            value={statistics?.longestStreak}
+          />
+
+          <StatCard
+            icon={<ChartNoAxesCombinedIcon className="size-5" />}
+            isLoading={!statistics}
+            title="Longest Gap"
+            value={statistics?.longestGap}
           />
 
           <StatCard
