@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 import { useParams } from 'next/navigation'
 import {
@@ -6,12 +6,12 @@ import {
   CalendarIcon,
   ChartNoAxesCombinedIcon,
   FolderGit2Icon,
-  LoaderIcon,
   MessageSquareQuoteIcon,
   TrendingUpIcon,
 } from 'lucide-react'
 
 import { ContributionsGraph } from '~/components/ContributionsGraph'
+import type { GraphHighlightMode, GraphHighlightOptions } from '~/components/ContributionsGraph/graphHighlightUtils'
 import Loading from '~/components/Loading'
 import { useData } from '~/DataContext'
 import {
@@ -25,107 +25,7 @@ import {
   formatStatMonth,
 } from '~/lib/statistics'
 
-function SpinningLoader() {
-  return <LoaderIcon className="size-4 animate-spin text-main-300" />
-}
-
-interface StaticCardTitleProps {
-  children: React.ReactNode
-  icon: React.ReactNode
-}
-
-function StaticCardTitle(props: StaticCardTitleProps) {
-  const { icon, children } = props
-
-  return (
-    <span className="flex items-center gap-x-3">
-      {icon}
-      <span className="font-medium">{children}</span>
-    </span>
-  )
-}
-
-interface StaticCardProps {
-  children: React.ReactNode
-}
-
-function StaticCard(props: StaticCardProps) {
-  return (
-    <div className="overflow-hidden rounded-[12px] border border-solid border-main-200 ">
-      <div className="rounded-[11px] border border-background">
-        <div className="rounded-[10px] border border-main-300">
-          <div className="overflow-hidden rounded-[9px] border border-white/50">
-            <div className="flex items-center gap-x-6 gap-y-2 bg-linear-to-b from-main-100/80 to-main-100/5 p-3">
-              {props.children}
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  )
-}
-
-interface StatValueProps {
-  value: number | string | undefined
-  isLoading: boolean
-  fallback?: number | string
-}
-
-/**
- * 统计数值显示组件
- * 根据加载状态显示加载图标或实际数值
- * @param value - 要显示的数值或文本
- * @param isLoading - 是否正在加载
- * @param fallback - 当 value 为 undefined 时的默认值,默认为 0
- */
-function StatValue(props: StatValueProps) {
-  const { value, isLoading, fallback = 0 } = props
-
-  return (
-    <span className="ml-auto tabular-nums">
-      {
-        isLoading
-          ? <SpinningLoader />
-          : (value ?? fallback)
-      }
-    </span>
-  )
-}
-
-interface StatCardProps {
-  icon: React.ReactNode
-  title: React.ReactNode
-  value: number | string | undefined
-  isLoading: boolean
-  fallback?: number | string
-}
-
-/**
- * 完整的统计卡片组件
- * 封装了卡片容器、标题和数值显示的完整结构
- * @param icon - 卡片图标
- * @param title - 卡片标题
- * @param value - 统计数值或文本
- * @param isLoading - 是否正在加载
- * @param fallback - 默认值
- */
-function StatCard(props: StatCardProps) {
-  const { icon, title, value, isLoading, fallback } = props
-
-  return (
-    <StaticCard>
-      <StaticCardTitle icon={icon}>
-        {title}
-      </StaticCardTitle>
-
-      <StatValue
-        fallback={fallback}
-        isLoading={isLoading}
-        value={value}
-      />
-    </StaticCard>
-  )
-}
+import { StatCard } from './StaticCard'
 
 export function GraphBlock() {
   const { year, username } = useParams()
@@ -154,6 +54,12 @@ export function GraphBlock() {
 
   const statistics = useMemo(() => deriveStatistics(contributionData), [contributionData])
 
+  // 高亮状态管理
+  const [highlightMode, setHighlightMode] = useState<GraphHighlightMode>('none')
+  const [highlightOptions, setHighlightOptions] = useState<
+    GraphHighlightOptions | undefined
+  >(undefined)
+
   useEffect(() => {
     if (contributionData) {
       setGraphData(contributionData)
@@ -161,6 +67,25 @@ export function GraphBlock() {
   }, [contributionData, setGraphData])
 
   const isLoading = contributionLoading
+
+  const formatStatDateRange = (
+    startDate: string | undefined,
+    endDate: string | undefined,
+  ): string | undefined => {
+    let range: string | undefined = undefined
+
+    if (startDate && endDate) {
+      range = `${formatStatDate(startDate)} - ${formatStatDate(endDate)}`
+    }
+
+    return range
+  }
+
+  // 清除高亮的处理器
+  const handleClearHighlight = () => {
+    setHighlightMode('none')
+    setHighlightOptions(undefined)
+  }
 
   return (
     <div className="flex flex-col items-center py-5">
@@ -171,6 +96,8 @@ export function GraphBlock() {
             )
           : (
               <ContributionsGraph
+                highlightMode={highlightMode}
+                highlightOptions={highlightOptions}
                 showInspect={false}
                 titleRender={() => null}
               />
@@ -184,6 +111,13 @@ export function GraphBlock() {
             isLoading={!statistics}
             title="Max Contributions in a Day"
             value={statistics?.maxContributionsInADay}
+            onMouseEnter={() => {
+              if (statistics?.maxContributionsDate) {
+                setHighlightMode('specificDate')
+                setHighlightOptions({ specificDate: statistics.maxContributionsDate })
+              }
+            }}
+            onMouseLeave={handleClearHighlight}
           />
 
           <StatCard
@@ -198,6 +132,13 @@ export function GraphBlock() {
             isLoading={!statistics}
             title="Most Active Day"
             value={formatStatDate(statistics?.maxContributionsDate)}
+            onMouseEnter={() => {
+              if (statistics?.maxContributionsDate) {
+                setHighlightMode('specificDate')
+                setHighlightOptions({ specificDate: statistics.maxContributionsDate })
+              }
+            }}
+            onMouseLeave={handleClearHighlight}
           />
 
           <StatCard
@@ -205,20 +146,54 @@ export function GraphBlock() {
             isLoading={!statistics}
             title="Most Active Month"
             value={formatStatMonth(statistics?.maxContributionsMonth)}
+            onMouseEnter={() => {
+              if (statistics?.maxContributionsMonth) {
+                setHighlightMode('specificMonth')
+                setHighlightOptions({ specificMonth: statistics.maxContributionsMonth })
+              }
+            }}
+            onMouseLeave={handleClearHighlight}
           />
 
           <StatCard
             icon={<ChartNoAxesCombinedIcon className="size-5" />}
             isLoading={!statistics}
+            subValue={formatStatDateRange(
+              statistics?.longestStreakStartDate,
+              statistics?.longestStreakEndDate,
+            )}
             title="Longest Streak"
             value={statistics?.longestStreak}
+            onMouseEnter={() => {
+              if (statistics?.longestStreakStartDate && statistics.longestStreakEndDate) {
+                setHighlightMode('longestStreak')
+                setHighlightOptions(undefined)
+              }
+            }}
+            onMouseLeave={handleClearHighlight}
           />
 
           <StatCard
             icon={<ChartNoAxesCombinedIcon className="size-5" />}
             isLoading={!statistics}
+            subValue={formatStatDateRange(
+              statistics?.longestGapStartDate,
+              statistics?.longestGapEndDate,
+            )}
             title="Longest Gap"
             value={statistics?.longestGap}
+            onMouseEnter={() => {
+              if (statistics?.longestGapStartDate && statistics.longestGapEndDate) {
+                setHighlightMode('longestGap')
+                setHighlightOptions({
+                  longestGapRange: {
+                    start: statistics.longestGapStartDate,
+                    end: statistics.longestGapEndDate,
+                  },
+                })
+              }
+            }}
+            onMouseLeave={handleClearHighlight}
           />
 
           <StatCard

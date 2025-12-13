@@ -4,6 +4,14 @@ export function numberWithCommas(num: number): string {
   return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
 }
 
+function getLocalIsoDateString(date: Date): string {
+  const year = date.getFullYear()
+  const month = String(date.getMonth() + 1).padStart(2, '0')
+  const day = String(date.getDate()).padStart(2, '0')
+
+  return `${year}-${month}-${day}`
+}
+
 const isDev: boolean = process.env.NODE_ENV === 'development'
 
 export function trackEvent(
@@ -95,21 +103,30 @@ export function getLongestContributionGap(graphData: GraphData): {
   let startDate: string | null = null
   let endDate: string | null = null
 
+  const currentYear = new Date().getFullYear()
+  const todayLocalIso = getLocalIsoDateString(new Date())
+
   graphData.contributionCalendars.forEach((calendar) => {
     calendar.weeks.forEach((week) => {
       week.days.forEach((day) => {
-        if (day.level === 'NONE') {
-          currentGap++
-          maxGap = Math.max(maxGap, currentGap)
+        const shouldIncludeDay
+          = calendar.year !== currentYear
+            || day.date <= todayLocalIso
 
-          if (currentGap === 1) {
-            startDate = day.date
+        if (shouldIncludeDay) {
+          if (day.level === 'NONE') {
+            currentGap++
+            maxGap = Math.max(maxGap, currentGap)
+
+            if (currentGap === 1) {
+              startDate = day.date
+            }
+
+            endDate = day.date
           }
-
-          endDate = day.date
-        }
-        else {
-          currentGap = 0
+          else {
+            currentGap = 0
+          }
         }
       })
     })
@@ -204,72 +221,81 @@ export function getValuableStatistics(graphData: GraphData): ValuableStatistics 
   let maxContributionsMonth: string | undefined = undefined
   let maxMonthlyContributions = 0
 
+  const currentYear = new Date().getFullYear()
+  const todayLocalIso = getLocalIsoDateString(new Date())
+
   graphData.contributionCalendars.forEach((calendar) => {
     calendar.weeks.forEach((week) => {
       week.days.forEach((day) => {
-        totalDays++
+        const shouldIncludeDay
+          = calendar.year !== currentYear
+            || day.date <= todayLocalIso
 
-        const isWeekend = day.weekday === 0 || day.weekday === 6
+        if (shouldIncludeDay) {
+          totalDays++
 
-        if (isWeekend) {
-          weekendContributions += day.count
-        }
+          const isWeekend = day.weekday === 0 || day.weekday === 6
 
-        if (day.level !== 'NONE') {
-          // Start of a new streak.
-          if (currentStreak === 0) {
-            currentStreakStartDate = day.date
+          if (isWeekend) {
+            weekendContributions += day.count
           }
 
-          currentStreak++
+          if (day.level !== 'NONE') {
+            // Start of a new streak.
+            if (currentStreak === 0) {
+              currentStreakStartDate = day.date
+            }
 
-          // Update longest streak if current streak is longer.
-          if (currentStreak > longestStreak) {
-            longestStreak = currentStreak
-            longestStreakStartDate = currentStreakStartDate
-            longestStreakEndDate = day.date
+            currentStreak++
+
+            // Update longest streak if current streak is longer.
+            if (currentStreak > longestStreak) {
+              longestStreak = currentStreak
+              longestStreakStartDate = currentStreakStartDate
+              longestStreakEndDate = day.date
+            }
+
+            // Reset gap tracking
+            currentGap = 0
+            currentGapStartDate = undefined
+          }
+          else {
+            // Start of a new gap
+            if (currentGap === 0) {
+              currentGapStartDate = day.date
+            }
+
+            currentGap++
+
+            // Update longest gap if current gap is longer.
+            if (currentGap > longestGap) {
+              longestGap = currentGap
+              longestGapStartDate = currentGapStartDate
+              longestGapEndDate = day.date
+            }
+
+            // Reset streak tracking.
+            currentStreak = 0
+            currentStreakStartDate = undefined
           }
 
-          // Reset gap tracking
-          currentGap = 0
-          currentGapStartDate = undefined
-        }
-        else {
-          // Start of a new gap
-          if (currentGap === 0) {
-            currentGapStartDate = day.date
+          // Track maximum contributions in a day.
+          if (day.level !== 'NONE' && day.count > maxContributionsInADay) {
+            maxContributionsInADay = day.count
+            maxContributionsDate = day.date
           }
 
-          currentGap++
+          // Track monthly contributions.
+          if (day.level !== 'NONE') {
+            // Extract month from date (format: YYYY-MM-DD).
+            const month = day.date.substring(0, 7) // Gets YYYY-MM.
+            monthlyContributions[month] = (monthlyContributions[month] || 0) + day.count
 
-          // Update longest gap if current gap is longer.
-          if (currentGap > longestGap) {
-            longestGap = currentGap
-            longestGapStartDate = currentGapStartDate
-            longestGapEndDate = day.date
-          }
-
-          // Reset streak tracking.
-          currentStreak = 0
-          currentStreakStartDate = undefined
-        }
-
-        // Track maximum contributions in a day.
-        if (day.level !== 'NONE' && day.count > maxContributionsInADay) {
-          maxContributionsInADay = day.count
-          maxContributionsDate = day.date
-        }
-
-        // Track monthly contributions.
-        if (day.level !== 'NONE') {
-          // Extract month from date (format: YYYY-MM-DD).
-          const month = day.date.substring(0, 7) // Gets YYYY-MM.
-          monthlyContributions[month] = (monthlyContributions[month] || 0) + day.count
-
-          // Update max monthly contributions if this month has more.
-          if (monthlyContributions[month] > maxMonthlyContributions) {
-            maxMonthlyContributions = monthlyContributions[month]
-            maxContributionsMonth = month
+            // Update max monthly contributions if this month has more.
+            if (monthlyContributions[month] > maxMonthlyContributions) {
+              maxMonthlyContributions = monthlyContributions[month]
+              maxContributionsMonth = month
+            }
           }
         }
       })
@@ -278,7 +304,10 @@ export function getValuableStatistics(graphData: GraphData): ValuableStatistics 
     totalContributions += calendar.total
   })
 
-  const averageContributionsPerDay = Math.round(totalContributions / totalDays)
+  const averageContributionsPerDay
+    = totalDays > 0
+      ? Math.round(totalContributions / totalDays)
+      : 0
 
   return {
     weekendContributions,

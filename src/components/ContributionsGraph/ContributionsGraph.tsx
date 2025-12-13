@@ -8,8 +8,15 @@ import { BlockShape } from '~/enums'
 import { Graph, type GraphProps } from './Graph'
 import { GraphFooter } from './GraphFooter'
 import { GraphHeader } from './GraphHeader'
+import {
+  calculateHighlightDates,
+  flattenAndSortDays,
+  type GraphHighlightMode,
+  type GraphHighlightOptions,
+} from './graphHighlightUtils'
 
-interface ContributionsGraphProps extends Pick<GraphProps, 'showInspect' | 'titleRender'> {
+interface ContributionsGraphProps
+  extends Pick<GraphProps, 'showInspect' | 'titleRender'> {
   /** Unique ID for the contributions graph container. */
   wrapperId?: string
   /**
@@ -19,13 +26,23 @@ interface ContributionsGraphProps extends Pick<GraphProps, 'showInspect' | 'titl
   Mockup?: React.ComponentType<React.ComponentProps<typeof MockupSafari>>
   /** CSS class name to be applied to the Mockup component. */
   mockupClassName?: string
+  highlightMode?: GraphHighlightMode
+  highlightOptions?: GraphHighlightOptions
 }
 
 function InnerContributionsGraph(
   props: ContributionsGraphProps,
   ref: React.Ref<HTMLDivElement | null>,
 ) {
-  const { mockupClassName = '', wrapperId, showInspect, titleRender, Mockup = MockupSafari } = props
+  const {
+    mockupClassName = '',
+    wrapperId,
+    showInspect,
+    titleRender,
+    highlightMode,
+    highlightOptions,
+    Mockup = MockupSafari,
+  } = props
 
   const { graphData, settings, firstYear, lastYear } = useData()
 
@@ -40,6 +57,22 @@ function InnerContributionsGraph(
       ),
     [settings.theme],
   )
+
+  const highlightDatesMap = useMemo(() => {
+    const map = new Map<number, Set<string>>()
+
+    if (!graphData) {
+      return map
+    }
+
+    graphData.contributionCalendars.forEach((calendar) => {
+      const daysInYear = flattenAndSortDays(calendar.weeks)
+      const highlightedDates = calculateHighlightDates(daysInYear, highlightMode, highlightOptions)
+      map.set(calendar.year, highlightedDates)
+    })
+
+    return map
+  }, [graphData, highlightMode, highlightOptions])
 
   if (!graphData) {
     return null
@@ -97,12 +130,15 @@ function InnerContributionsGraph(
                   ? calendar.year >= Number(startYear) && calendar.year <= Number(endYear)
                   : true
 
+              const highlightedDates = highlightDatesMap.get(calendar.year)
+
               return (
                 <Graph
                   key={calendar.year}
                   className={shouldDisplay ? '' : 'hidden'}
                   data={calendar}
                   daysLabel={settings.daysLabel}
+                  highlightedDates={highlightedDates}
                   showInspect={showInspect}
                   titleRender={titleRender}
                 />

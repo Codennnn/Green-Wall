@@ -8,6 +8,7 @@ import { levels } from '~/constants'
 import { useData } from '~/DataContext'
 import { ContributionLevel, GraphSize } from '~/enums'
 import { numberWithCommas } from '~/helpers'
+import { cn } from '~/lib/utils'
 import type { ContributionCalendar, ContributionDay } from '~/types'
 
 import styles from './Graph.module.css'
@@ -17,6 +18,7 @@ export interface GraphProps extends React.ComponentProps<'div'> {
   daysLabel?: boolean
   weekLabel?: boolean
   showInspect?: boolean
+  highlightedDates?: Set<string>
   titleRender?: (params: {
     year: number
     total: number
@@ -27,7 +29,14 @@ export interface GraphProps extends React.ComponentProps<'div'> {
 const newYearText = 'Happy New Year 🎉 Go make the first contribution !'
 
 export function Graph(props: GraphProps) {
-  const { data: calendar, daysLabel, showInspect = true, titleRender, ...rest } = props
+  const {
+    data: calendar,
+    daysLabel,
+    showInspect = true,
+    titleRender,
+    highlightedDates,
+    ...rest
+  } = props
 
   const { username, settings } = useData()
 
@@ -70,6 +79,8 @@ export function Graph(props: GraphProps) {
 
     setRefEle(null)
   }
+
+  const shouldDimNonHighlighted = highlightedDates && highlightedDates.size > 0
 
   return (
     <div {...rest} className={`${rest.className ?? ''} group`}>
@@ -175,9 +186,18 @@ export function Graph(props: GraphProps) {
             }
 
             days.forEach((day, j) => {
+              const isHighlighted = day.date
+                ? highlightedDates?.has(day.date) ?? false
+                : false
+
+              const opacityClassName = shouldDimNonHighlighted
+                ? (isHighlighted ? 'opacity-100' : 'opacity-15')
+                : ''
+
               blocks.push(
                 <li
-                  key={`${i}${j}`}
+                  key={day.date || `fill-${i}-${j}`}
+                  className={cn('transition-opacity', opacityClassName)}
                   data-level={levels[day.level]}
                   onMouseEnter={(ev) => {
                     handleMouseEnter(ev.currentTarget, day)
