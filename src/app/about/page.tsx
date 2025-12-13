@@ -36,7 +36,7 @@ export default function AboutPage() {
         </Paragraph>
 
         <SectionTitle>Credits</SectionTitle>
-        <ul className="list-inside list-disc py-2 pl-1 marker:text-sm marker:text-main-700/90">
+        <ul className="list-inside list-disc py-2 pl-1 marker:text-sm marker:text-foreground/90">
           <li>
             <i className="mr-3 opacity-90">Inspiration:</i>
             <TextLink

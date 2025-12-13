@@ -16,6 +16,8 @@ import {
   useRole,
 } from '@floating-ui/react'
 
+import { cn } from '~/lib/utils'
+
 interface TooltipProps extends Pick<React.ComponentProps<'span'>, 'className'> {
   label?: React.ReactNode
   placement?: Placement
@@ -63,7 +65,10 @@ export function GraphTooltip({
               left: x,
             },
           })}
-          className={`z-20 whitespace-nowrap rounded border border-solid border-[var(--theme-border)] bg-[var(--theme-background)] px-2 text-[var(--theme-foreground)] ${className}`}
+          className={cn(
+            'z-20 whitespace-nowrap rounded border border-solid border-(--theme-border) bg-(--theme-background) px-2 text-(--theme-foreground)',
+            className,
+          )}
         >
           {label}
         </span>

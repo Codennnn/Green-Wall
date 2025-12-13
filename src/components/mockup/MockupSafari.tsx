@@ -9,6 +9,7 @@ import {
 } from 'lucide-react'
 
 import { useData } from '~/DataContext'
+import { cn } from '~/lib/utils'
 
 type MockupSafariProps = React.PropsWithChildren<Pick<React.ComponentProps<'div'>, 'className'>>
 
@@ -18,15 +19,15 @@ export function MockupSafari(props: MockupSafariProps) {
   const { graphData, settings } = useData()
 
   return (
-    <div className="relative overflow-hidden rounded-3xl p-[calc(var(--block-size)_*_3.5)]">
-      <div className={`relative z-10 overflow-hidden ${className}`}>
-        <div className="rounded-2xl border-2 border-double border-[var(--theme-border)] bg-[var(--theme-background)]">
+    <div className="relative overflow-hidden rounded-3xl p-[calc(var(--block-size)*3.5)]">
+      <div className={cn('relative z-10 overflow-hidden', className)}>
+        <div className="rounded-2xl border-2 border-double border-(--theme-border) bg-(--theme-background)">
           {settings.showSafariHeader && (
             <div className="relative flex h-14 items-center gap-x-2 px-6">
               <div className="flex items-center gap-2">
-                <div className="size-3 rounded-full bg-[rgb(232,_106,94)]" />
-                <div className="size-3 rounded-full bg-[rgb(241,_190,_80)]" />
-                <div className="size-3 rounded-full bg-[rgb(97,_196,_84)]" />
+                <div className="size-3 rounded-full bg-[rgb(232,106,94)]" />
+                <div className="size-3 rounded-full bg-[rgb(241,190,80)]" />
+                <div className="size-3 rounded-full bg-[rgb(97,196,84)]" />
               </div>
 
               <div className="flex items-center px-4 opacity-70">
@@ -35,7 +36,7 @@ export function MockupSafari(props: MockupSafariProps) {
               </div>
 
               {!!graphData?.login && (
-                <div className="absolute inset-x-0 mx-auto flex w-fit min-w-[290px] items-center justify-between gap-2 rounded-lg border-2 border-[color-mix(in_srgb,_var(--theme-border),_transparent_50%)] bg-[var(--theme-secondary)] p-1 px-2">
+                <div className="absolute inset-x-0 mx-auto flex w-fit min-w-[290px] items-center justify-between gap-2 rounded-lg border-2 border-[color-mix(in_srgb,var(--theme-border),transparent_50%)] bg-(--theme-secondary) p-1 px-2">
                   <LockIcon className="size-3.5 opacity-70" />
                   <div className="text-xs opacity-70">{`github.com/${graphData.login}`}</div>
                   <RotateCwIcon className="size-3.5 opacity-70" />

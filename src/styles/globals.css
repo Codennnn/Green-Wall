@@ -45,7 +45,7 @@
   --max-content-width: 1280px;
   --radius: 0.625rem;
   --background: var(--color-white);
-  --foreground: var(--color-slate-800);
+  --foreground: var(--color-slate-700);
   --card: var(--color-white);
   --card-foreground: var(--color-slate-800);
   --popover: var(--color-white);

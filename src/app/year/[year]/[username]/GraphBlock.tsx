@@ -40,7 +40,7 @@ function StaticCardTitle(props: StaticCardTitleProps) {
   return (
     <span className="flex items-center gap-x-3">
       {icon}
-      <span className="font-medium text-main-700">{children}</span>
+      <span className="font-medium">{children}</span>
     </span>
   )
 }
@@ -117,7 +117,12 @@ function StatCard(props: StatCardProps) {
       <StaticCardTitle icon={icon}>
         {title}
       </StaticCardTitle>
-      <StatValue fallback={fallback} isLoading={isLoading} value={value} />
+
+      <StatValue
+        fallback={fallback}
+        isLoading={isLoading}
+        value={value}
+      />
     </StaticCard>
   )
 }
@@ -177,7 +182,7 @@ export function GraphBlock() {
           <StatCard
             icon={<ActivityIcon className="size-5" />}
             isLoading={!statistics}
-            title="Top Record"
+            title="Max Contributions in a Day"
             value={statistics?.maxContributionsInADay}
           />
 

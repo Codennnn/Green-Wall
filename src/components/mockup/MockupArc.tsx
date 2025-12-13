@@ -1,3 +1,5 @@
+import { cn } from '~/lib/utils'
+
 type MockupArcProps = React.PropsWithChildren<Pick<React.ComponentProps<'div'>, 'className'>>
 
 export function MockupArc(props: MockupArcProps) {
@@ -6,7 +8,7 @@ export function MockupArc(props: MockupArcProps) {
   return (
     <div className="relative overflow-hidden rounded-3xl p-7">
       <div
-        className={`relative z-10 overflow-hidden rounded-[12px] border border-solid border-main-200 ${className}`}
+        className={cn('relative z-10 overflow-hidden rounded-[12px] border border-solid border-main-200', className)}
       >
         <div className="rounded-[11px] border border-page-background">
           <div className="rounded-[10px] border border-main-300">

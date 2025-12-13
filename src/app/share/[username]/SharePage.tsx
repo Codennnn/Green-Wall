@@ -102,7 +102,7 @@ export function SharePage() {
         <div className="flex justify-center">
           <Link href="/">
             <button
-              className="cursor-pointer rounded-lg border-[3px] border-solid border-brand-400/70 bg-gradient-to-br from-brand-500 to-brand-300/60 bg-clip-text px-3 py-1 text-lg font-medium text-transparent outline-none transition-colors hover:border-brand-400 hover:bg-brand-400"
+              className="cursor-pointer rounded-lg border-[3px] border-solid border-brand-400/70 bg-linear-to-br from-brand-500 to-brand-300/60 bg-clip-text px-3 py-1 text-lg font-medium text-transparent outline-none transition-colors hover:border-brand-400 hover:bg-brand-400"
               type="button"
             >
               Generate Yours

@@ -49,7 +49,7 @@ export default function Layout(props: React.PropsWithChildren) {
         className={`h-full overflow-hidden bg-page-background text-main-800 motion-safe:scroll-smooth ${rubik.className}`}
         lang="en"
       >
-        <body className="m-0 h-full overflow-y-auto text-main-700">
+        <body className="m-0 h-full overflow-y-auto text-foreground">
           <QueryProvider>
             <div className="flex min-h-screen flex-col px-4 md:mx-auto md:min-w-content md:max-w-content md:px-5">
               <header>

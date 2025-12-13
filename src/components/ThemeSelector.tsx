@@ -1,4 +1,5 @@
 import { THEME_PRESETS, THEMES } from '~/constants'
+import { cn } from '~/lib/utils'
 import type { Themes } from '~/types'
 
 interface ThemeSelectorProps extends Omit<React.ComponentProps<'div'>, 'onChange'> {
@@ -10,7 +11,7 @@ export function ThemeSelector(props: ThemeSelectorProps) {
   const { value, onChange, className = '', ...rest } = props
 
   return (
-    <div {...rest} className={`flex w-full flex-col gap-3 ${className}`}>
+    <div {...rest} className={cn('flex w-full flex-col gap-3', className)}>
       {THEME_PRESETS.map((theme) => {
         const isSelected = value === theme.name
 
@@ -65,7 +66,7 @@ export function ThemeLevelSelector(props: ThemeSelectorProps) {
   const { value, onChange, className = '', ...rest } = props
 
   return (
-    <div {...rest} className={`flex flex-wrap gap-3 ${className}`}>
+    <div {...rest} className={cn('flex flex-wrap gap-3', className)}>
       {THEMES.map((theme) => {
         const isSelected = value === theme.name
 
