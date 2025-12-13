@@ -1,6 +1,6 @@
 import { array, type InferInput, number, object, optional, string } from 'valibot'
 
-import type { BlockShape, ContributionLevel, ErrorType, GraphSize } from '~/enums'
+import type { BlockShape, ColorScheme, ContributionLevel, ErrorType, GraphSize } from '~/enums'
 
 export type Themes = 'Classic' | 'Midnight' | 'Sunset' | 'Sunsetx' | 'Violet'
 
@@ -9,7 +9,7 @@ export interface Theme {
   textColor: string
   levelColors: [level_0: string, level_1: string, level_2: string, level_3: string, level_4: string]
   background: string
-  mode?: 'light' | 'dark'
+  mode?: ColorScheme
 }
 
 type GitHubProfileName = string
@@ -158,7 +158,7 @@ export interface ValuableStatistics {
 
 export interface ThemePreset {
   name: Themes
-  mode?: 'light' | 'dark'
+  mode?: ColorScheme
   colorForeground: string
   colorBackground: string
   colorSecondary: string

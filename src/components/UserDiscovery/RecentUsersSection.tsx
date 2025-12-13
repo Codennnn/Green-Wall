@@ -1,3 +1,4 @@
+import { DiscoverySection } from './DiscoverySection'
 import { UserCard } from './UserCard'
 import type { RecentGitHubUser } from './useRecentUsers'
 
@@ -46,41 +47,33 @@ export function RecentUsersSection(props: RecentUsersSectionProps) {
 
   const hasUsers = users.length > 0
 
-  if (hasUsers) {
-    return (
-      <section className="border-main-200 bg-main-50/40 rounded-2xl border p-5 shadow-xs">
-        <div className="flex items-end justify-between gap-x-4">
-          <div>
-            <h2 className="text-main-600 text-base font-semibold">
-              Recently viewed
-            </h2>
-            <p className="text-main-400 mt-1 text-sm">
-              Pick up where you left off
-            </p>
+  const section = hasUsers
+    ? (
+        <DiscoverySection
+          description="Pick up where you left off"
+          title="Recently viewed"
+        >
+          <div className="mt-4 grid grid-cols-2 gap-3 md:grid-cols-4">
+            {users.map((user) => {
+              const cardLoading = Boolean(isLoading && loadingLogin && loadingLogin === user.login)
+              const badgeText = `Last viewed ${formatLastSearchedAt(user.lastSearchedAt)}`
+
+              return (
+                <UserCard
+                  key={user.login}
+                  avatarUrl={user.avatarUrl}
+                  badgeText={badgeText}
+                  isLoading={cardLoading}
+                  login={user.login}
+                  onRemove={onRemove}
+                  onSelect={onSelect}
+                />
+              )
+            })}
           </div>
-        </div>
+        </DiscoverySection>
+      )
+    : null
 
-        <div className="mt-4 grid grid-cols-2 gap-3 md:grid-cols-4">
-          {users.map((user) => {
-            const cardLoading = Boolean(isLoading && loadingLogin && loadingLogin === user.login)
-            const badgeText = `Last viewed ${formatLastSearchedAt(user.lastSearchedAt)}`
-
-            return (
-              <UserCard
-                key={user.login}
-                avatarUrl={user.avatarUrl}
-                badgeText={badgeText}
-                isLoading={cardLoading}
-                login={user.login}
-                onRemove={onRemove}
-                onSelect={onSelect}
-              />
-            )
-          })}
-        </div>
-      </section>
-    )
-  }
-
-  return null
+  return section
 }

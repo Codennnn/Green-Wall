@@ -23,3 +23,14 @@ export const enum BlockShape {
   Square = 'square',
   Round = 'round',
 }
+
+export const enum ThemeMode {
+  Light = 'light',
+  Dark = 'dark',
+  System = 'system',
+}
+
+export const enum ColorScheme {
+  Light = 'light',
+  Dark = 'dark',
+}

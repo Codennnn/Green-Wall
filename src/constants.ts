@@ -1,4 +1,4 @@
-import { BlockShape, type ContributionLevel, GraphSize } from '~/enums'
+import { BlockShape, ColorScheme, type ContributionLevel, GraphSize } from '~/enums'
 
 import type { Theme, ThemePreset, Themes } from './types'
 
@@ -72,7 +72,7 @@ export const THEMES = [
 export const THEME_PRESETS = [
   {
     name: 'Classic',
-    mode: 'light',
+    mode: ColorScheme.Light,
     colorForeground: '#24292f',
     colorBackground: '#fff',
     colorSecondary: 'rgba(245, 245, 245, 0.38)',
@@ -84,7 +84,7 @@ export const THEME_PRESETS = [
   },
   {
     name: 'Midnight',
-    mode: 'dark',
+    mode: ColorScheme.Dark,
     colorForeground: 'rgba(255, 255, 255, 0.98)',
     colorBackground: 'rgba(0, 0, 0, 0.76)',
     colorSecondary: 'rgba(115, 115, 115, 0.15)',
@@ -101,7 +101,7 @@ export const THEME_PRESETS = [
   },
   {
     name: 'Sunset',
-    mode: 'dark',
+    mode: ColorScheme.Dark,
     colorForeground: '#fff',
     colorBackground: 'rgba(16, 4, 4, 0.84)',
     colorSecondary: 'rgba(60, 32, 32, 0.85)',
@@ -118,7 +118,7 @@ export const THEME_PRESETS = [
   },
   {
     name: 'Violet',
-    mode: 'dark',
+    mode: ColorScheme.Dark,
     colorForeground: 'rgb(235, 234, 234)',
     colorBackground: 'rgba(21, 21, 39, 0.92)',
     colorSecondary: 'rgba(48, 48, 80, 0.8)',

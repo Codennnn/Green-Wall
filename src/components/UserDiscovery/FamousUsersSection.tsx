@@ -1,5 +1,6 @@
 import type { GitHubUser } from '~/types'
 
+import { DiscoverySection } from './DiscoverySection'
 import { UserCard } from './UserCard'
 
 interface FamousUsersSectionProps {
@@ -25,18 +26,10 @@ export function FamousUsersSection(props: FamousUsersSectionProps) {
   const { onSelect, isLoading, loadingLogin } = props
 
   return (
-    <section className="border-main-200 bg-main-50/40 rounded-2xl border p-5 shadow-xs">
-      <div className="flex items-end justify-between gap-x-4">
-        <div>
-          <h2 className="text-main-600 text-base font-semibold">
-            Popular profiles
-          </h2>
-          <p className="text-main-400 mt-1 text-sm">
-            Quick picks to explore contributions
-          </p>
-        </div>
-      </div>
-
+    <DiscoverySection
+      description="Quick picks to explore contributions"
+      title="Popular profiles"
+    >
       <div className="mt-4 grid grid-cols-2 gap-3 md:grid-cols-4">
         {FAMOUS_USERS.map((user) => {
           const cardLoading = Boolean(isLoading && loadingLogin && loadingLogin === user.login)
@@ -53,6 +46,6 @@ export function FamousUsersSection(props: FamousUsersSectionProps) {
           )
         })}
       </div>
-    </section>
+    </DiscoverySection>
   )
 }

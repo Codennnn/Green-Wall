@@ -31,7 +31,7 @@
 
   .bg-decoration {
     background:
-      linear-gradient(180deg, transparent 18em, #fff 30em),
+      linear-gradient(180deg, transparent 18em, var(--color-background) 30em),
       url('/grid-cell.svg') 0 0 repeat;
     background-attachment: local;
     background-size:
@@ -127,7 +127,6 @@
   --color-main-800: var(--color-slate-800);
   --color-main-900: var(--color-slate-900);
   --color-main-950: var(--color-slate-950);
-  --color-page-background: var(--color-white);
   --min-width-content: var(--min-content-width);
   --max-width-content: var(--max-content-width);
   --animate-skeleton: skeleton 2s -1s infinite linear;
@@ -220,6 +219,8 @@
   --success-foreground: var(--color-emerald-400);
   --warning: var(--color-amber-500);
   --warning-foreground: var(--color-amber-400);
+
+  color-scheme: dark;
 }
 
 @layer base {

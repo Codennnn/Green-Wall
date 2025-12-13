@@ -85,7 +85,7 @@ export function SharePage() {
           src="/mona-loading-default.gif"
           width={60}
         />
-        <span className="bg-page-background px-3 py-4">Loading contributions...</span>
+        <span className="bg-background px-3 py-4">Loading contributions...</span>
       </div>
     )
   }

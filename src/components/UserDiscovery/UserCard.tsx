@@ -37,16 +37,16 @@ export function UserCard(props: UserCardProps) {
     <div className="group relative">
       <button
         className={[
-          'flex w-full items-center gap-x-3 rounded-xl border border-main-200 bg-main-50/70 p-3 text-left text-main-600 shadow-xs',
-          'hover:bg-main-100 motion-safe:transition-colors motion-safe:duration-200',
-          'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-main-300',
+          'flex w-full items-center gap-x-3 rounded-xl border border-border bg-muted p-3 text-left text-foreground shadow-xs',
+          'hover:bg-accent motion-safe:transition-colors motion-safe:duration-200',
+          'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
           disabled ? 'cursor-wait opacity-70' : 'cursor-pointer',
         ].join(' ')}
         disabled={disabled}
         type="button"
         onClick={handleSelect}
       >
-        <div className="bg-main-100 relative size-10 shrink-0 overflow-hidden rounded-full">
+        <div className="bg-secondary relative size-10 shrink-0 overflow-hidden rounded-full border border-border">
           <img
             alt={login}
             className="size-10 object-cover"
@@ -76,9 +76,9 @@ export function UserCard(props: UserCardProps) {
         <button
           aria-label={`Remove ${login} from recent`}
           className={[
-            'absolute right-2 top-2 inline-flex items-center justify-center rounded-md border border-main-200 bg-main-50/80 px-2 py-1 text-xs text-main-500',
+            'absolute right-2 top-2 inline-flex items-center justify-center rounded-md border border-border bg-secondary px-2 py-1 text-xs text-foreground',
             'opacity-0 group-hover:opacity-100 motion-safe:transition-opacity motion-safe:duration-150',
-            'hover:bg-main-100 focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-main-300',
+            'hover:bg-accent focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
           ].join(' ')}
           type="button"
           onClick={handleRemove}
