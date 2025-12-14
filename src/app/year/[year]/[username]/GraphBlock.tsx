@@ -28,7 +28,9 @@ import {
   formatStatDate,
   formatStatMonth,
 } from '~/lib/statistics'
+import type { IssueInfo, RepoInfo } from '~/types'
 
+import { StatCardWithPopover } from './StatCardWithPopover'
 import { StatCard } from './StaticCard'
 import { TopLanguagesCard } from './TopLanguagesCard'
 
@@ -47,12 +49,20 @@ export function GraphBlock() {
     gcTime: 60 * 60 * 1000, // 1 小时
   })
 
-  const { data: reposData, isLoading: reposLoading } = useReposQuery(
+  const {
+    data: reposData,
+    isLoading: reposLoading,
+    error: reposError,
+  } = useReposQuery(
     githubUsername,
     queryYear,
   )
 
-  const { data: issuesData, isLoading: issuesLoading } = useIssuesQuery(
+  const {
+    data: issuesData,
+    isLoading: issuesLoading,
+    error: issuesError,
+  } = useIssuesQuery(
     githubUsername,
     queryYear,
   )
@@ -204,19 +214,96 @@ export function GraphBlock() {
             onMouseLeave={handleClearHighlight}
           />
 
-          <StatCard
-            icon={<FolderGit2Icon className="size-5" />}
+          <StatCardWithPopover
+            align="start"
+            ariaLabel={`Show repositories created in ${queryYear}`}
+            emptyMessage="No repositories found."
+            error={reposError}
+            errorMessage="Failed to load repositories."
             isLoading={reposLoading}
-            title={`Repos Created in ${queryYear}`}
-            value={reposData?.count}
-          />
+            items={reposData?.repos ?? []}
+            loadingMessage="Loading repositories..."
+            popoverCount={reposData?.count}
+            popoverTitle={`Repositories in ${queryYear}`}
+            renderItem={(repo: RepoInfo) => {
+              return (
+                <a
+                  className="block rounded-md px-2 py-2 text-sm transition-colors hover:bg-foreground/6 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500/40"
+                  href={repo.url}
+                  rel="noreferrer"
+                  target="_blank"
+                >
+                  <div className="flex items-center gap-2">
+                    <span className="min-w-0 flex-1 truncate font-medium">
+                      {repo.name}
+                    </span>
+                    <span className="shrink-0 text-foreground/60 text-xs tabular-nums">
+                      ★ {repo.stargazerCount}
+                    </span>
+                  </div>
 
-          <StatCard
-            icon={<MessageSquareQuoteIcon className="size-5" />}
+                  {repo.description
+                    ? (
+                        <div className="mt-1 line-clamp-2 text-foreground/70 text-xs">
+                          {repo.description}
+                        </div>
+                      )
+                    : null}
+                </a>
+              )
+            }}
+            side="left"
+          >
+            <StatCard
+              icon={<FolderGit2Icon className="size-5" />}
+              isLoading={reposLoading}
+              title={`Repos Created in ${queryYear}`}
+              value={reposData?.count}
+            />
+          </StatCardWithPopover>
+
+          <StatCardWithPopover
+            align="start"
+            ariaLabel={`Show issues in ${queryYear}`}
+            contentClassName="w-[min(90vw,520px)]"
+            emptyMessage="No issues found."
+            error={issuesError}
+            errorMessage="Failed to load issues."
             isLoading={issuesLoading}
-            title={`Issues in ${queryYear}`}
-            value={issuesData?.count}
-          />
+            items={issuesData?.issues ?? []}
+            loadingMessage="Loading issues..."
+            popoverCount={issuesData?.count}
+            popoverTitle={`Issues in ${queryYear}`}
+            renderItem={(issue: IssueInfo) => {
+              return (
+                <a
+                  className="block rounded-md px-2 py-2 text-sm transition-colors hover:bg-foreground/6 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500/40"
+                  href={issue.url}
+                  rel="noreferrer"
+                  target="_blank"
+                >
+                  <div className="min-w-0 font-medium">
+                    <span className="block truncate">
+                      {issue.title}
+                    </span>
+                  </div>
+                  <div className="mt-1 flex items-center gap-2 text-foreground/70 text-xs">
+                    <span className="truncate">
+                      {issue.repository.nameWithOwner}
+                    </span>
+                  </div>
+                </a>
+              )
+            }}
+            side="right"
+          >
+            <StatCard
+              icon={<MessageSquareQuoteIcon className="size-5" />}
+              isLoading={issuesLoading}
+              title={`Issues in ${queryYear}`}
+              value={issuesData?.count}
+            />
+          </StatCardWithPopover>
 
           <div className="col-span-2">
             <TopLanguagesCard
