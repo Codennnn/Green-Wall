@@ -1,4 +1,4 @@
-import { array, type InferInput, number, object, optional, string } from 'valibot'
+import { array, type InferInput, nullable, number, object, optional, string } from 'valibot'
 
 import type { BlockShape, ColorScheme, ContributionLevel, ErrorType, GraphSize } from '~/enums'
 
@@ -92,6 +92,15 @@ const RepoInfoSchema = object({
   url: string(),
   description: optional(string()),
   stargazerCount: number(),
+  languages: optional(nullable(object({
+    totalSize: number(),
+    edges: array(object({
+      size: number(),
+      node: object({
+        name: string(),
+      }),
+    })),
+  }))),
 })
 
 const IssueInfoSchema = object({

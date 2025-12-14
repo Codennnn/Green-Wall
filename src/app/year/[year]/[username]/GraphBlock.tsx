@@ -2,12 +2,15 @@ import { useEffect, useMemo, useState } from 'react'
 
 import { useParams } from 'next/navigation'
 import {
-  ActivityIcon,
-  CalendarIcon,
-  ChartNoAxesCombinedIcon,
+  ArrowBigUpDashIcon,
+  Calendar1Icon,
+  CalendarArrowUpIcon,
+  CalendarDaysIcon,
+  CalendarMinus2Icon,
   FolderGit2Icon,
   MessageSquareQuoteIcon,
-  TrendingUpIcon,
+  ScaleIcon,
+  SquareCodeIcon,
 } from 'lucide-react'
 
 import { ContributionsGraph } from '~/components/ContributionsGraph'
@@ -19,6 +22,7 @@ import {
   useIssuesQuery,
   useReposQuery,
 } from '~/hooks/useQueries'
+import { getTopLanguagesFromRepos } from '~/lib/language-stats'
 import {
   deriveStatistics,
   formatStatDate,
@@ -26,6 +30,7 @@ import {
 } from '~/lib/statistics'
 
 import { StatCard } from './StaticCard'
+import { TopLanguagesCard } from './TopLanguagesCard'
 
 export function GraphBlock() {
   const { year, username } = useParams()
@@ -53,6 +58,9 @@ export function GraphBlock() {
   )
 
   const statistics = useMemo(() => deriveStatistics(contributionData), [contributionData])
+  const topLanguages = useMemo(() => {
+    return getTopLanguagesFromRepos(reposData?.repos, { limit: 5 })
+  }, [reposData?.repos])
 
   // 高亮状态管理
   const [highlightMode, setHighlightMode] = useState<GraphHighlightMode>('none')
@@ -107,7 +115,7 @@ export function GraphBlock() {
       <>
         <div className="grid grid-cols-2 gap-3 pt-4">
           <StatCard
-            icon={<ActivityIcon className="size-5" />}
+            icon={<ArrowBigUpDashIcon className="size-5" />}
             isLoading={!statistics}
             title="Max Contributions in a Day"
             value={statistics?.maxContributionsInADay}
@@ -121,14 +129,14 @@ export function GraphBlock() {
           />
 
           <StatCard
-            icon={<TrendingUpIcon className="size-5" />}
+            icon={<ScaleIcon className="size-5" />}
             isLoading={!statistics}
             title="Average Per Day"
             value={statistics?.averageContributionsPerDay}
           />
 
           <StatCard
-            icon={<CalendarIcon className="size-5" />}
+            icon={<Calendar1Icon className="size-5" />}
             isLoading={!statistics}
             title="Most Active Day"
             value={formatStatDate(statistics?.maxContributionsDate)}
@@ -142,7 +150,7 @@ export function GraphBlock() {
           />
 
           <StatCard
-            icon={<CalendarIcon className="size-5" />}
+            icon={<CalendarArrowUpIcon className="size-5" />}
             isLoading={!statistics}
             title="Most Active Month"
             value={formatStatMonth(statistics?.maxContributionsMonth)}
@@ -156,7 +164,7 @@ export function GraphBlock() {
           />
 
           <StatCard
-            icon={<ChartNoAxesCombinedIcon className="size-5" />}
+            icon={<CalendarDaysIcon className="size-5" />}
             isLoading={!statistics}
             subValue={formatStatDateRange(
               statistics?.longestStreakStartDate,
@@ -174,7 +182,7 @@ export function GraphBlock() {
           />
 
           <StatCard
-            icon={<ChartNoAxesCombinedIcon className="size-5" />}
+            icon={<CalendarMinus2Icon className="size-5" />}
             isLoading={!statistics}
             subValue={formatStatDateRange(
               statistics?.longestGapStartDate,
@@ -209,6 +217,15 @@ export function GraphBlock() {
             title={`Issues in ${queryYear}`}
             value={issuesData?.count}
           />
+
+          <div className="col-span-2">
+            <TopLanguagesCard
+              icon={<SquareCodeIcon className="size-5" />}
+              isLoading={reposLoading}
+              items={topLanguages}
+              title={`Top Languages in ${queryYear}`}
+            />
+          </div>
         </div>
       </>
     </div>

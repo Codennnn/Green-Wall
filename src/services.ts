@@ -176,6 +176,15 @@ export async function fetchReposCreatedInYear({
             url
             description
             stargazerCount
+            languages(first: 100, orderBy: { field: SIZE, direction: DESC }) {
+              totalSize
+              edges {
+                size
+                node {
+                  name
+                }
+              }
+            }
           }
           pageInfo {
             hasNextPage

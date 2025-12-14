@@ -1,5 +1,7 @@
 import { LoaderIcon } from 'lucide-react'
 
+import { cn } from '~/lib/utils'
+
 export function SpinningLoader() {
   return <LoaderIcon className="size-4 animate-spin text-main-300" />
 }
@@ -22,16 +24,24 @@ export function StaticCardTitle(props: StaticCardTitleProps) {
 
 export interface StaticCardProps {
   children: React.ReactNode
+  contentClassName?: string
 }
 
 export function StaticCard(props: StaticCardProps) {
+  const { children, contentClassName } = props
+
   return (
-    <div className="overflow-hidden rounded-[12px] border border-solid border-main-200 ">
+    <div className="overflow-hidden rounded-[12px] border border-foreground/13 ">
       <div className="rounded-[11px] border border-background">
-        <div className="rounded-[10px] border border-main-300">
-          <div className="overflow-hidden rounded-[9px] border border-white/50">
-            <div className="flex items-center gap-x-6 gap-y-2 bg-linear-to-b from-main-100/80 to-main-100/5 px-3 py-1 min-h-12">
-              {props.children}
+        <div className="rounded-[10px] border border-foreground/20">
+          <div className="overflow-hidden rounded-[9px] border border-background/50">
+            <div
+              className={cn(
+                'flex min-h-12 items-center gap-x-6 gap-y-2 bg-linear-to-b from-foreground/4 to-background px-3 py-1',
+                contentClassName,
+              )}
+            >
+              {children}
             </div>
           </div>
         </div>
@@ -58,7 +68,7 @@ export function StatValue(props: StatValueProps) {
           : (
               <div className="flex flex-col items-end gap-1">
                 <span className="leading-none">{value ?? fallback}</span>
-                {!!subValue && <span className="text-muted-foreground text-xs leading-none">{subValue}</span>}
+                {!!subValue && <span className="text-foreground/70 text-xs leading-none">{subValue}</span>}
               </div>
             )
       }

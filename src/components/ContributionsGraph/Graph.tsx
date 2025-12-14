@@ -190,14 +190,17 @@ export function Graph(props: GraphProps) {
                 ? highlightedDates?.has(day.date) ?? false
                 : false
 
-              const opacityClassName = shouldDimNonHighlighted
-                ? (isHighlighted ? 'opacity-100' : 'opacity-15')
-                : ''
-
               blocks.push(
                 <li
                   key={day.date || `fill-${i}-${j}`}
-                  className={cn('transition-opacity', opacityClassName)}
+                  className={cn(
+                    'transition-all',
+                    shouldDimNonHighlighted
+                      ? (isHighlighted
+                          ? 'opacity-100 shadow-xs'
+                          : 'opacity-15')
+                      : null,
+                  )}
                   data-level={levels[day.level]}
                   onMouseEnter={(ev) => {
                     handleMouseEnter(ev.currentTarget, day)

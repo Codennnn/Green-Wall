@@ -1,0 +1,91 @@
+import { Badge } from '~/components/ui/badge'
+import {
+  Progress,
+  ProgressIndicator,
+  ProgressTrack,
+} from '~/components/ui/progress'
+import type { TopLanguageItem } from '~/lib/language-stats'
+
+import { SpinningLoader, StaticCard, StaticCardTitle } from './StaticCard'
+
+function formatPercent(value: number): string {
+  const percent = Math.round(value * 1000) / 10
+
+  return `${percent.toFixed(1)}%`
+}
+
+export interface TopLanguagesCardProps {
+  icon: React.ReactNode
+  title: React.ReactNode
+  isLoading: boolean
+  items: TopLanguageItem[]
+}
+
+export function TopLanguagesCard(props: TopLanguagesCardProps) {
+  const {
+    icon,
+    title,
+    isLoading,
+    items,
+  } = props
+
+  return (
+    <StaticCard contentClassName="flex-col items-stretch gap-3 py-3">
+      <div className="flex items-center gap-x-6 gap-y-2">
+        <StaticCardTitle icon={icon}>
+          {title}
+        </StaticCardTitle>
+
+        <div className="ml-auto">
+          {isLoading
+            ? <SpinningLoader />
+            : (
+                <Badge size="sm" variant="outline">
+                  Top {items.length}
+                </Badge>
+              )}
+        </div>
+      </div>
+
+      {!isLoading && items.length === 0 && (
+        <div className="text-muted-foreground text-sm">
+          No language data.
+        </div>
+      )}
+
+      {!isLoading && items.length > 0 && (
+        <div className="flex flex-col gap-2">
+          {items.map((item, index) => {
+            const itemRatio = typeof item.ratio === 'number' ? item.ratio : 0
+            const ratio = Math.round(itemRatio * 100)
+
+            return (
+              <div key={item.language} className="flex items-center gap-3">
+                <Badge className="tabular-nums" size="sm" variant="secondary">
+                  #{index + 1}
+                </Badge>
+
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-center justify-between gap-3">
+                    <div className="truncate font-medium text-sm">
+                      {item.language}
+                    </div>
+                    <div className="shrink-0 tabular-nums text-muted-foreground text-xs">
+                      {formatPercent(itemRatio)}
+                    </div>
+                  </div>
+
+                  <Progress className="mt-1" max={100} value={ratio}>
+                    <ProgressTrack>
+                      <ProgressIndicator />
+                    </ProgressTrack>
+                  </Progress>
+                </div>
+              </div>
+            )
+          })}
+        </div>
+      )}
+    </StaticCard>
+  )
+}
