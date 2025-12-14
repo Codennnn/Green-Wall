@@ -19,7 +19,7 @@
 // @grant              GM.xmlHttpRequest
 // @homepageURL        https://github.com/Codennnn/Green-Wall
 // @license            MIT
-// @require            file:///Users/your-path/Green-Wall/plugins/script.js
+// @require            file:///Users/[YOUR_PATH]/Green-Wall/plugins/script.js
 ```
 
 ### 2. 开发流程

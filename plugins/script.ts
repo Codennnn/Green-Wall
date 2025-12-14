@@ -388,8 +388,41 @@ const handler = () => {
 
           let hasLoaded = false
 
-          const handleLoadError = () => {
+          const handleLoadError = (error: unknown) => {
             dialogContent.innerHTML = ''
+
+            const errorTimestamp = new Date().toISOString()
+
+            let rawErrorMessage = 'Unknown error'
+            let errorStack: string | undefined
+
+            if (error instanceof Error) {
+              rawErrorMessage = error.message || rawErrorMessage
+              errorStack = error.stack
+            }
+            else if (typeof error === 'string') {
+              rawErrorMessage = error
+            }
+            else if (typeof error === 'object' && error !== null && 'message' in error) {
+              const maybeMessage = (error as { message?: unknown }).message
+
+              if (typeof maybeMessage === 'string') {
+                rawErrorMessage = maybeMessage
+              }
+            }
+
+            const singleLineErrorMessage = rawErrorMessage.replace(/\s+/g, ' ').trim()
+            const safeErrorMessage
+              = singleLineErrorMessage.length > 140
+                ? `${singleLineErrorMessage.slice(0, 140)}...`
+                : singleLineErrorMessage
+
+            console.error('[Green Wall]: load data failed', {
+              timestamp: errorTimestamp,
+              message: safeErrorMessage,
+              stack: errorStack,
+              error,
+            })
 
             const errorBlock = document.createElement('div')
             errorBlock.style.display = 'flex'
@@ -485,13 +518,12 @@ const handler = () => {
 
                   hasLoaded = true
                 }
-                catch {
-                  handleLoadError()
+                catch (err) {
+                  handleLoadError(err)
                 }
               },
               onerror: (err) => {
-                console.error('[Green Wall]: ', err)
-                handleLoadError()
+                handleLoadError(err)
               },
             })
           }

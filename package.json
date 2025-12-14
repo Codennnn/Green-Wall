@@ -6,6 +6,7 @@
   "author": "LeoKu <leokudev@gmail.com> (https://leoku.dev)",
   "scripts": {
     "build": "next build",
+    "build:script": "tsc plugins/script",
     "deps": "pnpm up --interactive --latest",
     "dev": "next dev --turbopack -p 8000",
     "dev:script": "tsc plugins/script --watch",
