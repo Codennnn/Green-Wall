@@ -1,3 +1,4 @@
+import { LanguageIcon } from '~/components/LanguageIcon'
 import { Badge } from '~/components/ui/badge'
 import {
   Progress,
@@ -39,11 +40,13 @@ export function TopLanguagesCard(props: TopLanguagesCardProps) {
         <div className="ml-auto">
           {isLoading
             ? <SpinningLoader />
-            : (
-                <Badge size="sm" variant="outline">
-                  Top {items.length}
-                </Badge>
-              )}
+            : items.length > 0
+              ? (
+                  <Badge size="sm" variant="outline">
+                    Top {items.length}
+                  </Badge>
+                )
+              : null}
         </div>
       </div>
 
@@ -67,8 +70,9 @@ export function TopLanguagesCard(props: TopLanguagesCardProps) {
 
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center justify-between gap-3">
-                    <div className="truncate font-medium text-sm">
-                      {item.language}
+                    <div className="flex min-w-0 items-center gap-2 truncate font-medium text-sm">
+                      <LanguageIcon language={item.language} size={16} />
+                      <span className="truncate">{item.language}</span>
                     </div>
                     <div className="shrink-0 tabular-nums text-muted-foreground text-xs">
                       {formatPercent(itemRatio)}

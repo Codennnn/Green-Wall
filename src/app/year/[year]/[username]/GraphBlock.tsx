@@ -90,13 +90,15 @@ export function GraphBlock() {
     startDate: string | undefined,
     endDate: string | undefined,
   ): string | undefined => {
-    let range: string | undefined = undefined
-
-    if (startDate && endDate) {
-      range = `${formatStatDate(startDate)} - ${formatStatDate(endDate)}`
+    if (!startDate || !endDate) {
+      return undefined
     }
 
-    return range
+    if (startDate === endDate) {
+      return formatStatDate(startDate)
+    }
+
+    return `${formatStatDate(startDate)} - ${formatStatDate(endDate)}`
   }
 
   // 清除高亮的处理器
