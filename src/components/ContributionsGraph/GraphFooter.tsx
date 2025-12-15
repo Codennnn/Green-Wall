@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react'
 
+import { useTranslations } from 'next-intl'
+
 export function GraphFooter() {
+  const t = useTranslations('graph')
   const [origin, setOrigin] = useState<string>()
 
   useEffect(() => {
@@ -9,7 +12,7 @@ export function GraphFooter() {
 
   return (
     <div className="flex items-center justify-end whitespace-nowrap text-xs opacity-40">
-      <span>Made in - </span>
+      <span>{t('madeIn')} </span>
       <a className="ml-1" href={origin}>
         {origin}
       </a>

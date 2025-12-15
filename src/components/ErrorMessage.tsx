@@ -1,9 +1,12 @@
+import { useTranslations } from 'next-intl'
+
 import { ErrorType } from '~/enums'
 
 import { TextLink } from './TextLink'
 
 export function ErrorMessage(props: { errorType?: ErrorType, text?: string }) {
   const { errorType, text } = props
+  const t = useTranslations('errors')
 
   return (
     <div className="flex flex-col items-center justify-center text-main-400/80">
@@ -15,22 +18,22 @@ export function ErrorMessage(props: { errorType?: ErrorType, text?: string }) {
         {errorType === ErrorType.BadCredentials
           ? (
               <div className="text-center">
-                You need access token to get data, please read
-                {' '}
-                <TextLink
-                  passHref
-                  className="font-bold"
-                  href="https://github.com/Codennnn/Green-Wall#running-locally"
-                  target="_blank"
-                >
-                  this step
-                </TextLink>
-                {' '}
-                to learn how to set the token correctly.
+                {t.rich('badCredentials', {
+                  link: (chunks) => (
+                    <TextLink
+                      passHref
+                      className="font-bold"
+                      href="https://github.com/Codennnn/Green-Wall#running-locally"
+                      target="_blank"
+                    >
+                      {chunks}
+                    </TextLink>
+                  ),
+                })}
               </div>
             )
           : (
-              (text ?? 'Something went wrong.')
+              (text ?? t('somethingWentWrong'))
             )}
       </div>
     </div>

@@ -4,6 +4,7 @@ import { useEffect } from 'react'
 
 import Image from 'next/image'
 import { useParams } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 
 import { ContributionsGraph } from '~/components/ContributionsGraph'
 import { ErrorMessage } from '~/components/ErrorMessage'
@@ -11,6 +12,7 @@ import { useData } from '~/DataContext'
 import { useContributionQuery } from '~/hooks/useQueries'
 
 export function UserPage() {
+  const t = useTranslations('graph')
   const { setGraphData } = useData()
 
   const params = useParams()
@@ -52,7 +54,7 @@ export function UserPage() {
           src="/mona-loading-default.gif"
           width={60}
         />
-        <span className="bg-background px-3 py-4">Loading contributions...</span>
+        <span className="bg-background px-3 py-4">{t('loadingContributions')}</span>
       </div>
     )
   }

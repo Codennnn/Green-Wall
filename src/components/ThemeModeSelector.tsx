@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 
+import { useTranslations } from 'next-intl'
 import { useTheme } from 'next-themes'
 import { MoonIcon, SunIcon, SunMoonIcon } from 'lucide-react'
 
@@ -16,6 +17,7 @@ import { ThemeMode } from '~/enums'
 export function ThemeModeSelector() {
   const { theme, setTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
+  const t = useTranslations('themeMode')
 
   useEffect(() => {
     setMounted(true)
@@ -34,17 +36,17 @@ export function ThemeModeSelector() {
   const modes = [
     {
       value: ThemeMode.Light,
-      label: 'Light',
+      label: t('light'),
       icon: SunIcon,
     },
     {
       value: ThemeMode.Dark,
-      label: 'Dark',
+      label: t('dark'),
       icon: MoonIcon,
     },
     {
       value: DEFAULT_THEME_MODE,
-      label: 'System',
+      label: t('system'),
       icon: SunMoonIcon,
     },
   ]

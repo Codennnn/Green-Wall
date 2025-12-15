@@ -1,3 +1,5 @@
+import { useTranslations } from 'next-intl'
+
 import styles from './GenerateButton.module.css'
 
 interface GenerateButtonProps extends React.ComponentProps<'button'> {
@@ -5,6 +7,8 @@ interface GenerateButtonProps extends React.ComponentProps<'button'> {
 }
 
 export function GenerateButton({ loading = false, ...props }: GenerateButtonProps) {
+  const t = useTranslations('home')
+
   return (
     <button
       className={`${styles.pushable} select-none text-white ${
@@ -18,7 +22,7 @@ export function GenerateButton({ loading = false, ...props }: GenerateButtonProp
       <span
         className={`${styles.front} min-w-[max(30vw,200px)] text-center text-lg font-medium md:min-w-[120px] md:text-base`}
       >
-        {loading ? 'Generating...' : 'Generate'}
+        {loading ? t('generating') : t('generate')}
       </span>
     </button>
   )

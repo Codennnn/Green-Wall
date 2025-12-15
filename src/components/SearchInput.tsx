@@ -1,6 +1,9 @@
 import { useEffect, useRef } from 'react'
 
+import { useTranslations } from 'next-intl'
+
 export function SearchInput(props: React.ComponentProps<'input'>) {
+  const t = useTranslations('home')
   const inputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
@@ -21,7 +24,7 @@ export function SearchInput(props: React.ComponentProps<'input'>) {
         focus:bg-background focus:shadow-[0_0_1.2rem_var(--tw-shadow-color)]
       "
       name="username"
-      placeholder="GitHub Username"
+      placeholder={t('searchPlaceholder')}
       type="text"
       onFocus={() => inputRef.current?.select()}
     />

@@ -1,3 +1,5 @@
+import { useTranslations } from 'next-intl'
+
 import type { GitHubUser } from '~/types'
 
 import { DiscoverySection } from './DiscoverySection'
@@ -24,11 +26,12 @@ function buildGitHubAvatarUrl(login: string, size = 80) {
 
 export function FamousUsersSection(props: FamousUsersSectionProps) {
   const { onSelect, isLoading, loadingLogin } = props
+  const t = useTranslations('discovery')
 
   return (
     <DiscoverySection
-      description="Quick picks to explore contributions"
-      title="Popular profiles"
+      description={t('popularDescription')}
+      title={t('popularProfiles')}
     >
       <div className="mt-4 grid grid-cols-2 gap-3 md:grid-cols-4">
         {FAMOUS_USERS.map((user) => {

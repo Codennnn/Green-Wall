@@ -2,6 +2,7 @@
 
 import { useMemo } from 'react'
 
+import { useTranslations } from 'next-intl'
 import { CalendarRangeIcon } from 'lucide-react'
 import {
   Bar,
@@ -18,28 +19,37 @@ import { Badge } from '~/components/ui/badge'
 import { numberWithCommas } from '~/helpers'
 import type { ContributionCalendar } from '~/types'
 
+import { createMonthShortNames, type MonthAbbr } from './chart-i18n'
 import { getMonthlyChartData, type MonthlyChartData } from './chart-utils'
 import { ChartCard, ChartSummaryItem } from './ChartCard'
 
 interface CustomTooltipProps {
   active?: boolean
   payload?: { payload: MonthlyChartData }[]
+  contributionsLabel?: string
+  monthNames?: Partial<Record<MonthAbbr, string>>
 }
 
-function CustomTooltip({ active, payload }: CustomTooltipProps) {
+function CustomTooltip({
+  active,
+  payload,
+  contributionsLabel = 'contributions',
+  monthNames,
+}: CustomTooltipProps) {
   if (!active || !payload || payload.length === 0) {
     return null
   }
 
   const data = payload[0].payload
+  const monthLabel = monthNames?.[data.month as MonthAbbr] ?? data.month
 
   return (
     <div className="rounded-lg border border-border bg-popover px-3 py-2 shadow-lg">
       <p className="font-medium text-popover-foreground text-sm">
-        {data.month}
+        {monthLabel}
       </p>
       <p className="text-muted-foreground text-xs">
-        {numberWithCommas(data.count)} contributions
+        {numberWithCommas(data.count)} {contributionsLabel}
       </p>
     </div>
   )
@@ -53,21 +63,28 @@ export interface MonthlyCommitChartProps {
 
 export function MonthlyCommitChart(props: MonthlyCommitChartProps) {
   const { calendars, isLoading, year } = props
+  const t = useTranslations('stats')
+  const tMonths = useTranslations('months')
 
   const { data, summary } = useMemo(
     () => getMonthlyChartData(calendars),
     [calendars],
   )
 
+  const monthShortNames = useMemo(
+    () => createMonthShortNames(tMonths),
+    [tMonths],
+  )
+
   const summarySlot = (
     <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
       <ChartSummaryItem
-        label="Total"
+        label={t('total')}
         value={numberWithCommas(summary.totalContributions)}
       />
       {summary.maxMonth && (
         <Badge size="sm" variant="outline">
-          Peak: {summary.maxMonth}
+          {t('peak', { month: monthShortNames[summary.maxMonth as MonthAbbr] })}
         </Badge>
       )}
     </div>
@@ -78,7 +95,7 @@ export function MonthlyCommitChart(props: MonthlyCommitChartProps) {
       icon={<CalendarRangeIcon className="size-5" />}
       isLoading={isLoading}
       summarySlot={summarySlot}
-      title={`Monthly Distribution in ${year}`}
+      title={t('monthlyDistribution', { year })}
     >
       <ResponsiveContainer height={200} width="100%">
         <BarChart
@@ -95,6 +112,9 @@ export function MonthlyCommitChart(props: MonthlyCommitChartProps) {
             dataKey="month"
             fontSize={12}
             stroke="var(--color-muted-foreground)"
+            tickFormatter={(value: string) => {
+              return monthShortNames[value as MonthAbbr]
+            }}
             tickLine={false}
             tickMargin={8}
           />
@@ -113,7 +133,12 @@ export function MonthlyCommitChart(props: MonthlyCommitChartProps) {
             tickMargin={8}
           />
           <Tooltip
-            content={<CustomTooltip />}
+            content={(
+              <CustomTooltip
+                contributionsLabel={t('contributions')}
+                monthNames={monthShortNames}
+              />
+            )}
             cursor={{ fill: 'var(--color-muted)', opacity: 0.3 }}
           />
           <Bar

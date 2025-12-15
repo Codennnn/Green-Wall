@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 
 import { useParams } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 import {
   ArrowBigUpDashIcon,
   Calendar1Icon,
@@ -17,17 +18,14 @@ import { ContributionsGraph } from '~/components/ContributionsGraph'
 import type { GraphHighlightMode, GraphHighlightOptions } from '~/components/ContributionsGraph/graphHighlightUtils'
 import Loading from '~/components/Loading'
 import { useData } from '~/DataContext'
+import { useDateFormatters } from '~/hooks/useDateFormatters'
 import {
   useContributionQuery,
   useIssuesQuery,
   useReposQuery,
 } from '~/hooks/useQueries'
 import { getTopLanguagesFromRepos } from '~/lib/language-stats'
-import {
-  deriveStatistics,
-  formatStatDate,
-  formatStatMonth,
-} from '~/lib/statistics'
+import { deriveStatistics } from '~/lib/statistics'
 import type { IssueInfo, RepoInfo } from '~/types'
 
 import { MonthlyCommitChart } from './charts/MonthlyCommitChart'
@@ -40,6 +38,8 @@ export function GraphBlock() {
   const { year, username } = useParams()
   const queryYear = Number(year)
   const githubUsername = String(username)
+  const t = useTranslations('stats')
+  const tErrors = useTranslations('errors')
 
   const { setGraphData } = useData()
 
@@ -88,20 +88,7 @@ export function GraphBlock() {
 
   const isLoading = contributionLoading
 
-  const formatStatDateRange = (
-    startDate: string | undefined,
-    endDate: string | undefined,
-  ): string | undefined => {
-    if (!startDate || !endDate) {
-      return undefined
-    }
-
-    if (startDate === endDate) {
-      return formatStatDate(startDate)
-    }
-
-    return `${formatStatDate(startDate)} - ${formatStatDate(endDate)}`
-  }
+  const { formatDate, formatMonth, formatDateRange } = useDateFormatters()
 
   // 清除高亮的处理器
   const handleClearHighlight = () => {
@@ -131,7 +118,7 @@ export function GraphBlock() {
           <StatCard
             icon={<ArrowBigUpDashIcon className="size-5" />}
             isLoading={!statistics}
-            title="Max Contributions in a Day"
+            title={t('maxContributions')}
             value={statistics?.maxContributionsInADay}
             onMouseEnter={() => {
               if (statistics?.maxContributionsDate) {
@@ -145,15 +132,15 @@ export function GraphBlock() {
           <StatCard
             icon={<ScaleIcon className="size-5" />}
             isLoading={!statistics}
-            title="Average Per Day"
+            title={t('averagePerDay')}
             value={statistics?.averageContributionsPerDay}
           />
 
           <StatCard
             icon={<Calendar1Icon className="size-5" />}
             isLoading={!statistics}
-            title="Most Active Day"
-            value={formatStatDate(statistics?.maxContributionsDate)}
+            title={t('mostActiveDay')}
+            value={formatDate(statistics?.maxContributionsDate)}
             onMouseEnter={() => {
               if (statistics?.maxContributionsDate) {
                 setHighlightMode('specificDate')
@@ -166,8 +153,8 @@ export function GraphBlock() {
           <StatCard
             icon={<CalendarArrowUpIcon className="size-5" />}
             isLoading={!statistics}
-            title="Most Active Month"
-            value={formatStatMonth(statistics?.maxContributionsMonth)}
+            title={t('mostActiveMonth')}
+            value={formatMonth(statistics?.maxContributionsMonth)}
             onMouseEnter={() => {
               if (statistics?.maxContributionsMonth) {
                 setHighlightMode('specificMonth')
@@ -180,11 +167,11 @@ export function GraphBlock() {
           <StatCard
             icon={<CalendarDaysIcon className="size-5" />}
             isLoading={!statistics}
-            subValue={formatStatDateRange(
+            subValue={formatDateRange(
               statistics?.longestStreakStartDate,
               statistics?.longestStreakEndDate,
             )}
-            title="Longest Streak"
+            title={t('longestStreak')}
             value={statistics?.longestStreak}
             onMouseEnter={() => {
               if (statistics?.longestStreakStartDate && statistics.longestStreakEndDate) {
@@ -198,11 +185,11 @@ export function GraphBlock() {
           <StatCard
             icon={<CalendarMinus2Icon className="size-5" />}
             isLoading={!statistics}
-            subValue={formatStatDateRange(
+            subValue={formatDateRange(
               statistics?.longestGapStartDate,
               statistics?.longestGapEndDate,
             )}
-            title="Longest Gap"
+            title={t('longestGap')}
             value={statistics?.longestGap}
             onMouseEnter={() => {
               if (statistics?.longestGapStartDate && statistics.longestGapEndDate) {
@@ -220,15 +207,15 @@ export function GraphBlock() {
 
           <StatCardWithPopover
             align="start"
-            ariaLabel={`Show repositories created in ${queryYear}`}
-            emptyMessage="No repositories found."
+            ariaLabel={t('showRepos', { year: queryYear })}
+            emptyMessage={tErrors('noRepos')}
             error={reposError}
-            errorMessage="Failed to load repositories."
+            errorMessage={tErrors('failedLoadRepos')}
             isLoading={reposLoading}
             items={reposData?.repos ?? []}
-            loadingMessage="Loading repositories..."
+            loadingMessage={tErrors('loadingRepos')}
             popoverCount={reposData?.count}
-            popoverTitle={`Repositories in ${queryYear}`}
+            popoverTitle={t('reposIn', { year: queryYear })}
             renderItem={(repo: RepoInfo) => {
               return (
                 <a
@@ -261,23 +248,23 @@ export function GraphBlock() {
             <StatCard
               icon={<FolderGit2Icon className="size-5" />}
               isLoading={reposLoading}
-              title={`Repos Created in ${queryYear}`}
+              title={t('reposCreated', { year: queryYear })}
               value={reposData?.count}
             />
           </StatCardWithPopover>
 
           <StatCardWithPopover
             align="start"
-            ariaLabel={`Show issues in ${queryYear}`}
+            ariaLabel={t('showIssues', { year: queryYear })}
             contentClassName="w-[min(90vw,520px)]"
-            emptyMessage="No issues found."
+            emptyMessage={tErrors('noIssues')}
             error={issuesError}
-            errorMessage="Failed to load issues."
+            errorMessage={tErrors('failedLoadIssues')}
             isLoading={issuesLoading}
             items={issuesData?.issues ?? []}
-            loadingMessage="Loading issues..."
+            loadingMessage={tErrors('loadingIssues')}
             popoverCount={issuesData?.count}
-            popoverTitle={`Issues in ${queryYear}`}
+            popoverTitle={t('issuesIn', { year: queryYear })}
             renderItem={(issue: IssueInfo) => {
               return (
                 <a
@@ -304,7 +291,7 @@ export function GraphBlock() {
             <StatCard
               icon={<MessageSquareQuoteIcon className="size-5" />}
               isLoading={issuesLoading}
-              title={`Issues in ${queryYear}`}
+              title={t('issues', { year: queryYear })}
               value={issuesData?.count}
             />
           </StatCardWithPopover>
@@ -314,7 +301,7 @@ export function GraphBlock() {
               icon={<SquareCodeIcon className="size-5" />}
               isLoading={reposLoading}
               items={topLanguages}
-              title={`Top Languages in ${queryYear}`}
+              title={t('topLanguages', { year: queryYear })}
             />
           </div>
 

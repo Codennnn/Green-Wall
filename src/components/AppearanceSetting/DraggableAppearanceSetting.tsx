@@ -1,5 +1,6 @@
 import { useState } from 'react'
 
+import { useTranslations } from 'next-intl'
 import { motion, useDragControls } from 'framer-motion'
 import { XIcon } from 'lucide-react'
 
@@ -10,6 +11,8 @@ export function DraggableAppearanceSetting(
   }>,
 ) {
   const { children, initialPosition, onClose } = props
+  const t = useTranslations('settings')
+  const tCommon = useTranslations('common')
 
   const dragControls = useDragControls()
 
@@ -44,11 +47,11 @@ export function DraggableAppearanceSetting(
           setPressing(false)
         }}
       >
-        Appearance
+        {t('appearance')}
         <button
-          aria-label="Close"
+          aria-label={tCommon('close')}
           className="ml-auto hidden md:block"
-          title="Close"
+          title={tCommon('close')}
           onClick={() => {
             onClose?.()
           }}

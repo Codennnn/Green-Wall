@@ -1,5 +1,6 @@
 import type { RefObject } from 'react'
 
+import { useTranslations } from 'next-intl'
 import { FileCheck2Icon, ImageIcon, ImagesIcon } from 'lucide-react'
 
 import { AppearanceSetting } from '~/components/AppearanceSetting/AppearanceSetting'
@@ -28,6 +29,7 @@ export function GraphActionBar({
   onSettingPopOut,
   onSettingPopupClose,
 }: GraphActionBarProps) {
+  const t = useTranslations('graph')
   const {
     canUseClipboardItem,
     isDownloading,
@@ -48,7 +50,7 @@ export function GraphActionBar({
           }}
         >
           <ImageIcon className="mr-2 size-4 shrink-0 md:size-5" />
-          <span>Save as Image</span>
+          <span>{t('saveAsImage')}</span>
         </button>
 
         {canUseClipboardItem && (
@@ -71,7 +73,7 @@ export function GraphActionBar({
                 ? <FileCheck2Icon className="size-4 shrink-0 md:size-5" />
                 : <ImagesIcon className="size-4 shrink-0 md:size-5" />}
             </span>
-            <span>{copySuccess ? 'Copied' : 'Copy'} as Image</span>
+            <span>{copySuccess ? t('copiedAsImage') : t('copyAsImage')}</span>
           </button>
         )}
       </div>

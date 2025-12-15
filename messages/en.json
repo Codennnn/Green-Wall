@@ -1,6 +1,163 @@
 {
   "common": {
-    "appName": "Green Wall"
+    "appName": "Green Wall",
+    "loading": "Loading...",
+    "copy": "Copy",
+    "copied": "Copied",
+    "close": "Close",
+    "preview": "Preview",
+    "openSource": "Open Source"
+  },
+  "nav": {
+    "about": "About"
+  },
+  "footer": {
+    "madeBy": "Made by {author}"
+  },
+  "home": {
+    "title": "Review the contributions you have made on GitHub over the years.",
+    "searchPlaceholder": "GitHub Username",
+    "generate": "Generate",
+    "generating": "Generating..."
+  },
+  "share": {
+    "title": "Share Your Graph",
+    "shareIt": "Share it",
+    "headline": "Generated my GitHub graph with GreenWall",
+    "cta": "Try it and share yours!",
+    "generateYours": "Generate Yours"
+  },
+  "graph": {
+    "followers": "followers",
+    "following": "following",
+    "commits": "{count} Commits",
+    "years": "{count} Years",
+    "inYear": "In {year}",
+    "newYearText": "Happy New Year 🎉 Go make the first contribution !",
+    "tooltipContributionsInDate": "<strong>{count}</strong> contributions in {date}",
+    "less": "Less",
+    "more": "More",
+    "madeIn": "Made in -",
+    "loadingContributions": "Loading contributions...",
+    "saveAsImage": "Save as Image",
+    "copyAsImage": "Copy as Image",
+    "copiedAsImage": "Copied as Image"
+  },
+  "settings": {
+    "appearance": "Appearance",
+    "popOut": "Pop out",
+    "yearRange": "Year Range",
+    "daysLabel": "Days Label",
+    "safariHeader": "Safari Header",
+    "attribution": "Attribution",
+    "graphSize": "Graph Size",
+    "sizeSmall": "Small",
+    "sizeMedium": "Medium",
+    "sizeLarge": "Large",
+    "blockShape": "Block Shape",
+    "shapeSquare": "Square",
+    "shapeRound": "Round",
+    "themes": "Themes",
+    "sizeHint": "You can also adjust the web zoom to change the size of the saved image."
+  },
+  "discovery": {
+    "popularProfiles": "Popular profiles",
+    "popularDescription": "Quick picks to explore contributions",
+    "recentlyViewed": "Recently viewed",
+    "recentDescription": "Pick up where you left off",
+    "lastViewed": "Last viewed {time}"
+  },
+  "stats": {
+    "maxContributions": "Max Contributions in a Day",
+    "averagePerDay": "Average Per Day",
+    "mostActiveDay": "Most Active Day",
+    "mostActiveMonth": "Most Active Month",
+    "longestStreak": "Longest Streak",
+    "longestGap": "Longest Gap",
+    "reposCreated": "Repos Created in {year}",
+    "issues": "Issues in {year}",
+    "topLanguages": "Top Languages in {year}",
+    "monthlyDistribution": "Monthly Distribution in {year}",
+    "weeklyDistribution": "Weekly Distribution in {year}",
+    "contributions": "contributions",
+    "noLanguageData": "No language data.",
+    "top": "Top {count}",
+    "peak": "Peak: {month}",
+    "total": "Total",
+    "mostActive": "Most Active",
+    "showRepos": "Show repositories created in {year}",
+    "showIssues": "Show issues in {year}",
+    "reposIn": "Repositories in {year}",
+    "issuesIn": "Issues in {year}"
+  },
+  "errors": {
+    "somethingWentWrong": "Something went wrong.",
+    "badCredentials": "You need access token to get data, please read <link>this step</link> to learn how to set the token correctly.",
+    "thisStep": "this step",
+    "noRepos": "No repositories found.",
+    "noIssues": "No issues found.",
+    "loadingRepos": "Loading repositories...",
+    "loadingIssues": "Loading issues...",
+    "failedLoadRepos": "Failed to load repositories.",
+    "failedLoadIssues": "Failed to load issues."
+  },
+  "notFound": {
+    "sorry": "Sorry,",
+    "title": "this page isn't available.",
+    "description": "The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.",
+    "backHome": "Go back to the",
+    "homePage": "home page"
+  },
+  "about": {
+    "goal": "Goal",
+    "goalContent": "Our goal is to make it easy for people to look back on their GitHub contributions over the years and share their achievements on social media and beyond.",
+    "howItWorks": "How it works",
+    "howItWorksContent": "This project leverages the GitHub GraphQL API to retrieve contribution data and utilizes Next.js API routes to process requests. For more details on our data handling practices, you can check out the",
+    "relevantFiles": "relevant files",
+    "credits": "Credits",
+    "inspiration": "Inspiration",
+    "framework": "Framework",
+    "font": "Font",
+    "icons": "Icons",
+    "support": "Support",
+    "supportContent": "Want to show your support for this project? You can star on <github>GitHub</github> or vote on <productHunt>Product Hunt</productHunt>, or you can share this website elsewhere!",
+    "reportingIssues": "Reporting Issues",
+    "reportingIssuesContent": "Got bugs or have any suggestions for this project? Welcome to leave your message on the <link>GitHub issues</link>.",
+    "githubIssues": "GitHub issues"
+  },
+  "themeMode": {
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System"
+  },
+  "weekdays": {
+    "sun": "Sun",
+    "mon": "Mon",
+    "tue": "Tue",
+    "wed": "Wed",
+    "thu": "Thu",
+    "fri": "Fri",
+    "sat": "Sat",
+    "sunday": "Sunday",
+    "monday": "Monday",
+    "tuesday": "Tuesday",
+    "wednesday": "Wednesday",
+    "thursday": "Thursday",
+    "friday": "Friday",
+    "saturday": "Saturday"
+  },
+  "months": {
+    "jan": "Jan",
+    "feb": "Feb",
+    "mar": "Mar",
+    "apr": "Apr",
+    "may": "May",
+    "jun": "Jun",
+    "jul": "Jul",
+    "aug": "Aug",
+    "sep": "Sep",
+    "oct": "Oct",
+    "nov": "Nov",
+    "dec": "Dec"
   }
 }
-

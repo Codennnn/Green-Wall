@@ -1,24 +1,26 @@
 import Link from 'next/link'
+import { getTranslations } from 'next-intl/server'
 
-export default function NotFoundPage() {
+export default async function NotFoundPage() {
+  const t = await getTranslations('notFound')
+
   return (
     <div className="px-2 py-12 md:px-20 md:py-24">
       <h2 className="text-4xl font-semibold md:text-5xl">
-        <span className="text-brand-500">Sorry,</span>
+        <span className="text-brand-500">{t('sorry')}</span>
         {' '}
-        this page isn&apos;t available.
+        {t('title')}
       </h2>
 
       <p className="mt-6 md:mt-9 md:text-lg">
-        The page you are looking for might have been removed, had its name changed, or is
-        temporarily unavailable.
+        {t('description')}
       </p>
 
       <p className="mt-6 md:mt-9">
-        Go back to the
+        {t('backHome')}
         {' '}
         <Link className="text-brand-500" href="/">
-          home page
+          {t('homePage')}
         </Link>
         .
       </p>

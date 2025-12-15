@@ -2,6 +2,7 @@
 
 import { useId, useRef } from 'react'
 
+import { useTranslations } from 'next-intl'
 import { DotIcon } from 'lucide-react'
 
 import { ContributionsGraph } from '~/components/ContributionsGraph'
@@ -29,6 +30,7 @@ function Divider() {
 }
 
 export function HomePage() {
+  const t = useTranslations('home')
   const graphRef = useRef<HTMLDivElement>(null)
 
   const settingPopoverContentId = useId()
@@ -157,7 +159,7 @@ export function HomePage() {
   return (
     <div className="py-10 md:py-14">
       <h1 className="text-center text-3xl font-bold md:mx-auto md:px-20 md:text-4xl md:leading-[1.2] lg:text-6xl">
-        Review the contributions you have made on GitHub over the years.
+        {t('title')}
       </h1>
 
       <SearchForm

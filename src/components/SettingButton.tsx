@@ -1,3 +1,4 @@
+import { useTranslations } from 'next-intl'
 import { PictureInPicture2Icon, Settings2Icon, XIcon } from 'lucide-react'
 
 import {
@@ -16,22 +17,24 @@ interface SettingButtonProps extends Omit<React.ComponentProps<'button'>, 'conte
 
 export function SettingButton(props: SettingButtonProps) {
   const { content, popoverContentId, onPopOut, ...buttonProps } = props
+  const t = useTranslations('settings')
+  const tCommon = useTranslations('common')
 
   return (
     <Popover>
       <PopoverTrigger className="simple-button" {...buttonProps}>
         <Settings2Icon className="size-[18px]" />
-        <span>Appearance</span>
+        <span>{t('appearance')}</span>
       </PopoverTrigger>
       <PopoverContent id={popoverContentId}>
         <div className="mb-2 flex items-center">
           <PopoverTitle className="min-h-[24px] flex-1 font-medium text-main-500">
             <div className="flex">
-              <span>Appearance</span>
+              <span>{t('appearance')}</span>
 
               <PopoverClose
                 className="ml-auto hidden md:block"
-                title="Pop out"
+                title={t('popOut')}
                 onClick={() => {
                   onPopOut?.()
                 }}
@@ -42,7 +45,7 @@ export function SettingButton(props: SettingButtonProps) {
               </PopoverClose>
             </div>
           </PopoverTitle>
-          <PopoverClose className="ml-auto" title="Close">
+          <PopoverClose className="ml-auto" title={tCommon('close')}>
             <span className="inline-flex items-center justify-center rounded p-[0.3rem] transition-colors duration-200 hover:bg-main-100/80">
               <XIcon className="size-4 text-main-500" />
             </span>

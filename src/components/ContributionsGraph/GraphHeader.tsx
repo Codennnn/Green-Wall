@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 
 import Link from 'next/link'
+import { useTranslations } from 'next-intl'
 import { AtSignIcon, DotIcon, UserIcon } from 'lucide-react'
 
 import { useData } from '~/DataContext'
@@ -59,6 +60,7 @@ const Avatar = () => {
 }
 
 export function GraphHeader() {
+  const t = useTranslations('graph')
   const { graphData, lastYear, totalYears, totalContributions, settings } = useData()
 
   if (!graphData) {
@@ -99,14 +101,14 @@ export function GraphHeader() {
           <span className="flex items-center gap-1 whitespace-nowrap">
             <UserIcon className="size-4" />
             <span>{numberWithCommas(graphData.followers.totalCount)}</span>
-            <span className="opacity-70">followers</span>
+            <span className="opacity-70">{t('followers')}</span>
           </span>
 
           <DotIcon className="size-5" />
 
           <span className="flex items-center gap-1 whitespace-nowrap">
             <span>{numberWithCommas(graphData.following.totalCount)}</span>
-            <span className="opacity-70">following</span>
+            <span className="opacity-70">{t('following')}</span>
           </span>
         </div>
 
@@ -130,15 +132,15 @@ export function GraphHeader() {
 
         <span className="opacity-70">
           {typeof totalContributions === 'number'
-            ? `${numberWithCommas(totalContributions)} Commits`
+            ? t('commits', { count: numberWithCommas(totalContributions) })
             : '-'}
         </span>
 
         <span className="opacity-70">
           {typeof totalYears === 'number'
             ? totalYears === 1
-              ? `In ${lastYear ?? '-'}`
-              : `${totalYears} Years`
+              ? t('inYear', { year: lastYear ?? '-' })
+              : t('years', { count: totalYears })
             : '-'}
         </span>
       </div>

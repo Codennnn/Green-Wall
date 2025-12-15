@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 
 import Link from 'next/link'
+import { useTranslations } from 'next-intl'
 import { ArrowUpRightIcon, MousePointerClickIcon, XIcon } from 'lucide-react'
 
 import {
@@ -15,6 +16,8 @@ import { useData } from '~/DataContext'
 import { trackEvent } from '~/helpers'
 
 export function ShareButton() {
+  const t = useTranslations('share')
+  const tCommon = useTranslations('common')
   const { graphData, settings, firstYear, lastYear } = useData()
   const username = graphData?.login
 
@@ -61,14 +64,14 @@ export function ShareButton() {
     <Popover>
       <PopoverTrigger className="simple-button divider">
         <MousePointerClickIcon className="size-5" />
-        <span>Share it</span>
+        <span>{t('shareIt')}</span>
       </PopoverTrigger>
       <PopoverContent>
         <div className="mb-2 flex items-center">
           <PopoverTitle className="min-h-[24px] flex-1 font-medium text-main-500">
-            Share Your Graph
+            {t('title')}
           </PopoverTitle>
-          <PopoverClose className="ml-auto" title="Close">
+          <PopoverClose className="ml-auto" title={tCommon('close')}>
             <span className="inline-flex items-center justify-center rounded p-[0.3rem] transition-colors duration-200 hover:bg-main-100/80">
               <XIcon className="size-4 text-main-500" />
             </span>
@@ -76,7 +79,7 @@ export function ShareButton() {
         </div>
         <div className="max-w-[90vw] rounded-md pt-2 md:max-w-[min(40vw,300px)]">
           {shareUrl && (
-            <div className="overflow-hidden rounded bg-main-100/80 p-3 pb-2 text-xs text-main-500 md:text-sm">
+            <div className="overflow-hidden rounded-md bg-main-100/80 p-3 pb-2 text-xs text-main-500 md:text-sm">
               <div className="break-all">
                 <span>{shareUrl.href.replace(shareUrl.search, '')}</span>
                 <span className="opacity-60">{shareUrl.search}</span>
@@ -85,17 +88,17 @@ export function ShareButton() {
               <div className="-mr-1 mt-4 flex h-7 items-center justify-end gap-x-2">
                 <Link passHref className="h-full" href={shareUrl} target="_blank">
                   <button
-                    className="flex h-full items-center gap-x-1 rounded bg-main-200 px-2"
+                    className="flex h-full items-center gap-x-1 rounded-md bg-main-200 px-2"
                     onClick={() => {
                       trackEvent('Preview Share URL')
                     }}
                   >
-                    <span>Preview</span>
+                    <span>{tCommon('preview')}</span>
                     <ArrowUpRightIcon className="size-4 translate-y-px" />
                   </button>
                 </Link>
                 <button
-                  className="inline-block h-full min-w-14 rounded bg-brand-100 px-1 text-brand-600"
+                  className="inline-block h-full min-w-14 rounded-md bg-brand-100 px-1 text-brand-600"
                   onClick={() => {
                     if (!copied) {
                       trackEvent('Copy Share URL')
@@ -109,7 +112,7 @@ export function ShareButton() {
                     }
                   }}
                 >
-                  {copied ? 'Copied' : 'Copy'}
+                  {copied ? tCommon('copied') : tCommon('copy')}
                 </button>
               </div>
             </div>

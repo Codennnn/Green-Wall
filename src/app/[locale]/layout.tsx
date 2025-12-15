@@ -2,7 +2,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { hasLocale, NextIntlClientProvider } from 'next-intl'
-import { setRequestLocale } from 'next-intl/server'
+import { getTranslations, setRequestLocale } from 'next-intl/server'
 
 import { GitHubButton } from '~/components/GitHubButton'
 import { QueryProvider } from '~/components/QueryProvider'
@@ -28,6 +28,10 @@ export default async function LocaleLayout({ children, params }: Props) {
 
   setRequestLocale(locale)
 
+  const tNav = await getTranslations('nav')
+  const tFooter = await getTranslations('footer')
+  const tCommon = await getTranslations('common')
+
   return (
     <NextIntlClientProvider>
       <ThemeProvider>
@@ -41,7 +45,7 @@ export default async function LocaleLayout({ children, params }: Props) {
                       <Image fill alt="LOGO" className="object-contain" src="/favicon.svg" />
                     </span>
                     <span className="ml-3 hidden md:inline" translate="no">
-                      Green Wall
+                      {tCommon('appName')}
                     </span>
                   </span>
                 </Link>
@@ -62,11 +66,11 @@ export default async function LocaleLayout({ children, params }: Props) {
                 href="https://github.com/Codennnn"
                 target="_blank"
               >
-                Made by LeoKu
+                {tFooter('madeBy', { author: 'LeoKu' })}
               </Link>
               <span className="mx-2 font-medium md:mx-3">·</span>
               <Link className="transition-colors duration-200 hover:text-main-500/90" href={`/${locale}/about`}>
-                About
+                {tNav('about')}
               </Link>
             </footer>
           </div>

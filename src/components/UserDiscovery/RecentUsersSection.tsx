@@ -1,3 +1,5 @@
+import { useTranslations } from 'next-intl'
+
 import { DiscoverySection } from './DiscoverySection'
 import { UserCard } from './UserCard'
 import type { RecentGitHubUser } from './useRecentUsers'
@@ -45,18 +47,19 @@ export function RecentUsersSection(props: RecentUsersSectionProps) {
     loadingLogin,
   } = props
 
+  const t = useTranslations('discovery')
   const hasUsers = users.length > 0
 
   const section = hasUsers
     ? (
         <DiscoverySection
-          description="Pick up where you left off"
-          title="Recently viewed"
+          description={t('recentDescription')}
+          title={t('recentlyViewed')}
         >
           <div className="mt-4 grid grid-cols-2 gap-3 md:grid-cols-4">
             {users.map((user) => {
               const cardLoading = Boolean(isLoading && loadingLogin && loadingLogin === user.login)
-              const badgeText = `Last viewed ${formatLastSearchedAt(user.lastSearchedAt)}`
+              const badgeText = t('lastViewed', { time: formatLastSearchedAt(user.lastSearchedAt) })
 
               return (
                 <UserCard

@@ -1,5 +1,6 @@
 {
   "files.readonlyInclude": {
-    "plugins/*.js": true
+    "plugins/*.js": true,
+    ".next/**": true
   }
 }

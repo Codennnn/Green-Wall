@@ -2,6 +2,7 @@
 
 import { useMemo } from 'react'
 
+import { useTranslations } from 'next-intl'
 import { CalendarDaysIcon } from 'lucide-react'
 import {
   Bar,
@@ -18,21 +19,24 @@ import { Badge } from '~/components/ui/badge'
 import { numberWithCommas } from '~/helpers'
 import type { ContributionCalendar } from '~/types'
 
+import { createWeekdayShortNames, type WeekdayAbbr } from './chart-i18n'
 import { getWeeklyChartData, type WeeklyChartData } from './chart-utils'
 import { ChartCard, ChartSummaryItem } from './ChartCard'
 
 interface CustomTooltipProps {
   active?: boolean
   payload?: { payload: WeeklyChartData }[]
+  dayNames?: Record<string, string>
+  contributionsLabel?: string
 }
 
-function CustomTooltip({ active, payload }: CustomTooltipProps) {
+function CustomTooltip({ active, payload, dayNames, contributionsLabel = 'contributions' }: CustomTooltipProps) {
   if (!active || !payload || payload.length === 0) {
     return null
   }
 
   const data = payload[0].payload
-  const dayFullNames: Record<string, string> = {
+  const defaultDayNames: Record<string, string> = {
     Sun: 'Sunday',
     Mon: 'Monday',
     Tue: 'Tuesday',
@@ -41,14 +45,15 @@ function CustomTooltip({ active, payload }: CustomTooltipProps) {
     Fri: 'Friday',
     Sat: 'Saturday',
   }
+  const names = dayNames ?? defaultDayNames
 
   return (
     <div className="rounded-lg border border-border bg-popover px-3 py-2 shadow-lg">
       <p className="font-medium text-popover-foreground text-sm">
-        {dayFullNames[data.day] ?? data.day}
+        {names[data.day] ?? data.day}
       </p>
       <p className="text-muted-foreground text-xs">
-        {numberWithCommas(data.count)} contributions
+        {numberWithCommas(data.count)} {contributionsLabel}
       </p>
     </div>
   )
@@ -62,22 +67,39 @@ export interface WeeklyCommitChartProps {
 
 export function WeeklyCommitChart(props: WeeklyCommitChartProps) {
   const { calendars, isLoading, year } = props
+  const t = useTranslations('stats')
+  const tWeekdays = useTranslations('weekdays')
 
   const { data, summary } = useMemo(
     () => getWeeklyChartData(calendars),
     [calendars],
   )
 
+  const dayShortNames = useMemo(
+    () => createWeekdayShortNames(tWeekdays),
+    [tWeekdays],
+  )
+
+  const dayFullNames: Record<string, string> = {
+    Sun: tWeekdays('sunday'),
+    Mon: tWeekdays('monday'),
+    Tue: tWeekdays('tuesday'),
+    Wed: tWeekdays('wednesday'),
+    Thu: tWeekdays('thursday'),
+    Fri: tWeekdays('friday'),
+    Sat: tWeekdays('saturday'),
+  }
+
   const summarySlot = (
     <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
       {summary.mostActiveDay && (
         <>
           <ChartSummaryItem
-            label="Most Active"
-            value={summary.mostActiveDay}
+            label={t('mostActive')}
+            value={dayFullNames[summary.mostActiveDay] ?? summary.mostActiveDay}
           />
           <Badge size="sm" variant="outline">
-            {numberWithCommas(summary.mostActiveDayCount)} contributions
+            {numberWithCommas(summary.mostActiveDayCount)} {t('contributions')}
           </Badge>
         </>
       )}
@@ -89,7 +111,7 @@ export function WeeklyCommitChart(props: WeeklyCommitChartProps) {
       icon={<CalendarDaysIcon className="size-5" />}
       isLoading={isLoading}
       summarySlot={summarySlot}
-      title={`Weekly Distribution in ${year}`}
+      title={t('weeklyDistribution', { year })}
     >
       <ResponsiveContainer height={200} width="100%">
         <BarChart
@@ -106,6 +128,9 @@ export function WeeklyCommitChart(props: WeeklyCommitChartProps) {
             dataKey="day"
             fontSize={12}
             stroke="var(--color-muted-foreground)"
+            tickFormatter={(value: string) => {
+              return dayShortNames[value as WeekdayAbbr]
+            }}
             tickLine={false}
             tickMargin={8}
           />
@@ -124,7 +149,7 @@ export function WeeklyCommitChart(props: WeeklyCommitChartProps) {
             tickMargin={8}
           />
           <Tooltip
-            content={<CustomTooltip />}
+            content={<CustomTooltip contributionsLabel={t('contributions')} dayNames={dayFullNames} />}
             cursor={{ fill: 'var(--color-muted)', opacity: 0.3 }}
           />
           <Bar

@@ -1,9 +1,13 @@
+import { useTranslations } from 'next-intl'
+
 import styles from './Graph.module.css'
 
 export function GraphLegend() {
+  const t = useTranslations('graph')
+
   return (
     <div className="ml-auto flex items-center text-xs">
-      <span>Less</span>
+      <span>{t('less')}</span>
 
       <ul className={`${styles.grids} mx-2 grid grid-cols-5 gap-[3px]`}>
         <li className="size-3" data-level="0" />
@@ -13,7 +17,7 @@ export function GraphLegend() {
         <li className="size-3" data-level="4" />
       </ul>
 
-      <span>More</span>
+      <span>{t('more')}</span>
     </div>
   )
 }

@@ -1,5 +1,6 @@
 import { useId } from 'react'
 
+import { useTranslations } from 'next-intl'
 import { CircleHelpIcon } from 'lucide-react'
 
 import { ThemeSelector } from '~/components/ThemeSelector'
@@ -13,6 +14,7 @@ import { trackEvent } from '~/helpers'
 import { YearRangeSelect } from './YearRangeSelect'
 
 export function AppearanceSetting() {
+  const t = useTranslations('settings')
   const { graphData, settings, dispatchSettings } = useData()
 
   const daysLabelId = useId()
@@ -22,12 +24,12 @@ export function AppearanceSetting() {
   return (
     <div className="appearance-setting min-w-[min(40vw,220px)] max-w-[min(90vw,280px)] text-main-400">
       <fieldset>
-        <label>Year Range</label>
+        <label>{t('yearRange')}</label>
         <YearRangeSelect graphData={graphData} />
       </fieldset>
 
       <fieldset>
-        <label htmlFor={daysLabelId}>Days Label</label>
+        <label htmlFor={daysLabelId}>{t('daysLabel')}</label>
         <Switch
           checked={settings.daysLabel}
           defaultChecked={true}
@@ -39,7 +41,7 @@ export function AppearanceSetting() {
       </fieldset>
 
       <fieldset>
-        <label htmlFor={safariHeader}>Safari Header</label>
+        <label htmlFor={safariHeader}>{t('safariHeader')}</label>
         <Switch
           checked={settings.showSafariHeader}
           defaultChecked={true}
@@ -51,7 +53,7 @@ export function AppearanceSetting() {
       </fieldset>
 
       <fieldset>
-        <label htmlFor={attributionId}>Attribution</label>
+        <label htmlFor={attributionId}>{t('attribution')}</label>
         <Switch
           checked={settings.showAttribution}
           defaultChecked={true}
@@ -64,15 +66,14 @@ export function AppearanceSetting() {
 
       <fieldset>
         <label className="flex items-center">
-          Graph Size
+          {t('graphSize')}
           <Tooltip>
             <TooltipTrigger>
               <CircleHelpIcon className="ml-1 inline-block size-4 cursor-help opacity-90" />
             </TooltipTrigger>
             <TooltipContent>
               <span className="inline-block max-w-xs leading-5">
-                You can also adjust the web zoom to change the size of the saved
-                image.
+                {t('sizeHint')}
               </span>
             </TooltipContent>
           </Tooltip>
@@ -87,25 +88,25 @@ export function AppearanceSetting() {
             <TooltipTrigger render={<Toggle size="sm" value={GraphSize.Small} />}>
               S
             </TooltipTrigger>
-            <TooltipContent>Small</TooltipContent>
+            <TooltipContent>{t('sizeSmall')}</TooltipContent>
           </Tooltip>
           <Tooltip>
             <TooltipTrigger render={<Toggle size="sm" value={GraphSize.Medium} />}>
               M
             </TooltipTrigger>
-            <TooltipContent>Medium</TooltipContent>
+            <TooltipContent>{t('sizeMedium')}</TooltipContent>
           </Tooltip>
           <Tooltip>
             <TooltipTrigger render={<Toggle size="sm" value={GraphSize.Large} />}>
               L
             </TooltipTrigger>
-            <TooltipContent>Large</TooltipContent>
+            <TooltipContent>{t('sizeLarge')}</TooltipContent>
           </Tooltip>
         </ToggleGroup>
       </fieldset>
 
       <fieldset>
-        <label className="flex items-center">Block Shape</label>
+        <label className="flex items-center">{t('blockShape')}</label>
         <ToggleGroup
           value={[settings.blockShape]}
           onValueChange={(shape) => {
@@ -119,19 +120,19 @@ export function AppearanceSetting() {
             <TooltipTrigger render={<Toggle size="sm" value={BlockShape.Square} />}>
               <span className="inline-block size-4 rounded-[2px] bg-current" />
             </TooltipTrigger>
-            <TooltipContent>Square</TooltipContent>
+            <TooltipContent>{t('shapeSquare')}</TooltipContent>
           </Tooltip>
           <Tooltip>
             <TooltipTrigger render={<Toggle size="sm" value={BlockShape.Round} />}>
               <span className="inline-block size-4 rounded-full bg-current" />
             </TooltipTrigger>
-            <TooltipContent>Round</TooltipContent>
+            <TooltipContent>{t('shapeRound')}</TooltipContent>
           </Tooltip>
         </ToggleGroup>
       </fieldset>
 
       <fieldset className="flex-col items-start">
-        <label>Themes</label>
+        <label>{t('themes')}</label>
         <ThemeSelector
           className="mt-3 pl-1"
           value={settings.theme}

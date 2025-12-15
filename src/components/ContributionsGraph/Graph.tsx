@@ -1,12 +1,14 @@
 import { useEffect, useRef, useState } from 'react'
 
 import Link from 'next/link'
+import { useTranslations } from 'next-intl'
 import { ChevronRight } from 'lucide-react'
 
 import { GraphTooltip } from '~/components/ContributionsGraph/GraphTooltip'
-import { levels } from '~/constants'
+import { GraphTooltipLabel } from '~/components/ContributionsGraph/GraphTooltipLabel'
+import { DEFAULT_SIZE, levels } from '~/constants'
 import { useData } from '~/DataContext'
-import { ContributionLevel, GraphSize } from '~/enums'
+import { ContributionLevel } from '~/enums'
 import { numberWithCommas } from '~/helpers'
 import { cn } from '~/lib/utils'
 import type { ContributionCalendar, ContributionDay } from '~/types'
@@ -26,8 +28,6 @@ export interface GraphProps extends React.ComponentProps<'div'> {
   }) => React.ReactNode | null
 }
 
-const newYearText = 'Happy New Year 🎉 Go make the first contribution !'
-
 export function Graph(props: GraphProps) {
   const {
     data: calendar,
@@ -39,6 +39,7 @@ export function Graph(props: GraphProps) {
   } = props
 
   const { username, settings } = useData()
+  const t = useTranslations('graph')
 
   const [isNewYear, setIsNewYear] = useState(false)
 
@@ -98,7 +99,7 @@ export function Graph(props: GraphProps) {
                 <span className="mr-2 font-medium">{calendar.year}:</span>
                 <span className="opacity-80">
                   {isNewYear && calendar.total === 0
-                    ? newYearText
+                    ? t('newYearText')
                     : `${numberWithCommas(calendar.total)} Contributions`}
                 </span>
               </div>
@@ -122,13 +123,11 @@ export function Graph(props: GraphProps) {
         label={
           tooltipInfo
             ? (
-                <span className={settings.size === GraphSize.Small ? 'text-xs' : 'text-sm'}>
-                  <strong className="font-medium">{tooltipInfo.count}</strong>
-                  {' '}
-                  contributions in
-                  {' '}
-                  {tooltipInfo.date}
-                </span>
+                <GraphTooltipLabel
+                  count={tooltipInfo.count}
+                  date={tooltipInfo.date}
+                  size={settings.size ?? DEFAULT_SIZE}
+                />
               )
             : null
         }

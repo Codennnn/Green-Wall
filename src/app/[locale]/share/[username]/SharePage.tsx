@@ -5,6 +5,7 @@ import { useEffect, useMemo } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useParams, useSearchParams } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 
 import { ContributionsGraph } from '~/components/ContributionsGraph'
 import { ErrorMessage } from '~/components/ErrorMessage'
@@ -15,6 +16,8 @@ import { useContributionQuery } from '~/hooks/useQueries'
 import type { GraphSettings, Themes } from '~/types'
 
 export function SharePage() {
+  const t = useTranslations('share')
+  const tGraph = useTranslations('graph')
   const query = useSearchParams()
 
   const settings = useMemo<GraphSettings | null>(() => {
@@ -85,7 +88,7 @@ export function SharePage() {
           src="/mona-loading-default.gif"
           width={60}
         />
-        <span className="bg-background px-3 py-4">Loading contributions...</span>
+        <span className="bg-background px-3 py-4">{tGraph('loadingContributions')}</span>
       </div>
     )
   }
@@ -94,9 +97,11 @@ export function SharePage() {
     return (
       <div className="py-10 md:py-14">
         <h1 className="mb-5 text-center text-lg font-medium md:mx-auto md:px-20 md:text-3xl md:leading-[1.2]">
-          Generated my GitHub graph with GreenWall
+          {t('headline')}
           <br />
-          Try it and share yours! 🌱
+          {t('cta')}
+          {' '}
+          🌱
         </h1>
 
         <div className="flex justify-center">
@@ -105,7 +110,7 @@ export function SharePage() {
               className="cursor-pointer rounded-lg border-[3px] border-solid border-brand-400/70 bg-linear-to-br from-brand-500 to-brand-300/60 bg-clip-text px-3 py-1 text-lg font-medium text-transparent outline-none transition-colors hover:border-brand-400 hover:bg-brand-400"
               type="button"
             >
-              Generate Yours
+              {t('generateYours')}
             </button>
           </Link>
         </div>

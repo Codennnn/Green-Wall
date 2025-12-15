@@ -1,3 +1,5 @@
+import { useTranslations } from 'next-intl'
+
 import { LanguageIcon } from '~/components/LanguageIcon'
 import { Badge } from '~/components/ui/badge'
 import {
@@ -30,6 +32,8 @@ export function TopLanguagesCard(props: TopLanguagesCardProps) {
     items,
   } = props
 
+  const t = useTranslations('stats')
+
   return (
     <StaticCard contentClassName="flex-col items-stretch gap-3 py-3">
       <div className="flex items-center gap-x-6 gap-y-2">
@@ -43,7 +47,7 @@ export function TopLanguagesCard(props: TopLanguagesCardProps) {
             : items.length > 0
               ? (
                   <Badge size="sm" variant="outline">
-                    Top {items.length}
+                    {t('top', { count: items.length })}
                   </Badge>
                 )
               : null}
@@ -52,7 +56,7 @@ export function TopLanguagesCard(props: TopLanguagesCardProps) {
 
       {!isLoading && items.length === 0 && (
         <div className="text-muted-foreground text-sm">
-          No language data.
+          {t('noLanguageData')}
         </div>
       )}
 
