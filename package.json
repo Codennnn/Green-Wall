@@ -34,7 +34,7 @@
     "react-use-event-hook": "^0.9.6",
     "recharts": "^3.6.0",
     "tailwind-merge": "^3.4.0",
-    "valibot": "1.1.0"
+    "valibot": "1.2.0"
   },
   "devDependencies": {
     "@babel/preset-react": "^7.28.5",
