@@ -30,6 +30,8 @@ import {
 } from '~/lib/statistics'
 import type { IssueInfo, RepoInfo } from '~/types'
 
+import { MonthlyCommitChart } from './charts/MonthlyCommitChart'
+import { WeeklyCommitChart } from './charts/WeeklyCommitChart'
 import { StatCardWithPopover } from './StatCardWithPopover'
 import { StatCard } from './StaticCard'
 import { TopLanguagesCard } from './TopLanguagesCard'
@@ -313,6 +315,22 @@ export function GraphBlock() {
               isLoading={reposLoading}
               items={topLanguages}
               title={`Top Languages in ${queryYear}`}
+            />
+          </div>
+
+          <div className="col-span-2">
+            <MonthlyCommitChart
+              calendars={contributionData?.contributionCalendars}
+              isLoading={contributionLoading}
+              year={queryYear}
+            />
+          </div>
+
+          <div className="col-span-2">
+            <WeeklyCommitChart
+              calendars={contributionData?.contributionCalendars}
+              isLoading={contributionLoading}
+              year={queryYear}
             />
           </div>
         </div>

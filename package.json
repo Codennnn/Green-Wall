@@ -32,6 +32,7 @@
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "react-use-event-hook": "^0.9.6",
+    "recharts": "^3.6.0",
     "tailwind-merge": "^3.4.0",
     "valibot": "1.1.0"
   },

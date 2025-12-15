@@ -1,7 +1,16 @@
 import type { GitHubUsername, GraphData, ValuableStatistics } from '~/types'
 
+/**
+ * 将数字格式化为带千位分隔符的字符串
+ * @param num - 要格式化的数字
+ * @returns 格式化后的字符串，例如：1234567 -> "1,234,567"
+ */
 export function numberWithCommas(num: number): string {
-  return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+  if (!Number.isFinite(num)) {
+    return '0'
+  }
+
+  return new Intl.NumberFormat('en-US').format(num)
 }
 
 function getLocalIsoDateString(date: Date): string {
