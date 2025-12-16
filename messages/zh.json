@@ -14,8 +14,8 @@
     "aboutDescription": "了解 Green Wall - 一个帮助你回顾和分享编程历程的 GitHub 贡献图生成器。",
     "aboutOgTitle": "关于 Green Wall",
     "aboutOgDescription": "了解 Green Wall 如何帮助你可视化和分享你的 GitHub 贡献。",
-    "yearTitle": "{username} 的 {year} 年 GitHub 贡献 · Green Wall",
-    "yearOgTitle": "{username} 的 {year} 年 GitHub 贡献",
+    "yearTitle": "{username} 的 {year} 年度报告 · Green Wall",
+    "yearOgTitle": "{username} 的 {year} 年度报告",
     "yearOgDescription": "探索 {username} 在 {year} 年的 GitHub 活动和贡献统计。"
   },
   "common": {

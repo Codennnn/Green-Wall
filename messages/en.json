@@ -14,8 +14,8 @@
     "aboutDescription": "Learn about Green Wall - a GitHub contribution graph generator that helps you review and share your coding journey.",
     "aboutOgTitle": "About Green Wall",
     "aboutOgDescription": "Learn how Green Wall helps you visualize and share your GitHub contributions.",
-    "yearTitle": "{username}'s GitHub contributions in {year} · Green Wall",
-    "yearOgTitle": "{username}'s GitHub contributions in {year}",
+    "yearTitle": "{username}'s {year} GitHub Wrapped · Green Wall",
+    "yearOgTitle": "{username}'s {year} GitHub Wrapped",
     "yearOgDescription": "Explore {username}'s GitHub activity and contribution statistics for {year}."
   },
   "common": {
@@ -54,7 +54,7 @@
     "inYear": "In {year}",
     "newYearText": "Happy New Year 🎉 Go make the first contribution !",
     "contributions": "contributions",
-    "tooltipContributionsInDate": "<strong>{count}</strong> contributions in {date}",
+    "tooltipContributionsInDate": "<strong>{count}</strong> contributions on {date}",
     "less": "Less",
     "more": "More",
     "madeIn": "Made in -",

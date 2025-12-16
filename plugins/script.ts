@@ -175,7 +175,7 @@ const handler = () => {
 
             td = `
             <td
-              title="${col.count === 0 ? 'No' : col.count} contributions in ${col.date}"
+              title="${col.count === 0 ? 'No' : col.count} contributions on ${col.date}"
               tabindex="-1"
               data-ix="${idx}"
               style="width: 10px"
