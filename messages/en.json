@@ -117,6 +117,19 @@
     "reposIn": "Repositories in {year}",
     "issuesIn": "Issues in {year}"
   },
+  "aiReport": {
+    "title": "AI Year in Review",
+    "description": "Let AI generate a personalized annual GitHub summary for you",
+    "generate": "Generate",
+    "regenerate": "Regenerate",
+    "cancel": "Cancel",
+    "retry": "Retry",
+    "copy": "Copy",
+    "copied": "Copied",
+    "charCount": "{count} chars",
+    "generating": "Generating...",
+    "failed": "Generation failed, please retry"
+  },
   "errors": {
     "somethingWentWrong": "Something went wrong.",
     "badCredentials": "You need access token to get data, please read <link>this step</link> to learn how to set the token correctly.",

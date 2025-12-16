@@ -24,14 +24,20 @@ export function StaticCardTitle(props: StaticCardTitleProps) {
 
 export interface StaticCardProps {
   children: React.ReactNode
+  className?: string
   contentClassName?: string
 }
 
 export function StaticCard(props: StaticCardProps) {
-  const { children, contentClassName } = props
+  const { children, className, contentClassName } = props
 
   return (
-    <div className="overflow-hidden rounded-[12px] border border-foreground/13 ">
+    <div
+      className={cn(
+        'overflow-hidden rounded-[12px] border border-foreground/13',
+        className,
+      )}
+    >
       <div className="rounded-[11px] border border-background">
         <div className="rounded-[10px] border border-foreground/20">
           <div className="overflow-hidden rounded-[9px] border border-background/50">

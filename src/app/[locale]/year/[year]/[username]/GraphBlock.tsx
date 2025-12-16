@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
+import { useEvent } from 'react-use-event-hook'
 
 import { useParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
@@ -26,18 +27,24 @@ import {
 } from '~/hooks/useQueries'
 import { getTopLanguagesFromRepos } from '~/lib/language-stats'
 import { deriveStatistics } from '~/lib/statistics'
+import {
+  deriveYearlyTags,
+  extractHighlights,
+} from '~/lib/yearly-report/deriveTags'
 import type { IssueInfo, RepoInfo } from '~/types'
 
 import { MonthlyCommitChart } from './charts/MonthlyCommitChart'
 import { WeeklyCommitChart } from './charts/WeeklyCommitChart'
+import { AiYearlyReportCard } from './AiYearlyReportCard'
 import { StatCardWithPopover } from './StatCardWithPopover'
 import { StatCard } from './StaticCard'
 import { TopLanguagesCard } from './TopLanguagesCard'
 
 export function GraphBlock() {
-  const { year, username } = useParams()
+  const { year, username, locale } = useParams()
   const queryYear = Number(year)
   const githubUsername = String(username)
+  const currentLocale = String(locale)
   const t = useTranslations('stats')
   const tErrors = useTranslations('errors')
 
@@ -74,6 +81,26 @@ export function GraphBlock() {
     return getTopLanguagesFromRepos(reposData?.repos, { limit: 5 })
   }, [reposData?.repos])
 
+  // 年度报告标签推导
+  const yearlyTags = useMemo(() => {
+    return deriveYearlyTags({
+      statistics,
+      calendars: contributionData?.contributionCalendars,
+      topLanguages,
+      reposData,
+      issuesData,
+    })
+  }, [statistics, contributionData?.contributionCalendars, topLanguages, reposData, issuesData])
+
+  // 年度报告高光数据
+  const yearlyHighlights = useMemo(() => {
+    return extractHighlights({
+      statistics,
+      reposData,
+      issuesData,
+    })
+  }, [statistics, reposData, issuesData])
+
   // 高亮状态管理
   const [highlightMode, setHighlightMode] = useState<GraphHighlightMode>('none')
   const [highlightOptions, setHighlightOptions] = useState<
@@ -90,11 +117,10 @@ export function GraphBlock() {
 
   const { formatDate, formatMonth, formatDateRange } = useDateFormatters()
 
-  // 清除高亮的处理器
-  const handleClearHighlight = () => {
+  const handleClearHighlight = useEvent(() => {
     setHighlightMode('none')
     setHighlightOptions(undefined)
-  }
+  })
 
   return (
     <div className="flex flex-col items-center py-5">
@@ -115,6 +141,19 @@ export function GraphBlock() {
 
       <>
         <div className="grid grid-cols-2 gap-3 pt-4">
+          {/* MARK: AI 年度报告 */}
+          {!!statistics && (
+            <div className="col-span-2">
+              <AiYearlyReportCard
+                highlights={yearlyHighlights}
+                locale={currentLocale}
+                tags={yearlyTags}
+                username={githubUsername}
+                year={queryYear}
+              />
+            </div>
+          )}
+
           <StatCard
             icon={<ArrowBigUpDashIcon className="size-5" />}
             isLoading={!statistics}

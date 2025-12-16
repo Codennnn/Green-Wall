@@ -117,6 +117,19 @@
     "reposIn": "{year} 年新建的仓库",
     "issuesIn": "{year} 年参与的 Issues"
   },
+  "aiReport": {
+    "title": "AI 年度总结",
+    "description": "让 AI 为你生成一段个性化的年度 GitHub 总结文案",
+    "generate": "生成文案",
+    "regenerate": "重新生成",
+    "cancel": "取消",
+    "retry": "重试",
+    "copy": "复制",
+    "copied": "已复制",
+    "charCount": "{count} 字",
+    "generating": "正在生成...",
+    "failed": "生成失败，请重试"
+  },
   "errors": {
     "somethingWentWrong": "出了点问题，请稍后再试。",
     "badCredentials": "本地运行需要配置 GitHub Access Token 才能拉取数据。按 <link>这个步骤</link> 设置好环境变量即可。",
