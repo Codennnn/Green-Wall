@@ -57,7 +57,8 @@
   --muted: --alpha(var(--color-black) / 4%);
   --muted-foreground: color-mix(in srgb, var(--color-slate-500) 90%, var(--color-black));
   --accent: --alpha(var(--color-black) / 4%);
-  --brand-foreground: var(--foreground);
+  --brand-background: var(--color-emerald-50);
+  --brand-foreground: var(--color-emerald-900);
   --destructive: var(--color-red-500);
   --border: --alpha(var(--color-black) / 12%);
   --input: --alpha(var(--color-black) / 12%);
@@ -130,6 +131,8 @@
   --min-width-content: var(--min-content-width);
   --max-width-content: var(--max-content-width);
   --animate-skeleton: skeleton 2s -1s infinite linear;
+  --color-brand-background: var(--brand-background);
+  --color-brand-foreground: var(--brand-foreground);
   --color-warning-foreground: var(--warning-foreground);
   --color-warning: var(--warning);
   --color-success-foreground: var(--success-foreground);
@@ -154,7 +157,6 @@
   --color-input: var(--input);
   --color-border: var(--border);
   --color-destructive: var(--destructive);
-  --color-brand-foreground: var(--brand-foreground);
   --color-accent: var(--accent);
   --color-muted-foreground: var(--muted-foreground);
   --color-muted: var(--muted);
@@ -194,7 +196,8 @@
   --muted: --alpha(var(--color-white) / 6%);
   --muted-foreground: color-mix(in srgb, var(--color-slate-500) 90%, var(--color-white));
   --accent: --alpha(var(--color-white) / 6%);
-  --brand-foreground: var(--foreground);
+  --brand-foreground: var(--color-emerald-300);
+  --brand-background: var(--color-emerald-950);
   --destructive: var(--color-red-500);
   --border: --alpha(var(--color-white) / 12%);
   --input: --alpha(var(--color-white) / 12%);

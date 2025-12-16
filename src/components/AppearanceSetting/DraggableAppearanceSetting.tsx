@@ -26,7 +26,7 @@ export function DraggableAppearanceSetting(
     <motion.div
       drag
       animate={pressing ? 'scale' : undefined}
-      className="fixed left-0 top-0 z-50 inline-block overflow-hidden rounded-lg bg-background shadow-muted shadow border border-brand-950/10"
+      className="fixed left-0 top-0 z-50 inline-block overflow-hidden rounded-lg bg-background shadow-muted shadow border border-border"
       dragConstraints={{ current: document.body }}
       dragControls={dragControls}
       dragListener={false}
@@ -40,7 +40,7 @@ export function DraggableAppearanceSetting(
       }}
     >
       <motion.div
-        className="flex min-h-10 select-none items-center bg-brand-50 pl-3 pr-1"
+        className="flex min-h-10 select-none items-center bg-brand-background pl-3 pr-1"
         initial={{ cursor: 'grab' }}
         whileTap={{ cursor: 'grabbing' }}
         onPointerDown={(event) => {
@@ -51,7 +51,7 @@ export function DraggableAppearanceSetting(
           setPressing(false)
         }}
       >
-        <span className="text-brand-900 font-medium">{t('appearance')}</span>
+        <span className="text-brand-foreground font-medium">{t('appearance')}</span>
 
         <Button
           aria-label={tCommon('close')}

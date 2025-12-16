@@ -21,9 +21,9 @@ import { useUrlUsername } from '~/hooks/useUrlUsername'
 
 function Divider() {
   return (
-    <div className="my-4 flex items-center justify-center gap-x-2 text-main-200">
+    <div className="my-4 flex items-center justify-center gap-x-2 text-border">
       <span className="h-px w-1/3 bg-linear-to-l from-current to-transparent" />
-      <DotIcon className="size-4 text-main-300" />
+      <DotIcon className="size-4" />
       <span className="h-px w-1/3 bg-linear-to-r from-current to-transparent" />
     </div>
   )
