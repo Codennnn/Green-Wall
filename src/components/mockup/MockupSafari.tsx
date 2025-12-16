@@ -11,15 +11,21 @@ import {
 import { useData } from '~/DataContext'
 import { cn } from '~/lib/utils'
 
-type MockupSafariProps = React.PropsWithChildren<Pick<React.ComponentProps<'div'>, 'className'>>
+type MockupSafariProps = React.PropsWithChildren<Pick<React.ComponentProps<'div'>, 'className'> & {
+  wrapperClassName?: string
+}>
 
 export function MockupSafari(props: MockupSafariProps) {
-  const { children, className = '' } = props
+  const { children, wrapperClassName, className } = props
 
   const { graphData, settings } = useData()
 
   return (
-    <div className="relative overflow-hidden rounded-3xl p-[calc(var(--block-size)*3.5)]">
+    <div
+      className={cn(
+        'relative overflow-hidden rounded-3xl p-[calc(var(--block-size)*3.5)]', wrapperClassName,
+      )}
+    >
       <div className={cn('relative z-10 overflow-hidden', className)}>
         <div className="rounded-2xl border-2 border-double border-(--theme-border) bg-(--theme-background)">
           {settings.showSafariHeader && (

@@ -48,7 +48,7 @@ function CustomTooltip({ active, payload, dayNames, contributionsLabel = 'contri
   const names = dayNames ?? defaultDayNames
 
   return (
-    <div className="rounded-lg border border-border bg-popover px-3 py-2 shadow-lg">
+    <div className="rounded-lg border border-border bg-popover p-grid-item shadow-lg">
       <p className="font-medium text-popover-foreground text-sm">
         {names[data.day] ?? data.day}
       </p>

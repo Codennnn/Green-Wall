@@ -44,7 +44,7 @@ function CustomTooltip({
   const monthLabel = monthNames?.[data.month as MonthAbbr] ?? data.month
 
   return (
-    <div className="rounded-lg border border-border bg-popover px-3 py-2 shadow-lg">
+    <div className="rounded-lg border border-border bg-popover p-grid-item shadow-lg">
       <p className="font-medium text-popover-foreground text-sm">
         {monthLabel}
       </p>

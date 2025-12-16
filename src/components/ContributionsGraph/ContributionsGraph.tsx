@@ -25,7 +25,7 @@ interface ContributionsGraphProps
    * @default MockupArc
    */
   Mockup?: React.ComponentType<React.ComponentProps<typeof MockupSafari>>
-  /** CSS class name to be applied to the Mockup component. */
+  mockupWrapperClassName?: string
   mockupClassName?: string
   highlightMode?: GraphHighlightMode
   highlightOptions?: GraphHighlightOptions
@@ -36,7 +36,8 @@ function InnerContributionsGraph(
   ref: React.Ref<HTMLDivElement | null>,
 ) {
   const {
-    mockupClassName = '',
+    mockupWrapperClassName,
+    mockupClassName,
     wrapperId,
     showInspect,
     titleRender,
@@ -114,7 +115,10 @@ function InnerContributionsGraph(
         color: 'var(--theme-foreground, #24292f)',
       }}
     >
-      <Mockup className={mockupClassName}>
+      <Mockup
+        className={mockupClassName}
+        wrapperClassName={mockupWrapperClassName}
+      >
         <div>
           <div className={cn('px-6', settings.showSafariHeader ? 'pt-2' : 'pt-6')}>
             <GraphHeader />

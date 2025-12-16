@@ -35,8 +35,8 @@ export function TopLanguagesCard(props: TopLanguagesCardProps) {
   const t = useTranslations('stats')
 
   return (
-    <StaticCard contentClassName="flex-col items-stretch gap-3 py-3">
-      <div className="flex items-center gap-x-6 gap-y-2">
+    <StaticCard contentClassName="flex-col items-stretch gap-grid-item py-grid-item">
+      <div className="flex items-center gap-grid-item">
         <StaticCardTitle icon={icon}>
           {title}
         </StaticCardTitle>

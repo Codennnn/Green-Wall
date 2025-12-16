@@ -80,7 +80,7 @@ const ThemeOption = memo(function ThemeOption({ theme, isSelected, onClick }: Th
 })
 
 export const ThemeSelector = memo(function ThemeSelector(props: ThemeSelectorProps) {
-  const { value, onChange, className = '', ...rest } = props
+  const { value, onChange, className, ...rest } = props
 
   const handleThemeClick = useEvent(
     (themeName: Themes) => {
@@ -138,7 +138,7 @@ const ThemeLevelOption = memo(function ThemeLevelOption({
 })
 
 export const ThemeLevelSelector = memo(function ThemeLevelSelector(props: ThemeSelectorProps) {
-  const { value, onChange, className = '', ...rest } = props
+  const { value, onChange, className, ...rest } = props
 
   const handleThemeClick = useEvent(
     (themeName: Themes) => {

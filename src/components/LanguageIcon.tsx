@@ -27,7 +27,7 @@ export function LanguageIcon(props: LanguageIconProps) {
   const {
     language,
     size = 16,
-    className = '',
+    className,
   } = props
 
   const [imageError, setImageError] = useState(false)

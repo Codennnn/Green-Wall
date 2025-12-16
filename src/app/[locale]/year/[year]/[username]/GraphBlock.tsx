@@ -124,243 +124,268 @@ export function GraphBlock() {
 
   return (
     <div className="flex flex-col items-center py-5">
-      <Loading active={isLoading}>
-        {isLoading || !contributionData
-          ? (
-              <div className="h-[265px] w-full" />
-            )
-          : (
-              <ContributionsGraph
-                highlightMode={highlightMode}
-                highlightOptions={highlightOptions}
-                showInspect={false}
-                titleRender={() => null}
-              />
-            )}
-      </Loading>
-
-      <>
-        <div className="grid grid-cols-2 gap-3 pt-4">
-          {/* MARK: AI 年度报告 */}
-          {!!statistics && (
-            <div className="col-span-2">
-              <AiYearlyReportCard
-                highlights={yearlyHighlights}
-                locale={currentLocale}
-                tags={yearlyTags}
-                username={githubUsername}
-                year={queryYear}
-              />
-            </div>
-          )}
-
-          <StatCard
-            icon={<ArrowBigUpDashIcon className="size-5" />}
-            isLoading={!statistics}
-            title={t('maxContributions')}
-            value={statistics?.maxContributionsInADay}
-            onMouseEnter={() => {
-              if (statistics?.maxContributionsDate) {
-                setHighlightMode('specificDate')
-                setHighlightOptions({ specificDate: statistics.maxContributionsDate })
-              }
-            }}
-            onMouseLeave={handleClearHighlight}
-          />
-
-          <StatCard
-            icon={<ScaleIcon className="size-5" />}
-            isLoading={!statistics}
-            title={t('averagePerDay')}
-            value={statistics?.averageContributionsPerDay}
-          />
-
-          <StatCard
-            icon={<Calendar1Icon className="size-5" />}
-            isLoading={!statistics}
-            title={t('mostActiveDay')}
-            value={formatDate(statistics?.maxContributionsDate)}
-            onMouseEnter={() => {
-              if (statistics?.maxContributionsDate) {
-                setHighlightMode('specificDate')
-                setHighlightOptions({ specificDate: statistics.maxContributionsDate })
-              }
-            }}
-            onMouseLeave={handleClearHighlight}
-          />
-
-          <StatCard
-            icon={<CalendarArrowUpIcon className="size-5" />}
-            isLoading={!statistics}
-            title={t('mostActiveMonth')}
-            value={formatMonth(statistics?.maxContributionsMonth)}
-            onMouseEnter={() => {
-              if (statistics?.maxContributionsMonth) {
-                setHighlightMode('specificMonth')
-                setHighlightOptions({ specificMonth: statistics.maxContributionsMonth })
-              }
-            }}
-            onMouseLeave={handleClearHighlight}
-          />
-
-          <StatCard
-            icon={<CalendarDaysIcon className="size-5" />}
-            isLoading={!statistics}
-            subValue={formatDateRange(
-              statistics?.longestStreakStartDate,
-              statistics?.longestStreakEndDate,
-            )}
-            title={t('longestStreak')}
-            value={statistics?.longestStreak}
-            onMouseEnter={() => {
-              if (statistics?.longestStreakStartDate && statistics.longestStreakEndDate) {
-                setHighlightMode('longestStreak')
-                setHighlightOptions(undefined)
-              }
-            }}
-            onMouseLeave={handleClearHighlight}
-          />
-
-          <StatCard
-            icon={<CalendarMinus2Icon className="size-5" />}
-            isLoading={!statistics}
-            subValue={formatDateRange(
-              statistics?.longestGapStartDate,
-              statistics?.longestGapEndDate,
-            )}
-            title={t('longestGap')}
-            value={statistics?.longestGap}
-            onMouseEnter={() => {
-              if (statistics?.longestGapStartDate && statistics.longestGapEndDate) {
-                setHighlightMode('longestGap')
-                setHighlightOptions({
-                  longestGapRange: {
-                    start: statistics.longestGapStartDate,
-                    end: statistics.longestGapEndDate,
-                  },
-                })
-              }
-            }}
-            onMouseLeave={handleClearHighlight}
-          />
-
-          <StatCardWithPopover
-            align="start"
-            ariaLabel={t('showRepos', { year: queryYear })}
-            emptyMessage={tErrors('noRepos')}
-            error={reposError}
-            errorMessage={tErrors('failedLoadRepos')}
-            isLoading={reposLoading}
-            items={reposData?.repos ?? []}
-            loadingMessage={tErrors('loadingRepos')}
-            popoverCount={reposData?.count}
-            popoverTitle={t('reposIn', { year: queryYear })}
-            renderItem={(repo: RepoInfo) => {
-              return (
-                <a
-                  className="block rounded-md px-2 py-2 text-sm transition-colors hover:bg-foreground/6 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500/40"
-                  href={repo.url}
-                  rel="noreferrer"
-                  target="_blank"
-                >
-                  <div className="flex items-center gap-2">
-                    <span className="min-w-0 flex-1 truncate font-medium">
-                      {repo.name}
-                    </span>
-                    <span className="shrink-0 text-foreground/60 text-xs tabular-nums">
-                      ★ {repo.stargazerCount}
-                    </span>
-                  </div>
-
-                  {repo.description
-                    ? (
-                        <div className="mt-1 line-clamp-2 text-foreground/70 text-xs">
-                          {repo.description}
-                        </div>
-                      )
-                    : null}
-                </a>
-              )
-            }}
-            side="left"
-          >
-            <StatCard
-              icon={<FolderGit2Icon className="size-5" />}
-              isLoading={reposLoading}
-              title={t('reposCreated', { year: queryYear })}
-              value={reposData?.count}
-            />
-          </StatCardWithPopover>
-
-          <StatCardWithPopover
-            align="start"
-            ariaLabel={t('showIssues', { year: queryYear })}
-            contentClassName="w-[min(90vw,520px)]"
-            emptyMessage={tErrors('noIssues')}
-            error={issuesError}
-            errorMessage={tErrors('failedLoadIssues')}
-            isLoading={issuesLoading}
-            items={issuesData?.issues ?? []}
-            loadingMessage={tErrors('loadingIssues')}
-            popoverCount={issuesData?.count}
-            popoverTitle={t('issuesIn', { year: queryYear })}
-            renderItem={(issue: IssueInfo) => {
-              return (
-                <a
-                  className="block rounded-md px-2 py-2 text-sm transition-colors hover:bg-foreground/6 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500/40"
-                  href={issue.url}
-                  rel="noreferrer"
-                  target="_blank"
-                >
-                  <div className="min-w-0 font-medium">
-                    <span className="block truncate">
-                      {issue.title}
-                    </span>
-                  </div>
-                  <div className="mt-1 flex items-center gap-2 text-foreground/70 text-xs">
-                    <span className="truncate">
-                      {issue.repository.nameWithOwner}
-                    </span>
-                  </div>
-                </a>
-              )
-            }}
-            side="right"
-          >
-            <StatCard
-              icon={<MessageSquareQuoteIcon className="size-5" />}
-              isLoading={issuesLoading}
-              title={t('issues', { year: queryYear })}
-              value={issuesData?.count}
-            />
-          </StatCardWithPopover>
-
-          <div className="col-span-2">
-            <TopLanguagesCard
-              icon={<SquareCodeIcon className="size-5" />}
-              isLoading={reposLoading}
-              items={topLanguages}
-              title={t('topLanguages', { year: queryYear })}
-            />
-          </div>
-
-          <div className="col-span-2">
-            <MonthlyCommitChart
-              calendars={contributionData?.contributionCalendars}
-              isLoading={contributionLoading}
-              year={queryYear}
-            />
-          </div>
-
-          <div className="col-span-2">
-            <WeeklyCommitChart
-              calendars={contributionData?.contributionCalendars}
-              isLoading={contributionLoading}
-              year={queryYear}
-            />
-          </div>
+      <div className="grid w-full grid-cols-12 gap-4">
+        {/* MARK: 贡献日历热力图 */}
+        <div className="col-span-7">
+          <Loading active={isLoading}>
+            {isLoading || !contributionData
+              ? (
+                  <div className="h-[265px] w-full" />
+                )
+              : (
+                  <ContributionsGraph
+                    highlightMode={highlightMode}
+                    highlightOptions={highlightOptions}
+                    mockupWrapperClassName="p-grid-item"
+                    showInspect={false}
+                    titleRender={() => null}
+                  />
+                )}
+          </Loading>
         </div>
-      </>
+
+        {/* MARK: AI 年度报告 */}
+        {!!statistics && (
+          <div className="col-span-5">
+            <AiYearlyReportCard
+              highlights={yearlyHighlights}
+              locale={currentLocale}
+              tags={yearlyTags}
+              username={githubUsername}
+              year={queryYear}
+            />
+          </div>
+        )}
+
+        {/* MARK: 最大贡献 */}
+        <StatCard
+          className="col-span-4"
+          icon={<ArrowBigUpDashIcon className="size-5" />}
+          isLoading={!statistics}
+          title={t('maxContributions')}
+          value={statistics?.maxContributionsInADay}
+          onMouseEnter={() => {
+            if (statistics?.maxContributionsDate) {
+              setHighlightMode('specificDate')
+              setHighlightOptions({ specificDate: statistics.maxContributionsDate })
+            }
+          }}
+          onMouseLeave={handleClearHighlight}
+        />
+
+        {/* MARK: 平均每日 */}
+        <StatCard
+          className="col-span-4"
+          icon={<ScaleIcon className="size-5" />}
+          isLoading={!statistics}
+          title={t('averagePerDay')}
+          value={statistics?.averageContributionsPerDay}
+        />
+
+        {/* MARK: 最活跃日期 */}
+        <StatCard
+          className="col-span-4"
+          icon={<Calendar1Icon className="size-5" />}
+          isLoading={!statistics}
+          title={t('mostActiveDay')}
+          value={formatDate(statistics?.maxContributionsDate)}
+          onMouseEnter={() => {
+            if (statistics?.maxContributionsDate) {
+              setHighlightMode('specificDate')
+              setHighlightOptions({ specificDate: statistics.maxContributionsDate })
+            }
+          }}
+          onMouseLeave={handleClearHighlight}
+        />
+
+        {/* MARK: 最活跃月份 */}
+        <StatCard
+          className="col-span-4"
+          icon={<CalendarArrowUpIcon className="size-5" />}
+          isLoading={!statistics}
+          title={t('mostActiveMonth')}
+          value={formatMonth(statistics?.maxContributionsMonth)}
+          onMouseEnter={() => {
+            if (statistics?.maxContributionsMonth) {
+              setHighlightMode('specificMonth')
+              setHighlightOptions({ specificMonth: statistics.maxContributionsMonth })
+            }
+          }}
+          onMouseLeave={handleClearHighlight}
+        />
+
+        {/* MARK: 最长连续天数 */}
+        <StatCard
+          large
+          className="col-span-4 row-span-2"
+          contentClassName="flex-col items-start justify-center gap-3 py-6"
+          icon={<CalendarDaysIcon className="size-6" />}
+          isLoading={!statistics}
+          subValue={formatDateRange(
+            statistics?.longestStreakStartDate,
+            statistics?.longestStreakEndDate,
+          )}
+          title={t('longestStreak')}
+          value={statistics?.longestStreak}
+          onMouseEnter={() => {
+            if (statistics?.longestStreakStartDate && statistics.longestStreakEndDate) {
+              setHighlightMode('longestStreak')
+              setHighlightOptions(undefined)
+            }
+          }}
+          onMouseLeave={handleClearHighlight}
+        />
+
+        {/* MARK: 最长间隔天数 */}
+        <StatCard
+          large
+          className="col-span-4 row-span-2"
+          contentClassName="flex-col items-start justify-center gap-3 py-6"
+          icon={<CalendarMinus2Icon className="size-6" />}
+          isLoading={!statistics}
+          subValue={formatDateRange(
+            statistics?.longestGapStartDate,
+            statistics?.longestGapEndDate,
+          )}
+          title={t('longestGap')}
+          value={statistics?.longestGap}
+          onMouseEnter={() => {
+            if (statistics?.longestGapStartDate && statistics.longestGapEndDate) {
+              setHighlightMode('longestGap')
+              setHighlightOptions({
+                longestGapRange: {
+                  start: statistics.longestGapStartDate,
+                  end: statistics.longestGapEndDate,
+                },
+              })
+            }
+          }}
+          onMouseLeave={handleClearHighlight}
+        />
+
+        {/* MARK: 仓库数量 */}
+        <StatCardWithPopover
+          align="start"
+          ariaLabel={t('showRepos', { year: queryYear })}
+          className="col-span-4"
+          emptyMessage={tErrors('noRepos')}
+          error={reposError}
+          errorMessage={tErrors('failedLoadRepos')}
+          isLoading={reposLoading}
+          items={reposData?.repos ?? []}
+          loadingMessage={tErrors('loadingRepos')}
+          popoverCount={reposData?.count}
+          popoverTitle={t('reposIn', { year: queryYear })}
+          renderItem={(repo: RepoInfo) => {
+            return (
+              <a
+                className="block rounded-md px-2 py-2 text-sm transition-colors hover:bg-foreground/6 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500/40"
+                href={repo.url}
+                rel="noreferrer"
+                target="_blank"
+              >
+                <div className="flex items-center gap-2">
+                  <span className="min-w-0 flex-1 truncate font-medium">
+                    {repo.name}
+                  </span>
+                  <span className="shrink-0 text-foreground/60 text-xs tabular-nums">
+                    ★ {repo.stargazerCount}
+                  </span>
+                </div>
+
+                {repo.description
+                  ? (
+                      <div className="mt-1 line-clamp-2 text-foreground/70 text-xs">
+                        {repo.description}
+                      </div>
+                    )
+                  : null}
+              </a>
+            )
+          }}
+          side="left"
+        >
+          <StatCard
+            icon={<FolderGit2Icon className="size-5" />}
+            isLoading={reposLoading}
+            title={t('reposCreated', { year: queryYear })}
+            value={reposData?.count}
+          />
+        </StatCardWithPopover>
+
+        {/* MARK: Issues 数量 */}
+        <StatCardWithPopover
+          align="start"
+          ariaLabel={t('showIssues', { year: queryYear })}
+          className="col-span-4"
+          contentClassName="w-[min(90vw,520px)]"
+          emptyMessage={tErrors('noIssues')}
+          error={issuesError}
+          errorMessage={tErrors('failedLoadIssues')}
+          isLoading={issuesLoading}
+          items={issuesData?.issues ?? []}
+          loadingMessage={tErrors('loadingIssues')}
+          popoverCount={issuesData?.count}
+          popoverTitle={t('issuesIn', { year: queryYear })}
+          renderItem={(issue: IssueInfo) => {
+            return (
+              <a
+                className="block rounded-md px-2 py-2 text-sm transition-colors hover:bg-foreground/6 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500/40"
+                href={issue.url}
+                rel="noreferrer"
+                target="_blank"
+              >
+                <div className="min-w-0 font-medium">
+                  <span className="block truncate">
+                    {issue.title}
+                  </span>
+                </div>
+                <div className="mt-1 flex items-center gap-2 text-foreground/70 text-xs">
+                  <span className="truncate">
+                    {issue.repository.nameWithOwner}
+                  </span>
+                </div>
+              </a>
+            )
+          }}
+          side="right"
+        >
+          <StatCard
+            icon={<MessageSquareQuoteIcon className="size-5" />}
+            isLoading={issuesLoading}
+            title={t('issues', { year: queryYear })}
+            value={issuesData?.count}
+          />
+        </StatCardWithPopover>
+
+        {/* MARK: 顶级语言 */}
+        <div className="col-span-8">
+          <TopLanguagesCard
+            icon={<SquareCodeIcon className="size-5" />}
+            isLoading={reposLoading}
+            items={topLanguages}
+            title={t('topLanguages', { year: queryYear })}
+          />
+        </div>
+
+        {/* MARK: 图表区域 - 月度提交 */}
+        <div className="col-span-6">
+          <MonthlyCommitChart
+            calendars={contributionData?.contributionCalendars}
+            isLoading={contributionLoading}
+            year={queryYear}
+          />
+        </div>
+
+        {/* MARK: 图表区域 - 周度提交 */}
+        <div className="col-span-6">
+          <WeeklyCommitChart
+            calendars={contributionData?.contributionCalendars}
+            isLoading={contributionLoading}
+            year={queryYear}
+          />
+        </div>
+      </div>
     </div>
   )
 }

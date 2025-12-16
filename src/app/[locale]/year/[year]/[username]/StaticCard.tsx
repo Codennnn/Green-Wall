@@ -38,12 +38,12 @@ export function StaticCard(props: StaticCardProps) {
         className,
       )}
     >
-      <div className="rounded-[11px] border border-background">
-        <div className="rounded-[10px] border border-foreground/20">
-          <div className="overflow-hidden rounded-[9px] border border-background/50">
+      <div className="h-full rounded-[11px] border border-background">
+        <div className="h-full rounded-[10px] border border-foreground/20">
+          <div className="h-full overflow-hidden rounded-[9px] border border-background/50">
             <div
               className={cn(
-                'flex min-h-12 items-center gap-x-6 gap-y-2 bg-linear-to-b from-foreground/4 to-background px-3 py-1',
+                'flex h-full min-h-12 items-center gap-x-6 gap-y-2 bg-linear-to-b from-foreground/4 to-background p-grid-item',
                 contentClassName,
               )}
             >
@@ -61,20 +61,43 @@ export interface StatValueProps {
   subValue?: number | string | undefined
   isLoading: boolean
   fallback?: number | string
+  /** 是否启用大尺寸展示样式（用于跨行卡片） */
+  large?: boolean
 }
 
 export function StatValue(props: StatValueProps) {
-  const { value, subValue, isLoading, fallback = 0 } = props
+  const { value, subValue, isLoading, fallback = 0, large } = props
 
   return (
-    <div className="ml-auto tabular-nums">
+    <div className={cn('tabular-nums', large ? 'ml-auto md:ml-0 md:w-full' : 'ml-auto')}>
       {
         isLoading
           ? <SpinningLoader />
           : (
-              <div className="flex flex-col items-end gap-1">
-                <span className="leading-none">{value ?? fallback}</span>
-                {!!subValue && <span className="text-foreground/70 text-xs leading-none">{subValue}</span>}
+              <div
+                className={cn(
+                  'flex flex-col gap-1',
+                  large ? 'items-end md:items-start' : 'items-end',
+                )}
+              >
+                <span
+                  className={cn(
+                    'leading-none',
+                    large && 'md:text-3xl md:font-semibold',
+                  )}
+                >
+                  {value ?? fallback}
+                </span>
+                {!!subValue && (
+                  <span
+                    className={cn(
+                      'text-foreground/70 leading-none',
+                      large ? 'text-xs md:text-sm' : 'text-xs',
+                    )}
+                  >
+                    {subValue}
+                  </span>
+                )}
               </div>
             )
       }
@@ -91,6 +114,12 @@ export interface StatCardProps {
   fallback?: number | string
   onMouseEnter?: () => void
   onMouseLeave?: () => void
+  /** 外层容器的 className，用于网格布局定位 */
+  className?: string
+  /** 卡片内容的 className，用于跨行时的内容布局调整 */
+  contentClassName?: string
+  /** 是否启用大尺寸展示样式（用于跨行卡片） */
+  large?: boolean
 }
 
 export function StatCard(props: StatCardProps) {
@@ -103,14 +132,18 @@ export function StatCard(props: StatCardProps) {
     fallback,
     onMouseEnter,
     onMouseLeave,
+    className,
+    contentClassName,
+    large,
   } = props
 
   return (
     <div
+      className={cn('h-full', className)}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
     >
-      <StaticCard>
+      <StaticCard className="h-full" contentClassName={contentClassName}>
         <StaticCardTitle icon={icon}>
           {title}
         </StaticCardTitle>
@@ -118,6 +151,7 @@ export function StatCard(props: StatCardProps) {
         <StatValue
           fallback={fallback}
           isLoading={isLoading}
+          large={large}
           subValue={subValue}
           value={value}
         />

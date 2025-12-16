@@ -22,10 +22,10 @@ export async function fetchYearlyReportStream(
     let errorMessage = `HTTP ${response.status}: ${response.statusText}`
 
     try {
-      const errorData = await response.json()
+      const errorData: unknown = await response.json()
 
-      if (errorData.message) {
-        errorMessage = errorData.message
+      if (typeof errorData === 'object' && errorData !== null && 'message' in errorData && typeof (errorData as Record<string, unknown>).message === 'string') {
+        errorMessage = (errorData as Record<string, unknown>).message as string
       }
     }
     catch {
@@ -59,22 +59,26 @@ export async function readTextStream(
   let fullText = ''
 
   try {
-    while (true) {
+    // 检查是否被中止
+    if (signal?.aborted) {
+      await reader.cancel()
+      throw new DOMException('Aborted', 'AbortError')
+    }
+
+    let result = await reader.read()
+
+    while (!result.done) {
+      const chunk = decoder.decode(result.value, { stream: true })
+      fullText += chunk
+      onChunk(fullText)
+
       // 检查是否被中止
       if (signal?.aborted) {
-        reader.cancel()
+        await reader.cancel()
         throw new DOMException('Aborted', 'AbortError')
       }
 
-      const { done, value } = await reader.read()
-
-      if (done) {
-        break
-      }
-
-      const chunk = decoder.decode(value, { stream: true })
-      fullText += chunk
-      onChunk(fullText)
+      result = await reader.read()
     }
   }
   finally {

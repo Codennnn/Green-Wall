@@ -32,9 +32,9 @@ export function ChartCard(props: ChartCardProps) {
   } = props
 
   return (
-    <StaticCard contentClassName={cn('flex-col items-stretch gap-3 py-3', className)}>
+    <StaticCard contentClassName={cn('flex-col items-stretch gap-grid-item py-grid-item', className)}>
       {/* 标题栏 */}
-      <div className="flex items-center gap-x-6 gap-y-2">
+      <div className="flex items-center gap-grid-item">
         <StaticCardTitle icon={icon}>
           {title}
         </StaticCardTitle>

@@ -27,7 +27,7 @@ interface TooltipProps extends Pick<React.ComponentProps<'span'>, 'className'> {
 export function GraphTooltip({
   label,
   placement = 'top',
-  className = '',
+  className,
   refElement,
 }: TooltipProps) {
   const [open, setOpen] = useState(false)

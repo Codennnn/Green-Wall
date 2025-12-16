@@ -28,14 +28,27 @@ interface SettingContextData {
   applyingTheme: ThemePreset | undefined
 }
 
+interface DataProviderProps extends React.PropsWithChildren {
+  overrideSettings?: Partial<GraphSettings>
+}
+
 const Setting = createContext({} as SettingContextData)
 
-export function DataProvider(props: React.PropsWithChildren) {
-  const { children } = props
+export function DataProvider(props: DataProviderProps) {
+  const { children, overrideSettings } = props
 
   const [graphData, setGraphData] = useState<GraphData>()
 
   const [settings, dispatchSettings] = useGraphSetting()
+
+  // 合并覆盖设置（优先级：overrideSettings > settings）
+  const finalSettings = useMemo(
+    () => ({
+      ...settings,
+      ...overrideSettings,
+    }),
+    [settings, overrideSettings],
+  )
 
   const derivedValues = useMemo(() => {
     const firstYear = graphData?.contributionYears.at(-1)?.toString()
@@ -59,9 +72,9 @@ export function DataProvider(props: React.PropsWithChildren) {
   const applyingTheme = useMemo(
     () =>
       THEME_PRESETS.find(
-        (item) => item.name.toLowerCase() === (settings.theme ?? DEFAULT_THEME).toLowerCase(),
+        (item) => item.name.toLowerCase() === (finalSettings.theme ?? DEFAULT_THEME).toLowerCase(),
       ),
-    [settings.theme],
+    [finalSettings.theme],
   )
 
   const contextValue = useMemo<SettingContextData>(
@@ -69,7 +82,7 @@ export function DataProvider(props: React.PropsWithChildren) {
       username: derivedValues.username,
       graphData,
       setGraphData,
-      settings,
+      settings: finalSettings,
       dispatchSettings,
       firstYear: derivedValues.firstYear,
       lastYear: derivedValues.lastYear,
@@ -77,7 +90,7 @@ export function DataProvider(props: React.PropsWithChildren) {
       totalContributions: derivedValues.totalContributions,
       applyingTheme,
     }),
-    [graphData, settings, dispatchSettings, applyingTheme, derivedValues],
+    [graphData, finalSettings, dispatchSettings, applyingTheme, derivedValues],
   )
 
   return (

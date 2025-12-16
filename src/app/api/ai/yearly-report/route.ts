@@ -46,7 +46,7 @@ export async function POST(request: NextRequest) {
     }
 
     // 2. 解析并校验请求体
-    const body = await request.json()
+    const body: unknown = await request.json()
     const parsedBody = parse(YearlyReportRequestSchema, body)
 
     const { username, year, locale, tags, highlights } = parsedBody

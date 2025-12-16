@@ -6,7 +6,7 @@ import { GraphBlock } from './GraphBlock'
 
 export default function YearPageContent() {
   return (
-    <DataProvider>
+    <DataProvider overrideSettings={{ showAttribution: false }}>
       <GraphBlock />
     </DataProvider>
   )
