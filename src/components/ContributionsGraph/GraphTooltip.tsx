@@ -21,7 +21,7 @@ import { cn } from '~/lib/utils'
 interface TooltipProps extends Pick<React.ComponentProps<'span'>, 'className'> {
   label?: React.ReactNode
   placement?: Placement
-  refElement?: HTMLElement | null
+  refElement?: Element | null
 }
 
 export function GraphTooltip({

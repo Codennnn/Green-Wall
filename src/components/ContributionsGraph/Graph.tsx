@@ -5,25 +5,22 @@ import Link from 'next/link'
 import { useTranslations } from 'next-intl'
 import { ChevronRight } from 'lucide-react'
 
+import { GraphSvgBlocks } from '~/components/ContributionsGraph/GraphSvgBlocks'
 import { GraphTooltip } from '~/components/ContributionsGraph/GraphTooltip'
 import { GraphTooltipLabel } from '~/components/ContributionsGraph/GraphTooltipLabel'
 import { Button } from '~/components/ui/button'
-import { DEFAULT_SIZE, levels } from '~/constants'
 import { useData } from '~/DataContext'
-import { ContributionLevel } from '~/enums'
 import { numberWithCommas } from '~/helpers'
 import { cn } from '~/lib/utils'
-import type { ContributionCalendar, ContributionDay, GraphSettings } from '~/types'
+import type { ContributionCalendar, ContributionDay } from '~/types'
 
 import styles from './Graph.module.css'
 
 export interface GraphProps extends React.ComponentProps<'div'> {
   data: ContributionCalendar
   daysLabel?: boolean
-  weekLabel?: boolean
   showInspect?: boolean
   highlightedDates?: Set<string>
-  settingsSize?: GraphSettings['size']
   titleRender?: (params: {
     year: number
     total: number
@@ -38,7 +35,6 @@ function InnerGraph(props: GraphProps) {
     showInspect = true,
     titleRender,
     highlightedDates,
-    settingsSize,
     ...rest
   } = props
 
@@ -69,28 +65,28 @@ function InnerGraph(props: GraphProps) {
   }, [calendar.year])
 
   const [tooltipInfo, setTooltipInfo] = useState<ContributionDay>()
-  const [refEle, setRefEle] = useState<HTMLElement | null>(null)
+  const [refEle, setRefEle] = useState<Element | null>(null)
   const delayTimer = useRef<NodeJS.Timeout | null>(null)
 
-  const handleMouseEnter = useEvent((refTarget: HTMLElement, info: ContributionDay) => {
-    delayTimer.current = setTimeout(() => {
-      setRefEle(refTarget)
-      setTooltipInfo(info)
-    }, 50)
-  })
+  const handleDayHover = useEvent(
+    (day: ContributionDay | null, element: SVGRectElement | null) => {
+      if (delayTimer.current) {
+        window.clearTimeout(delayTimer.current)
+        delayTimer.current = null
+      }
 
-  const handleMouseLeave = useEvent(() => {
-    if (delayTimer.current) {
-      window.clearTimeout(delayTimer.current)
-    }
-
-    setRefEle(null)
-  })
-
-  const shouldDimNonHighlighted = highlightedDates && highlightedDates.size > 0
-
-  // 使用传入的 settingsSize，如果没有则使用默认值
-  const currentSize = settingsSize ?? DEFAULT_SIZE
+      if (day && element) {
+        delayTimer.current = setTimeout(() => {
+          setRefEle(element)
+          setTooltipInfo(day)
+        }, 50)
+      }
+      else {
+        setRefEle(null)
+        setTooltipInfo(undefined)
+      }
+    },
+  )
 
   return (
     <div {...rest} className={cn('group', rest.className)}>
@@ -140,7 +136,6 @@ function InnerGraph(props: GraphProps) {
                 <GraphTooltipLabel
                   count={tooltipInfo.count}
                   date={tooltipInfo.date}
-                  size={currentSize}
                 />
               )
             : null
@@ -179,68 +174,22 @@ function InnerGraph(props: GraphProps) {
         )}
 
         {/* Day Blocks */}
-        <ul className={cn(styles.grids, styles.blocks)}>
-          {calendar.weeks.reduce<React.ReactElement[]>((blocks, week, i) => {
-            let days = week.days
-
-            if (days.length < 7) {
-              const fills = Array.from(Array(7 - days.length)).map<ContributionDay>(() => ({
-                level: ContributionLevel.Null,
-                count: 0,
-                date: '',
-              }))
-
-              if (i === 0) {
-                days = [...fills, ...week.days]
-              }
-              else {
-                days = [...week.days, ...fills]
-              }
-            }
-
-            days.forEach((day, j) => {
-              const isHighlighted = day.date
-                ? highlightedDates?.has(day.date) ?? false
-                : false
-
-              blocks.push(
-                <li
-                  key={day.date || `fill-${i}-${j}`}
-                  className={cn(
-                    'transition-all',
-                    shouldDimNonHighlighted
-                      ? (isHighlighted
-                          ? 'opacity-100 shadow-xs'
-                          : 'opacity-15')
-                      : null,
-                  )}
-                  data-level={levels[day.level]}
-                  onMouseEnter={(ev) => {
-                    handleMouseEnter(ev.currentTarget, day)
-                  }}
-                  onMouseLeave={handleMouseLeave}
-                />,
-              )
-            })
-
-            return blocks
-          }, [])}
-        </ul>
+        <GraphSvgBlocks
+          highlightedDates={highlightedDates}
+          weeks={calendar.weeks}
+          onDayHover={handleDayHover}
+        />
       </div>
     </div>
   )
 }
 
 export const Graph = memo(InnerGraph, (prevProps, nextProps) => {
-  if (prevProps.data.year !== nextProps.data.year) {
-    return false
+  if (prevProps === nextProps) {
+    return true
   }
 
-  if (prevProps.data.total !== nextProps.data.total) {
-    return false
-  }
-
-  if (prevProps.data.weeks.length !== nextProps.data.weeks.length) {
+  if (prevProps.data !== nextProps.data) {
     return false
   }
 
@@ -252,35 +201,12 @@ export const Graph = memo(InnerGraph, (prevProps, nextProps) => {
     return false
   }
 
-  if (prevProps.settingsSize !== nextProps.settingsSize) {
-    return false
-  }
-
   if (prevProps.className !== nextProps.className) {
     return false
   }
 
-  const prevHighlighted = prevProps.highlightedDates
-  const nextHighlighted = nextProps.highlightedDates
-
-  if (prevHighlighted !== nextHighlighted) {
-    if (!prevHighlighted && !nextHighlighted) {
-      return true
-    }
-
-    if (!prevHighlighted || !nextHighlighted) {
-      return false
-    }
-
-    if (prevHighlighted.size !== nextHighlighted.size) {
-      return false
-    }
-
-    for (const date of prevHighlighted) {
-      if (!nextHighlighted.has(date)) {
-        return false
-      }
-    }
+  if (prevProps.highlightedDates !== nextProps.highlightedDates) {
+    return false
   }
 
   if (prevProps.titleRender !== nextProps.titleRender) {

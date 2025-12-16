@@ -140,7 +140,6 @@ function InnerContributionsGraph(
                   data={calendar}
                   daysLabel={settings.daysLabel}
                   highlightedDates={highlightedDates}
-                  settingsSize={settings.size}
                   showInspect={showInspect}
                   titleRender={titleRender}
                 />

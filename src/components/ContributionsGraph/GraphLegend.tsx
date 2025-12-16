@@ -11,7 +11,7 @@ export function GraphLegend() {
     <div className="ml-auto flex items-center text-xs">
       <span>{t('less')}</span>
 
-      <ul className={cn(styles.grids, 'mx-2 grid grid-cols-5 gap-[3px]')}>
+      <ul className={cn(styles.legend, 'mx-2 grid grid-cols-5 gap-[3px]')}>
         <li className="size-3" data-level="0" />
         <li className="size-3" data-level="1" />
         <li className="size-3" data-level="2" />

@@ -31,7 +31,10 @@
 }
 
 .days {
+  display: grid;
   grid-area: days;
+  grid-template-rows: repeat(7, var(--block-size, 10px));
+  gap: var(--block-gap, 3px);
 }
 
 .months,
@@ -39,38 +42,29 @@
   opacity: 0.5;
 }
 
-.blocks {
-  grid-area: blocks;
-  grid-auto-columns: var(--block-size, 10px);
-  grid-auto-flow: column;
-}
-
-.grids li {
+/* Legend */
+.legend li {
   border-radius: var(--block-round, 2px);
-}
 
-.grids li[data-level='-1'] {
-  visibility: hidden;
-}
+  &[data-level='0'] {
+    background-color: var(--level-0, #ebedf0);
+  }
 
-.grids li[data-level='0'] {
-  background-color: var(--level-0, #ebedf0);
-}
+  &[data-level='1'] {
+    background-color: var(--level-1, #9be9a8);
+  }
 
-.grids li[data-level='1'] {
-  background-color: var(--level-1, #9be9a8);
-}
+  &[data-level='2'] {
+    background-color: var(--level-2, #40c463);
+  }
 
-.grids li[data-level='2'] {
-  background-color: var(--level-2, #40c463);
-}
+  &[data-level='3'] {
+    background-color: var(--level-3, #30a14e);
+  }
 
-.grids li[data-level='3'] {
-  background-color: var(--level-3, #30a14e);
-}
-
-.grids li[data-level='4'] {
-  background-color: var(--level-4, #216e39);
+  &[data-level='4'] {
+    background-color: var(--level-4, #216e39);
+  }
 }
 
 .days li {
@@ -82,9 +76,49 @@
   visibility: hidden;
 }
 
-.days,
-.blocks {
-  display: grid;
-  grid-template-rows: repeat(7, var(--block-size, 10px));
-  gap: var(--block-gap, 3px);
+/* SVG Blocks */
+.svgBlocks {
+  grid-area: blocks;
+  width: calc((var(--block-size, 10px) + var(--block-gap, 3px)) * 53 - var(--block-gap, 3px));
+  height: calc((var(--block-size, 10px) + var(--block-gap, 3px)) * 7 - var(--block-gap, 3px));
+}
+
+.svgBlocks rect {
+  transition: opacity 0.15s ease;
+}
+
+.svgBlocks rect[data-level='-1'] {
+  visibility: hidden;
+}
+
+.svgBlocks rect[data-level='0'] {
+  fill: var(--level-0, #ebedf0);
+}
+
+.svgBlocks rect[data-level='1'] {
+  fill: var(--level-1, #9be9a8);
+}
+
+.svgBlocks rect[data-level='2'] {
+  fill: var(--level-2, #40c463);
+}
+
+.svgBlocks rect[data-level='3'] {
+  fill: var(--level-3, #30a14e);
+}
+
+.svgBlocks rect[data-level='4'] {
+  fill: var(--level-4, #216e39);
+}
+
+.svgRect {
+  opacity: 1;
+}
+
+.svgRect.dimmed {
+  opacity: 0.15;
+}
+
+.svgRect.highlighted {
+  opacity: 1;
 }
