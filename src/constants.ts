@@ -1,6 +1,6 @@
 import { BlockShape, ColorScheme, type ContributionLevel, GraphSize } from '~/enums'
 
-import type { Theme, ThemePreset, Themes } from './types'
+import type { ThemePreset, Themes } from './types'
 
 export const levels = {
   Null: -1,
@@ -10,6 +10,8 @@ export const levels = {
   THIRD_QUARTILE: 3,
   FOURTH_QUARTILE: 4,
 } satisfies Record<ContributionLevel, -1 | 0 | 1 | 2 | 3 | 4>
+
+export const DEFAULT_LEVEL_COLORS: [string, string, string, string, string] = ['#ebedf0', '#9be9a8', '#40c463', '#30a14e', '#216e39']
 
 export const sizeProperties = {
   [GraphSize.Small]: {
@@ -42,33 +44,6 @@ export const DEFAULT_THEME: Themes = 'Classic'
 
 export const DEFAULT_BLOCK_SHAPE: BlockShape = BlockShape.Square
 
-export const THEMES = [
-  {
-    name: 'Classic',
-    textColor: '#24292f',
-    levelColors: ['#ebedf0', '#9be9a8', '#40c463', '#30a14e', '#216e39'],
-    background: '#fff',
-  },
-  {
-    name: 'Midnight',
-    textColor: '#fafafa',
-    levelColors: ['#233133', '#3a5c60', '#589198', '#6ab2ba', '#87e7f2'],
-    background: '#091617',
-  },
-  {
-    name: 'Sunset',
-    textColor: '#fafafa',
-    levelColors: ['#331b1b', '#794b49', '#ab6e69', '#c9837d', '#fba59d'],
-    background: '#1d1210',
-  },
-  {
-    name: 'Violet',
-    textColor: '#fafafa',
-    levelColors: ['#262640', '#505073', '#6d6d98', '#7f7fae', '#9c9cd2'],
-    background: '#17151f',
-  },
-] satisfies Theme[]
-
 export const THEME_PRESETS = [
   {
     name: 'Classic',
@@ -80,7 +55,7 @@ export const THEME_PRESETS = [
     colorBorder: 'color-mix(in srgb, rgba(218, 218, 218, 0.48), transparent 0%)',
     colorBackgroundContainer:
       'linear-gradient(140deg, rgb(241 245 249 / 0.8) 0%, rgb(241 245 249 / 0.5) 100%)',
-    levelColors: ['#ebedf0', '#9be9a8', '#40c463', '#30a14e', '#216e39'],
+    levelColors: DEFAULT_LEVEL_COLORS,
   },
   {
     name: 'Midnight',

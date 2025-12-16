@@ -4,14 +4,6 @@ import type { BlockShape, ColorScheme, ContributionLevel, ErrorType, GraphSize }
 
 export type Themes = 'Classic' | 'Midnight' | 'Sunset' | 'Sunsetx' | 'Violet'
 
-export interface Theme {
-  name: Themes
-  textColor: string
-  levelColors: [level_0: string, level_1: string, level_2: string, level_3: string, level_4: string]
-  background: string
-  mode?: ColorScheme
-}
-
 type GitHubProfileName = string
 
 export type GitHubUsername = string

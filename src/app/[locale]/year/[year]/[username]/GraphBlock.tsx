@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useEvent } from 'react-use-event-hook'
 
 import { useParams } from 'next/navigation'
@@ -9,6 +9,7 @@ import {
   CalendarArrowUpIcon,
   CalendarDaysIcon,
   CalendarMinus2Icon,
+  DownloadIcon,
   FolderGit2Icon,
   MessageSquareQuoteIcon,
   ScaleIcon,
@@ -18,9 +19,11 @@ import {
 import { ContributionsGraph } from '~/components/ContributionsGraph'
 import type { GraphHighlightMode, GraphHighlightOptions } from '~/components/ContributionsGraph/graphHighlightUtils'
 import Loading from '~/components/Loading'
+import { Button } from '~/components/ui/button'
 import { ScrollArea } from '~/components/ui/scroll-area'
 import { useData } from '~/DataContext'
 import { useDateFormatters } from '~/hooks/useDateFormatters'
+import { useImageExport } from '~/hooks/useImageExport'
 import {
   useContributionQuery,
   useIssuesQuery,
@@ -118,6 +121,18 @@ export function GraphBlock() {
 
   const { formatDate, formatMonth, formatDateRange } = useDateFormatters()
 
+  const reportContainerRef = useRef<HTMLDivElement>(null)
+
+  const { isDownloading, handleDownload } = useImageExport(
+    reportContainerRef,
+    githubUsername,
+    { filename: `${githubUsername}_${queryYear}_yearly_report` },
+  )
+
+  const handleDownloadClick = useEvent(() => {
+    void handleDownload()
+  })
+
   const handleClearHighlight = useEvent(() => {
     setHighlightMode('none')
     setHighlightOptions(undefined)
@@ -125,7 +140,18 @@ export function GraphBlock() {
 
   return (
     <div className="flex flex-col items-center py-5">
-      <div className="grid w-full grid-cols-12 gap-4">
+      <div className="mb-4 flex w-full justify-end">
+        <Button
+          disabled={isDownloading || isLoading}
+          size="default"
+          onClick={handleDownloadClick}
+        >
+          <DownloadIcon />
+          {t('downloadYearlyReport')}
+        </Button>
+      </div>
+
+      <div ref={reportContainerRef} className="grid w-full grid-cols-12 gap-4 bg-background p-4">
         {/* MARK: 贡献日历热力图 */}
         <div className="col-span-7">
           <Loading active={isLoading}>

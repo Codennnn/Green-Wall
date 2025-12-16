@@ -116,7 +116,8 @@
     "showRepos": "Show repositories created in {year}",
     "showIssues": "Show issues in {year}",
     "reposIn": "Repositories in {year}",
-    "issuesIn": "Issues in {year}"
+    "issuesIn": "Issues in {year}",
+    "downloadYearlyReport": "Download Report"
   },
   "aiReport": {
     "title": "AI Year in Review",

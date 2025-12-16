@@ -116,7 +116,8 @@
     "showRepos": "查看 {year} 年新建的仓库",
     "showIssues": "查看 {year} 年参与的 Issues",
     "reposIn": "{year} 年新建的仓库",
-    "issuesIn": "{year} 年参与的 Issues"
+    "issuesIn": "{year} 年参与的 Issues",
+    "downloadYearlyReport": "下载年度报告"
   },
   "aiReport": {
     "title": "AI 年度总结",

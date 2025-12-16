@@ -1,7 +1,7 @@
 import { ImageResponse } from 'next/og'
 import type { NextRequest } from 'next/server'
 
-import { THEMES } from '~/constants'
+import { THEME_PRESETS } from '~/constants'
 import { ContributionLevel } from '~/enums'
 import { fetchContributionsCollection, fetchGitHubUser } from '~/services'
 
@@ -23,7 +23,7 @@ export async function GET(
   const height = searchParams.get('height')
 
   const themeName = searchParams.get('theme') ?? 'Classic'
-  const selectedTheme = THEMES.find((theme) => theme.name === themeName) ?? THEMES[0]
+  const selectedTheme = THEME_PRESETS.find((theme) => theme.name === themeName) ?? THEME_PRESETS[0]
   const levelColors = {
     [ContributionLevel.Null]: 'transparent',
     [ContributionLevel.NONE]: selectedTheme.levelColors[0],
@@ -32,7 +32,8 @@ export async function GET(
     [ContributionLevel.THIRD_QUARTILE]: selectedTheme.levelColors[3],
     [ContributionLevel.FOURTH_QUARTILE]: selectedTheme.levelColors[4],
   }
-  const { textColor, background } = selectedTheme
+  const textColor = selectedTheme.colorForeground
+  const background = selectedTheme.colorBackground
 
   const user = await fetchGitHubUser(username)
   const latestYear = user.contributionYears[0]

@@ -6,9 +6,14 @@ import { toBlob, toPng } from 'html-to-image'
 
 import { trackEvent } from '~/helpers'
 
+interface UseImageExportOptions {
+  filename?: string
+}
+
 export function useImageExport(
   graphRef: RefObject<HTMLDivElement | null>,
   username: string,
+  options?: UseImageExportOptions,
 ) {
   const canUseClipboardItem = typeof ClipboardItem !== 'undefined'
 
@@ -25,7 +30,7 @@ export function useImageExport(
         const dataURL = await toPng(graphRef.current)
         const trigger = document.createElement('a')
         trigger.href = dataURL
-        trigger.download = `${username}_contributions`
+        trigger.download = options?.filename ?? `${username}_contributions`
         trigger.click()
       }
       catch (err) {
