@@ -18,6 +18,7 @@ import {
 import { ContributionsGraph } from '~/components/ContributionsGraph'
 import type { GraphHighlightMode, GraphHighlightOptions } from '~/components/ContributionsGraph/graphHighlightUtils'
 import Loading from '~/components/Loading'
+import { ScrollArea } from '~/components/ui/scroll-area'
 import { useData } from '~/DataContext'
 import { useDateFormatters } from '~/hooks/useDateFormatters'
 import {
@@ -37,7 +38,7 @@ import { MonthlyCommitChart } from './charts/MonthlyCommitChart'
 import { WeeklyCommitChart } from './charts/WeeklyCommitChart'
 import { AiYearlyReportCard } from './AiYearlyReportCard'
 import { StatCardWithPopover } from './StatCardWithPopover'
-import { StatCard } from './StaticCard'
+import { SpinningLoader, StatCard, StaticCard, StaticCardTitle } from './StaticCard'
 import { TopLanguagesCard } from './TopLanguagesCard'
 
 export function GraphBlock() {
@@ -309,57 +310,78 @@ export function GraphBlock() {
         </StatCardWithPopover>
 
         {/* MARK: 仓库数量 */}
-        <StatCardWithPopover
-          align="start"
-          ariaLabel={t('showRepos', { year: queryYear })}
-          className="col-span-4"
-          emptyMessage={tErrors('noRepos')}
-          error={reposError}
-          errorMessage={tErrors('failedLoadRepos')}
-          isLoading={reposLoading}
-          items={reposData?.repos ?? []}
-          loadingMessage={tErrors('loadingRepos')}
-          popoverCount={reposData?.count}
-          popoverTitle={t('reposIn', { year: queryYear })}
-          renderItem={(repo: RepoInfo) => {
-            return (
-              <a
-                className="block rounded-md px-2 py-2 text-sm transition-colors hover:bg-foreground/6 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500/40"
-                href={repo.url}
-                rel="noreferrer"
-                target="_blank"
-              >
-                <div className="flex items-center gap-2">
-                  <span className="min-w-0 flex-1 truncate font-medium">
-                    {repo.name}
-                  </span>
-                  <span className="shrink-0 text-foreground/60 text-xs tabular-nums">
-                    ★ {repo.stargazerCount}
-                  </span>
-                </div>
+        <div className="col-span-5">
+          <StaticCard contentClassName="flex-col items-stretch gap-3 py-4">
+            <div className="flex items-center gap-x-3">
+              <StaticCardTitle icon={<FolderGit2Icon className="size-5" />}>
+                {t('reposCreated', { year: queryYear })}
+              </StaticCardTitle>
+              <span className="ml-auto tabular-nums">
+                {reposLoading
+                  ? <SpinningLoader />
+                  : (reposData?.count ?? 0)}
+              </span>
+            </div>
 
-                {repo.description
+            <div className="h-32">
+              {reposLoading
+                ? (
+                    <div className="flex h-full items-center justify-center text-foreground/70 text-sm">
+                      <div className="size-4 animate-spin rounded-full border-2 border-border border-t-transparent" />
+                      <span className="ml-2">{tErrors('loadingRepos')}</span>
+                    </div>
+                  )
+                : reposError
                   ? (
-                      <div className="mt-1 line-clamp-2 text-foreground/70 text-xs">
-                        {repo.description}
+                      <div className="flex h-full items-center justify-center text-destructive text-sm">
+                        {tErrors('failedLoadRepos')}
                       </div>
                     )
-                  : null}
-              </a>
-            )
-          }}
-          side="left"
-        >
-          <StatCard
-            icon={<FolderGit2Icon className="size-5" />}
-            isLoading={reposLoading}
-            title={t('reposCreated', { year: queryYear })}
-            value={reposData?.count}
-          />
-        </StatCardWithPopover>
+                  : (reposData?.repos ?? []).length === 0
+                      ? (
+                          <div className="flex h-full items-center justify-center text-foreground/70 text-sm">
+                            {tErrors('noRepos')}
+                          </div>
+                        )
+                      : (
+                          <ScrollArea scrollFade className="h-full">
+                            <ul className="flex flex-col gap-1 pr-1">
+                              {(reposData?.repos ?? []).map((repo: RepoInfo) => (
+                                <li key={repo.url}>
+                                  <a
+                                    className="block rounded-md px-2 py-2 text-sm transition-colors hover:bg-foreground/6 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500/40"
+                                    href={repo.url}
+                                    rel="noreferrer"
+                                    target="_blank"
+                                  >
+                                    <div className="flex items-center gap-2">
+                                      <span className="min-w-0 flex-1 truncate font-medium">
+                                        {repo.name}
+                                      </span>
+                                      <span className="shrink-0 text-foreground/60 text-xs tabular-nums">
+                                        ★ {repo.stargazerCount}
+                                      </span>
+                                    </div>
+
+                                    {repo.description
+                                      ? (
+                                          <div className="mt-1 line-clamp-2 text-foreground/70 text-xs">
+                                            {repo.description}
+                                          </div>
+                                        )
+                                      : null}
+                                  </a>
+                                </li>
+                              ))}
+                            </ul>
+                          </ScrollArea>
+                        )}
+            </div>
+          </StaticCard>
+        </div>
 
         {/* MARK: 顶级语言 */}
-        <div className="col-span-8">
+        <div className="col-span-7">
           <TopLanguagesCard
             icon={<SquareCodeIcon className="size-5" />}
             isLoading={reposLoading}

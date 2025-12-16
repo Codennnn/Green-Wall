@@ -108,7 +108,7 @@
     "monthlyDistribution": "{year} 月度贡献趋势",
     "weeklyDistribution": "{year} 每周贡献分布",
     "contributions": "次贡献",
-    "noLanguageData": "暂无语言数据。",
+    "noLanguageData": "暂无语言数据",
     "top": "前 {count} 名",
     "peak": "峰值月份：{month}",
     "total": "总计",

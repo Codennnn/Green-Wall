@@ -1,7 +1,14 @@
 import { useTranslations } from 'next-intl'
+import { SquareCodeIcon } from 'lucide-react'
 
 import { LanguageIcon } from '~/components/LanguageIcon'
 import { Badge } from '~/components/ui/badge'
+import {
+  Empty,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+} from '~/components/ui/empty'
 import {
   Progress,
   ProgressIndicator,
@@ -55,9 +62,16 @@ export function TopLanguagesCard(props: TopLanguagesCardProps) {
       </div>
 
       {!isLoading && items.length === 0 && (
-        <div className="text-muted-foreground text-sm">
-          {t('noLanguageData')}
-        </div>
+        <Empty className="border-0 p-0">
+          <EmptyHeader>
+            <EmptyMedia variant="icon">
+              <SquareCodeIcon />
+            </EmptyMedia>
+            <EmptyDescription>
+              {t('noLanguageData')}
+            </EmptyDescription>
+          </EmptyHeader>
+        </Empty>
       )}
 
       {!isLoading && items.length > 0 && (
