@@ -6,6 +6,7 @@ import { ChevronRight } from 'lucide-react'
 
 import { GraphTooltip } from '~/components/ContributionsGraph/GraphTooltip'
 import { GraphTooltipLabel } from '~/components/ContributionsGraph/GraphTooltipLabel'
+import { Button } from '~/components/ui/button'
 import { DEFAULT_SIZE, levels } from '~/constants'
 import { useData } from '~/DataContext'
 import { ContributionLevel } from '~/enums'
@@ -40,6 +41,8 @@ export function Graph(props: GraphProps) {
 
   const { username, settings } = useData()
   const t = useTranslations('graph')
+  const tMonths = useTranslations('months')
+  const tWeekdays = useTranslations('weekdays')
 
   const [isNewYear, setIsNewYear] = useState(false)
 
@@ -100,22 +103,27 @@ export function Graph(props: GraphProps) {
                 <span className="opacity-80">
                   {isNewYear && calendar.total === 0
                     ? t('newYearText')
-                    : `${numberWithCommas(calendar.total)} Contributions`}
+                    : `${numberWithCommas(calendar.total)} ${t('contributions')}`}
                 </span>
               </div>
             )}
 
         {showInspect && (
-          <button className="group/inspect ml-auto rounded bg-(--theme-secondary) px-2 py-1 text-sm text-current opacity-0 outline outline-transparent transition-all hover:outline-(--theme-border) group-hover:opacity-100">
-            <Link
-              className="inline-flex items-center gap-0.5"
-              href={`/year/${calendar.year}/${username}`}
-              target="_blank"
-            >
-              <span className="opacity-70 transition group-hover/inspect:opacity-100">Inspect</span>
-              <ChevronRight className="size-4 transition group-hover/inspect:translate-x-0.5" />
-            </Link>
-          </button>
+          <Button
+            className="ml-auto opacity-0 transition-opacity group-hover:opacity-100 text-muted-foreground"
+            render={(props) => (
+              <Link
+                href={`/year/${calendar.year}/${username}`}
+                target="_blank"
+                {...props}
+              />
+            )}
+            size="xs"
+            variant="outline"
+          >
+            {t('inspect')}
+            <ChevronRight className="size-3" strokeWidth={2.5} />
+          </Button>
         )}
       </div>
 
@@ -137,30 +145,30 @@ export function Graph(props: GraphProps) {
       <div className={styles.graph}>
         {/* Months Label */}
         <ul className={styles.months}>
-          <li>Jan</li>
-          <li>Feb</li>
-          <li>Mar</li>
-          <li>Apr</li>
-          <li>May</li>
-          <li>Jun</li>
-          <li>Jul</li>
-          <li>Aug</li>
-          <li>Sep</li>
-          <li>Oct</li>
-          <li>Nov</li>
-          <li>Dec</li>
+          <li>{tMonths('jan')}</li>
+          <li>{tMonths('feb')}</li>
+          <li>{tMonths('mar')}</li>
+          <li>{tMonths('apr')}</li>
+          <li>{tMonths('may')}</li>
+          <li>{tMonths('jun')}</li>
+          <li>{tMonths('jul')}</li>
+          <li>{tMonths('aug')}</li>
+          <li>{tMonths('sep')}</li>
+          <li>{tMonths('oct')}</li>
+          <li>{tMonths('nov')}</li>
+          <li>{tMonths('dec')}</li>
         </ul>
 
         {/* Days Label */}
         {daysLabel && (
           <ul className={styles.days}>
-            <li>Sun</li>
-            <li>Mon</li>
-            <li>Tue</li>
-            <li>Wed</li>
-            <li>Thu</li>
-            <li>Fri</li>
-            <li>Sat</li>
+            <li>{tWeekdays('sun')}</li>
+            <li>{tWeekdays('mon')}</li>
+            <li>{tWeekdays('tue')}</li>
+            <li>{tWeekdays('wed')}</li>
+            <li>{tWeekdays('thu')}</li>
+            <li>{tWeekdays('fri')}</li>
+            <li>{tWeekdays('sat')}</li>
           </ul>
         )}
 

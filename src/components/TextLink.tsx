@@ -7,7 +7,7 @@ export function TextLink({
   return (
     <Link
       {...props}
-      className={`underline decoration-current decoration-dotted underline-offset-[3px] transition-colors duration-200 hover:text-main-500/90 ${
+      className={`underline decoration-current decoration-dotted underline-offset-[3px] hover:decoration-solid ${
         props.className ?? ''
       }`}
     >

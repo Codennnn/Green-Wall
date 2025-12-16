@@ -9,6 +9,7 @@ import { useTranslations } from 'next-intl'
 
 import { ContributionsGraph } from '~/components/ContributionsGraph'
 import { ErrorMessage } from '~/components/ErrorMessage'
+import { Button } from '~/components/ui/button'
 import { DEFAULT_THEME, THEME_PRESETS } from '~/constants'
 import { useData } from '~/DataContext'
 import type { GraphSize } from '~/enums'
@@ -100,19 +101,16 @@ export function SharePage() {
           {t('headline')}
           <br />
           {t('cta')}
-          {' '}
-          🌱
         </h1>
 
         <div className="flex justify-center">
-          <Link href="/">
-            <button
-              className="cursor-pointer rounded-lg border-[3px] border-solid border-brand-400/70 bg-linear-to-br from-brand-500 to-brand-300/60 bg-clip-text px-3 py-1 text-lg font-medium text-transparent outline-none transition-colors hover:border-brand-400 hover:bg-brand-400"
-              type="button"
-            >
-              {t('generateYours')}
-            </button>
-          </Link>
+          <Button
+            render={(props) => <Link href="/" {...props} />}
+            size="lg"
+            variant="default"
+          >
+            {t('generateYours')}
+          </Button>
         </div>
 
         <div className="flex w-full overflow-x-auto py-5 md:justify-center md:py-14">

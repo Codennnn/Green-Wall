@@ -5,6 +5,7 @@ import { hasLocale, NextIntlClientProvider } from 'next-intl'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 
 import { GitHubButton } from '~/components/GitHubButton'
+import { LocaleSelector } from '~/components/LocaleSelector'
 import { QueryProvider } from '~/components/QueryProvider'
 import { ThemeModeSelector } from '~/components/ThemeModeSelector'
 import { ThemeProvider } from '~/components/ThemeProvider'
@@ -52,6 +53,7 @@ export default async function LocaleLayout({ children, params }: Props) {
 
                 <div className="ml-auto flex items-center gap-3">
                   <GitHubButton />
+                  <LocaleSelector />
                   <ThemeModeSelector />
                 </div>
               </div>

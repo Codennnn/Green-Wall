@@ -22,7 +22,7 @@ export function AppearanceSetting() {
   const attributionId = useId()
 
   return (
-    <div className="appearance-setting min-w-[min(40vw,220px)] max-w-[min(90vw,280px)] text-main-400">
+    <div className="appearance-setting min-w-[min(40vw,220px)] max-w-[min(90vw,280px)] text-muted-foreground">
       <fieldset>
         <label>{t('yearRange')}</label>
         <YearRangeSelect graphData={graphData} />

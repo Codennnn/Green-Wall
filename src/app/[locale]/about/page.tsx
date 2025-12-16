@@ -39,7 +39,7 @@ export default async function AboutPage() {
         <SectionTitle>{t('credits')}</SectionTitle>
         <ul className="list-inside list-disc py-2 pl-1 marker:text-sm marker:text-foreground/90">
           <li>
-            <i className="mr-3 opacity-90">{t('inspiration')}:</i>
+            <span className="mr-3 opacity-90">{t('inspiration')}{t('colon')}</span>
             <TextLink
               passHref
               href="https://github.com/sallar/github-contributions-chart"
@@ -49,11 +49,11 @@ export default async function AboutPage() {
             </TextLink>
           </li>
           <li>
-            <i className="mr-3 opacity-90">{t('framework')}:</i>
+            <span className="mr-3 opacity-90">{t('framework')}{t('colon')}</span>
             Next.js.
           </li>
           <li>
-            <i className="mr-3 opacity-90">{t('font')}:</i>
+            <span className="mr-3 opacity-90">{t('font')}{t('colon')}</span>
             <TextLink passHref href="https://fonts.google.com/specimen/Rubik" target="_blank">
               Rubik
             </TextLink>
@@ -61,7 +61,7 @@ export default async function AboutPage() {
             by Google Fonts.
           </li>
           <li>
-            <i className="mr-3 opacity-90">{t('icons')}:</i>
+            <span className="mr-3 opacity-90">{t('icons')}{t('colon')}</span>
             <TextLink passHref href="https://heroicons.com" target="_blank">
               heroicons.
             </TextLink>

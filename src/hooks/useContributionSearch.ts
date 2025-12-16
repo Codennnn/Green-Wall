@@ -112,10 +112,8 @@ export function useContributionSearch({
       lastProcessedUsernameRef.current = ''
       setGraphData(undefined)
       resetSettings()
-      setSearchName('')
-      setUsernameInUrl('', { replace: true })
     }
-  }, [isError, setGraphData, resetSettings, setUsernameInUrl])
+  }, [isError, setGraphData, resetSettings])
 
   const handleSubmit = useEvent(() => {
     const username = normalizeGitHubUsername(searchName)

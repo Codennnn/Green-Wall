@@ -1,4 +1,16 @@
 {
+  "metadata": {
+    "defaultTitle": "Green Wall · GitHub contribution graph generator",
+    "defaultDescription": "Green Wall is a GitHub contribution graph generator.",
+    "defaultOgTitle": "Green Wall",
+    "defaultOgDescription": "GitHub contribution graph generator.",
+    "userTitle": "{username}'s GitHub contributions in review · Green Wall",
+    "userOgTitle": "{username}'s GitHub contributions",
+    "userOgDescription": "{username}'s GitHub contributions.",
+    "shareTitle": "{username}'s GitHub contributions in review · Green Wall",
+    "shareOgTitle": "{username}'s GitHub contributions",
+    "shareOgDescription": "I just made a GitHub contributions graph in review!"
+  },
   "common": {
     "appName": "Green Wall",
     "loading": "Loading...",
@@ -34,6 +46,7 @@
     "years": "{count} Years",
     "inYear": "In {year}",
     "newYearText": "Happy New Year 🎉 Go make the first contribution !",
+    "contributions": "contributions",
     "tooltipContributionsInDate": "<strong>{count}</strong> contributions in {date}",
     "less": "Less",
     "more": "More",
@@ -41,7 +54,8 @@
     "loadingContributions": "Loading contributions...",
     "saveAsImage": "Save as Image",
     "copyAsImage": "Copy as Image",
-    "copiedAsImage": "Copied as Image"
+    "copiedAsImage": "Copied as Image",
+    "inspect": "Inspect"
   },
   "settings": {
     "appearance": "Appearance",
@@ -123,12 +137,17 @@
     "supportContent": "Want to show your support for this project? You can star on <github>GitHub</github> or vote on <productHunt>Product Hunt</productHunt>, or you can share this website elsewhere!",
     "reportingIssues": "Reporting Issues",
     "reportingIssuesContent": "Got bugs or have any suggestions for this project? Welcome to leave your message on the <link>GitHub issues</link>.",
-    "githubIssues": "GitHub issues"
+    "githubIssues": "GitHub issues",
+    "colon": ":"
   },
   "themeMode": {
     "light": "Light",
     "dark": "Dark",
     "system": "System"
+  },
+  "locale": {
+    "en": "English",
+    "zh": "Chinese"
   },
   "weekdays": {
     "sun": "Sun",

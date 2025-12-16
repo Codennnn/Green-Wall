@@ -1,4 +1,16 @@
 {
+  "metadata": {
+    "defaultTitle": "Green Wall · GitHub 贡献图生成器",
+    "defaultDescription": "Green Wall 是一个 GitHub 贡献图生成器。",
+    "defaultOgTitle": "Green Wall",
+    "defaultOgDescription": "GitHub 贡献图生成器",
+    "userTitle": "{username} 的 GitHub 贡献回顾 · Green Wall",
+    "userOgTitle": "{username} 的 GitHub 贡献",
+    "userOgDescription": "{username} 的 GitHub 贡献记录。",
+    "shareTitle": "{username} 的 GitHub 贡献回顾 · Green Wall",
+    "shareOgTitle": "{username} 的 GitHub 贡献",
+    "shareOgDescription": "我刚刚用 Green Wall 生成了我的 GitHub 贡献图！"
+  },
   "common": {
     "appName": "Green Wall",
     "loading": "加载中...",
@@ -34,6 +46,7 @@
     "years": "累计 {count} 年",
     "inYear": "仅 {year} 年",
     "newYearText": "新年快乐 🎉 去做今年的第一次贡献吧！",
+    "contributions": "次贡献",
     "tooltipContributionsInDate": "{date}：<strong>{count}</strong> 次贡献",
     "less": "少",
     "more": "多",
@@ -41,10 +54,11 @@
     "loadingContributions": "正在拉取贡献数据…",
     "saveAsImage": "保存图片",
     "copyAsImage": "复制图片",
-    "copiedAsImage": "图片已复制"
+    "copiedAsImage": "图片已复制",
+    "inspect": "查看详情"
   },
   "settings": {
-    "appearance": "外观",
+    "appearance": "偏好设置",
     "popOut": "弹出到浮窗",
     "yearRange": "年份范围",
     "daysLabel": "显示星期",
@@ -123,12 +137,17 @@
     "supportContent": "喜欢这个小工具的话，欢迎在 <github>GitHub</github> 点个 Star，或去 <productHunt>Product Hunt</productHunt> 支持一下；也可以把网站分享给更多朋友。",
     "reportingIssues": "问题反馈",
     "reportingIssuesContent": "发现 bug、想要新功能，或者有任何建议，欢迎到 <link>GitHub Issues</link> 留言交流。",
-    "githubIssues": "GitHub Issues"
+    "githubIssues": "GitHub Issues",
+    "colon": "："
   },
   "themeMode": {
     "light": "浅色",
     "dark": "深色",
     "system": "跟随系统"
+  },
+  "locale": {
+    "en": "英语",
+    "zh": "简体中文"
   },
   "weekdays": {
     "sun": "日",

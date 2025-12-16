@@ -1,6 +1,7 @@
 import { Suspense } from 'react'
 
 import type { Metadata } from 'next'
+import { getTranslations } from 'next-intl/server'
 
 import { DataProvider } from '~/DataContext'
 
@@ -9,16 +10,18 @@ import { SharePage } from './SharePage'
 export const generateMetadata = async ({
   params,
 }: {
-  params: Promise<{ username: string }>
+  params: Promise<{ username: string, locale: string }>
 }): Promise<Metadata> => {
-  const { username } = await params
-  const sharingTitle = `${username}'s GitHub contributions`
-  const sharingDescription = 'I just made a GitHub contributions graph in review!'
+  const { username, locale } = await params
+  const t = await getTranslations({ locale, namespace: 'metadata' })
+
+  const sharingTitle = t('shareOgTitle', { username })
+  const sharingDescription = t('shareOgDescription')
   const sharingURL = `https://green-wall.leoku.dev/share/${username}`
   const image = `https://green-wall.leoku.dev/api/og/share/${username}`
 
   return {
-    title: `${username}'s GitHub contributions in review · Green Wall`,
+    title: t('shareTitle', { username }),
     openGraph: {
       title: sharingTitle,
       description: sharingDescription,
