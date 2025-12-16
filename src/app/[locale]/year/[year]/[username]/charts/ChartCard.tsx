@@ -2,6 +2,8 @@
 
 import type { ReactNode } from 'react'
 
+import { useTranslations } from 'next-intl'
+
 import { cn } from '~/lib/utils'
 
 import { SpinningLoader, StaticCard, StaticCardTitle } from '../StaticCard'
@@ -66,9 +68,11 @@ export interface ChartSummaryItemProps {
 export function ChartSummaryItem(props: ChartSummaryItemProps) {
   const { label, value } = props
 
+  const t = useTranslations('common')
+
   return (
-    <div className="flex items-center gap-2 text-sm">
-      <span className="text-muted-foreground">{label}:</span>
+    <div className="flex items-center gap-0.5 text-sm">
+      <span className="text-muted-foreground">{label}{t('colon')}</span>
       <span className="font-medium tabular-nums">{value}</span>
     </div>
   )

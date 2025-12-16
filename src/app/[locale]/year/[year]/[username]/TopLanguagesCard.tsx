@@ -75,7 +75,10 @@ export function TopLanguagesCard(props: TopLanguagesCardProps) {
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center justify-between gap-3">
                     <div className="flex min-w-0 items-center gap-2 truncate font-medium text-sm">
-                      <LanguageIcon language={item.language} size={16} />
+                      <LanguageIcon
+                        language={item.language}
+                        size={16}
+                      />
                       <span className="truncate">{item.language}</span>
                     </div>
                     <div className="shrink-0 tabular-nums text-muted-foreground text-xs">

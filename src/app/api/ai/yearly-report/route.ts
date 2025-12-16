@@ -67,7 +67,7 @@ export async function POST(request: NextRequest) {
       prompt,
       // 可选：设置温度等参数
       temperature: 0.7,
-      maxOutputTokens: 500,
+      maxOutputTokens: 3000,
     })
 
     // 5. 返回纯文本流式响应

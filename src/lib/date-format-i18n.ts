@@ -147,10 +147,6 @@ function getLocalizedMonthName(monthNumber: number, tMonths: Translator): string
   return tMonths(key)
 }
 
-// ============================================================================
-// 工厂函数
-// ============================================================================
-
 /**
  * 创建日期格式化函数（支持 i18n）
  *
@@ -177,6 +173,11 @@ export function createDateFormatter(tMonths: Translator): (date: string | undefi
     }
 
     const monthName = getLocalizedMonthName(parsed.month, tMonths)
+    const isChineseStyleMonth = monthName.endsWith('月')
+
+    if (isChineseStyleMonth) {
+      return `${monthName}${parsed.day}日`
+    }
 
     return `${monthName} ${parsed.day}`
   }
@@ -208,6 +209,11 @@ export function createMonthFormatter(tMonths: Translator): (month: string | unde
     }
 
     const monthName = getLocalizedMonthName(parsed.month, tMonths)
+    const isChineseStyleMonth = monthName.endsWith('月')
+
+    if (isChineseStyleMonth) {
+      return `${parsed.year}年${monthName}`
+    }
 
     return `${monthName} ${parsed.year}`
   }

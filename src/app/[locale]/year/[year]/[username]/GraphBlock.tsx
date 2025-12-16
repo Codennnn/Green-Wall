@@ -173,15 +173,6 @@ export function GraphBlock() {
           onMouseLeave={handleClearHighlight}
         />
 
-        {/* MARK: 平均每日 */}
-        <StatCard
-          className="col-span-4"
-          icon={<ScaleIcon className="size-5" />}
-          isLoading={!statistics}
-          title={t('averagePerDay')}
-          value={statistics?.averageContributionsPerDay}
-        />
-
         {/* MARK: 最活跃日期 */}
         <StatCard
           className="col-span-4"
@@ -212,6 +203,15 @@ export function GraphBlock() {
             }
           }}
           onMouseLeave={handleClearHighlight}
+        />
+
+        {/* MARK: 平均每日 */}
+        <StatCard
+          className="col-span-4"
+          icon={<ScaleIcon className="size-5" />}
+          isLoading={!statistics}
+          title={t('averagePerDay')}
+          value={statistics?.averageContributionsPerDay}
         />
 
         {/* MARK: 最长连续天数 */}
@@ -263,6 +263,51 @@ export function GraphBlock() {
           onMouseLeave={handleClearHighlight}
         />
 
+        {/* MARK: Issues 数量 */}
+        <StatCardWithPopover
+          align="start"
+          ariaLabel={t('showIssues', { year: queryYear })}
+          className="col-span-4"
+          contentClassName="w-[min(90vw,520px)]"
+          emptyMessage={tErrors('noIssues')}
+          error={issuesError}
+          errorMessage={tErrors('failedLoadIssues')}
+          isLoading={issuesLoading}
+          items={issuesData?.issues ?? []}
+          loadingMessage={tErrors('loadingIssues')}
+          popoverCount={issuesData?.count}
+          popoverTitle={t('issuesIn', { year: queryYear })}
+          renderItem={(issue: IssueInfo) => {
+            return (
+              <a
+                className="block rounded-md px-2 py-2 text-sm transition-colors hover:bg-foreground/6 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500/40"
+                href={issue.url}
+                rel="noreferrer"
+                target="_blank"
+              >
+                <div className="min-w-0 font-medium">
+                  <span className="block truncate">
+                    {issue.title}
+                  </span>
+                </div>
+                <div className="mt-1 flex items-center gap-2 text-foreground/70 text-xs">
+                  <span className="truncate">
+                    {issue.repository.nameWithOwner}
+                  </span>
+                </div>
+              </a>
+            )
+          }}
+          side="right"
+        >
+          <StatCard
+            icon={<MessageSquareQuoteIcon className="size-5" />}
+            isLoading={issuesLoading}
+            title={t('issues', { year: queryYear })}
+            value={issuesData?.count}
+          />
+        </StatCardWithPopover>
+
         {/* MARK: 仓库数量 */}
         <StatCardWithPopover
           align="start"
@@ -310,51 +355,6 @@ export function GraphBlock() {
             isLoading={reposLoading}
             title={t('reposCreated', { year: queryYear })}
             value={reposData?.count}
-          />
-        </StatCardWithPopover>
-
-        {/* MARK: Issues 数量 */}
-        <StatCardWithPopover
-          align="start"
-          ariaLabel={t('showIssues', { year: queryYear })}
-          className="col-span-4"
-          contentClassName="w-[min(90vw,520px)]"
-          emptyMessage={tErrors('noIssues')}
-          error={issuesError}
-          errorMessage={tErrors('failedLoadIssues')}
-          isLoading={issuesLoading}
-          items={issuesData?.issues ?? []}
-          loadingMessage={tErrors('loadingIssues')}
-          popoverCount={issuesData?.count}
-          popoverTitle={t('issuesIn', { year: queryYear })}
-          renderItem={(issue: IssueInfo) => {
-            return (
-              <a
-                className="block rounded-md px-2 py-2 text-sm transition-colors hover:bg-foreground/6 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500/40"
-                href={issue.url}
-                rel="noreferrer"
-                target="_blank"
-              >
-                <div className="min-w-0 font-medium">
-                  <span className="block truncate">
-                    {issue.title}
-                  </span>
-                </div>
-                <div className="mt-1 flex items-center gap-2 text-foreground/70 text-xs">
-                  <span className="truncate">
-                    {issue.repository.nameWithOwner}
-                  </span>
-                </div>
-              </a>
-            )
-          }}
-          side="right"
-        >
-          <StatCard
-            icon={<MessageSquareQuoteIcon className="size-5" />}
-            isLoading={issuesLoading}
-            title={t('issues', { year: queryYear })}
-            value={issuesData?.count}
           />
         </StatCardWithPopover>
 

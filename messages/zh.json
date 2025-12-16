@@ -25,7 +25,8 @@
     "copied": "已复制",
     "close": "关闭",
     "preview": "预览",
-    "openSource": "开源代码"
+    "openSource": "开源代码",
+    "colon": "："
   },
   "nav": {
     "about": "关于"
@@ -163,8 +164,7 @@
     "supportContent": "喜欢这个小工具的话，欢迎在 <github>GitHub</github> 点个 Star，或去 <productHunt>Product Hunt</productHunt> 支持一下；也可以把网站分享给更多朋友。",
     "reportingIssues": "问题反馈",
     "reportingIssuesContent": "发现 bug、想要新功能，或者有任何建议，欢迎到 <link>GitHub Issues</link> 留言交流。",
-    "githubIssues": "GitHub Issues",
-    "colon": "："
+    "githubIssues": "GitHub Issues"
   },
   "themeMode": {
     "light": "浅色",

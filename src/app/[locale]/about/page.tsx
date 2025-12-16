@@ -41,6 +41,7 @@ const Paragraph = (props: React.PropsWithChildren) => <p className="py-2">{props
 
 export default async function AboutPage() {
   const t = await getTranslations('about')
+  const tCommon = await getTranslations('common')
 
   return (
     <div className="py-10 md:py-14">
@@ -68,7 +69,7 @@ export default async function AboutPage() {
         <SectionTitle>{t('credits')}</SectionTitle>
         <ul className="list-inside list-disc py-2 pl-1 marker:text-sm marker:text-foreground/90">
           <li>
-            <span className="mr-3 opacity-90">{t('inspiration')}{t('colon')}</span>
+            <span className="mr-3 opacity-90">{t('inspiration')}{tCommon('colon')}</span>
             <TextLink
               passHref
               href="https://github.com/sallar/github-contributions-chart"
@@ -78,11 +79,11 @@ export default async function AboutPage() {
             </TextLink>
           </li>
           <li>
-            <span className="mr-3 opacity-90">{t('framework')}{t('colon')}</span>
+            <span className="mr-3 opacity-90">{t('framework')}{tCommon('colon')}</span>
             Next.js.
           </li>
           <li>
-            <span className="mr-3 opacity-90">{t('font')}{t('colon')}</span>
+            <span className="mr-3 opacity-90">{t('font')}{tCommon('colon')}</span>
             <TextLink passHref href="https://fonts.google.com/specimen/Rubik" target="_blank">
               Rubik
             </TextLink>
@@ -90,7 +91,7 @@ export default async function AboutPage() {
             by Google Fonts.
           </li>
           <li>
-            <span className="mr-3 opacity-90">{t('icons')}{t('colon')}</span>
+            <span className="mr-3 opacity-90">{t('icons')}{tCommon('colon')}</span>
             <TextLink passHref href="https://heroicons.com" target="_blank">
               heroicons.
             </TextLink>

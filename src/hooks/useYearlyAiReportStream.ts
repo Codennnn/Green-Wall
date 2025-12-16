@@ -32,10 +32,6 @@ export interface UseYearlyAiReportStreamReturn {
   reset: () => void
 }
 
-/**
- * 年度 AI 报告流式生成 Hook
- * 支持：流式显示、取消、重试、重新生成
- */
 export function useYearlyAiReportStream(
   options: UseYearlyAiReportStreamOptions,
 ): UseYearlyAiReportStreamReturn {
@@ -45,24 +41,17 @@ export function useYearlyAiReportStream(
   const [status, setStatus] = useState<StreamStatus>('idle')
   const [error, setError] = useState<string | null>(null)
 
-  // 用于取消请求
   const abortControllerRef = useRef<AbortController | null>(null)
 
-  /**
-   * 开始生成
-   */
   const start = useCallback(async () => {
-    // 如果正在生成，先取消
     if (abortControllerRef.current) {
       abortControllerRef.current.abort()
     }
 
-    // 重置状态
     setText('')
     setError(null)
     setStatus('streaming')
 
-    // 创建新的 AbortController
     const abortController = new AbortController()
     abortControllerRef.current = abortController
 
@@ -103,9 +92,6 @@ export function useYearlyAiReportStream(
     }
   }, [username, year, locale, tags, highlights])
 
-  /**
-   * 中止生成
-   */
   const abort = useCallback(() => {
     if (abortControllerRef.current) {
       abortControllerRef.current.abort()
@@ -113,9 +99,6 @@ export function useYearlyAiReportStream(
     }
   }, [])
 
-  /**
-   * 重置状态
-   */
   const reset = useCallback(() => {
     abort()
     setText('')

@@ -25,7 +25,8 @@
     "copied": "Copied",
     "close": "Close",
     "preview": "Preview",
-    "openSource": "Open Source"
+    "openSource": "Open Source",
+    "colon": ":"
   },
   "nav": {
     "about": "About"
@@ -163,8 +164,7 @@
     "supportContent": "Want to show your support for this project? You can star on <github>GitHub</github> or vote on <productHunt>Product Hunt</productHunt>, or you can share this website elsewhere!",
     "reportingIssues": "Reporting Issues",
     "reportingIssuesContent": "Got bugs or have any suggestions for this project? Welcome to leave your message on the <link>GitHub issues</link>.",
-    "githubIssues": "GitHub issues",
-    "colon": ":"
+    "githubIssues": "GitHub issues"
   },
   "themeMode": {
     "light": "Light",

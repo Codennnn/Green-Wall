@@ -19,7 +19,9 @@ const SYSTEM_PROMPT_ZH = `你是一位克制、有幽默感的程序员旁白，
 - 不进行负面评价
 - 对极端数据保持克制和尊重
 - 语气轻松，但不过度调侃
-- 可以适当使用程序员梗或行话，但不要过于晦涩`
+- 可以适当使用程序员梗或行话，但不要过于晦涩
+- 善于从数据中挖掘故事和洞察
+- 用生动的描述让数据变得有温度`
 
 const SYSTEM_PROMPT_EN = `You are a restrained, witty narrator familiar with GitHub and developer culture.
 
@@ -29,7 +31,9 @@ Style requirements:
 - No negative judgments
 - Be respectful and restrained about extreme data
 - Keep a casual tone without over-teasing
-- Feel free to use programmer jokes or jargon, but not too obscure`
+- Feel free to use programmer jokes or jargon, but not too obscure
+- Excel at uncovering stories and insights from data
+- Make data feel warm and relatable through vivid descriptions`
 
 function buildUserPromptZh(options: BuildPromptOptions): string {
   const { username, year, tags, highlights } = options
@@ -77,14 +81,39 @@ ${highlightLines.join('\n')}`
 
   prompt += `
 
-结构要求（严格遵守）：
-1. 用一句话概括这一年的开发状态
-2. 用 1–2 句话解释标签背后的"习惯或节奏"
-3. 点出一个最具代表性的高光点
-4. 用一句有余味的评价收尾
+内容结构要求（严格遵守）：
 
-总字数控制在 120–180 字。
-请直接输出文案，不要解释过程，不要添加标题或分隔符。`
+**第一部分：年度概览（2-3 句话）**
+- 用生动的语言概括这一年的整体开发状态
+- 结合总贡献数等关键数据，给出直观的感受
+- 可以用比喻或类比让数据更有画面感
+
+**第二部分：深度解读（3-4 段）**
+针对每个标签进行深入解读，每个标签用 1-2 句话：
+- 活跃度：不只是说活跃或不活跃，要分析背后可能的原因或状态
+- 提交节奏：描述这种节奏反映出的工作方式或性格特点
+- 时间习惯：挖掘时间偏好背后的生活方式或工作环境
+- 技术侧重：分析技术选择体现的开发理念或项目类型
+- 项目模式：解读项目管理方式反映的协作风格或个人特质
+
+**第三部分：高光时刻（2-3 句话）**
+- 选择 2-3 个最有代表性的高光数据进行深入解读
+- 不要只是罗列数字，要讲述数字背后的故事
+- 可以对比、类比或用具体场景让数据更生动
+- 例如：单日峰值可以描述那天可能发生了什么，连续贡献可以描述坚持的不易
+
+**第四部分：趋势洞察（1-2 句话）**
+- 从数据中发现的有趣模式或趋势
+- 可以是月度分布、时间规律等的观察
+
+**第五部分：收尾点评（1-2 句话）**
+- 用有余味、有温度的话语收尾
+- 可以是鼓励、认可或有趣的观察
+- 避免说教，保持轻松克制的语气
+
+总字数控制在 400–600 字，确保内容充实、有深度。
+使用自然的段落分隔（空行），让内容层次清晰、易读。
+请直接输出文案，不要添加标题、序号或 Markdown 格式符号。`
 
   return prompt
 }
@@ -135,14 +164,39 @@ ${highlightLines.join('\n')}`
 
   prompt += `
 
-Structure requirements (strictly follow):
-1. One sentence summarizing the year's dev status
-2. 1-2 sentences explaining the "habits or rhythm" behind the tags
-3. Highlight one most representative achievement
-4. End with a memorable closing remark
+Content structure requirements (strictly follow):
 
-Keep the total word count between 60-100 words (English equivalent of 120-180 Chinese characters).
-Output the summary directly without explanations, titles, or separators.`
+**Part 1: Annual Overview (2-3 sentences)**
+- Vividly summarize the overall development status of the year
+- Incorporate key data like total contributions to give an intuitive feel
+- Use metaphors or analogies to make data more visual
+
+**Part 2: Deep Dive (3-4 paragraphs)**
+Provide in-depth interpretation for each tag, 1-2 sentences per tag:
+- Activity Level: Don't just say active or inactive, analyze possible reasons or states behind it
+- Commit Style: Describe how this rhythm reflects work style or personality traits
+- Time Pattern: Uncover the lifestyle or work environment behind time preferences
+- Tech Focus: Analyze what technical choices reveal about development philosophy or project types
+- Repo Pattern: Interpret how project management style reflects collaboration approach or personal traits
+
+**Part 3: Highlight Moments (2-3 sentences)**
+- Select 2-3 most representative highlight data points for deep interpretation
+- Don't just list numbers, tell the story behind them
+- Use comparisons, analogies, or specific scenarios to make data vivid
+- For example: peak day could describe what might have happened, streak could describe the persistence
+
+**Part 4: Trend Insights (1-2 sentences)**
+- Interesting patterns or trends discovered from the data
+- Could be observations about monthly distribution, time patterns, etc.
+
+**Part 5: Closing Remarks (1-2 sentences)**
+- End with warm, memorable words
+- Could be encouragement, recognition, or interesting observations
+- Avoid preaching, maintain a casual and restrained tone
+
+Keep the total word count between 250-350 words.
+Use natural paragraph breaks (blank lines) to make content clear and readable.
+Output the summary directly without titles, numbering, or Markdown formatting symbols.`
 
   return prompt
 }

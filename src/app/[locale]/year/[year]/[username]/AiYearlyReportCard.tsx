@@ -60,14 +60,12 @@ export function AiYearlyReportCard(props: AiYearlyReportCardProps) {
     highlights,
   })
 
-  // 自动开始（可选）
   useEffect(() => {
     if (autoStart && status === 'idle') {
       void start()
     }
   }, [autoStart, status, start])
 
-  // 复制文案
   const handleCopy = useCallback(async () => {
     if (!text) {
       return
@@ -85,7 +83,6 @@ export function AiYearlyReportCard(props: AiYearlyReportCardProps) {
     }
   }, [text])
 
-  // 重新生成
   const handleRegenerate = useCallback(() => {
     reset()
     void start()
