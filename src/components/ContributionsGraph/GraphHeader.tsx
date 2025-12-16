@@ -7,6 +7,7 @@ import { AtSignIcon, DotIcon, UserIcon } from 'lucide-react'
 import { useData } from '~/DataContext'
 import { GraphSize } from '~/enums'
 import { numberWithCommas } from '~/helpers'
+import { cn } from '~/lib/utils'
 
 const GitHubIcon = () => {
   return (
@@ -114,9 +115,10 @@ export function GraphHeader() {
 
         {!!graphData.bio && (
           <div
-            className={`line-clamp-3 text-sm opacity-70 ${
-              settings.size === GraphSize.Small ? 'max-w-[300px]' : 'max-w-[400px]'
-            }`}
+            className={cn(
+              'line-clamp-3 text-sm opacity-70',
+              settings.size === GraphSize.Small ? 'max-w-[300px]' : 'max-w-[400px]',
+            )}
           >
             {graphData.bio}
           </div>

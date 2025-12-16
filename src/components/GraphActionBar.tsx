@@ -1,4 +1,5 @@
-import type { RefObject } from 'react'
+import { memo, type RefObject, useMemo } from 'react'
+import { useEvent } from 'react-use-event-hook'
 
 import { useTranslations } from 'next-intl'
 import { FileCheck2Icon, ImageIcon, ImagesIcon } from 'lucide-react'
@@ -9,6 +10,7 @@ import { SettingButton } from '~/components/SettingButton'
 import { ShareButton } from '~/components/ShareButton'
 import { useImageExport } from '~/hooks/useImageExport'
 import type { SettingPopupPosition } from '~/hooks/useSettingPopup'
+import { cn } from '~/lib/utils'
 
 interface GraphActionBarProps {
   graphRef: RefObject<HTMLDivElement | null>
@@ -20,7 +22,7 @@ interface GraphActionBarProps {
   onSettingPopupClose: () => void
 }
 
-export function GraphActionBar({
+export const GraphActionBar = memo(function GraphActionBar({
   graphRef,
   username,
   settingPopoverContentId,
@@ -39,15 +41,28 @@ export function GraphActionBar({
     handleCopyImage,
   } = useImageExport(graphRef, username)
 
+  const handleDownloadClick = useEvent(() => {
+    void handleDownload()
+  })
+
+  const handleCopyClick = useEvent(() => {
+    void handleCopyImage()
+  })
+
+  const appearanceSettingContent = useMemo(() => <AppearanceSetting />, [])
+
+  const draggableInitialPosition = useMemo(() => ({
+    x: settingPopupPosition?.offsetX ?? 0,
+    y: settingPopupPosition?.offsetY ?? 0,
+  }), [settingPopupPosition?.offsetX, settingPopupPosition?.offsetY])
+
   return (
     <>
       <div className="flex gap-x-3">
         <button
           className="inline-flex h-full items-center rounded-md bg-main-100 px-4 py-2 text-sm font-medium text-main-500 hover:bg-main-200 disabled:pointer-events-none motion-safe:transition-colors motion-safe:duration-300 md:text-base"
           disabled={isDownloading}
-          onClick={() => {
-            void handleDownload()
-          }}
+          onClick={handleDownloadClick}
         >
           <ImageIcon className="mr-2 size-4 shrink-0 md:size-5" />
           <span>{t('saveAsImage')}</span>
@@ -55,18 +70,14 @@ export function GraphActionBar({
 
         {canUseClipboardItem && (
           <button
-            className={`
-              inline-flex h-full items-center rounded-md px-4 py-2 text-sm font-medium transition-colors disabled:pointer-events-none md:text-base
-              ${
-          copySuccess
-            ? 'bg-brand-100 text-brand-500'
-            : 'bg-main-100 text-main-500 duration-300 hover:bg-main-200 motion-safe:transition-colors'
-          }
-            `}
+            className={cn(
+              'inline-flex h-full items-center rounded-md px-4 py-2 text-sm font-medium transition-colors disabled:pointer-events-none md:text-base',
+              copySuccess
+                ? 'bg-brand-100 text-brand-500'
+                : 'bg-main-100 text-main-500 duration-300 hover:bg-main-200 motion-safe:transition-colors',
+            )}
             disabled={isCopying}
-            onClick={() => {
-              void handleCopyImage()
-            }}
+            onClick={handleCopyClick}
           >
             <span className="mr-2">
               {copySuccess
@@ -82,7 +93,7 @@ export function GraphActionBar({
         <ShareButton />
 
         <SettingButton
-          content={<AppearanceSetting />}
+          content={appearanceSettingContent}
           popoverContentId={settingPopoverContentId}
           onClick={onSettingClick}
           onPopOut={onSettingPopOut}
@@ -91,17 +102,14 @@ export function GraphActionBar({
         <div className="relative">
           {!!settingPopupPosition && (
             <DraggableAppearanceSetting
-              initialPosition={{
-                x: settingPopupPosition.offsetX,
-                y: settingPopupPosition.offsetY,
-              }}
+              initialPosition={draggableInitialPosition}
               onClose={onSettingPopupClose}
             >
-              <AppearanceSetting />
+              {appearanceSettingContent}
             </DraggableAppearanceSetting>
           )}
         </div>
       </div>
     </>
   )
-}
+})

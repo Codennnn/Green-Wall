@@ -1,4 +1,5 @@
-import { useId } from 'react'
+import { memo, useId } from 'react'
+import { useEvent } from 'react-use-event-hook'
 
 import { useTranslations } from 'next-intl'
 import { CircleHelpIcon } from 'lucide-react'
@@ -10,16 +11,57 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '~/components/ui/tooltip
 import { useData } from '~/DataContext'
 import { BlockShape, GraphSize } from '~/enums'
 import { trackEvent } from '~/helpers'
+import type { Themes } from '~/types'
 
 import { YearRangeSelect } from './YearRangeSelect'
 
-export function AppearanceSetting() {
+export const AppearanceSetting = memo(function AppearanceSetting() {
   const t = useTranslations('settings')
   const { graphData, settings, dispatchSettings } = useData()
 
   const daysLabelId = useId()
   const safariHeader = useId()
   const attributionId = useId()
+
+  const handleDaysLabelChange = useEvent(
+    (checked: boolean) => {
+      dispatchSettings({ type: 'daysLabel', payload: checked })
+    },
+  )
+
+  const handleSafariHeaderChange = useEvent(
+    (checked: boolean) => {
+      dispatchSettings({ type: 'showSafariHeader', payload: checked })
+    },
+  )
+
+  const handleAttributionChange = useEvent(
+    (checked: boolean) => {
+      dispatchSettings({ type: 'showAttribution', payload: checked })
+    },
+  )
+
+  const handleSizeChange = useEvent(
+    (size: string[]) => {
+      dispatchSettings({ type: 'size', payload: size[0] as GraphSize })
+    },
+  )
+
+  const handleBlockShapeChange = useEvent(
+    (shape: string[]) => {
+      dispatchSettings({
+        type: 'blockShape',
+        payload: shape[0] as BlockShape,
+      })
+    },
+  )
+
+  const handleThemeChange = useEvent(
+    (theme: Themes) => {
+      trackEvent('Change theme', { themeName: theme })
+      dispatchSettings({ type: 'theme', payload: theme })
+    },
+  )
 
   return (
     <div className="appearance-setting min-w-[min(40vw,220px)] max-w-[min(90vw,280px)] text-muted-foreground">
@@ -34,9 +76,7 @@ export function AppearanceSetting() {
           checked={settings.daysLabel}
           defaultChecked={true}
           id={daysLabelId}
-          onCheckedChange={(checked) => {
-            dispatchSettings({ type: 'daysLabel', payload: checked })
-          }}
+          onCheckedChange={handleDaysLabelChange}
         />
       </fieldset>
 
@@ -46,9 +86,7 @@ export function AppearanceSetting() {
           checked={settings.showSafariHeader}
           defaultChecked={true}
           id={safariHeader}
-          onCheckedChange={(checked) => {
-            dispatchSettings({ type: 'showSafariHeader', payload: checked })
-          }}
+          onCheckedChange={handleSafariHeaderChange}
         />
       </fieldset>
 
@@ -58,9 +96,7 @@ export function AppearanceSetting() {
           checked={settings.showAttribution}
           defaultChecked={true}
           id={attributionId}
-          onCheckedChange={(checked) => {
-            dispatchSettings({ type: 'showAttribution', payload: checked })
-          }}
+          onCheckedChange={handleAttributionChange}
         />
       </fieldset>
 
@@ -80,9 +116,7 @@ export function AppearanceSetting() {
         </label>
         <ToggleGroup
           value={[settings.size]}
-          onValueChange={(size) => {
-            dispatchSettings({ type: 'size', payload: size[0] as GraphSize })
-          }}
+          onValueChange={handleSizeChange}
         >
           <Tooltip>
             <TooltipTrigger render={<Toggle size="sm" value={GraphSize.Small} />}>
@@ -109,12 +143,7 @@ export function AppearanceSetting() {
         <label className="flex items-center">{t('blockShape')}</label>
         <ToggleGroup
           value={[settings.blockShape]}
-          onValueChange={(shape) => {
-            dispatchSettings({
-              type: 'blockShape',
-              payload: shape[0] as BlockShape,
-            })
-          }}
+          onValueChange={handleBlockShapeChange}
         >
           <Tooltip>
             <TooltipTrigger render={<Toggle size="sm" value={BlockShape.Square} />}>
@@ -136,12 +165,9 @@ export function AppearanceSetting() {
         <ThemeSelector
           className="mt-3 pl-1"
           value={settings.theme}
-          onChange={(theme) => {
-            trackEvent('Change theme', { themeName: theme })
-            dispatchSettings({ type: 'theme', payload: theme })
-          }}
+          onChange={handleThemeChange}
         />
       </fieldset>
     </div>
   )
-}
+})

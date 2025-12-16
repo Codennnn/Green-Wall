@@ -37,15 +37,24 @@ export function DataProvider(props: React.PropsWithChildren) {
 
   const [settings, dispatchSettings] = useGraphSetting()
 
-  const firstYear = graphData?.contributionYears.at(-1)?.toString()
-  const lastYear = graphData?.contributionYears.at(0)?.toString()
+  const derivedValues = useMemo(() => {
+    const firstYear = graphData?.contributionYears.at(-1)?.toString()
+    const lastYear = graphData?.contributionYears.at(0)?.toString()
+    const totalYears = graphData?.contributionYears.length
+    const totalContributions = graphData?.contributionCalendars.reduce(
+      (sum, calendar) => sum + calendar.total,
+      0,
+    )
+    const username = graphData?.login ?? ''
 
-  const totalYears = graphData?.contributionYears.length
-
-  const totalContributions = graphData?.contributionCalendars.reduce(
-    (sum, calendar) => sum + calendar.total,
-    0,
-  )
+    return {
+      username,
+      firstYear,
+      lastYear,
+      totalYears,
+      totalContributions,
+    }
+  }, [graphData])
 
   const applyingTheme = useMemo(
     () =>
@@ -55,21 +64,24 @@ export function DataProvider(props: React.PropsWithChildren) {
     [settings.theme],
   )
 
+  const contextValue = useMemo<SettingContextData>(
+    () => ({
+      username: derivedValues.username,
+      graphData,
+      setGraphData,
+      settings,
+      dispatchSettings,
+      firstYear: derivedValues.firstYear,
+      lastYear: derivedValues.lastYear,
+      totalYears: derivedValues.totalYears,
+      totalContributions: derivedValues.totalContributions,
+      applyingTheme,
+    }),
+    [graphData, settings, dispatchSettings, applyingTheme, derivedValues],
+  )
+
   return (
-    <Setting.Provider
-      value={{
-        username: graphData?.login ?? '',
-        graphData,
-        setGraphData,
-        settings,
-        dispatchSettings,
-        firstYear,
-        lastYear,
-        totalYears,
-        totalContributions,
-        applyingTheme,
-      }}
-    >
+    <Setting.Provider value={contextValue}>
       {children}
     </Setting.Provider>
   )

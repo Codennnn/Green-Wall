@@ -1,3 +1,5 @@
+import { cn } from '~/lib/utils'
+
 import styles from './Loading.module.css'
 
 export function Loading(props: React.PropsWithChildren<{ active?: boolean }>) {
@@ -8,7 +10,7 @@ export function Loading(props: React.PropsWithChildren<{ active?: boolean }>) {
       {props.children}
 
       {props.active && (
-        <div className={`${styles.waterfall} ${active ? styles.active : ''}`}>
+        <div className={cn(styles.waterfall, active && styles.active)}>
           <div />
           <div />
           <div />

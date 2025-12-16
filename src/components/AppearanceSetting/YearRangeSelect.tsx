@@ -1,3 +1,6 @@
+import { memo, useMemo } from 'react'
+import { useEvent } from 'react-use-event-hook'
+
 import {
   Select,
   SelectContent,
@@ -6,51 +9,62 @@ import {
   SelectValue,
 } from '~/components/ui/select'
 import { useData } from '~/DataContext'
-import type { GraphData, GraphSettings } from '~/types'
+import type { GraphData } from '~/types'
 
 interface YearRangeSelectProps {
   graphData: GraphData | undefined
 }
 
-export function YearRangeSelect(props: YearRangeSelectProps) {
+export const YearRangeSelect = memo(function YearRangeSelect(props: YearRangeSelectProps) {
   const { graphData } = props
 
   const { settings, dispatchSettings, firstYear, lastYear } = useData()
 
-  let [startYear, endYear] = settings.yearRange ?? []
-  startYear ??= firstYear
-  endYear ??= lastYear
+  const yearRange = useMemo(() => {
+    let [startYear, endYear] = settings.yearRange ?? []
+    startYear ??= firstYear
+    endYear ??= lastYear
+
+    return { startYear, endYear }
+  }, [settings.yearRange, firstYear, lastYear])
+
+  const { startYear, endYear } = yearRange
+
+  const handleStartYearChange = useEvent(
+    (year: string | null) => {
+      if (!year) {
+        return
+      }
+
+      dispatchSettings({
+        type: 'yearRange',
+        payload: [year, endYear],
+      })
+    },
+  )
+
+  const handleEndYearChange = useEvent(
+    (year: string | null) => {
+      if (!year) {
+        return
+      }
+
+      dispatchSettings({
+        type: 'yearRange',
+        payload: [startYear, year],
+      })
+    },
+  )
 
   if (!startYear || !endYear) {
     return null
-  }
-
-  const handleYearChange = (se: 'start' | 'end', year: string | null) => {
-    if (!year) {
-      return
-    }
-
-    let payload: GraphSettings['yearRange'] = undefined
-
-    if (se === 'start') {
-      payload = [year, endYear]
-    }
-
-    if (se === 'end') {
-      payload = [startYear, year]
-    }
-
-    dispatchSettings({
-      type: 'yearRange',
-      payload,
-    })
   }
 
   return (
     <div className="flex items-center">
       <Select
         value={startYear}
-        onValueChange={handleYearChange.bind(null, 'start')}
+        onValueChange={handleStartYearChange}
       >
         <SelectTrigger className="w-20 min-w-auto">
           <SelectValue />
@@ -72,7 +86,7 @@ export function YearRangeSelect(props: YearRangeSelectProps) {
 
       <Select
         value={endYear}
-        onValueChange={handleYearChange.bind(null, 'end')}
+        onValueChange={handleEndYearChange}
       >
         <SelectTrigger className="w-20 min-w-auto">
           <SelectValue />
@@ -91,4 +105,4 @@ export function YearRangeSelect(props: YearRangeSelectProps) {
       </Select>
     </div>
   )
-}
+})

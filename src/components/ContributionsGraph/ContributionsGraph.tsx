@@ -4,6 +4,7 @@ import { MockupSafari } from '~/components/mockup/MockupSafari'
 import { DEFAULT_SIZE, DEFAULT_THEME, sizeProperties, THEME_PRESETS } from '~/constants'
 import { useData } from '~/DataContext'
 import { BlockShape } from '~/enums'
+import { cn } from '~/lib/utils'
 
 import { Graph, type GraphProps } from './Graph'
 import { GraphFooter } from './GraphFooter'
@@ -115,7 +116,7 @@ function InnerContributionsGraph(
     >
       <Mockup className={mockupClassName}>
         <div>
-          <div className={`px-6 ${settings.showSafariHeader ? 'pt-2' : 'pt-6'}`}>
+          <div className={cn('px-6', settings.showSafariHeader ? 'pt-2' : 'pt-6')}>
             <GraphHeader />
           </div>
 
@@ -139,6 +140,7 @@ function InnerContributionsGraph(
                   data={calendar}
                   daysLabel={settings.daysLabel}
                   highlightedDates={highlightedDates}
+                  settingsSize={settings.size}
                   showInspect={showInspect}
                   titleRender={titleRender}
                 />

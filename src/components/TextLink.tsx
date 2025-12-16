@@ -1,5 +1,7 @@
 import Link from 'next/link'
 
+import { cn } from '~/lib/utils'
+
 export function TextLink({
   children,
   ...props
@@ -7,9 +9,10 @@ export function TextLink({
   return (
     <Link
       {...props}
-      className={`underline decoration-current decoration-dotted underline-offset-[3px] hover:decoration-solid ${
-        props.className ?? ''
-      }`}
+      className={cn(
+        'underline decoration-current decoration-dotted underline-offset-[3px] hover:decoration-solid',
+        props.className,
+      )}
     >
       {children}
     </Link>

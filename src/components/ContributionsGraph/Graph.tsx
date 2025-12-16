@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from 'react'
+import { memo, useEffect, useRef, useState } from 'react'
+import { useEvent } from 'react-use-event-hook'
 
 import Link from 'next/link'
 import { useTranslations } from 'next-intl'
@@ -12,7 +13,7 @@ import { useData } from '~/DataContext'
 import { ContributionLevel } from '~/enums'
 import { numberWithCommas } from '~/helpers'
 import { cn } from '~/lib/utils'
-import type { ContributionCalendar, ContributionDay } from '~/types'
+import type { ContributionCalendar, ContributionDay, GraphSettings } from '~/types'
 
 import styles from './Graph.module.css'
 
@@ -22,6 +23,7 @@ export interface GraphProps extends React.ComponentProps<'div'> {
   weekLabel?: boolean
   showInspect?: boolean
   highlightedDates?: Set<string>
+  settingsSize?: GraphSettings['size']
   titleRender?: (params: {
     year: number
     total: number
@@ -29,17 +31,18 @@ export interface GraphProps extends React.ComponentProps<'div'> {
   }) => React.ReactNode | null
 }
 
-export function Graph(props: GraphProps) {
+function InnerGraph(props: GraphProps) {
   const {
     data: calendar,
     daysLabel,
     showInspect = true,
     titleRender,
     highlightedDates,
+    settingsSize,
     ...rest
   } = props
 
-  const { username, settings } = useData()
+  const { username } = useData()
   const t = useTranslations('graph')
   const tMonths = useTranslations('months')
   const tWeekdays = useTranslations('weekdays')
@@ -69,25 +72,28 @@ export function Graph(props: GraphProps) {
   const [refEle, setRefEle] = useState<HTMLElement | null>(null)
   const delayTimer = useRef<NodeJS.Timeout | null>(null)
 
-  const handleMouseEnter = (refTarget: HTMLElement, info: ContributionDay) => {
+  const handleMouseEnter = useEvent((refTarget: HTMLElement, info: ContributionDay) => {
     delayTimer.current = setTimeout(() => {
       setRefEle(refTarget)
       setTooltipInfo(info)
     }, 50)
-  }
+  })
 
-  const handleMouseLeave = () => {
+  const handleMouseLeave = useEvent(() => {
     if (delayTimer.current) {
       window.clearTimeout(delayTimer.current)
     }
 
     setRefEle(null)
-  }
+  })
 
   const shouldDimNonHighlighted = highlightedDates && highlightedDates.size > 0
 
+  // 使用传入的 settingsSize，如果没有则使用默认值
+  const currentSize = settingsSize ?? DEFAULT_SIZE
+
   return (
-    <div {...rest} className={`${rest.className ?? ''} group`}>
+    <div {...rest} className={cn('group', rest.className)}>
       <div className="mb-2 flex items-center">
         {typeof titleRender === 'function'
           ? (
@@ -134,7 +140,7 @@ export function Graph(props: GraphProps) {
                 <GraphTooltipLabel
                   count={tooltipInfo.count}
                   date={tooltipInfo.date}
-                  size={settings.size ?? DEFAULT_SIZE}
+                  size={currentSize}
                 />
               )
             : null
@@ -173,7 +179,7 @@ export function Graph(props: GraphProps) {
         )}
 
         {/* Day Blocks */}
-        <ul className={`${styles.grids} ${styles.blocks}`}>
+        <ul className={cn(styles.grids, styles.blocks)}>
           {calendar.weeks.reduce<React.ReactElement[]>((blocks, week, i) => {
             let days = week.days
 
@@ -224,3 +230,62 @@ export function Graph(props: GraphProps) {
     </div>
   )
 }
+
+export const Graph = memo(InnerGraph, (prevProps, nextProps) => {
+  if (prevProps.data.year !== nextProps.data.year) {
+    return false
+  }
+
+  if (prevProps.data.total !== nextProps.data.total) {
+    return false
+  }
+
+  if (prevProps.data.weeks.length !== nextProps.data.weeks.length) {
+    return false
+  }
+
+  if (prevProps.daysLabel !== nextProps.daysLabel) {
+    return false
+  }
+
+  if (prevProps.showInspect !== nextProps.showInspect) {
+    return false
+  }
+
+  if (prevProps.settingsSize !== nextProps.settingsSize) {
+    return false
+  }
+
+  if (prevProps.className !== nextProps.className) {
+    return false
+  }
+
+  const prevHighlighted = prevProps.highlightedDates
+  const nextHighlighted = nextProps.highlightedDates
+
+  if (prevHighlighted !== nextHighlighted) {
+    if (!prevHighlighted && !nextHighlighted) {
+      return true
+    }
+
+    if (!prevHighlighted || !nextHighlighted) {
+      return false
+    }
+
+    if (prevHighlighted.size !== nextHighlighted.size) {
+      return false
+    }
+
+    for (const date of prevHighlighted) {
+      if (!nextHighlighted.has(date)) {
+        return false
+      }
+    }
+  }
+
+  if (prevProps.titleRender !== nextProps.titleRender) {
+    return false
+  }
+
+  return true
+})

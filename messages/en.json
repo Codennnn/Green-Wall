@@ -9,7 +9,14 @@
     "userOgDescription": "{username}'s GitHub contributions.",
     "shareTitle": "{username}'s GitHub contributions in review · Green Wall",
     "shareOgTitle": "{username}'s GitHub contributions",
-    "shareOgDescription": "I just made a GitHub contributions graph in review!"
+    "shareOgDescription": "I just made a GitHub contributions graph in review!",
+    "aboutTitle": "About · Green Wall",
+    "aboutDescription": "Learn about Green Wall - a GitHub contribution graph generator that helps you review and share your coding journey.",
+    "aboutOgTitle": "About Green Wall",
+    "aboutOgDescription": "Learn how Green Wall helps you visualize and share your GitHub contributions.",
+    "yearTitle": "{username}'s GitHub contributions in {year} · Green Wall",
+    "yearOgTitle": "{username}'s GitHub contributions in {year}",
+    "yearOgDescription": "Explore {username}'s GitHub activity and contribution statistics for {year}."
   },
   "common": {
     "appName": "Green Wall",
