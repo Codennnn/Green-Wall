@@ -11,11 +11,11 @@ interface FamousUsersSectionProps {
   onSelect?: (login: string) => void
 }
 
-const FAMOUS_USERS: { login: GitHubUser['login'], badgeText?: string }[] = [
-  { login: 'torvalds', badgeText: 'Linux' },
-  { login: 'gaearon', badgeText: 'React' },
-  { login: 'tj', badgeText: 'JavaScript' },
-  { login: 'sindresorhus', badgeText: 'Open Source' },
+const FAMOUS_USERS: { login: GitHubUser['login'], badgeKey: string }[] = [
+  { login: 'torvalds', badgeKey: 'torvalds' },
+  { login: 'gaearon', badgeKey: 'gaearon' },
+  { login: 'tj', badgeKey: 'tj' },
+  { login: 'sindresorhus', badgeKey: 'sindresorhus' },
 ]
 
 function buildGitHubAvatarUrl(login: string, size = 80) {
@@ -36,12 +36,13 @@ export function FamousUsersSection(props: FamousUsersSectionProps) {
       <div className="mt-4 grid grid-cols-2 gap-3 md:grid-cols-4">
         {FAMOUS_USERS.map((user) => {
           const cardLoading = Boolean(isLoading && loadingLogin && loadingLogin === user.login)
+          const badgeText = t(`famousUsers.${user.badgeKey}`)
 
           return (
             <UserCard
               key={user.login}
               avatarUrl={buildGitHubAvatarUrl(user.login)}
-              badgeText={user.badgeText}
+              badgeText={badgeText}
               isLoading={cardLoading}
               login={user.login}
               onSelect={onSelect}

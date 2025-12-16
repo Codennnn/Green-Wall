@@ -86,7 +86,13 @@
     "popularDescription": "Quick picks to explore contributions",
     "recentlyViewed": "Recently viewed",
     "recentDescription": "Pick up where you left off",
-    "lastViewed": "Last viewed {time}"
+    "lastViewed": "Last viewed {time}",
+    "famousUsers": {
+      "torvalds": "Linux & Git Creator",
+      "gaearon": "React Core, Redux",
+      "tj": "Express, Koa Author",
+      "sindresorhus": "1000+ npm Packages"
+    }
   },
   "stats": {
     "maxContributions": "Max Contributions in a Day",

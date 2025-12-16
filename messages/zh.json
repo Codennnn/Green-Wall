@@ -25,7 +25,7 @@
     "copied": "已复制",
     "close": "关闭",
     "preview": "预览",
-    "openSource": "代码开源"
+    "openSource": "开源代码"
   },
   "nav": {
     "about": "关于"
@@ -86,7 +86,13 @@
     "popularDescription": "一键看看他们的贡献墙长什么样",
     "recentlyViewed": "最近浏览",
     "recentDescription": "从你上次生成的记录继续",
-    "lastViewed": "上次查看 {time}"
+    "lastViewed": "上次查看 {time}",
+    "famousUsers": {
+      "torvalds": "Linux/Git 之父",
+      "gaearon": "React 核心团队",
+      "tj": "Express/Koa 作者",
+      "sindresorhus": "1000+ npm 包"
+    }
   },
   "stats": {
     "maxContributions": "单日峰值",
