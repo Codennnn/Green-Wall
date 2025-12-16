@@ -205,5 +205,12 @@
     "oct": "10月",
     "nov": "11月",
     "dec": "12月"
+  },
+  "yearSearch": {
+    "title": "探索年度 GitHub 贡献",
+    "description": "输入用户名并选择年份，查看详细的贡献统计数据。",
+    "usernamePlaceholder": "输入 GitHub 用户名",
+    "selectYear": "选择年份",
+    "go": "查看"
   }
 }

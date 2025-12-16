@@ -16,9 +16,9 @@ import {
   SquareCodeIcon,
 } from 'lucide-react'
 
-import { ContributionsGraph } from '~/components/ContributionsGraph'
+import { ContributionsGraph } from '~/components/ContributionsGraph/ContributionsGraph'
 import type { GraphHighlightMode, GraphHighlightOptions } from '~/components/ContributionsGraph/graphHighlightUtils'
-import Loading from '~/components/Loading'
+import { Loading } from '~/components/Loading/Loading'
 import { Button } from '~/components/ui/button'
 import { ScrollArea } from '~/components/ui/scroll-area'
 import { useData } from '~/DataContext'

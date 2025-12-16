@@ -1,1 +1,0 @@
-export { ContributionsGraph } from './ContributionsGraph'

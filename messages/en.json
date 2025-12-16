@@ -205,5 +205,12 @@
     "oct": "Oct",
     "nov": "Nov",
     "dec": "Dec"
+  },
+  "yearSearch": {
+    "title": "Explore yearly GitHub contributions",
+    "description": "Enter a username and select a year to view detailed contribution statistics.",
+    "usernamePlaceholder": "GitHub Username",
+    "selectYear": "Select Year",
+    "go": "Go"
   }
 }

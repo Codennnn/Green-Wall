@@ -6,7 +6,7 @@ import Image from 'next/image'
 import { useParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 
-import { ContributionsGraph } from '~/components/ContributionsGraph'
+import { ContributionsGraph } from '~/components/ContributionsGraph/ContributionsGraph'
 import { ErrorMessage } from '~/components/ErrorMessage'
 import { useData } from '~/DataContext'
 import { useContributionQuery } from '~/hooks/useQueries'

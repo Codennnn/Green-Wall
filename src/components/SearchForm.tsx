@@ -1,4 +1,4 @@
-import GenerateButton from '~/components/GenerateButton'
+import { GenerateButton } from '~/components/GenerateButton/GenerateButton'
 import { SearchInput } from '~/components/SearchInput'
 
 interface SearchFormProps {
