@@ -61,11 +61,11 @@ export function YearSearchPage() {
   return (
     <div className="py-10 md:py-14">
       <h1 className="text-center text-3xl font-bold md:mx-auto md:px-20 md:text-4xl md:leading-[1.2] lg:text-5xl">
-        {t('title')}
+        {t('titleWithYear', { year: currentYear })}
       </h1>
 
       <p className="mx-auto mt-4 max-w-2xl text-center text-muted-foreground">
-        {t('description')}
+        {t('descriptionWithYear', { year: currentYear })}
       </p>
 
       <div className="py-12 md:py-16">

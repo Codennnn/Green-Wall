@@ -7,11 +7,12 @@ import { useTheme } from 'next-themes'
 import { MoonIcon, SunIcon, SunMoonIcon } from 'lucide-react'
 
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-} from '~/components/ui/select'
+  Menu,
+  MenuPopup,
+  MenuRadioGroup,
+  MenuRadioItem,
+  MenuTrigger,
+} from '~/components/ui/menu'
 import { ThemeMode } from '~/enums'
 
 export function ThemeModeSelector() {
@@ -57,33 +58,35 @@ export function ThemeModeSelector() {
       ?? modes.find((mode) => mode.value === DEFAULT_THEME_MODE)!
   const CurrentIcon = currentMode.icon
 
+  const handleThemeChange = (value: string) => {
+    setTheme(value)
+  }
+
   return (
-    <Select
-      value={currentTheme}
-      onValueChange={(value) => {
-        setTheme(value!)
-      }}
-    >
-      <SelectTrigger className="flex size-[38px] min-w-0 items-center rounded-md border-0 bg-main-100! p-0 text-sm font-medium text-main-500! shadow-none ring-4 ring-background transition-colors duration-300 hover:bg-main-200! focus-visible:ring-0 md:ring-8 before:shadow-none **:data-[slot=select-icon]:hidden">
-        <span className="size-full flex items-center justify-center">
-          <CurrentIcon className="size-5.5" />
-        </span>
-      </SelectTrigger>
+    <Menu>
+      <MenuTrigger className="flex size-[38px] min-w-0 items-center justify-center rounded-md border-0 bg-main-100 p-0 text-sm font-medium text-main-500 shadow-none ring-4 ring-background transition-colors duration-300 hover:bg-main-200 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background md:ring-8">
+        <CurrentIcon className="size-5.5" />
+      </MenuTrigger>
 
-      <SelectContent>
-        {modes.map((mode) => {
-          const Icon = mode.icon
+      <MenuPopup>
+        <MenuRadioGroup value={currentTheme} onValueChange={handleThemeChange}>
+          {modes.map((mode) => {
+            const Icon = mode.icon
 
-          return (
-            <SelectItem key={mode.value} value={mode.value}>
-              <div className="flex items-center gap-2">
-                <Icon className="size-4" />
-                <span>{mode.label}</span>
-              </div>
-            </SelectItem>
-          )
-        })}
-      </SelectContent>
-    </Select>
+            return (
+              <MenuRadioItem
+                key={mode.value}
+                value={mode.value}
+              >
+                <div className="flex items-center gap-2">
+                  <Icon className="size-4" />
+                  <span>{mode.label}</span>
+                </div>
+              </MenuRadioItem>
+            )
+          })}
+        </MenuRadioGroup>
+      </MenuPopup>
+    </Menu>
   )
 }

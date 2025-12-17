@@ -4,7 +4,6 @@ import { useEffect } from 'react'
 import { useEvent } from 'react-use-event-hook'
 
 import { useTranslations } from 'next-intl'
-import { div } from 'framer-motion/client'
 import {
   CheckIcon,
   CopyIcon,
@@ -21,6 +20,7 @@ import {
   EmptyContent,
   EmptyDescription,
 } from '~/components/ui/empty'
+import { ScrollArea } from '~/components/ui/scroll-area'
 import { Skeleton } from '~/components/ui/skeleton'
 import { useCopyToClipboard } from '~/hooks/useCopyToClipboard'
 import { useYearlyAiReportStream } from '~/hooks/useYearlyAiReportStream'
@@ -150,14 +150,20 @@ export function AiYearlyReportCard(props: AiYearlyReportCardProps) {
 
   return (
     <StatCard
-      cardClassName="h-full"
+      cardClassName="h-full max-h-[352px]"
+      cardContentClassName="overflow-hidden"
       icon={<SparklesIcon className="size-5" />}
       title={t('title')}
     >
       <div className="flex flex-col gap-grid-item h-full">
         {/* 内容区 */}
-        <div className="flex-1 p-grid-item py-0">
-          {renderContent()}
+        <div className="flex-1 py-0 overflow-auto">
+          <ScrollArea
+            scrollFade
+            className="p-grid-item"
+          >
+            {renderContent()}
+          </ScrollArea>
         </div>
 
         {/* 操作按钮 */}

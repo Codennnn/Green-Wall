@@ -26,7 +26,7 @@ export function DraggableAppearanceSetting(
     <motion.div
       drag
       animate={pressing ? 'scale' : undefined}
-      className="fixed left-0 top-0 z-50 inline-block overflow-hidden rounded-lg bg-background shadow-muted shadow border border-border"
+      className="fixed left-0 top-0 z-50 inline-block overflow-hidden rounded-lg bg-background shadow-muted shadow-lg border border-border"
       dragConstraints={{ current: document.body }}
       dragControls={dragControls}
       dragListener={false}

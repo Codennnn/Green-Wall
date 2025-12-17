@@ -22,7 +22,7 @@
   }
 
   .appearance-setting fieldset {
-    @apply min-h-[35px] flex items-center justify-between py-1 mb-2 last-of-type:mb-0;
+    @apply min-h-[35px] flex items-center justify-between;
   }
 
   .appearance-setting fieldset > label {

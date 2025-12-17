@@ -19,7 +19,14 @@ import { ContributionsGraph } from '~/components/ContributionsGraph/Contribution
 import type { GraphHighlightMode, GraphHighlightOptions } from '~/components/ContributionsGraph/graphHighlightUtils'
 import { Loading } from '~/components/Loading/Loading'
 import { Button } from '~/components/ui/button'
+import {
+  Empty,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+} from '~/components/ui/empty'
 import { ScrollArea } from '~/components/ui/scroll-area'
+import { Skeleton } from '~/components/ui/skeleton'
 import { useData } from '~/DataContext'
 import { useDateFormatters } from '~/hooks/useDateFormatters'
 import { useImageExport } from '~/hooks/useImageExport'
@@ -80,9 +87,15 @@ export function GraphBlock() {
   )
 
   const statistics = useMemo(() => deriveStatistics(contributionData), [contributionData])
-  const topLanguages = useMemo(() => {
-    return getTopLanguagesFromRepos(reposData?.repos, { limit: 5 })
-  }, [reposData?.repos])
+
+  const repos = reposData?.repos
+
+  const [reposDataSet, topLanguages] = useMemo(() => {
+    return [
+      Array.isArray(repos) ? repos : [],
+      getTopLanguagesFromRepos(repos, { limit: 5 }),
+    ]
+  }, [repos])
 
   // 年度报告标签推导
   const yearlyTags = useMemo(() => {
@@ -92,8 +105,16 @@ export function GraphBlock() {
       topLanguages,
       reposData,
       issuesData,
+      locale: currentLocale,
     })
-  }, [statistics, contributionData?.contributionCalendars, topLanguages, reposData, issuesData])
+  }, [
+    statistics,
+    contributionData?.contributionCalendars,
+    topLanguages,
+    reposData,
+    issuesData,
+    currentLocale,
+  ])
 
   // 年度报告高光数据
   const yearlyHighlights = useMemo(() => {
@@ -152,7 +173,7 @@ export function GraphBlock() {
 
       <div
         ref={reportContainerRef}
-        className="grid w-full grid-cols-12 gap-4 bg-background p-4"
+        className="grid w-full grid-cols-12 gap-4 bg-background p-grid-item"
       >
         {/* MARK: 贡献日历热力图 */}
         <div className="col-span-7">
@@ -361,10 +382,16 @@ export function GraphBlock() {
               <ScrollArea scrollFade className="h-full pt-grid-item-sm p-grid-item">
                 {reposLoading
                   ? (
-                      <div className="flex h-full items-center justify-center text-foreground/70 text-sm">
-                        <div className="size-4 animate-spin rounded-full border-2 border-border border-t-transparent" />
-                        <span className="ml-2">{tErrors('loadingRepos')}</span>
-                      </div>
+                      <ul className="flex flex-col gap-3 px-grid-item">
+                        {Array.from({ length: 4 }).map((_, index) => (
+                          <li key={index}>
+                            <div className="space-y-1.5">
+                              <Skeleton className="h-4 w-full rounded-sm" />
+                              <Skeleton className="h-4 w-1/2 rounded-sm" />
+                            </div>
+                          </li>
+                        ))}
+                      </ul>
                     )
                   : reposError
                     ? (
@@ -372,43 +399,50 @@ export function GraphBlock() {
                           {tErrors('failedLoadRepos')}
                         </div>
                       )
-                    : (reposData?.repos ?? []).length === 0
-                        ? (
-                            <div className="flex h-full items-center justify-center text-foreground/70 text-sm">
-                              {tErrors('noRepos')}
-                            </div>
-                          )
-                        : (
-                            <ul className="flex flex-col gap-1 pr-1">
-                              {(reposData?.repos ?? []).map((repo: RepoInfo) => (
-                                <li key={repo.url}>
-                                  <a
-                                    className="block rounded-md px-2 py-2 text-sm transition-colors hover:bg-foreground/6 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500/40"
-                                    href={repo.url}
-                                    rel="noreferrer"
-                                    target="_blank"
-                                  >
-                                    <div className="flex items-center gap-2">
-                                      <span className="min-w-0 flex-1 truncate font-medium">
-                                        {repo.name}
-                                      </span>
-                                      <span className="shrink-0 text-foreground/60 text-xs tabular-nums">
-                                        ★ {repo.stargazerCount}
-                                      </span>
-                                    </div>
+                    : reposDataSet.length === 0
+                      ? (
+                          <Empty className="h-full border-0 p-0">
+                            <EmptyHeader>
+                              <EmptyMedia variant="icon">
+                                <FolderGit2Icon />
+                              </EmptyMedia>
+                              <EmptyDescription>
+                                {tErrors('noRepos')}
+                              </EmptyDescription>
+                            </EmptyHeader>
+                          </Empty>
+                        )
+                      : (
+                          <ul className="flex flex-col gap-1 pr-1">
+                            {reposDataSet.map((repo: RepoInfo) => (
+                              <li key={repo.url}>
+                                <a
+                                  className="block rounded-md px-2 py-2 text-sm transition-colors hover:bg-foreground/6 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500/40"
+                                  href={repo.url}
+                                  rel="noreferrer"
+                                  target="_blank"
+                                >
+                                  <div className="flex items-center gap-2">
+                                    <span className="min-w-0 flex-1 truncate font-medium">
+                                      {repo.name}
+                                    </span>
+                                    <span className="shrink-0 text-foreground/60 text-xs tabular-nums">
+                                      ★ {repo.stargazerCount}
+                                    </span>
+                                  </div>
 
-                                    {repo.description
-                                      ? (
-                                          <div className="mt-1 line-clamp-2 text-foreground/70 text-xs">
-                                            {repo.description}
-                                          </div>
-                                        )
-                                      : null}
-                                  </a>
-                                </li>
-                              ))}
-                            </ul>
-                          )}
+                                  {repo.description
+                                    ? (
+                                        <div className="mt-1 line-clamp-2 text-foreground/70 text-xs">
+                                          {repo.description}
+                                        </div>
+                                      )
+                                    : null}
+                                </a>
+                              </li>
+                            ))}
+                          </ul>
+                        )}
               </ScrollArea>
             </div>
           </StatCard>

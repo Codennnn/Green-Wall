@@ -64,7 +64,7 @@ export const AppearanceSetting = memo(function AppearanceSetting() {
   )
 
   return (
-    <div className="appearance-setting min-w-[min(40vw,220px)] max-w-[min(90vw,280px)] text-muted-foreground">
+    <div className="appearance-setting min-w-[min(40vw,220px)] max-w-[min(90vw,280px)] text-muted-foreground space-y-2">
       <fieldset>
         <label>{t('yearRange')}</label>
         <YearRangeSelect graphData={graphData} />

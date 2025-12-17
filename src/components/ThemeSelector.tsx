@@ -54,7 +54,7 @@ const ThemeOption = memo(function ThemeOption({ theme, isSelected, onClick }: Th
   return (
     <div
       className={cn(
-        'h-20 w-full cursor-pointer overflow-hidden rounded-lg transition-all duration-300',
+        'h-15 w-full cursor-pointer overflow-hidden rounded-md transition-all duration-300',
         'ring-2 ring-offset-0',
         isSelected
           ? 'ring-brand-400/70 ring-offset-2 ring-offset-background hover:ring-brand-500/80'
@@ -65,10 +65,10 @@ const ThemeOption = memo(function ThemeOption({ theme, isSelected, onClick }: Th
       onClick={handleClick}
     >
       <div
-        className="flex size-full justify-center p-5 pb-0"
+        className="flex size-full justify-center p-2.5 pb-0"
         style={{ background: 'var(--theme-background-container)' }}
       >
-        <div className="flex size-full items-center justify-center gap-2 overflow-hidden rounded-t-md border-dashed border-(--theme-border) bg-(--theme-background) p-5">
+        <div className="flex size-full items-center justify-center gap-2 overflow-hidden rounded-t-md border-dashed border-(--theme-border) bg-(--theme-background) p-4">
           <span className="size-3 rounded bg-(--level-0)" />
           <span className="size-3 rounded bg-(--level-1)" />
           <span className="size-3 rounded bg-(--level-2)" />
@@ -89,7 +89,13 @@ export const ThemeSelector = memo(function ThemeSelector(props: ThemeSelectorPro
   )
 
   return (
-    <div {...rest} className={cn('flex w-full flex-col gap-3', className)}>
+    <div
+      {...rest}
+      className={cn(
+        'grid grid-cols-2 gap-3 w-full',
+        className,
+      )}
+    >
       {THEME_PRESETS.map((theme) => (
         <ThemeOption
           key={theme.name}

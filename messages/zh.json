@@ -29,6 +29,8 @@
     "colon": "："
   },
   "nav": {
+    "home": "首页",
+    "yearSearch": "年度回顾",
     "about": "关于"
   },
   "footer": {
@@ -207,11 +209,24 @@
     "dec": "12月"
   },
   "yearSearch": {
-    "title": "探索年度 GitHub 贡献",
-    "description": "输入用户名并选择年份，查看详细的贡献统计数据。",
+    "title": "探索年度 GitHub 回顾",
+    "titleWithYear": "{year} 年度 GitHub 回顾",
+    "description": "输入用户名并选择年份，查看详细的分析数据与年度报告。",
+    "descriptionWithYear": "探索 {year} 年的 GitHub 贡献数据，查看详细的分析与年度报告。",
     "usernamePlaceholder": "输入 GitHub 用户名",
     "searchPlaceholder": "输入 GitHub 用户名",
     "selectYear": "选择年份",
     "go": "查看"
+  },
+  "navigation": {
+    "backToOverview": "返回总览",
+    "backToHome": "返回首页",
+    "home": "首页",
+    "yearReport": "{year} 年度报告",
+    "switchYear": "切换年份",
+    "previousYear": "上一年",
+    "nextYear": "下一年",
+    "viewYearDetails": "查看 {year} 年详情",
+    "inspectYear": "查看年度详情"
   }
 }

@@ -29,6 +29,8 @@
     "colon": ":"
   },
   "nav": {
+    "home": "Home",
+    "yearSearch": "Year Wrapped",
     "about": "About"
   },
   "footer": {
@@ -208,10 +210,23 @@
   },
   "yearSearch": {
     "title": "Explore yearly GitHub contributions",
+    "titleWithYear": "{year} GitHub Wrapped",
     "description": "Enter a username and select a year to view detailed contribution statistics.",
+    "descriptionWithYear": "Explore {year} GitHub contribution data with detailed analytics and annual reports.",
     "usernamePlaceholder": "GitHub Username",
     "searchPlaceholder": "GitHub Username",
     "selectYear": "Select Year",
     "go": "Go"
+  },
+  "navigation": {
+    "backToOverview": "Back to Overview",
+    "backToHome": "Back to Home",
+    "home": "Home",
+    "yearReport": "{year} Year Report",
+    "switchYear": "Switch Year",
+    "previousYear": "Previous Year",
+    "nextYear": "Next Year",
+    "viewYearDetails": "View {year} Details",
+    "inspectYear": "Inspect Year"
   }
 }

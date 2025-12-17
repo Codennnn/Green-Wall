@@ -112,7 +112,7 @@ function InnerGraph(props: GraphProps) {
 
         {showInspect && (
           <Button
-            className="ml-auto opacity-0 transition-opacity group-hover:opacity-100 text-muted-foreground"
+            className="group/inspect ml-auto transition-all opacity-0 group-hover:opacity-60 hover:opacity-100"
             render={(props) => (
               <Link
                 href={`/year/${calendar.year}/${username}`}
@@ -121,10 +121,10 @@ function InnerGraph(props: GraphProps) {
               />
             )}
             size="xs"
-            variant="outline"
+            variant="ghost"
           >
             {t('inspect')}
-            <ChevronRight className="size-3" strokeWidth={2.5} />
+            <ChevronRight className="size-3 transition-transform group-hover/inspect:translate-x-0.5" strokeWidth={2.5} />
           </Button>
         )}
       </div>
