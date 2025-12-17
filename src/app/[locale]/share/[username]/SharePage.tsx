@@ -7,7 +7,7 @@ import Link from 'next/link'
 import { useParams, useSearchParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 
-import { ContributionsGraph } from '~/components/ContributionsGraph'
+import { ContributionsGraph } from '~/components/ContributionsGraph/ContributionsGraph'
 import { ErrorMessage } from '~/components/ErrorMessage'
 import { Button } from '~/components/ui/button'
 import { DEFAULT_THEME, THEME_PRESETS } from '~/constants'

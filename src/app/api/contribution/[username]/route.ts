@@ -2,7 +2,6 @@ import { type NextRequest, NextResponse } from 'next/server'
 
 import { ErrorType } from '~/enums'
 import { getValuableStatistics } from '~/helpers'
-import { mockGraphData } from '~/mock-data'
 import { fetchContributionsCollection, fetchGitHubUser } from '~/services'
 import type { GraphData, ResponseData, ValuableStatistics } from '~/types'
 
@@ -18,10 +17,6 @@ export async function GET(
   const statistics = request.nextUrl.searchParams.get('statistics') === 'true'
   const { searchParams } = new URL(request.url)
   const queryYears = searchParams.getAll('years').map(Number)
-
-  if (process.env.NEXT_PUBLIC_DATA_MODE === 'mock') {
-    return NextResponse.json({ data: mockGraphData }, { status: 200 })
-  }
 
   try {
     const githubUser = await fetchGitHubUser(username)

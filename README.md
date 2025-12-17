@@ -52,7 +52,7 @@ This will produce a preview similar to the one shown below.
 
 ## Deploy to Vercel
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FCodennnn%2FGreen-Wall&project-name=green-wall&repository-name=green-wall&env=GITHUB_ACCESS_TOKEN%2CNEXT_PUBLIC_DATA_MODE&envDescription=Required%3A%20GITHUB_ACCESS_TOKEN%20to%20call%20the%20GitHub%20GraphQL%20API.%20Optional%3A%20NEXT_PUBLIC_DATA_MODE%3Dmock%20to%20use%20local%20mock%20data.&envLink=https%3A%2F%2Fgithub.com%2FCodennnn%2FGreen-Wall%2Fblob%2Fmain%2F.env.example)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FCodennnn%2FGreen-Wall&project-name=green-wall&repository-name=green-wall&env=GITHUB_ACCESS_TOKEN&envDescription=Required%3A%20GITHUB_ACCESS_TOKEN%20to%20call%20the%20GitHub%20GraphQL%20API.&envLink=https%3A%2F%2Fgithub.com%2FCodennnn%2FGreen-Wall%2Fblob%2Fmain%2F.env.example)
 
 This project is a Next.js app that fetches data from the GitHub GraphQL API. The easiest way to deploy it is Vercel (the platform behind Next.js).
 
@@ -79,13 +79,12 @@ This project is a Next.js app that fetches data from the GitHub GraphQL API. The
 3. **Configure Environment Variables on Vercel**
    - During import (or later in **Project → Settings → Environment Variables**), set the following variables (see [`.env.example`](./.env.example) for the full reference):
 
-| Variable                | Required | Description                                                               | Suggested value                             |
-| ----------------------- | -------- | ------------------------------------------------------------------------- | ------------------------------------------- |
-| `GITHUB_ACCESS_TOKEN`   | Yes      | GitHub token used by the server to call the GitHub GraphQL API            | Your PAT                                    |
-| `NEXT_PUBLIC_DATA_MODE` | No       | Frontend data mode (`mock` uses local mock data; otherwise uses real API) | Leave empty for real data, or set to `mock` |
-| `AI_BASE_URL`           | No       | Base URL of an OpenAI-compatible API endpoint                             | e.g. `https://api.openai.com/v1`            |
-| `AI_API_KEY`            | No\*     | API key for the AI provider                                               | Provider key                                |
-| `AI_MODEL`              | No       | Model name supported by your provider                                     | e.g. `gpt-4o-mini`                          |
+| Variable              | Required | Description                                                    | Suggested value                  |
+| --------------------- | -------- | -------------------------------------------------------------- | -------------------------------- |
+| `GITHUB_ACCESS_TOKEN` | Yes      | GitHub token used by the server to call the GitHub GraphQL API | Your PAT                         |
+| `AI_BASE_URL`         | No       | Base URL of an OpenAI-compatible API endpoint                  | e.g. `https://api.openai.com/v1` |
+| `AI_API_KEY`          | No\*     | API key for the AI provider                                    | Provider key                     |
+| `AI_MODEL`            | No       | Model name supported by your provider                          | e.g. `gpt-4o-mini`               |
 
 > Note: AI variables are only needed for the **Yearly AI Report** feature (`/api/ai/yearly-report`). If you set `AI_API_KEY`, make sure `AI_BASE_URL` and `AI_MODEL` are also valid.
 

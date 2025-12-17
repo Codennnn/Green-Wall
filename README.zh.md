@@ -52,7 +52,7 @@ _为你的 GitHub 贡献拍张快照 📸，然后分享出去！_
 
 ## 部署到 Vercel
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FCodennnn%2FGreen-Wall&project-name=green-wall&repository-name=green-wall&env=GITHUB_ACCESS_TOKEN%2CNEXT_PUBLIC_DATA_MODE&envDescription=Required%3A%20GITHUB_ACCESS_TOKEN%20to%20call%20the%20GitHub%20GraphQL%20API.%20Optional%3A%20NEXT_PUBLIC_DATA_MODE%3Dmock%20to%20use%20local%20mock%20data.&envLink=https%3A%2F%2Fgithub.com%2FCodennnn%2FGreen-Wall%2Fblob%2Fmain%2F.env.example)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FCodennnn%2FGreen-Wall&project-name=green-wall&repository-name=green-wall&env=GITHUB_ACCESS_TOKEN&envDescription=Required%3A%20GITHUB_ACCESS_TOKEN%20to%20call%20the%20GitHub%20GraphQL%20API.&envLink=https%3A%2F%2Fgithub.com%2FCodennnn%2FGreen-Wall%2Fblob%2Fmain%2F.env.example)
 
 本项目是一个 Next.js 应用，会通过 GitHub GraphQL API 拉取数据。最省心的部署方式是使用 Vercel（Next.js 背后的平台）。
 
@@ -85,7 +85,6 @@ _为你的 GitHub 贡献拍张快照 📸，然后分享出去！_
 | 变量                    | 必填 | 说明                                                        | 推荐值                           |
 | ----------------------- | ---- | ----------------------------------------------------------- | -------------------------------- |
 | `GITHUB_ACCESS_TOKEN`   | 是   | 服务端调用 GitHub GraphQL API 所需的 GitHub Token           | 你的 PAT                         |
-| `NEXT_PUBLIC_DATA_MODE` | 否   | 前端数据模式（`mock` 使用本地 mock 数据；否则使用真实 API） | 真实数据留空，或设为 `mock`      |
 | `AI_BASE_URL`           | 否   | OpenAI-compatible API 的 Base URL                           | e.g. `https://api.openai.com/v1` |
 | `AI_API_KEY`            | 否\* | AI 服务的 API Key                                           | Provider key                     |
 | `AI_MODEL`              | 否   | 该 AI 服务支持的模型名称                                    | e.g. `gpt-4o-mini`               |
