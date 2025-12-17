@@ -5,7 +5,6 @@ import { useParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import {
   ArrowBigUpDashIcon,
-  Calendar1Icon,
   CalendarArrowUpIcon,
   CalendarDaysIcon,
   CalendarMinus2Icon,
@@ -41,7 +40,7 @@ import { MonthlyCommitChart } from './charts/MonthlyCommitChart'
 import { WeeklyCommitChart } from './charts/WeeklyCommitChart'
 import { AiYearlyReportCard } from './AiYearlyReportCard'
 import { StatCardWithPopover } from './StatCardWithPopover'
-import { SpinningLoader, StatCard, StaticCard, StaticCardTitle } from './StaticCard'
+import { StatCard, StatValue } from './StaticCard'
 import { TopLanguagesCard } from './TopLanguagesCard'
 
 export function GraphBlock() {
@@ -151,144 +150,64 @@ export function GraphBlock() {
         </Button>
       </div>
 
-      <div ref={reportContainerRef} className="grid w-full grid-cols-12 gap-4 bg-background p-4">
+      <div
+        ref={reportContainerRef}
+        className="grid w-full grid-cols-12 gap-4 bg-background p-4"
+      >
         {/* MARK: 贡献日历热力图 */}
         <div className="col-span-7">
           <Loading active={isLoading}>
-            {isLoading || !contributionData
-              ? (
-                  <div className="h-[265px] w-full" />
-                )
-              : (
-                  <ContributionsGraph
-                    highlightMode={highlightMode}
-                    highlightOptions={highlightOptions}
-                    mockupWrapperClassName="p-grid-item"
-                    showInspect={false}
-                    titleRender={() => null}
-                  />
-                )}
+            <ContributionsGraph
+              highlightMode={highlightMode}
+              highlightOptions={highlightOptions}
+              mockupWrapperClassName="p-grid-item"
+              showInspect={false}
+              titleRender={() => null}
+            />
           </Loading>
         </div>
 
-        {/* MARK: AI 年度报告 */}
-        {!!statistics && (
-          <div className="col-span-5">
-            <AiYearlyReportCard
-              highlights={yearlyHighlights}
-              locale={currentLocale}
-              tags={yearlyTags}
-              username={githubUsername}
-              year={queryYear}
-            />
-          </div>
-        )}
-
-        {/* MARK: 最大贡献 */}
-        <StatCard
-          className="col-span-4"
-          icon={<ArrowBigUpDashIcon className="size-5" />}
-          isLoading={!statistics}
-          title={t('maxContributions')}
-          value={statistics?.maxContributionsInADay}
-          onMouseEnter={() => {
-            if (statistics?.maxContributionsDate) {
-              setHighlightMode('specificDate')
-              setHighlightOptions({ specificDate: statistics.maxContributionsDate })
-            }
-          }}
-          onMouseLeave={handleClearHighlight}
-        />
-
-        {/* MARK: 最活跃日期 */}
-        <StatCard
-          className="col-span-4"
-          icon={<Calendar1Icon className="size-5" />}
-          isLoading={!statistics}
-          title={t('mostActiveDay')}
-          value={formatDate(statistics?.maxContributionsDate)}
-          onMouseEnter={() => {
-            if (statistics?.maxContributionsDate) {
-              setHighlightMode('specificDate')
-              setHighlightOptions({ specificDate: statistics.maxContributionsDate })
-            }
-          }}
-          onMouseLeave={handleClearHighlight}
-        />
+        {/* MARK: AI 年度总结 */}
+        <div className="col-span-5">
+          <AiYearlyReportCard
+            highlights={yearlyHighlights}
+            locale={currentLocale}
+            tags={yearlyTags}
+            username={githubUsername}
+            year={queryYear}
+          />
+        </div>
 
         {/* MARK: 最活跃月份 */}
-        <StatCard
-          className="col-span-4"
-          icon={<CalendarArrowUpIcon className="size-5" />}
-          isLoading={!statistics}
-          title={t('mostActiveMonth')}
-          value={formatMonth(statistics?.maxContributionsMonth)}
-          onMouseEnter={() => {
-            if (statistics?.maxContributionsMonth) {
-              setHighlightMode('specificMonth')
-              setHighlightOptions({ specificMonth: statistics.maxContributionsMonth })
-            }
-          }}
-          onMouseLeave={handleClearHighlight}
-        />
+        <div className="col-span-4">
+          <StatCard
+            icon={<CalendarArrowUpIcon className="size-5" />}
+            statValueProps={{
+              isLoading: !statistics,
+              value: formatMonth(statistics?.maxContributionsMonth),
+            }}
+            title={t('mostActiveMonth')}
+            onMouseEnter={() => {
+              if (statistics?.maxContributionsMonth) {
+                setHighlightMode('specificMonth')
+                setHighlightOptions({ specificMonth: statistics.maxContributionsMonth })
+              }
+            }}
+            onMouseLeave={handleClearHighlight}
+          />
+        </div>
 
         {/* MARK: 平均每日 */}
-        <StatCard
-          className="col-span-4"
-          icon={<ScaleIcon className="size-5" />}
-          isLoading={!statistics}
-          title={t('averagePerDay')}
-          value={statistics?.averageContributionsPerDay}
-        />
-
-        {/* MARK: 最长连续天数 */}
-        <StatCard
-          large
-          className="col-span-4 row-span-2"
-          contentClassName="flex-col items-start justify-center gap-3 py-6"
-          icon={<CalendarDaysIcon className="size-6" />}
-          isLoading={!statistics}
-          subValue={formatDateRange(
-            statistics?.longestStreakStartDate,
-            statistics?.longestStreakEndDate,
-          )}
-          title={t('longestStreak')}
-          value={statistics?.longestStreak}
-          onMouseEnter={() => {
-            if (statistics?.longestStreakStartDate && statistics.longestStreakEndDate) {
-              setHighlightMode('longestStreak')
-              setHighlightOptions(undefined)
-            }
-          }}
-          onMouseLeave={handleClearHighlight}
-        />
-
-        {/* MARK: 最长间隔天数 */}
-        <StatCard
-          large
-          className="col-span-4 row-span-2"
-          contentClassName="flex-col items-start justify-center gap-3 py-6"
-          icon={<CalendarMinus2Icon className="size-6" />}
-          isLoading={!statistics}
-          subValue={formatDateRange(
-            statistics?.longestGapStartDate,
-            statistics?.longestGapEndDate,
-          )}
-          title={t('longestGap')}
-          value={statistics?.longestGap}
-          onMouseEnter={() => {
-            if (statistics?.longestGapStartDate && statistics.longestGapEndDate) {
-              setHighlightMode('longestGap')
-              setHighlightOptions({
-                longestGapRange: {
-                  start: statistics.longestGapStartDate,
-                  end: statistics.longestGapEndDate,
-                },
-              })
-            }
-          }}
-          onMouseLeave={handleClearHighlight}
-        />
+        <div className="col-span-4">
+          <StatCard
+            icon={<ScaleIcon className="size-5" />}
+            statValueProps={{
+              isLoading: !statistics,
+              value: statistics?.averageContributionsPerDay,
+            }}
+            title={t('averagePerDay')}
+          />
+        </div>
 
         {/* MARK: Issues 数量 */}
         <StatCardWithPopover
@@ -301,7 +220,6 @@ export function GraphBlock() {
           errorMessage={tErrors('failedLoadIssues')}
           isLoading={issuesLoading}
           items={issuesData?.issues ?? []}
-          loadingMessage={tErrors('loadingIssues')}
           popoverCount={issuesData?.count}
           popoverTitle={t('issuesIn', { year: queryYear })}
           renderItem={(issue: IssueInfo) => {
@@ -329,48 +247,138 @@ export function GraphBlock() {
         >
           <StatCard
             icon={<MessageSquareQuoteIcon className="size-5" />}
-            isLoading={issuesLoading}
+            statValueProps={{
+              isLoading: issuesLoading,
+              value: issuesData?.count,
+            }}
             title={t('issues', { year: queryYear })}
-            value={issuesData?.count}
           />
         </StatCardWithPopover>
 
+        {/* MARK: 最大贡献 */}
+        <div className="col-span-4 row-span-2">
+          <StatCard
+            icon={<ArrowBigUpDashIcon className="size-5" />}
+            title={t('maxContributions')}
+            onMouseEnter={() => {
+              if (statistics?.maxContributionsDate) {
+                setHighlightMode('specificDate')
+                setHighlightOptions({ specificDate: statistics.maxContributionsDate })
+              }
+            }}
+            onMouseLeave={handleClearHighlight}
+          >
+            <div className="pt-grid-item-sm p-grid-item">
+              <StatValue
+                large
+                isLoading={!statistics}
+                subValue={formatDate(statistics?.maxContributionsDate)}
+                value={statistics?.maxContributionsInADay}
+              />
+            </div>
+          </StatCard>
+        </div>
+
+        {/* MARK: 最长连续天数 */}
+        <div className="col-span-4 row-span-2">
+          <StatCard
+            icon={<CalendarDaysIcon className="size-5" />}
+            title={t('longestStreak')}
+            onMouseEnter={() => {
+              if (statistics?.longestStreakStartDate && statistics.longestStreakEndDate) {
+                setHighlightMode('longestStreak')
+                setHighlightOptions(undefined)
+              }
+            }}
+            onMouseLeave={handleClearHighlight}
+          >
+            <div className="pt-grid-item-sm p-grid-item">
+              <StatValue
+                large
+                isLoading={!statistics}
+                subValue={formatDateRange(
+                  statistics?.longestStreakStartDate,
+                  statistics?.longestStreakEndDate,
+                )}
+                value={statistics?.longestStreak}
+
+              />
+            </div>
+          </StatCard>
+        </div>
+
+        {/* MARK: 最长间隔天数 */}
+        <div className="col-span-4 row-span-2">
+          <StatCard
+            icon={<CalendarMinus2Icon className="size-5" />}
+            title={t('longestGap')}
+            onMouseEnter={() => {
+              if (statistics?.longestGapStartDate && statistics.longestGapEndDate) {
+                setHighlightMode('longestGap')
+                setHighlightOptions({
+                  longestGapRange: {
+                    start: statistics.longestGapStartDate,
+                    end: statistics.longestGapEndDate,
+                  },
+                })
+              }
+            }}
+            onMouseLeave={handleClearHighlight}
+          >
+            <div className="pt-grid-item-sm p-grid-item">
+              <StatValue
+                large
+                isLoading={!statistics}
+                subValue={formatDateRange(
+                  statistics?.longestGapStartDate,
+                  statistics?.longestGapEndDate,
+                )}
+                value={statistics?.longestGap}
+              />
+            </div>
+          </StatCard>
+        </div>
+
         {/* MARK: 仓库数量 */}
         <div className="col-span-5">
-          <StaticCard contentClassName="flex-col items-stretch gap-3 py-4">
-            <div className="flex items-center gap-x-3">
-              <StaticCardTitle icon={<FolderGit2Icon className="size-5" />}>
-                {t('reposCreated', { year: queryYear })}
-              </StaticCardTitle>
-              <span className="ml-auto tabular-nums">
+          <StatCard
+            icon={<FolderGit2Icon className="size-5" />}
+            title={t('reposCreated', { year: queryYear })}
+            onMouseEnter={() => {
+              if (statistics?.longestGapStartDate && statistics.longestGapEndDate) {
+                setHighlightMode('longestGap')
+                setHighlightOptions({
+                  longestGapRange: {
+                    start: statistics.longestGapStartDate,
+                    end: statistics.longestGapEndDate,
+                  },
+                })
+              }
+            }}
+            onMouseLeave={handleClearHighlight}
+          >
+            <div className="h-60">
+              <ScrollArea scrollFade className="h-full pt-grid-item-sm p-grid-item">
                 {reposLoading
-                  ? <SpinningLoader />
-                  : (reposData?.count ?? 0)}
-              </span>
-            </div>
-
-            <div className="h-32">
-              {reposLoading
-                ? (
-                    <div className="flex h-full items-center justify-center text-foreground/70 text-sm">
-                      <div className="size-4 animate-spin rounded-full border-2 border-border border-t-transparent" />
-                      <span className="ml-2">{tErrors('loadingRepos')}</span>
-                    </div>
-                  )
-                : reposError
                   ? (
-                      <div className="flex h-full items-center justify-center text-destructive text-sm">
-                        {tErrors('failedLoadRepos')}
+                      <div className="flex h-full items-center justify-center text-foreground/70 text-sm">
+                        <div className="size-4 animate-spin rounded-full border-2 border-border border-t-transparent" />
+                        <span className="ml-2">{tErrors('loadingRepos')}</span>
                       </div>
                     )
-                  : (reposData?.repos ?? []).length === 0
-                      ? (
-                          <div className="flex h-full items-center justify-center text-foreground/70 text-sm">
-                            {tErrors('noRepos')}
-                          </div>
-                        )
-                      : (
-                          <ScrollArea scrollFade className="h-full">
+                  : reposError
+                    ? (
+                        <div className="flex h-full items-center justify-center text-destructive text-sm">
+                          {tErrors('failedLoadRepos')}
+                        </div>
+                      )
+                    : (reposData?.repos ?? []).length === 0
+                        ? (
+                            <div className="flex h-full items-center justify-center text-foreground/70 text-sm">
+                              {tErrors('noRepos')}
+                            </div>
+                          )
+                        : (
                             <ul className="flex flex-col gap-1 pr-1">
                               {(reposData?.repos ?? []).map((repo: RepoInfo) => (
                                 <li key={repo.url}>
@@ -400,10 +408,10 @@ export function GraphBlock() {
                                 </li>
                               ))}
                             </ul>
-                          </ScrollArea>
-                        )}
+                          )}
+              </ScrollArea>
             </div>
-          </StaticCard>
+          </StatCard>
         </div>
 
         {/* MARK: 顶级语言 */}

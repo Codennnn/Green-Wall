@@ -34,7 +34,7 @@ export function ChartCard(props: ChartCardProps) {
   } = props
 
   return (
-    <StaticCard contentClassName={cn('flex-col items-stretch gap-grid-item py-grid-item', className)}>
+    <StaticCard contentClassName={cn('flex-col items-stretch gap-grid-item p-grid-item', className)}>
       {/* 标题栏 */}
       <div className="flex items-center gap-grid-item">
         <StaticCardTitle icon={icon}>
@@ -47,14 +47,16 @@ export function ChartCard(props: ChartCardProps) {
       </div>
 
       {/* 图表内容区域 */}
-      <div className="relative min-h-[200px]">
-        {isLoading
-          ? (
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="h-full w-full animate-pulse rounded-md bg-foreground/5" />
-              </div>
-            )
-          : children}
+      <div className="relative min-h-[200px] pt-grid-item">
+        {
+          isLoading
+            ? (
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="h-full w-full animate-pulse rounded-md bg-foreground/5" />
+                </div>
+              )
+            : children
+        }
       </div>
     </StaticCard>
   )
@@ -71,7 +73,7 @@ export function ChartSummaryItem(props: ChartSummaryItemProps) {
   const t = useTranslations('common')
 
   return (
-    <div className="flex items-center gap-0.5 text-sm">
+    <div className="flex items-center gap-0.5 text-xs">
       <span className="text-muted-foreground">{label}{t('colon')}</span>
       <span className="font-medium tabular-nums">{value}</span>
     </div>

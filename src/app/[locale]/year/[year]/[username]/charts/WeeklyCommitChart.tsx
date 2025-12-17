@@ -98,7 +98,7 @@ export function WeeklyCommitChart(props: WeeklyCommitChartProps) {
             label={t('mostActive')}
             value={dayFullNames[summary.mostActiveDay] ?? summary.mostActiveDay}
           />
-          <Badge size="sm" variant="outline">
+          <Badge variant="outline">
             {numberWithCommas(summary.mostActiveDayCount)} {t('contributions')}
           </Badge>
         </>

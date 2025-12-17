@@ -83,7 +83,7 @@ export function MonthlyCommitChart(props: MonthlyCommitChartProps) {
         value={numberWithCommas(summary.totalContributions)}
       />
       {summary.maxMonth && (
-        <Badge size="sm" variant="outline">
+        <Badge variant="outline">
           {t('peak', { month: monthShortNames[summary.maxMonth as MonthAbbr] })}
         </Badge>
       )}

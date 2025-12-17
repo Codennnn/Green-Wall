@@ -117,7 +117,7 @@
     "showIssues": "Show issues in {year}",
     "reposIn": "Repositories in {year}",
     "issuesIn": "Issues in {year}",
-    "downloadYearlyReport": "Download Report"
+    "downloadYearlyReport": "Download My Year"
   },
   "aiReport": {
     "title": "AI Year in Review",
@@ -210,6 +210,7 @@
     "title": "Explore yearly GitHub contributions",
     "description": "Enter a username and select a year to view detailed contribution statistics.",
     "usernamePlaceholder": "GitHub Username",
+    "searchPlaceholder": "GitHub Username",
     "selectYear": "Select Year",
     "go": "Go"
   }

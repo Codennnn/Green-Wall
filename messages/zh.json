@@ -136,12 +136,12 @@
     "somethingWentWrong": "出了点问题，请稍后再试。",
     "badCredentials": "本地运行需要配置 GitHub Access Token 才能拉取数据。按 <link>这个步骤</link> 设置好环境变量即可。",
     "thisStep": "这个步骤",
-    "noRepos": "未找到仓库。",
-    "noIssues": "未找到 Issues。",
+    "noRepos": "未找到仓库",
+    "noIssues": "未找到 Issues",
     "loadingRepos": "正在加载仓库…",
     "loadingIssues": "正在加载 Issues…",
-    "failedLoadRepos": "加载仓库失败。",
-    "failedLoadIssues": "加载 Issues 失败。"
+    "failedLoadRepos": "加载仓库失败",
+    "failedLoadIssues": "加载 Issues 失败"
   },
   "notFound": {
     "sorry": "抱歉，",
@@ -210,6 +210,7 @@
     "title": "探索年度 GitHub 贡献",
     "description": "输入用户名并选择年份，查看详细的贡献统计数据。",
     "usernamePlaceholder": "输入 GitHub 用户名",
+    "searchPlaceholder": "输入 GitHub 用户名",
     "selectYear": "选择年份",
     "go": "查看"
   }

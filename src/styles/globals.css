@@ -175,6 +175,7 @@
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
   --spacing-grid-item: calc(var(--spacing) * 3);
+  --spacing-grid-item-sm: calc(var(--spacing) * 1.5);
 
   @keyframes skeleton {
     to {

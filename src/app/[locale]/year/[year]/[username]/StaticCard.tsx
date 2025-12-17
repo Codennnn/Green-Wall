@@ -29,7 +29,11 @@ export interface StaticCardProps {
 }
 
 export function StaticCard(props: StaticCardProps) {
-  const { children, className, contentClassName } = props
+  const {
+    children,
+    className,
+    contentClassName,
+  } = props
 
   return (
     <div
@@ -43,7 +47,7 @@ export function StaticCard(props: StaticCardProps) {
           <div className="h-full overflow-hidden rounded-[9px] border border-background/50">
             <div
               className={cn(
-                'flex h-full min-h-12 items-center gap-x-6 gap-y-2 bg-linear-to-b from-foreground/4 to-background p-grid-item',
+                'flex flex-col h-full bg-linear-to-b from-foreground/4 to-background',
                 contentClassName,
               )}
             >
@@ -68,6 +72,8 @@ export interface StatValueProps {
 export function StatValue(props: StatValueProps) {
   const { value, subValue, isLoading, fallback = 0, large } = props
 
+  const finalValue = value ?? fallback
+
   return (
     <div className={cn('tabular-nums', large ? 'ml-auto md:ml-0 md:w-full' : 'ml-auto')}>
       {
@@ -86,8 +92,9 @@ export function StatValue(props: StatValueProps) {
                     large && 'md:text-3xl md:font-semibold',
                   )}
                 >
-                  {value ?? fallback}
+                  {finalValue}
                 </span>
+
                 {!!subValue && (
                   <span
                     className={cn(
@@ -107,54 +114,73 @@ export function StatValue(props: StatValueProps) {
 
 export interface StatCardProps {
   icon: React.ReactNode
-  title: React.ReactNode
-  value: number | string | undefined
-  subValue?: number | string | undefined
-  isLoading: boolean
-  fallback?: number | string
+  title?: React.ReactNode
   onMouseEnter?: () => void
   onMouseLeave?: () => void
-  /** 外层容器的 className，用于网格布局定位 */
-  className?: string
-  /** 卡片内容的 className，用于跨行时的内容布局调整 */
+  /** 外层容器的 className */
+  wrapperClassName?: string
+  /** 内容区的 className */
   contentClassName?: string
-  /** 是否启用大尺寸展示样式（用于跨行卡片） */
-  large?: boolean
+  /** 卡片的 className */
+  cardClassName?: string
+  /** 卡片内容的 className */
+  cardContentClassName?: string
+  /** StatValue 组件的属性配置 */
+  statValueProps?: {
+    value?: number | string
+    subValue?: number | string
+    isLoading?: boolean
+    fallback?: number | string
+    /** 是否启用大尺寸展示样式（用于跨行卡片） */
+    large?: boolean
+  }
 }
 
-export function StatCard(props: StatCardProps) {
+export function StatCard(props: React.PropsWithChildren<StatCardProps>) {
   const {
+    children,
     icon,
     title,
-    value,
-    subValue,
-    isLoading,
-    fallback,
     onMouseEnter,
     onMouseLeave,
-    className,
+    wrapperClassName,
     contentClassName,
-    large,
+    cardClassName,
+    cardContentClassName,
+    statValueProps,
   } = props
 
   return (
     <div
-      className={cn('h-full', className)}
+      className={cn('h-full', wrapperClassName)}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
     >
-      <StaticCard className="h-full" contentClassName={contentClassName}>
-        <StaticCardTitle icon={icon}>
-          {title}
-        </StaticCardTitle>
+      <StaticCard
+        className={cardClassName}
+        contentClassName={contentClassName}
+      >
+        <div className="flex items-center gap-grid-item p-grid-item">
+          {(!!icon || !!title) && (
+            <StaticCardTitle icon={icon}>
+              {title}
+            </StaticCardTitle>
+          )}
 
-        <StatValue
-          fallback={fallback}
-          isLoading={isLoading}
-          large={large}
-          subValue={subValue}
-          value={value}
-        />
+          {!!statValueProps && (
+            <StatValue
+              fallback={statValueProps.fallback}
+              isLoading={statValueProps.isLoading ?? true}
+              large={statValueProps.large}
+              subValue={statValueProps.subValue}
+              value={statValueProps.value}
+            />
+          )}
+        </div>
+
+        <div className={cn('flex-1', cardContentClassName)}>
+          {children}
+        </div>
       </StaticCard>
     </div>
   )

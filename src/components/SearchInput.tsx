@@ -2,13 +2,24 @@ import { useEffect, useRef } from 'react'
 
 import { useTranslations } from 'next-intl'
 
-export function SearchInput(props: React.ComponentProps<'input'>) {
-  const t = useTranslations('home')
+interface SearchInputProps extends React.ComponentProps<'input'> {
+  autoFocus?: boolean
+  translationNamespace?: string
+}
+
+export function SearchInput({
+  autoFocus = true,
+  translationNamespace = 'home',
+  ...props
+}: SearchInputProps) {
+  const t = useTranslations(translationNamespace)
   const inputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
-    inputRef.current?.focus()
-  }, [])
+    if (autoFocus) {
+      inputRef.current?.focus()
+    }
+  }, [autoFocus])
 
   return (
     <input

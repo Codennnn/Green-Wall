@@ -1,8 +1,12 @@
+import { Empty, EmptyDescription } from '~/components/ui/empty'
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from '~/components/ui/popover'
+import { ScrollArea } from '~/components/ui/scroll-area'
+import { Skeleton } from '~/components/ui/skeleton'
+import { cn } from '~/lib/utils'
 
 export interface StatCardWithPopoverProps<T extends { url: string }> {
   children: React.ReactNode
@@ -14,7 +18,6 @@ export interface StatCardWithPopoverProps<T extends { url: string }> {
   items: T[]
   renderItem: (item: T) => React.ReactNode
   emptyMessage: string
-  loadingMessage: string
   errorMessage: string
   side?: 'left' | 'right' | 'top' | 'bottom'
   align?: 'start' | 'center' | 'end'
@@ -34,7 +37,6 @@ export function StatCardWithPopover<T extends { url: string }>(props: StatCardWi
     items,
     renderItem,
     emptyMessage,
-    loadingMessage,
     errorMessage,
     side = 'left',
     align = 'start',
@@ -60,10 +62,10 @@ export function StatCardWithPopover<T extends { url: string }>(props: StatCardWi
 
         <PopoverContent
           align={align}
-          className={contentClassName}
+          className={cn('**:data-[slot=popover-viewport]:p-0', contentClassName)}
           side={side}
         >
-          <div className="flex items-center gap-2 pb-3">
+          <div className="flex items-center gap-2 p-grid-item">
             <span className="font-medium">
               {popoverTitle}
             </span>
@@ -72,42 +74,54 @@ export function StatCardWithPopover<T extends { url: string }>(props: StatCardWi
             </span>
           </div>
 
-          {isLoading
-            ? (
-                <div className="flex items-center gap-2 text-foreground/70 text-sm">
-                  <div className="size-4 animate-spin rounded-full border-2 border-border border-t-transparent" />
-                  <span>{loadingMessage}</span>
-                </div>
-              )
-            : error
-              ? (
-                  <div className="text-destructive text-sm">
-                    {errorMessage}
-                  </div>
-                )
-              : (
-                  <div className="flex flex-col gap-1">
-                    {items.length === 0
-                      ? (
-                          <div className="text-foreground/70 text-sm">
-                            {emptyMessage}
+          <ScrollArea
+            scrollFade
+            className="h-72"
+          >
+            <div className="p-grid-item">
+              {isLoading
+                ? (
+                    <div className="flex flex-col gap-1">
+                      {Array.from({ length: 4 }).map((_, index) => {
+                        return (
+                          <div
+                            key={index}
+                            className="rounded-md px-2 py-2"
+                          >
+                            <Skeleton className="mb-2 h-4 w-full" />
+                            <Skeleton className="h-3 w-3/4" />
                           </div>
                         )
-                      : (
-                          <div className="max-h-72 overflow-y-auto pr-1">
-                            <ul className="flex flex-col gap-1">
-                              {items.map((item) => {
-                                return (
-                                  <li key={item.url}>
-                                    {renderItem(item)}
-                                  </li>
-                                )
-                              })}
-                            </ul>
-                          </div>
-                        )}
-                  </div>
-                )}
+                      })}
+                    </div>
+                  )
+                : error || items.length === 0
+                  ? (
+                      <Empty>
+                        <EmptyDescription
+                          className={error ? 'text-destructive' : 'text-muted-foreground'}
+                        >
+                          {
+                            error
+                              ? errorMessage
+                              : emptyMessage
+                          }
+                        </EmptyDescription>
+                      </Empty>
+                    )
+                  : (
+                      <ul className="flex flex-col gap-1">
+                        {items.map((item) => {
+                          return (
+                            <li key={item.url}>
+                              {renderItem(item)}
+                            </li>
+                          )
+                        })}
+                      </ul>
+                    )}
+            </div>
+          </ScrollArea>
         </PopoverContent>
       </Popover>
     </div>

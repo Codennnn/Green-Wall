@@ -5,6 +5,7 @@ import { useMemo, useState } from 'react'
 import { useTranslations } from 'next-intl'
 
 import { GenerateButton } from '~/components/GenerateButton/GenerateButton'
+import { SearchInput } from '~/components/SearchInput'
 import {
   Select,
   SelectContent,
@@ -71,20 +72,11 @@ export function YearSearchPage() {
         <form onSubmit={handleSubmit}>
           <div className="flex flex-col items-center justify-center gap-y-6 md:flex-row md:gap-x-5">
             {/* 用户名输入框 */}
-            <input
-              required
-              autoComplete="off"
-              className="
-                inline-block h-[2.8rem] overflow-hidden rounded-lg bg-main-100 px-5
-                text-center text-lg font-medium text-main-600 caret-main-500 shadow-main-300/60 outline-none
-                transition-all duration-300
-                placeholder:select-none placeholder:font-normal placeholder:text-main-400
-                focus:bg-background focus:shadow-[0_0_1.2rem_var(--tw-shadow-color)]
-              "
+            <SearchInput
+              autoFocus={false}
               disabled={isSubmitting}
-              name="username"
               placeholder={t('usernamePlaceholder')}
-              type="text"
+              translationNamespace="yearSearch"
               value={username}
               onChange={handleUsernameChange}
             />

@@ -14,6 +14,7 @@ import {
 import { DEFAULT_SIZE, DEFAULT_THEME } from '~/constants'
 import { useData } from '~/DataContext'
 import { trackEvent } from '~/helpers'
+import { useCopyToClipboard } from '~/hooks/useCopyToClipboard'
 
 export function ShareButton() {
   const t = useTranslations('share')
@@ -22,7 +23,7 @@ export function ShareButton() {
   const username = graphData?.login
 
   const [shareUrl, setShareUrl] = useState<URL>()
-  const [copied, setCopied] = useState(false)
+  const { copied, copy } = useCopyToClipboard({ resetDelay: 1500 })
 
   useEffect(() => {
     if (username) {
@@ -102,13 +103,7 @@ export function ShareButton() {
                   onClick={() => {
                     if (!copied) {
                       trackEvent('Copy Share URL')
-
-                      void navigator.clipboard.writeText(shareUrl.toString()).then(() => {
-                        setCopied(true)
-                        setTimeout(() => {
-                          setCopied(false)
-                        }, 1500)
-                      })
+                      void copy(shareUrl.toString())
                     }
                   }}
                 >
