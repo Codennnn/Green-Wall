@@ -11,32 +11,25 @@ export interface BuildPromptOptions {
   highlights?: YearlyReportHighlights
 }
 
-const SYSTEM_PROMPT_ZH = `你是一位克制、有幽默感的程序员旁白，熟悉 GitHub 和开发者文化。
+const SYSTEM_PROMPT = `你是一位克制、有幽默感的程序员旁白，熟悉 GitHub 和开发者文化。
 
 整体风格要求：
-- 使用第二人称（"你"）
+- 使用第二人称（"你" 或 "you"）
 - 不使用鸡汤或汇报式语言
 - 不进行负面评价
 - 对极端数据保持克制和尊重
 - 语气轻松，但不过度调侃
 - 可以适当使用程序员梗或行话，但不要过于晦涩
 - 善于从数据中挖掘故事和洞察
-- 用生动的描述让数据变得有温度`
+- 用生动的描述让数据变得有温度
 
-const SYSTEM_PROMPT_EN = `You are a restrained, witty narrator familiar with GitHub and developer culture.
+输出语言要求：
+- 当 locale 参数为 'zh' 时，请使用中文输出
+- 当 locale 参数为 'en' 时，请使用英文输出
+- 保持相同的风格和深度，只改变输出语言`
 
-Style requirements:
-- Use second person ("you")
-- Avoid motivational clichés or report-style language
-- No negative judgments
-- Be respectful and restrained about extreme data
-- Keep a casual tone without over-teasing
-- Feel free to use programmer jokes or jargon, but not too obscure
-- Excel at uncovering stories and insights from data
-- Make data feel warm and relatable through vivid descriptions`
-
-function buildUserPromptZh(options: BuildPromptOptions): string {
-  const { username, year, tags, highlights } = options
+function buildUserPromptContent(options: BuildPromptOptions): string {
+  const { username, year, locale, tags, highlights } = options
 
   let prompt = `请为用户 ${username} 生成一段 ${year} 年度 GitHub Wrapped 总结文案。
 
@@ -111,123 +104,21 @@ ${highlightLines.join('\n')}`
 - 可以是鼓励、认可或有趣的观察
 - 避免说教，保持轻松克制的语气
 
-总字数控制在 400–600 字，确保内容充实、有深度。
+总字数控制在 400–600 字（中文）或 250-350 词（英文），确保内容充实、有深度。
 使用自然的段落分隔（空行），让内容层次清晰、易读。
-请直接输出文案，不要添加标题、序号或 Markdown 格式符号。`
+请直接输出文案，不要添加标题、序号或 Markdown 格式符号。
+
+输出语言（locale 参数）：${locale === 'zh' ? '中文' : '英文'}`
 
   return prompt
 }
 
-function buildUserPromptEn(options: BuildPromptOptions): string {
-  const { username, year, tags, highlights } = options
-
-  let prompt = `Generate a ${year} GitHub Wrapped summary for user ${username}.
-
-Based on the following **pre-determined user tags** (calculated by the system, do not reclassify or question):
-- Activity Level: ${tags.activity_level}
-- Commit Style: ${tags.commit_style}
-- Time Pattern: ${tags.time_pattern}
-- Tech Focus: ${tags.tech_focus}
-- Repo Pattern: ${tags.repo_pattern}`
-
-  // Add highlights if available
-  if (highlights) {
-    const highlightLines: string[] = []
-
-    if (highlights.totalContributions !== undefined) {
-      highlightLines.push(`Total contributions: ${highlights.totalContributions}`)
-    }
-
-    if (highlights.maxDayCount !== undefined && highlights.maxDayDate) {
-      highlightLines.push(`Peak day: ${highlights.maxDayCount} contributions (${highlights.maxDayDate})`)
-    }
-
-    if (highlights.longestStreak !== undefined) {
-      highlightLines.push(`Longest streak: ${highlights.longestStreak} days`)
-    }
-
-    if (highlights.reposCreated !== undefined) {
-      highlightLines.push(`New repos: ${highlights.reposCreated}`)
-    }
-
-    if (highlights.issuesInvolved !== undefined) {
-      highlightLines.push(`Issues involved: ${highlights.issuesInvolved}`)
-    }
-
-    if (highlightLines.length > 0) {
-      prompt += `
-
-**Optional highlights for reference** (use as material, not all need to be mentioned):
-${highlightLines.join('\n')}`
-    }
-  }
-
-  prompt += `
-
-Content structure requirements (strictly follow):
-
-**Part 1: Annual Overview (2-3 sentences)**
-- Vividly summarize the overall development status of the year
-- Incorporate key data like total contributions to give an intuitive feel
-- Use metaphors or analogies to make data more visual
-
-**Part 2: Deep Dive (3-4 paragraphs)**
-Provide in-depth interpretation for each tag, 1-2 sentences per tag:
-- Activity Level: Don't just say active or inactive, analyze possible reasons or states behind it
-- Commit Style: Describe how this rhythm reflects work style or personality traits
-- Time Pattern: Uncover the lifestyle or work environment behind time preferences
-- Tech Focus: Analyze what technical choices reveal about development philosophy or project types
-- Repo Pattern: Interpret how project management style reflects collaboration approach or personal traits
-
-**Part 3: Highlight Moments (2-3 sentences)**
-- Select 2-3 most representative highlight data points for deep interpretation
-- Don't just list numbers, tell the story behind them
-- Use comparisons, analogies, or specific scenarios to make data vivid
-- For example: peak day could describe what might have happened, streak could describe the persistence
-
-**Part 4: Trend Insights (1-2 sentences)**
-- Interesting patterns or trends discovered from the data
-- Could be observations about monthly distribution, time patterns, etc.
-
-**Part 5: Closing Remarks (1-2 sentences)**
-- End with warm, memorable words
-- Could be encouragement, recognition, or interesting observations
-- Avoid preaching, maintain a casual and restrained tone
-
-Keep the total word count between 250-350 words.
-Use natural paragraph breaks (blank lines) to make content clear and readable.
-Output the summary directly without titles, numbering, or Markdown formatting symbols.`
-
-  return prompt
-}
-
-/**
- * 构建年度报告的 System Prompt
- */
-export function buildSystemPrompt(locale?: string): string {
-  return locale === 'zh' ? SYSTEM_PROMPT_ZH : SYSTEM_PROMPT_EN
-}
-
-/**
- * 构建年度报告的 User Prompt
- */
-export function buildUserPrompt(options: BuildPromptOptions): string {
-  const { locale } = options
-
-  return locale === 'zh'
-    ? buildUserPromptZh(options)
-    : buildUserPromptEn(options)
-}
-
-/**
- * 构建完整的 Prompt 配置（供 AI SDK 使用）
- */
 export function buildYearlyReportPrompt(options: BuildPromptOptions): {
   system: string
   prompt: string
 } {
   return {
-    system: buildSystemPrompt(options.locale),
-    prompt: buildUserPrompt(options),
+    system: SYSTEM_PROMPT,
+    prompt: buildUserPromptContent(options),
   }
 }
