@@ -88,6 +88,8 @@ export const ThemeSelector = memo(function ThemeSelector(props: ThemeSelectorPro
     },
   )
 
+  const selectableThemes = THEME_PRESETS.filter((theme) => theme.name !== 'GreenWall')
+
   return (
     <div
       {...rest}
@@ -96,7 +98,7 @@ export const ThemeSelector = memo(function ThemeSelector(props: ThemeSelectorPro
         className,
       )}
     >
-      {THEME_PRESETS.map((theme) => (
+      {selectableThemes.map((theme) => (
         <ThemeOption
           key={theme.name}
           isSelected={value === theme.name}

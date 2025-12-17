@@ -183,6 +183,7 @@ export function GraphBlock() {
               highlightOptions={highlightOptions}
               mockupWrapperClassName="p-grid-item"
               showInspect={false}
+              theme="GreenWall"
               titleRender={() => null}
             />
           </Loading>

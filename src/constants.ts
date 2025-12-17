@@ -11,7 +11,7 @@ export const levels = {
   FOURTH_QUARTILE: 4,
 } satisfies Record<ContributionLevel, -1 | 0 | 1 | 2 | 3 | 4>
 
-export const DEFAULT_LEVEL_COLORS: [string, string, string, string, string] = ['#ebedf0', '#9be9a8', '#40c463', '#30a14e', '#216e39']
+export const DEFAULT_LEVEL_COLORS: ThemePreset['levelColors'] = ['#ebedf0', '#9be9a8', '#40c463', '#30a14e', '#216e39']
 
 export const sizeProperties = {
   [GraphSize.Small]: {
@@ -106,6 +106,24 @@ export const THEME_PRESETS = [
       'color-mix(in srgb, var(--theme-primary) 60%, var(--theme-secondary))',
       'color-mix(in srgb, var(--theme-primary) 75%, var(--theme-secondary))',
       'var(--theme-primary)',
+    ],
+  },
+  {
+    name: 'GreenWall',
+    mode: ColorScheme.Light,
+    colorForeground: '#24292f',
+    colorBackground: '#fff',
+    colorSecondary: 'rgba(245, 245, 245, 0.38)',
+    colorPrimary: 'rgb(56, 56, 56)',
+    colorBorder: 'color-mix(in srgb, rgba(218, 218, 218, 0.48), transparent 0%)',
+    colorBackgroundContainer:
+      'linear-gradient(140deg, rgb(241 245 249 / 0.8) 0%, rgb(241 245 249 / 0.5) 100%)',
+    levelColors: [
+      '#ebedf0',
+      'var(--color-brand-300)',
+      'var(--color-brand-500)',
+      'var(--color-brand-700)',
+      'var(--color-brand-900)',
     ],
   },
 ] satisfies ThemePreset[]

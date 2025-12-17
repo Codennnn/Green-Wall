@@ -2,7 +2,7 @@ import { array, type InferInput, nullable, number, object, optional, string } fr
 
 import type { BlockShape, ColorScheme, ContributionLevel, ErrorType, GraphSize } from '~/enums'
 
-export type Themes = 'Classic' | 'Midnight' | 'Sunset' | 'Sunsetx' | 'Violet'
+export type Themes = 'Classic' | 'Midnight' | 'Sunset' | 'Sunsetx' | 'Violet' | 'GreenWall'
 
 type GitHubProfileName = string
 
