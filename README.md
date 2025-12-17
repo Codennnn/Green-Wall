@@ -1,3 +1,5 @@
+[中文](./README.zh.md) | English
+
 # [Green Wall](https://green-wall.leoku.dev/)
 
 _Take a snapshot 📸 of your GitHub contributions, then share it!_
@@ -5,6 +7,9 @@ _Take a snapshot 📸 of your GitHub contributions, then share it!_
 **Green Wall** is a powerful web tool that simplifies the way you review your GitHub :octocat: contributions over time. This tool allows you to generate an image of your contributions, which you can save and share with others.
 
 [![Screenshot](./screenshot.webp)](https://green-wall.leoku.dev/)
+
+> **Demo availability (Netlify Free plan)**  
+> The public demo may be **temporarily unavailable** when the Netlify Free plan monthly quota is exhausted (bandwidth / requests / functions). If you hit this, it’s not your fault—please use **self-deploy** (recommended: Vercel one-click) to keep using the service.
 
 ## How it works
 
@@ -14,19 +19,25 @@ This project leverages the GitHub GraphQL API to retrieve data and employs Next.
 
 To showcase a live preview of your contributions on your GitHub README or website, you can use the following examples.
 
+> **If the public demo is down**  
+> Self-deploy in minutes (see **Deploy to Vercel** below), then replace `https://green-wall.leoku.dev` with your own domain.
+
 **Optional Parameters**
 
-| Parameter | Description                      | Type     | Default Value | Example          |
-|-----------|----------------------------------|----------|---------------|------------------|
-| `year`    | Specify calendar year to display | `number` | Latest year   | `?year=2023`     |
-| `theme`   | Choose color theme for image     | `string` | `Classic`     | `?theme=Violet`  |
-| `width`   | Set custom image width           | `number` | 1200          | `?width=800`     |
-| `height`  | Set custom image height          | `number` | 630           | `?height=400`    |
+| Parameter | Description                      | Type     | Default Value | Example         |
+| --------- | -------------------------------- | -------- | ------------- | --------------- |
+| `year`    | Specify calendar year to display | `number` | Latest year   | `?year=2023`    |
+| `theme`   | Choose color theme for image     | `string` | `Classic`     | `?theme=Violet` |
+| `width`   | Set custom image width           | `number` | 1200          | `?width=800`    |
+| `height`  | Set custom image height          | `number` | 630           | `?height=400`   |
 
 **HTML**
 
 ```html
-<img src="https://green-wall.leoku.dev/api/og/share/[YOUR_USERNAME]" alt="My contributions" />
+<img
+  src="https://green-wall.leoku.dev/api/og/share/[YOUR_USERNAME]"
+  alt="My contributions"
+/>
 ```
 
 **Markdown**
@@ -39,6 +50,58 @@ This will produce a preview similar to the one shown below.
 
 ![](https://green-wall.leoku.dev/api/og/share/Codennnn)
 
+## Deploy to Vercel
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FCodennnn%2FGreen-Wall&project-name=green-wall&repository-name=green-wall&env=GITHUB_ACCESS_TOKEN%2CNEXT_PUBLIC_DATA_MODE&envDescription=Required%3A%20GITHUB_ACCESS_TOKEN%20to%20call%20the%20GitHub%20GraphQL%20API.%20Optional%3A%20NEXT_PUBLIC_DATA_MODE%3Dmock%20to%20use%20local%20mock%20data.&envLink=https%3A%2F%2Fgithub.com%2FCodennnn%2FGreen-Wall%2Fblob%2Fmain%2F.env.example)
+
+This project is a Next.js app that fetches data from the GitHub GraphQL API. The easiest way to deploy it is Vercel (the platform behind Next.js).
+
+> **When the demo is unavailable**  
+> Vercel one-click deployment is the fastest way to restore access. You’ll get your own stable URL and avoid the public demo’s free-tier quota limits.
+
+### Step-by-step
+
+1. **Click “Deploy with Vercel”**
+
+   - Sign in to Vercel and authorize GitHub when prompted.
+   - (Recommended) Deploy from your own fork if you plan to customize the code.
+
+2. **Get a GitHub Personal Access Token (PAT)**
+
+   - Follow GitHub’s guide: [Creating a personal access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token)
+   - Token type:
+     - **Fine-grained token**: recommended for stricter permissions (select the minimal permissions required by your use case).
+     - **Classic token**: works as well.
+   - Permissions / scopes:
+     - Start with minimal scopes. In many cases, `read:org` (for org data) and `repo` (if you need private contributions) are sufficient.
+   - **Do not commit the token**. Treat it like a password.
+
+3. **Configure Environment Variables on Vercel**
+   - During import (or later in **Project → Settings → Environment Variables**), set the following variables (see [`.env.example`](./.env.example) for the full reference):
+
+| Variable                | Required | Description                                                               | Suggested value                             |
+| ----------------------- | -------- | ------------------------------------------------------------------------- | ------------------------------------------- |
+| `GITHUB_ACCESS_TOKEN`   | Yes      | GitHub token used by the server to call the GitHub GraphQL API            | Your PAT                                    |
+| `NEXT_PUBLIC_DATA_MODE` | No       | Frontend data mode (`mock` uses local mock data; otherwise uses real API) | Leave empty for real data, or set to `mock` |
+| `AI_BASE_URL`           | No       | Base URL of an OpenAI-compatible API endpoint                             | e.g. `https://api.openai.com/v1`            |
+| `AI_API_KEY`            | No\*     | API key for the AI provider                                               | Provider key                                |
+| `AI_MODEL`              | No       | Model name supported by your provider                                     | e.g. `gpt-4o-mini`                          |
+
+> Note: AI variables are only needed for the **Yearly AI Report** feature (`/api/ai/yearly-report`). If you set `AI_API_KEY`, make sure `AI_BASE_URL` and `AI_MODEL` are also valid.
+
+4. **Deploy**
+   - Click **Deploy** and wait for Vercel to finish building.
+   - After the first deploy, any push to your GitHub repo will trigger a new deployment automatically.
+
+### Verify after deployment
+
+1. Open your Vercel deployment URL and search for a GitHub username.
+2. Confirm the contributions graph loads for multiple years.
+3. Open the API endpoint in your browser:
+   - `/api/contribution/<username>` should return JSON (and should not be `Bad credentials`).
+4. Test the share image endpoint:
+   - `/api/og/share/<username>` should return an image response.
+
 ## Tampermonkey
 
 We also offer a [Tampermonkey script](https://greasyfork.org/en/scripts/492478-greenwall-view-all-contribution-graphs-in-github) that enables you to view the 'Green Wall' on anyone's GitHub profile page. The script adds a button to the user's GitHub Profile page, and clicking it will display the user's contribution graphs over the years.
@@ -46,13 +109,6 @@ We also offer a [Tampermonkey script](https://greasyfork.org/en/scripts/492478-g
 The source code for the script is located in the file [`/plugins/script.ts`](./plugins/script.ts).
 
 https://github.com/user-attachments/assets/694a5653-348b-4bec-9736-21e777e3ede8
-
-## Credits
-
-- _Inspired by:_ [GitHub Contributions Chart Generator](https://github.com/sallar/github-contributions-chart).
-- _Framework:_ Next.js.
-- _Font:_ [Rubik](https://fonts.google.com/specimen/Rubik) by Google Fonts.
-- _Icons:_ [heroicons](https://heroicons.com).
 
 ## Running Locally
 
