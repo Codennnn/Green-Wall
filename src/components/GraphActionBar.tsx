@@ -8,6 +8,7 @@ import { AppearanceSetting } from '~/components/AppearanceSetting/AppearanceSett
 import { DraggableAppearanceSetting } from '~/components/AppearanceSetting/DraggableAppearanceSetting'
 import { SettingButton } from '~/components/SettingButton'
 import { ShareButton } from '~/components/ShareButton'
+import { Button } from '~/components/ui/button'
 import { useImageExport } from '~/hooks/useImageExport'
 import type { SettingPopupPosition } from '~/hooks/useSettingPopup'
 import { cn } from '~/lib/utils'
@@ -59,38 +60,37 @@ export const GraphActionBar = memo(function GraphActionBar({
   return (
     <>
       <div className="flex gap-x-3">
-        <button
-          className="inline-flex h-full items-center rounded-md bg-main-100 px-4 py-2 text-sm font-medium text-main-500 hover:bg-main-200 disabled:pointer-events-none motion-safe:transition-colors motion-safe:duration-300 md:text-base"
+        <Button
           disabled={isDownloading}
+          variant="outline"
           onClick={handleDownloadClick}
         >
-          <ImageIcon className="mr-2 size-4 shrink-0 md:size-5" />
+          <ImageIcon />
           <span>{t('saveAsImage')}</span>
-        </button>
+        </Button>
 
         {canUseClipboardItem && (
-          <button
-            className={cn(
-              'inline-flex h-full items-center rounded-md px-4 py-2 text-sm font-medium transition-colors disabled:pointer-events-none md:text-base',
-              copySuccess
-                ? 'bg-brand-100 text-brand-500'
-                : 'bg-main-100 text-main-500 duration-300 hover:bg-main-200 motion-safe:transition-colors',
-            )}
+          <Button
             disabled={isCopying}
+            variant="outline"
             onClick={handleCopyClick}
           >
-            <span className="mr-2">
-              {copySuccess
-                ? <FileCheck2Icon className="size-4 shrink-0 md:size-5" />
-                : <ImagesIcon className="size-4 shrink-0 md:size-5" />}
+            <span>
+              {
+                copySuccess
+                  ? <FileCheck2Icon />
+                  : <ImagesIcon />
+              }
             </span>
             <span>{copySuccess ? t('copiedAsImage') : t('copyAsImage')}</span>
-          </button>
+          </Button>
         )}
       </div>
 
-      <div className="flex flex-wrap items-center gap-x-6 md:justify-center">
+      <div className="flex flex-wrap items-center gap-x-2 md:justify-center">
         <ShareButton />
+
+        <div className="w-px h-4.5 bg-foreground/20" />
 
         <SettingButton
           content={appearanceSettingContent}

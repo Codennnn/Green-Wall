@@ -60,7 +60,7 @@ export default async function LocaleLayout({ children, params }: Props) {
                     <MainNav locale={locale} />
                   </div>
 
-                  <div className="ml-auto flex items-center gap-3">
+                  <div className="ml-auto flex items-center gap-3 ring-4 ring-background bg-background">
                     <GitHubButton />
                     <LocaleSelector />
                     <ThemeModeSelector />

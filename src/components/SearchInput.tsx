@@ -2,6 +2,10 @@ import { useEffect, useRef } from 'react'
 
 import { useTranslations } from 'next-intl'
 
+import { Input } from '~/components/ui/input'
+
+import { cn } from '../lib/utils'
+
 interface SearchInputProps extends React.ComponentProps<'input'> {
   autoFocus?: boolean
   translationNamespace?: string
@@ -22,20 +26,20 @@ export function SearchInput({
   }, [autoFocus])
 
   return (
-    <input
+    <Input
       ref={inputRef}
       autoComplete="off"
       {...props}
       required
-      className="
-        inline-block h-[2.8rem] overflow-hidden rounded-lg bg-main-100 px-5
-        text-center text-lg font-medium text-main-600 caret-main-500 shadow-main-300/60 outline-none
-        transition-all duration-300
-        placeholder:select-none placeholder:font-normal placeholder:text-main-400
-        focus:bg-background focus:shadow-[0_0_1.2rem_var(--tw-shadow-color)]
-      "
+      className={cn(
+        'h-[2.8rem] w-2/3 md:w-[240px]',
+        '**:data-[slot=input]:placeholder:text-center **:data-[slot=input]:placeholder:font-normal',
+        '**:data-[slot=input]:text-base **:data-[slot=input]:font-semibold **:data-[slot=input]:text-center',
+        props.className,
+      )}
       name="username"
       placeholder={t('searchPlaceholder')}
+      size="lg"
       type="text"
       onFocus={() => inputRef.current?.select()}
     />

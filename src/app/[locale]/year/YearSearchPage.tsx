@@ -71,7 +71,6 @@ export function YearSearchPage() {
       <div className="py-12 md:py-16">
         <form onSubmit={handleSubmit}>
           <div className="flex flex-col items-center justify-center gap-y-6 md:flex-row md:gap-x-5">
-            {/* 用户名输入框 */}
             <SearchInput
               autoFocus={false}
               disabled={isSubmitting}
@@ -81,14 +80,13 @@ export function YearSearchPage() {
               onChange={handleUsernameChange}
             />
 
-            {/* 年份选择器 */}
             <Select
               disabled={isSubmitting}
               value={selectedYear}
               onValueChange={handleYearChange}
             >
-              <SelectTrigger className="h-[2.8rem] w-[140px] justify-center text-center text-lg font-medium">
-                <SelectValue />
+              <SelectTrigger className="h-[2.8rem] w-[120px] justify-center text-center">
+                <SelectValue className="text-xl font-medium" />
               </SelectTrigger>
               <SelectContent>
                 {yearOptions.map((year) => (
@@ -99,7 +97,6 @@ export function YearSearchPage() {
               </SelectContent>
             </Select>
 
-            {/* 提交按钮 */}
             <GenerateButton loading={isSubmitting} type="submit">
               {t('go')}
             </GenerateButton>

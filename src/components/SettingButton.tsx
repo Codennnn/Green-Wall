@@ -1,6 +1,7 @@
 import { useTranslations } from 'next-intl'
 import { PictureInPicture2Icon, Settings2Icon, XIcon } from 'lucide-react'
 
+import { Button } from '~/components/ui/button'
 import {
   Popover,
   PopoverClose,
@@ -22,13 +23,18 @@ export function SettingButton(props: SettingButtonProps) {
 
   return (
     <Popover>
-      <PopoverTrigger className="simple-button" {...buttonProps}>
-        <Settings2Icon className="size-[18px]" />
-        <span>{t('appearance')}</span>
-      </PopoverTrigger>
+      <PopoverTrigger
+        render={(
+          <Button variant="ghost" {...buttonProps}>
+            <Settings2Icon />
+            <span>{t('appearance')}</span>
+          </Button>
+        )}
+      />
+
       <PopoverContent id={popoverContentId}>
         <div className="mb-2 flex items-center">
-          <PopoverTitle className="min-h-[24px] flex-1 font-medium text-main-500">
+          <PopoverTitle className="flex-1">
             <div className="flex">
               <span>{t('appearance')}</span>
 
@@ -39,16 +45,17 @@ export function SettingButton(props: SettingButtonProps) {
                   onPopOut?.()
                 }}
               >
-                <span className="inline-flex items-center justify-center rounded p-[0.3rem] transition-colors duration-200 hover:bg-main-100/80">
-                  <PictureInPicture2Icon className="size-4 text-main-500" />
-                </span>
+                <Button size="icon-sm" type="button" variant="ghost">
+                  <PictureInPicture2Icon />
+                </Button>
               </PopoverClose>
             </div>
           </PopoverTitle>
+
           <PopoverClose className="ml-auto" title={tCommon('close')}>
-            <span className="inline-flex items-center justify-center rounded p-[0.3rem] transition-colors duration-200 hover:bg-main-100/80">
-              <XIcon className="size-4 text-main-500" />
-            </span>
+            <Button size="icon-sm" type="button" variant="ghost">
+              <XIcon />
+            </Button>
           </PopoverClose>
         </div>
         {content}

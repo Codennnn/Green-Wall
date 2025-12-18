@@ -3,6 +3,7 @@
 import { useLocale, useTranslations } from 'next-intl'
 import { GlobeIcon } from 'lucide-react'
 
+import { Button } from '~/components/ui/button'
 import {
   Menu,
   MenuPopup,
@@ -37,14 +38,25 @@ export function LocaleSelector() {
 
   return (
     <Menu>
-      <MenuTrigger className="flex size-[38px] min-w-0 items-center justify-center rounded-md border-0 bg-main-100 p-0 text-sm font-medium text-main-500 shadow-none ring-4 ring-background transition-colors duration-300 hover:bg-main-200 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background md:ring-8">
-        <GlobeIcon className="size-5.5" />
-      </MenuTrigger>
+      <MenuTrigger
+        render={(
+          <Button
+            size="icon"
+            variant="outline"
+          >
+            <GlobeIcon />
+          </Button>
+        )}
+      />
 
       <MenuPopup>
         <MenuRadioGroup value={locale} onValueChange={handleLocaleChange}>
           {locales.map((loc) => (
-            <MenuRadioItem key={loc.value} value={loc.value}>
+            <MenuRadioItem
+              key={loc.value}
+              closeOnClick
+              value={loc.value}
+            >
               {loc.label}
             </MenuRadioItem>
           ))}

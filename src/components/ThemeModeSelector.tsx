@@ -6,6 +6,7 @@ import { useTranslations } from 'next-intl'
 import { useTheme } from 'next-themes'
 import { MoonIcon, SunIcon, SunMoonIcon } from 'lucide-react'
 
+import { Button } from '~/components/ui/button'
 import {
   Menu,
   MenuPopup,
@@ -64,9 +65,16 @@ export function ThemeModeSelector() {
 
   return (
     <Menu>
-      <MenuTrigger className="flex size-[38px] min-w-0 items-center justify-center rounded-md border-0 bg-main-100 p-0 text-sm font-medium text-main-500 shadow-none ring-4 ring-background transition-colors duration-300 hover:bg-main-200 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background md:ring-8">
-        <CurrentIcon className="size-5.5" />
-      </MenuTrigger>
+      <MenuTrigger
+        render={(
+          <Button
+            size="icon"
+            variant="outline"
+          >
+            <CurrentIcon />
+          </Button>
+        )}
+      />
 
       <MenuPopup>
         <MenuRadioGroup value={currentTheme} onValueChange={handleThemeChange}>
@@ -76,6 +84,7 @@ export function ThemeModeSelector() {
             return (
               <MenuRadioItem
                 key={mode.value}
+                closeOnClick
                 value={mode.value}
               >
                 <div className="flex items-center gap-2">

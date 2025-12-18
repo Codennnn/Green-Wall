@@ -43,16 +43,20 @@ export const AppearanceSetting = memo(function AppearanceSetting() {
 
   const handleSizeChange = useEvent(
     (size: string[]) => {
-      dispatchSettings({ type: 'size', payload: size[0] as GraphSize })
+      if (size.length > 0) {
+        dispatchSettings({ type: 'size', payload: size[0] as GraphSize })
+      }
     },
   )
 
   const handleBlockShapeChange = useEvent(
     (shape: string[]) => {
-      dispatchSettings({
-        type: 'blockShape',
-        payload: shape[0] as BlockShape,
-      })
+      if (shape.length > 0) {
+        dispatchSettings({
+          type: 'blockShape',
+          payload: shape[0] as BlockShape,
+        })
+      }
     },
   )
 
