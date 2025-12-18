@@ -13,14 +13,18 @@ import {
   SelectTrigger,
   SelectValue,
 } from '~/components/ui/select'
-import { normalizeGitHubUsername } from '~/helpers'
-import { useRouter } from '~/i18n/navigation'
+import { Separator } from '~/components/ui/separator'
+import { getCurrentYear, normalizeGitHubUsername } from '~/helpers'
+import { useSession } from '~/lib/auth-client'
+
+import { YearQuickEntryCard } from './components/YearQuickEntryCard'
+import { useYearWrappedNavigation } from './hooks/useYearWrappedNavigation'
 
 export function YearSearchPage() {
   const t = useTranslations('yearSearch')
-  const router = useRouter()
+  const { data: session, isPending: isSessionPending } = useSession()
 
-  const currentYear = new Date().getFullYear()
+  const currentYear = getCurrentYear()
 
   const yearOptions = useMemo(() => {
     const years: number[] = []
@@ -34,7 +38,17 @@ export function YearSearchPage() {
 
   const [username, setUsername] = useState('')
   const [selectedYear, setSelectedYear] = useState<string>(String(currentYear))
-  const [isSubmitting, setIsSubmitting] = useState(false)
+
+  const { isNavigating, navigateToYearUser } = useYearWrappedNavigation()
+
+  const isLoggedIn = Boolean(session?.user)
+  const user = session?.user
+    ? {
+        name: session.user.name,
+        login: (session.user as { login?: string }).login,
+        image: session.user.image,
+      }
+    : null
 
   const handleUsernameChange = (ev: React.ChangeEvent<HTMLInputElement>) => {
     setUsername(ev.target.value)
@@ -53,8 +67,13 @@ export function YearSearchPage() {
     const year = Number(selectedYear)
 
     if (normalizedUsername && year) {
-      setIsSubmitting(true)
-      router.push(`/year/${year}/${normalizedUsername}`)
+      navigateToYearUser({ year, username: normalizedUsername })
+    }
+  }
+
+  const handleViewMyYear = () => {
+    if (user?.login) {
+      navigateToYearUser({ year: currentYear, username: user.login })
     }
   }
 
@@ -68,12 +87,33 @@ export function YearSearchPage() {
         {t('descriptionWithYear', { year: currentYear })}
       </p>
 
-      <div className="py-12 md:py-16">
+      {isLoggedIn && (
+        <>
+          <div className="mt-8">
+            <YearQuickEntryCard
+              currentYear={currentYear}
+              disabled={isNavigating}
+              isPending={isSessionPending}
+              user={user}
+              onViewMyYear={handleViewMyYear}
+            />
+          </div>
+          <div className="mx-auto mt-8 flex max-w-md items-center gap-4">
+            <Separator className="flex-1" />
+            <span className="shrink-0 text-sm text-muted-foreground">
+              {t('orSearchOthers')}
+            </span>
+            <Separator className="flex-1" />
+          </div>
+        </>
+      )}
+
+      <div className="py-8 md:py-12">
         <form onSubmit={handleSubmit}>
           <div className="flex flex-col items-center justify-center gap-y-6 md:flex-row md:gap-x-5">
             <SearchInput
-              autoFocus={false}
-              disabled={isSubmitting}
+              autoFocus={!isLoggedIn}
+              disabled={isNavigating}
               placeholder={t('usernamePlaceholder')}
               translationNamespace="yearSearch"
               value={username}
@@ -81,7 +121,7 @@ export function YearSearchPage() {
             />
 
             <Select
-              disabled={isSubmitting}
+              disabled={isNavigating}
               value={selectedYear}
               onValueChange={handleYearChange}
             >
@@ -97,8 +137,8 @@ export function YearSearchPage() {
               </SelectContent>
             </Select>
 
-            <GenerateButton loading={isSubmitting} type="submit">
-              {t('go')}
+            <GenerateButton loading={isNavigating} type="submit">
+              {t('viewWrapped')}
             </GenerateButton>
           </div>
         </form>

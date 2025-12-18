@@ -14,6 +14,7 @@ import {
   MenuRadioItem,
   MenuTrigger,
 } from '~/components/ui/menu'
+import { Spinner } from '~/components/ui/spinner'
 import { ThemeMode } from '~/enums'
 
 export function ThemeModeSelector() {
@@ -27,9 +28,13 @@ export function ThemeModeSelector() {
 
   if (!mounted) {
     return (
-      <div className="flex h-9 w-full items-center justify-center">
-        <div className="size-4 animate-pulse rounded-full bg-main-200" />
-      </div>
+      <Button
+        disabled
+        size="icon"
+        variant="outline"
+      >
+        <Spinner />
+      </Button>
     )
   }
 

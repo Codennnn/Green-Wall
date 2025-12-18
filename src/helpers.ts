@@ -21,6 +21,13 @@ function getLocalIsoDateString(date: Date): string {
   return `${year}-${month}-${day}`
 }
 
+export function getCurrentYear(): number {
+  // 使用本地时区获取当前年份；如果未来需要支持特定时区，可以在此统一调整
+  const now = new Date()
+
+  return now.getFullYear()
+}
+
 const isDev: boolean = process.env.NODE_ENV === 'development'
 
 export function trackEvent(
@@ -102,7 +109,26 @@ export function getLongestContributionStreak(graphData: GraphData): {
   return { maxStreak, startDate, endDate }
 }
 
-export function getLongestContributionGap(graphData: GraphData): {
+/**
+ * Options for calculating the longest contribution gap.
+ *
+ * Allow passing a custom "now" to make the function easier to test
+ * and to support non-current time perspectives (e.g. historical reports).
+ */
+export interface LongestContributionGapOptions {
+  /**
+   * Optional base time used as the "current" moment.
+   *
+   * - If provided, its year will be used as the current year.
+   * - If omitted, the helper will fall back to the system current year via getCurrentYear().
+   */
+  now?: Date
+}
+
+export function getLongestContributionGap(
+  graphData: GraphData,
+  options?: LongestContributionGapOptions,
+): {
   maxGap: number
   startDate: string | null
   endDate: string | null
@@ -112,8 +138,12 @@ export function getLongestContributionGap(graphData: GraphData): {
   let startDate: string | null = null
   let endDate: string | null = null
 
-  const currentYear = new Date().getFullYear()
-  const todayLocalIso = getLocalIsoDateString(new Date())
+  const now = options?.now ?? new Date()
+  const currentYear
+    = options?.now !== undefined
+      ? options.now.getFullYear()
+      : getCurrentYear()
+  const todayLocalIso = getLocalIsoDateString(now)
 
   graphData.contributionCalendars.forEach((calendar) => {
     calendar.weeks.forEach((week) => {
@@ -204,7 +234,20 @@ export function getWeekendActivity(graphData: GraphData): { total: number, ratio
  * - Maximum contributions in a day
  * - Average contributions per day
  */
-export function getValuableStatistics(graphData: GraphData): ValuableStatistics {
+export interface ValuableStatisticsOptions {
+  /**
+   * Optional base time used as the "current" moment.
+   *
+   * - If provided, its year and date will be used as the current year and today.
+   * - If omitted, the helper will fall back to the system current time.
+   */
+  now?: Date
+}
+
+export function getValuableStatistics(
+  graphData: GraphData,
+  options?: ValuableStatisticsOptions,
+): ValuableStatistics {
   let weekendContributions = 0
   let totalContributions = 0
 
@@ -230,8 +273,12 @@ export function getValuableStatistics(graphData: GraphData): ValuableStatistics 
   let maxContributionsMonth: string | undefined = undefined
   let maxMonthlyContributions = 0
 
-  const currentYear = new Date().getFullYear()
-  const todayLocalIso = getLocalIsoDateString(new Date())
+  const now = options?.now ?? new Date()
+  const currentYear
+    = options?.now !== undefined
+      ? options.now.getFullYear()
+      : getCurrentYear()
+  const todayLocalIso = getLocalIsoDateString(now)
 
   graphData.contributionCalendars.forEach((calendar) => {
     calendar.weeks.forEach((week) => {

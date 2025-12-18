@@ -8,7 +8,8 @@ interface GenerateButtonProps extends React.ComponentProps<'button'> {
   loading?: boolean
 }
 
-export function GenerateButton({ loading = false, ...props }: GenerateButtonProps) {
+export function GenerateButton(props: React.PropsWithChildren<GenerateButtonProps>) {
+  const { loading = false, children, ...restProps } = props
   const t = useTranslations('home')
 
   return (
@@ -19,7 +20,7 @@ export function GenerateButton({ loading = false, ...props }: GenerateButtonProp
         loading && 'pointer-events-none text-white/80',
       )}
       disabled={loading}
-      {...props}
+      {...restProps}
     >
       <span className={styles.shadow} />
       <span className={styles.edge} />
@@ -29,7 +30,7 @@ export function GenerateButton({ loading = false, ...props }: GenerateButtonProp
           'min-w-[max(30vw,200px)] text-center text-lg font-medium md:min-w-[120px] md:text-base',
         )}
       >
-        {loading ? t('generating') : t('generate')}
+        {loading ? t('generating') : (children || t('generate'))}
       </span>
     </button>
   )

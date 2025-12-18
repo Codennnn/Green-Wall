@@ -68,7 +68,7 @@ export function UserCard(props: UserCardProps) {
           </div>
 
           {!!badgeText && (
-            <div className="text-main-400 mt-1 truncate text-xs">
+            <div className="text-muted-foreground mt-1 truncate text-xs">
               {badgeText}
             </div>
           )}

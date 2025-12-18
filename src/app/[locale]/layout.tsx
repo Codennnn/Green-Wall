@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation'
 import { hasLocale, NextIntlClientProvider } from 'next-intl'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 
+import { AuthStatusButton } from '~/components/AuthStatusButton'
 import { GitHubButton } from '~/components/GitHubButton'
 import { LocaleSelector } from '~/components/LocaleSelector'
 import { MainNav } from '~/components/MainNav'
@@ -64,6 +65,7 @@ export default async function LocaleLayout({ children, params }: Props) {
                     <GitHubButton />
                     <LocaleSelector />
                     <ThemeModeSelector />
+                    <AuthStatusButton />
                   </div>
                 </div>
               </header>

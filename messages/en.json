@@ -216,7 +216,12 @@
     "usernamePlaceholder": "GitHub Username",
     "searchPlaceholder": "GitHub Username",
     "selectYear": "Select Year",
-    "go": "Go"
+    "viewWrapped": "View Wrapped",
+    "myQuickEntryCta": "My {year} Wrapped",
+    "orSearchOthers": "or search for others",
+    "loginMissingTitle": "Cannot retrieve GitHub username",
+    "loginMissingDesc": "Please sign in again to access your year in review.",
+    "reSignIn": "Sign in again"
   },
   "navigation": {
     "backToOverview": "Back to Overview",
@@ -228,5 +233,16 @@
     "nextYear": "Next Year",
     "viewYearDetails": "View {year} Details",
     "inspectYear": "Inspect Year"
+  },
+  "auth": {
+    "signIn": "Sign in with GitHub",
+    "signOut": "Sign out",
+    "yearReview": "{year} Wrapped",
+    "modePublic": "Public mode",
+    "modeAuthorized": "Includes private contributions",
+    "modePublicMismatch": "Public mode (viewing another user)",
+    "promptTitle": "Unlock your private contributions",
+    "promptDescription": "Sign in with GitHub to include your private repository contributions when viewing your own profile.",
+    "scopeExplanation": "We only read your contribution data. We cannot modify your repositories."
   }
 }

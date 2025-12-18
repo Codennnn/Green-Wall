@@ -1,6 +1,9 @@
 import { type NextRequest, NextResponse } from 'next/server'
 
+import { getGitHubAccessToken } from '~/server/auth/get-github-access-token'
 import { fetchIssuesInYear } from '~/services'
+
+export const dynamic = 'force-dynamic'
 
 export async function GET(request: NextRequest) {
   const { searchParams } = request.nextUrl
@@ -9,9 +12,20 @@ export async function GET(request: NextRequest) {
   const year = searchParams.get('year')
 
   if (username && year) {
-    const issues = await fetchIssuesInYear({ username, year: Number(year) })
+    const tokenResult = await getGitHubAccessToken(request, username)
+    const { token } = tokenResult
 
-    return NextResponse.json(issues)
+    const issues = await fetchIssuesInYear(
+      { username, year: Number(year) },
+      { token },
+    )
+
+    const response = NextResponse.json(issues)
+
+    response.headers.set('Cache-Control', 'private, no-store')
+    response.headers.set('Vary', 'Cookie')
+
+    return response
   }
 
   return NextResponse.json({ error: 'Missing username or year' }, { status: 400 })

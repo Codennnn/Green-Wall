@@ -56,10 +56,30 @@ export interface GraphData extends ContributionBasic {
   statistics?: ValuableStatistics
 }
 
+export type DataMode = 'public' | 'authorized'
+
+export type FallbackReason
+  = | 'not_logged_in'
+    | 'username_mismatch'
+    | 'token_missing'
+    | 'token_invalid'
+
+export interface ResponseMeta {
+  /** 数据获取模式 */
+  mode: DataMode
+  /** 登录用户信息 */
+  viewer?: {
+    login: string
+  }
+  /** 回退到公开模式的原因 */
+  reason?: FallbackReason
+}
+
 export interface ResponseData {
   errorType?: ErrorType
   message?: string
   data?: GraphData
+  meta?: ResponseMeta
 }
 
 export interface GraphSettings {

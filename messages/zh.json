@@ -216,17 +216,33 @@
     "usernamePlaceholder": "输入 GitHub 用户名",
     "searchPlaceholder": "输入 GitHub 用户名",
     "selectYear": "选择年份",
-    "go": "查看"
+    "viewWrapped": "查看回顾",
+    "myQuickEntryCta": "我的 {year} 回顾",
+    "orSearchOthers": "或搜索其他用户",
+    "loginMissingTitle": "无法获取 GitHub 用户名",
+    "loginMissingDesc": "请重新登录以查看你的年度回顾。",
+    "reSignIn": "重新登录"
   },
   "navigation": {
     "backToOverview": "返回总览",
     "backToHome": "返回首页",
     "home": "首页",
-    "yearReport": "{year} 年度报告",
+    "yearReport": "{year} 年度回顾",
     "switchYear": "切换年份",
     "previousYear": "上一年",
     "nextYear": "下一年",
     "viewYearDetails": "查看 {year} 年详情",
     "inspectYear": "查看年度详情"
+  },
+  "auth": {
+    "signIn": "GitHub 登录",
+    "signOut": "退出登录",
+    "yearReview": "{year} 年度回顾",
+    "modePublic": "公开模式",
+    "modeAuthorized": "包含私有贡献",
+    "modePublicMismatch": "公开模式（正在查看其他用户）",
+    "promptTitle": "解锁私有仓库贡献",
+    "promptDescription": "登录 GitHub 后，查看自己的贡献墙时将包含私有仓库的贡献记录。",
+    "scopeExplanation": "我们仅读取你的贡献数据，不会对你的仓库进行任何修改。"
   }
 }
