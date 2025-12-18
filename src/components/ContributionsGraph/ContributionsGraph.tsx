@@ -5,7 +5,6 @@ import { DEFAULT_SIZE, DEFAULT_THEME, sizeProperties, THEME_PRESETS } from '~/co
 import { useData } from '~/DataContext'
 import { BlockShape } from '~/enums'
 import { cn } from '~/lib/utils'
-import type { Themes } from '~/types'
 
 import { Graph, type GraphProps } from './Graph'
 import { GraphFooter } from './GraphFooter'
@@ -30,7 +29,6 @@ interface ContributionsGraphProps
   mockupClassName?: string
   highlightMode?: GraphHighlightMode
   highlightOptions?: GraphHighlightOptions
-  theme?: Themes
 }
 
 function InnerContributionsGraph(
@@ -45,7 +43,6 @@ function InnerContributionsGraph(
     titleRender,
     highlightMode,
     highlightOptions,
-    theme,
     Mockup = MockupSafari,
   } = props
 
@@ -57,13 +54,13 @@ function InnerContributionsGraph(
 
   const applyingTheme = useMemo(
     () => {
-      const targetTheme = theme ?? settings.theme ?? DEFAULT_THEME
+      const targetTheme = settings.theme ?? DEFAULT_THEME
 
       return THEME_PRESETS.find(
         (item) => item.name.toLowerCase() === targetTheme.toLowerCase(),
       )
     },
-    [theme, settings.theme],
+    [settings.theme],
   )
 
   const highlightDatesMap = useMemo(() => {

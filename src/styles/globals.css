@@ -192,7 +192,7 @@
   --popover: color-mix(in srgb, var(--background) 96%, var(--color-white));
   --popover-foreground: var(--foreground);
   --primary: var(--foreground);
-  --primary-foreground: var(--foreground);
+  --primary-foreground: var(--color-slate-800);
   --secondary: --alpha(var(--color-white) / 6%);
   --secondary-foreground: var(--foreground);
   --muted: --alpha(var(--color-white) / 6%);

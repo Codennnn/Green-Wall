@@ -11,7 +11,13 @@ export const levels = {
   FOURTH_QUARTILE: 4,
 } satisfies Record<ContributionLevel, -1 | 0 | 1 | 2 | 3 | 4>
 
-export const DEFAULT_LEVEL_COLORS: ThemePreset['levelColors'] = ['#ebedf0', '#9be9a8', '#40c463', '#30a14e', '#216e39']
+export const DEFAULT_LEVEL_COLORS: ThemePreset['levelColors'] = [
+  '#ebedf0',
+  '#9be9a8',
+  '#40c463',
+  '#30a14e',
+  '#216e39',
+]
 
 export const sizeProperties = {
   [GraphSize.Small]: {
@@ -117,7 +123,7 @@ export const THEME_PRESETS = [
     colorPrimary: 'rgb(56, 56, 56)',
     colorBorder: 'color-mix(in srgb, rgba(218, 218, 218, 0.48), transparent 0%)',
     colorBackgroundContainer:
-      'linear-gradient(140deg, rgb(241 245 249 / 0.8) 0%, rgb(241 245 249 / 0.5) 100%)',
+      'var(--color-slate-50)',
     levelColors: [
       '#ebedf0',
       'var(--color-brand-300)',

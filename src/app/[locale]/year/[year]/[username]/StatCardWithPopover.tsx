@@ -69,9 +69,11 @@ export function StatCardWithPopover<T extends { url: string }>(props: StatCardWi
             <span className="font-medium">
               {popoverTitle}
             </span>
-            <span className="ml-auto text-foreground/70 text-xs tabular-nums">
-              {popoverCount ?? 0}
-            </span>
+            {typeof popoverCount === 'number' && popoverCount > 0 && (
+              <span className="ml-auto text-foreground/70 text-xs tabular-nums">
+                {popoverCount}
+              </span>
+            )}
           </div>
 
           <ScrollArea

@@ -39,6 +39,8 @@ export interface AiYearlyReportCardProps {
   highlights?: YearlyReportHighlights
   /** 是否自动开始生成 */
   autoStart?: boolean
+  /** 是否隐藏操作按钮 */
+  hideActions?: boolean
 }
 
 export function AiYearlyReportCard(props: AiYearlyReportCardProps) {
@@ -49,6 +51,7 @@ export function AiYearlyReportCard(props: AiYearlyReportCardProps) {
     tags,
     highlights,
     autoStart = false,
+    hideActions = false,
   } = props
 
   const t = useTranslations('aiReport')
@@ -150,7 +153,7 @@ export function AiYearlyReportCard(props: AiYearlyReportCardProps) {
 
   return (
     <StatCard
-      cardClassName="h-full max-h-[352px]"
+      cardClassName="h-full max-h-[360px]"
       cardContentClassName="overflow-hidden"
       icon={<SparklesIcon className="size-5" />}
       title={t('title')}
@@ -167,54 +170,56 @@ export function AiYearlyReportCard(props: AiYearlyReportCardProps) {
         </div>
 
         {/* 操作按钮 */}
-        <div className="mt-auto flex items-center gap-2 p-grid-item-sm pt-0">
-          {/* 生成中 - 取消按钮 */}
-          {isStreaming && (
-            <Button size="xs" variant="outline" onClick={abort}>
-              <SquareIcon className="size-3.5" />
-              {t('cancel')}
-            </Button>
-          )}
+        {!hideActions && (
+          <div className="mt-auto flex items-center gap-2 p-grid-item-sm pt-0">
+            {/* 生成中 - 取消按钮 */}
+            {isStreaming && (
+              <Button size="xs" variant="outline" onClick={abort}>
+                <SquareIcon className="size-3.5" />
+                {t('cancel')}
+              </Button>
+            )}
 
-          {/* 生成完成或失败 - 重新生成按钮 */}
-          {(isSuccess || isError || (status === 'aborted' && hasText)) && (
-            <Button size="xs" variant="outline" onClick={handleRegenerate}>
-              <RefreshCwIcon className="size-3.5" />
-              {t('regenerate')}
-            </Button>
-          )}
+            {/* 生成完成或失败 - 重新生成按钮 */}
+            {(isSuccess || isError || (status === 'aborted' && hasText)) && (
+              <Button size="xs" variant="outline" onClick={handleRegenerate}>
+                <RefreshCwIcon className="size-3.5" />
+                {t('regenerate')}
+              </Button>
+            )}
 
-          {/* 错误状态 - 重试按钮 */}
-          {isError && (
-            <Button size="xs" onClick={() => void start()}>
-              {t('retry')}
-            </Button>
-          )}
+            {/* 错误状态 - 重试按钮 */}
+            {isError && (
+              <Button size="xs" onClick={() => void start()}>
+                {t('retry')}
+              </Button>
+            )}
 
-          {/* 生成完成 - 复制按钮 */}
-          {isSuccess && hasText && (
-            <Button
-              className="ml-auto"
-              size="xs"
-              variant="outline"
-              onClick={() => void handleCopy()}
-            >
-              {copied
-                ? (
-                    <>
-                      <CheckIcon className="size-3.5" />
-                      {t('copied')}
-                    </>
-                  )
-                : (
-                    <>
-                      <CopyIcon className="size-3.5" />
-                      {t('copy')}
-                    </>
-                  )}
-            </Button>
-          )}
-        </div>
+            {/* 生成完成 - 复制按钮 */}
+            {isSuccess && hasText && (
+              <Button
+                className="ml-auto"
+                size="xs"
+                variant="outline"
+                onClick={() => void handleCopy()}
+              >
+                {copied
+                  ? (
+                      <>
+                        <CheckIcon className="size-3.5" />
+                        {t('copied')}
+                      </>
+                    )
+                  : (
+                      <>
+                        <CopyIcon className="size-3.5" />
+                        {t('copy')}
+                      </>
+                    )}
+              </Button>
+            )}
+          </div>
+        )}
       </div>
     </StatCard>
   )
