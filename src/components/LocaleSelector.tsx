@@ -1,7 +1,7 @@
 'use client'
 
 import { useLocale, useTranslations } from 'next-intl'
-import { GlobeIcon } from 'lucide-react'
+import { LanguagesIcon } from 'lucide-react'
 
 import { Button } from '~/components/ui/button'
 import {
@@ -28,12 +28,12 @@ export function LocaleSelector() {
 
     return {
       value: loc,
-      label: `${t(loc)} (${NATIVE_NAMES[loc]})`,
+      label: `${t(loc)}${loc !== locale ? ` (${NATIVE_NAMES[loc]})` : ''}`,
     }
   })
 
-  const handleLocaleChange = (newLocale: string) => {
-    router.replace(pathname, { locale: newLocale as Locale })
+  const handleLocaleChange = (newLocale: Locale) => {
+    router.replace(pathname, { locale: newLocale })
   }
 
   return (
@@ -44,7 +44,7 @@ export function LocaleSelector() {
             size="icon"
             variant="outline"
           >
-            <GlobeIcon />
+            <LanguagesIcon />
           </Button>
         )}
       />

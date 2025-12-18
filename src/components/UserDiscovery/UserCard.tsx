@@ -1,3 +1,6 @@
+import { XIcon } from 'lucide-react'
+
+import { Button } from '~/components/ui/button'
 import type { GitHubUser } from '~/types'
 
 interface UserCardProps {
@@ -73,18 +76,16 @@ export function UserCard(props: UserCardProps) {
       </button>
 
       {showRemove && (
-        <button
+        <Button
           aria-label={`Remove ${login} from recent`}
-          className={[
-            'absolute right-2 top-2 inline-flex items-center justify-center rounded-md border border-border bg-secondary px-2 py-1 text-xs text-foreground',
-            'opacity-0 group-hover:opacity-100 motion-safe:transition-opacity motion-safe:duration-150',
-            'hover:bg-accent focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
-          ].join(' ')}
+          className="absolute right-2 top-2 opacity-0 group-hover:opacity-100 text-muted-foreground"
+          size="icon-xs"
           type="button"
+          variant="ghost"
           onClick={handleRemove}
         >
-          删除
-        </button>
+          <XIcon />
+        </Button>
       )}
     </div>
   )
