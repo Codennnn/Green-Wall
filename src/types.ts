@@ -104,6 +104,17 @@ const RepoInfoSchema = object({
   url: string(),
   description: optional(string()),
   stargazerCount: number(),
+  forkCount: number(),
+  issues: object({
+    totalCount: number(),
+  }),
+  defaultBranchRef: optional(nullable(object({
+    target: optional(nullable(object({
+      history: optional(nullable(object({
+        totalCount: number(),
+      }))),
+    }))),
+  }))),
   languages: optional(nullable(object({
     totalSize: number(),
     edges: array(object({

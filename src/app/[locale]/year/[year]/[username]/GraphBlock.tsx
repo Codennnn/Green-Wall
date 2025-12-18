@@ -35,6 +35,7 @@ import {
   useReposQuery,
 } from '~/hooks/useQueries'
 import { getTopLanguagesFromRepos } from '~/lib/language-stats'
+import { sortReposByDisplayValue } from '~/lib/repo-sort'
 import { deriveStatistics } from '~/lib/statistics'
 import {
   deriveYearlyTags,
@@ -90,11 +91,18 @@ export function GraphBlock() {
   const repos = reposData?.repos
 
   const [reposDataSet, topLanguages] = useMemo(() => {
+    console.log(repos, 'repos')
+
     return [
       Array.isArray(repos) ? repos : [],
       getTopLanguagesFromRepos(repos, { limit: 5 }),
     ]
   }, [repos])
+
+  const sortedReposDataSet = useMemo(
+    () => sortReposByDisplayValue(reposDataSet),
+    [reposDataSet],
+  )
 
   // 年度报告标签推导
   const yearlyTags = useMemo(() => {
@@ -422,7 +430,7 @@ export function GraphBlock() {
                           {tErrors('failedLoadRepos')}
                         </div>
                       )
-                    : reposDataSet.length === 0
+                    : sortedReposDataSet.length === 0
                       ? (
                           <Empty className="h-full border-0 p-0">
                             <EmptyHeader>
@@ -437,7 +445,7 @@ export function GraphBlock() {
                         )
                       : (
                           <ul className="flex flex-col gap-1 pr-1">
-                            {reposDataSet.map((repo: RepoInfo) => (
+                            {sortedReposDataSet.map((repo: RepoInfo) => (
                               <li key={repo.url}>
                                 <a
                                   className="block rounded-md px-2 py-2 text-sm transition-colors hover:bg-foreground/6 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500/40"

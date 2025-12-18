@@ -233,6 +233,19 @@ export async function fetchReposCreatedInYear(
             url
             description
             stargazerCount
+            forkCount
+            issues(states: [OPEN, CLOSED]) {
+              totalCount
+            }
+            defaultBranchRef {
+              target {
+                ... on Commit {
+                  history {
+                    totalCount
+                  }
+                }
+              }
+            }
             languages(first: 100, orderBy: { field: SIZE, direction: DESC }) {
               totalSize
               edges {
