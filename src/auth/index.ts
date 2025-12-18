@@ -10,17 +10,15 @@ import { customSession } from 'better-auth/plugins'
  * - 通过 customSession 插件注入 user.login 字段
  */
 export const auth = betterAuth({
-  // 使用环境变量，兼容现有 AUTH_SECRET 或新的 BETTER_AUTH_SECRET
-  secret: process.env.BETTER_AUTH_SECRET ?? process.env.AUTH_SECRET,
+  secret: process.env.AUTH_SECRET,
 
-  // 基础 URL（用于回调等）
-  baseURL: process.env.BETTER_AUTH_URL ?? process.env.NEXTAUTH_URL,
+  baseURL: process.env.AUTH_URL,
 
   // GitHub OAuth 配置
   socialProviders: {
     github: {
-      clientId: process.env.GITHUB_CLIENT_ID ?? process.env.AUTH_GITHUB_ID ?? '',
-      clientSecret: process.env.GITHUB_CLIENT_SECRET ?? process.env.AUTH_GITHUB_SECRET ?? '',
+      clientId: process.env.AUTH_GITHUB_ID ?? '',
+      clientSecret: process.env.AUTH_GITHUB_SECRET ?? '',
       // 保持与原 NextAuth 相同的 scope：读取用户信息、邮箱、私有仓库
       scope: ['read:user', 'user:email', 'repo'],
       // 将 GitHub profile 数据映射到用户字段

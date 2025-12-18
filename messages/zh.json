@@ -134,6 +134,27 @@
     "generating": "正在生成...",
     "failed": "生成失败，请重试"
   },
+  "aiConfig": {
+    "configButton": "已配置",
+    "dialogTitle": "自定义 AI 配置",
+    "dialogDescription": "配置你自己的 OpenAI 兼容 AI 服务。",
+    "baseUrl": "API 地址",
+    "baseUrlPlaceholder": "https://api.openai.com/v1",
+    "baseUrlHint": "OpenAI 兼容接口的根地址",
+    "apiKey": "API 密钥",
+    "apiKeyPlaceholder": "",
+    "apiKeyHint": "你的 API 密钥将保存在本地，仅用于发送请求",
+    "model": "模型名称",
+    "modelPlaceholder": "",
+    "modelHint": "例如：gpt-4o-mini，deepseek-chat，qwen-plus",
+    "testConnection": "测试连接",
+    "testSuccess": "连接成功",
+    "testFailed": "连接失败",
+    "save": "保存配置",
+    "cancel": "取消",
+    "resetToDefault": "恢复默认",
+    "securityWarning": "API 密钥将保存在浏览器本地存储中。建议使用权限受限或可撤销的密钥，避免在公共设备上保存。"
+  },
   "errors": {
     "somethingWentWrong": "出了点问题，请稍后再试。",
     "badCredentials": "本地运行需要配置 GitHub Access Token 才能拉取数据。按 <link>这个步骤</link> 设置好环境变量即可。",

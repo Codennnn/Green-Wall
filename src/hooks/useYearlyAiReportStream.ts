@@ -3,6 +3,7 @@
 import { useCallback, useRef, useState } from 'react'
 
 import { fetchYearlyReportStream, readTextStream } from '~/services/ai-report'
+import type { AiRuntimeConfig } from '~/types/ai-config'
 import type {
   StreamStatus,
   YearlyReportHighlights,
@@ -15,6 +16,8 @@ export interface UseYearlyAiReportStreamOptions {
   locale?: string
   tags: YearlyReportTags
   highlights?: YearlyReportHighlights
+  /** 可选的自定义 AI 配置 */
+  aiConfig?: AiRuntimeConfig | null
 }
 
 export interface UseYearlyAiReportStreamReturn {
@@ -35,7 +38,7 @@ export interface UseYearlyAiReportStreamReturn {
 export function useYearlyAiReportStream(
   options: UseYearlyAiReportStreamOptions,
 ): UseYearlyAiReportStreamReturn {
-  const { username, year, locale, tags, highlights } = options
+  const { username, year, locale, tags, highlights, aiConfig } = options
 
   const [text, setText] = useState('')
   const [status, setStatus] = useState<StreamStatus>('idle')
@@ -63,6 +66,8 @@ export function useYearlyAiReportStream(
           locale,
           tags,
           highlights,
+          // 仅当有自定义配置时才传递
+          aiConfig: aiConfig ?? undefined,
         },
         abortController.signal,
       )
@@ -90,7 +95,7 @@ export function useYearlyAiReportStream(
     finally {
       abortControllerRef.current = null
     }
-  }, [username, year, locale, tags, highlights])
+  }, [username, year, locale, tags, highlights, aiConfig])
 
   const abort = useCallback(() => {
     if (abortControllerRef.current) {

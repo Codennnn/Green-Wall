@@ -1,3 +1,5 @@
+import type { AiRuntimeConfig } from './ai-config'
+
 /**
  * 年度报告用户标签 - 由前端预计算，AI 仅解读不重新分类
  */
@@ -43,6 +45,8 @@ export interface YearlyReportRequest {
   locale?: string
   tags: YearlyReportTags
   highlights?: YearlyReportHighlights
+  /** 可选的自定义 AI 配置 */
+  aiConfig?: AiRuntimeConfig
 }
 
 /**

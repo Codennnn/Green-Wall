@@ -8,11 +8,13 @@ import {
   CheckIcon,
   CopyIcon,
   RefreshCwIcon,
+  SettingsIcon,
   SparklesIcon,
   SquareIcon,
   WandSparklesIcon,
 } from 'lucide-react'
 
+import { AiConfigDialog } from '~/components/AiConfig/AiConfigDialog'
 import { Alert, AlertDescription } from '~/components/ui/alert'
 import { Button } from '~/components/ui/button'
 import {
@@ -22,6 +24,7 @@ import {
 } from '~/components/ui/empty'
 import { ScrollArea } from '~/components/ui/scroll-area'
 import { Skeleton } from '~/components/ui/skeleton'
+import { useAiConfig } from '~/hooks/useAiConfig'
 import { useCopyToClipboard } from '~/hooks/useCopyToClipboard'
 import { useYearlyAiReportStream } from '~/hooks/useYearlyAiReportStream'
 import type {
@@ -55,7 +58,16 @@ export function AiYearlyReportCard(props: AiYearlyReportCardProps) {
   } = props
 
   const t = useTranslations('aiReport')
+  const tConfig = useTranslations('aiConfig')
   const { copied, copy } = useCopyToClipboard()
+
+  const {
+    config: aiConfig,
+    isLoaded,
+    reset: resetAiConfig,
+    save: saveAiConfig,
+    sourceInfo,
+  } = useAiConfig()
 
   const {
     text,
@@ -70,13 +82,15 @@ export function AiYearlyReportCard(props: AiYearlyReportCardProps) {
     locale,
     tags,
     highlights,
+    aiConfig,
   })
 
   useEffect(() => {
-    if (autoStart && status === 'idle') {
+    // 等待配置加载完成再自动开始
+    if (autoStart && status === 'idle' && isLoaded) {
       void start()
     }
-  }, [autoStart, status, start])
+  }, [autoStart, status, start, isLoaded])
 
   const handleCopy = useEvent(async () => {
     if (!text) {
@@ -171,7 +185,7 @@ export function AiYearlyReportCard(props: AiYearlyReportCardProps) {
 
         {/* 操作按钮 */}
         {!hideActions && (
-          <div className="mt-auto flex items-center gap-2 p-grid-item-sm pt-0">
+          <div className="mt-auto flex flex-wrap items-center gap-2 p-grid-item-sm pt-0">
             {/* 生成中 - 取消按钮 */}
             {isStreaming && (
               <Button size="xs" variant="outline" onClick={abort}>
@@ -198,7 +212,6 @@ export function AiYearlyReportCard(props: AiYearlyReportCardProps) {
             {/* 生成完成 - 复制按钮 */}
             {isSuccess && hasText && (
               <Button
-                className="ml-auto"
                 size="xs"
                 variant="outline"
                 onClick={() => void handleCopy()}
@@ -218,6 +231,23 @@ export function AiYearlyReportCard(props: AiYearlyReportCardProps) {
                     )}
               </Button>
             )}
+
+            <div className="ml-auto flex items-center gap-2">
+              <AiConfigDialog
+                config={aiConfig}
+                trigger={(
+                  <Button
+                    size={sourceInfo.source === 'custom' ? 'xs' : 'icon-xs'}
+                    variant="ghost"
+                  >
+                    <SettingsIcon className="size-3.5" />
+                    {sourceInfo.source === 'custom' ? tConfig('configButton') : ''}
+                  </Button>
+                )}
+                onReset={resetAiConfig}
+                onSave={saveAiConfig}
+              />
+            </div>
           </div>
         )}
       </div>

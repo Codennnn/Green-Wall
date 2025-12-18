@@ -134,6 +134,27 @@
     "generating": "Generating...",
     "failed": "Generation failed, please retry"
   },
+  "aiConfig": {
+    "configButton": "Custom",
+    "dialogTitle": "Custom AI Configuration",
+    "dialogDescription": "Configure your own OpenAI-compatible AI service.",
+    "baseUrl": "API Endpoint",
+    "baseUrlPlaceholder": "https://api.openai.com/v1",
+    "baseUrlHint": "Base URL for OpenAI-compatible API",
+    "apiKey": "API Key",
+    "apiKeyPlaceholder": "",
+    "apiKeyHint": "Your API key is stored locally and only used for requests",
+    "model": "Model Name",
+    "modelPlaceholder": "",
+    "modelHint": "e.g., gpt-4o-mini, deepseek-chat, qwen-plus",
+    "testConnection": "Test Connection",
+    "testSuccess": "Connected",
+    "testFailed": "Connection failed",
+    "save": "Save",
+    "cancel": "Cancel",
+    "resetToDefault": "Reset to Default",
+    "securityWarning": "Your API key will be stored in browser local storage. We recommend using a limited or revocable key, and avoid saving on public devices."
+  },
   "errors": {
     "somethingWentWrong": "Something went wrong.",
     "badCredentials": "You need access token to get data, please read <link>this step</link> to learn how to set the token correctly.",
