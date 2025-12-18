@@ -68,9 +68,6 @@ export function LanguageIcon(props: LanguageIconProps) {
         className="brightness-0 dark:brightness-0 dark:invert"
         height={size}
         src={iconUrl}
-        style={{
-          filter: 'brightness(0) saturate(100%)',
-        }}
         width={size}
         onError={() => {
           setImageError(true)
