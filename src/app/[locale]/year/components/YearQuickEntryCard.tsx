@@ -8,6 +8,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar'
 import { Button } from '~/components/ui/button'
 import { Card, CardPanel } from '~/components/ui/card'
 import { Skeleton } from '~/components/ui/skeleton'
+import { useCurrentPathWithSearch } from '~/hooks/useCurrentPathWithSearch'
 import { authClient } from '~/lib/auth-client'
 
 export interface YearQuickEntryUser {
@@ -32,6 +33,7 @@ export function YearQuickEntryCard({
   onViewMyYear,
 }: YearQuickEntryCardProps) {
   const t = useTranslations('yearSearch')
+  const callbackURL = useCurrentPathWithSearch()
 
   if (isPending) {
     return (
@@ -61,7 +63,10 @@ export function YearQuickEntryCard({
 
   if (!hasLogin) {
     const handleReSignIn = () => {
-      void authClient.signIn.social({ provider: 'github' })
+      void authClient.signIn.social({
+        provider: 'github',
+        callbackURL,
+      })
     }
 
     return (

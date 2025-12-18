@@ -14,6 +14,7 @@ import {
 } from '~/components/ui/menu'
 import { Spinner } from '~/components/ui/spinner'
 import { getCurrentYear } from '~/helpers'
+import { useCurrentPathWithSearch } from '~/hooks/useCurrentPathWithSearch'
 import { authClient, useSession } from '~/lib/auth-client'
 
 interface ExtendedUser {
@@ -27,6 +28,7 @@ export function AuthStatusButton() {
   const { data: session, isPending } = useSession()
   const t = useTranslations('auth')
   const currentYear = getCurrentYear()
+  const callbackURL = useCurrentPathWithSearch()
 
   if (isPending) {
     return (
@@ -97,6 +99,7 @@ export function AuthStatusButton() {
   const handleSignIn = () => {
     void authClient.signIn.social({
       provider: 'github',
+      callbackURL,
     })
   }
 
