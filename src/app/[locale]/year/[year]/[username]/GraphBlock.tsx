@@ -91,8 +91,6 @@ export function GraphBlock() {
   const repos = reposData?.repos
 
   const [reposDataSet, topLanguages] = useMemo(() => {
-    console.log(repos, 'repos')
-
     return [
       Array.isArray(repos) ? repos : [],
       getTopLanguagesFromRepos(repos, { limit: 5 }),
@@ -180,10 +178,10 @@ export function GraphBlock() {
 
       <div
         ref={reportContainerRef}
-        className="grid w-full grid-cols-12 gap-4 bg-background p-grid-item"
+        className="grid w-full grid-cols-1 gap-4 bg-background p-grid-item md:grid-cols-8 lg:grid-cols-12"
       >
         {/* MARK: 贡献日历热力图 */}
-        <div className="col-span-7">
+        <div className="col-span-1 md:col-span-5 lg:col-span-7">
           {
             isLoading
               ? (
@@ -219,7 +217,7 @@ export function GraphBlock() {
         </div>
 
         {/* MARK: AI 年度总结 */}
-        <div className="col-span-5">
+        <div className="col-span-1 md:col-span-3 lg:col-span-5">
           <AiYearlyReportCard
             hideActions={isDownloading}
             highlights={yearlyHighlights}
@@ -231,7 +229,7 @@ export function GraphBlock() {
         </div>
 
         {/* MARK: 最活跃月份 */}
-        <div className="col-span-4">
+        <div className="col-span-1 md:col-span-4 lg:col-span-4">
           <StatCard
             icon={<CalendarArrowUpIcon className="size-5" />}
             statValueProps={{
@@ -250,7 +248,7 @@ export function GraphBlock() {
         </div>
 
         {/* MARK: 平均每日 */}
-        <div className="col-span-4">
+        <div className="col-span-1 md:col-span-4 lg:col-span-4">
           <StatCard
             icon={<ScaleIcon className="size-5" />}
             statValueProps={{
@@ -265,7 +263,7 @@ export function GraphBlock() {
         <StatCardWithPopover
           align="start"
           ariaLabel={t('showIssues', { year: queryYear })}
-          className="col-span-4"
+          className="col-span-1 md:col-span-4 lg:col-span-4"
           contentClassName="w-[min(90vw,520px)]"
           emptyMessage={tErrors('noIssues')}
           error={issuesError}
@@ -308,7 +306,7 @@ export function GraphBlock() {
         </StatCardWithPopover>
 
         {/* MARK: 最大贡献 */}
-        <div className="col-span-4 row-span-2">
+        <div className="col-span-1 md:col-span-4 lg:col-span-4 lg:row-span-2">
           <StatCard
             icon={<ArrowBigUpDashIcon className="size-5" />}
             title={t('maxContributions')}
@@ -332,7 +330,7 @@ export function GraphBlock() {
         </div>
 
         {/* MARK: 最长连续天数 */}
-        <div className="col-span-4 row-span-2">
+        <div className="col-span-1 md:col-span-4 lg:col-span-4 lg:row-span-2">
           <StatCard
             icon={<CalendarDaysIcon className="size-5" />}
             title={t('longestStreak')}
@@ -360,7 +358,7 @@ export function GraphBlock() {
         </div>
 
         {/* MARK: 最长间隔天数 */}
-        <div className="col-span-4 row-span-2">
+        <div className="col-span-1 md:col-span-4 lg:col-span-4 lg:row-span-2">
           <StatCard
             icon={<CalendarMinus2Icon className="size-5" />}
             title={t('longestGap')}
@@ -392,7 +390,7 @@ export function GraphBlock() {
         </div>
 
         {/* MARK: 仓库数量 */}
-        <div className="col-span-5">
+        <div className="col-span-1 md:col-span-8 lg:col-span-5">
           <StatCard
             icon={<FolderGit2Icon className="size-5" />}
             title={t('reposCreated', { year: queryYear })}
@@ -480,7 +478,7 @@ export function GraphBlock() {
         </div>
 
         {/* MARK: 顶级语言 */}
-        <div className="col-span-7">
+        <div className="col-span-1 md:col-span-8 lg:col-span-7">
           <TopLanguagesCard
             icon={<SquareCodeIcon className="size-5" />}
             isLoading={reposLoading}
@@ -490,7 +488,7 @@ export function GraphBlock() {
         </div>
 
         {/* MARK: 图表区域 - 月度提交 */}
-        <div className="col-span-6">
+        <div className="col-span-1 md:col-span-4 lg:col-span-6">
           <MonthlyCommitChart
             calendars={contributionData?.contributionCalendars}
             isLoading={contributionLoading}
@@ -499,7 +497,7 @@ export function GraphBlock() {
         </div>
 
         {/* MARK: 图表区域 - 周度提交 */}
-        <div className="col-span-6">
+        <div className="col-span-1 md:col-span-4 lg:col-span-6">
           <WeeklyCommitChart
             calendars={contributionData?.contributionCalendars}
             isLoading={contributionLoading}
