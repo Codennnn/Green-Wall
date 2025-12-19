@@ -18,13 +18,6 @@ import {
 import { ContributionsGraph } from '~/components/ContributionsGraph/ContributionsGraph'
 import type { GraphHighlightMode, GraphHighlightOptions } from '~/components/ContributionsGraph/graphHighlightUtils'
 import { Button } from '~/components/ui/button'
-import {
-  Empty,
-  EmptyDescription,
-  EmptyHeader,
-  EmptyMedia,
-} from '~/components/ui/empty'
-import { ScrollArea } from '~/components/ui/scroll-area'
 import { Skeleton } from '~/components/ui/skeleton'
 import { useData } from '~/DataContext'
 import { useDateFormatters } from '~/hooks/useDateFormatters'
@@ -41,14 +34,17 @@ import {
   deriveYearlyTags,
   extractHighlights,
 } from '~/lib/yearly-report/deriveTags'
-import type { IssueInfo, RepoInfo } from '~/types'
+import type { IssueInfo } from '~/types'
 
 import { MonthlyCommitChart } from './charts/MonthlyCommitChart'
 import { WeeklyCommitChart } from './charts/WeeklyCommitChart'
 import { AiYearlyReportCard } from './AiYearlyReportCard'
+import { ReposCard } from './ReposCard'
 import { StatCardWithPopover } from './StatCardWithPopover'
 import { StatCard, StatValue } from './StaticCard'
 import { TopLanguagesCard } from './TopLanguagesCard'
+
+const STAT_CARD_ICON_SIZE = 'size-5'
 
 export function GraphBlock() {
   const { year, username, locale } = useParams()
@@ -97,10 +93,23 @@ export function GraphBlock() {
     ]
   }, [repos])
 
-  const sortedReposDataSet = useMemo(
-    () => sortReposByDisplayValue(reposDataSet),
-    [reposDataSet],
-  )
+  const [hiddenRepoUrls, setHiddenRepoUrls] = useState<Set<string>>(new Set())
+
+  const handleRemoveRepo = useEvent((repoUrl: string) => {
+    setHiddenRepoUrls((prev) => {
+      const next = new Set(prev)
+
+      next.add(repoUrl)
+
+      return next
+    })
+  })
+
+  const sortedReposDataSet = useMemo(() => {
+    const sorted = sortReposByDisplayValue(reposDataSet)
+
+    return sorted.filter((repo) => !hiddenRepoUrls.has(repo.url))
+  }, [reposDataSet, hiddenRepoUrls])
 
   // 年度报告标签推导
   const yearlyTags = useMemo(() => {
@@ -233,7 +242,7 @@ export function GraphBlock() {
         {/* MARK: 最活跃月份 */}
         <div className="col-span-1 md:col-span-4 lg:col-span-4">
           <StatCard
-            icon={<CalendarArrowUpIcon className="size-5" />}
+            icon={<CalendarArrowUpIcon className={STAT_CARD_ICON_SIZE} />}
             statValueProps={{
               isLoading: !statistics,
               value: formatMonth(statistics?.maxContributionsMonth),
@@ -252,7 +261,7 @@ export function GraphBlock() {
         {/* MARK: 平均每日 */}
         <div className="col-span-1 md:col-span-4 lg:col-span-4">
           <StatCard
-            icon={<ScaleIcon className="size-5" />}
+            icon={<ScaleIcon className={STAT_CARD_ICON_SIZE} />}
             statValueProps={{
               isLoading: !statistics,
               value: statistics?.averageContributionsPerDay,
@@ -298,7 +307,7 @@ export function GraphBlock() {
           side="right"
         >
           <StatCard
-            icon={<MessageSquareQuoteIcon className="size-5" />}
+            icon={<MessageSquareQuoteIcon className={STAT_CARD_ICON_SIZE} />}
             statValueProps={{
               isLoading: issuesLoading,
               value: issuesData?.count,
@@ -310,7 +319,7 @@ export function GraphBlock() {
         {/* MARK: 最大贡献 */}
         <div className="col-span-1 md:col-span-4 lg:col-span-4 lg:row-span-2">
           <StatCard
-            icon={<ArrowBigUpDashIcon className="size-5" />}
+            icon={<ArrowBigUpDashIcon className={STAT_CARD_ICON_SIZE} />}
             title={t('maxContributions')}
             onMouseEnter={() => {
               if (statistics?.maxContributionsDate) {
@@ -334,7 +343,7 @@ export function GraphBlock() {
         {/* MARK: 最长连续天数 */}
         <div className="col-span-1 md:col-span-4 lg:col-span-4 lg:row-span-2">
           <StatCard
-            icon={<CalendarDaysIcon className="size-5" />}
+            icon={<CalendarDaysIcon className={STAT_CARD_ICON_SIZE} />}
             title={t('longestStreak')}
             onMouseEnter={() => {
               if (statistics?.longestStreakStartDate && statistics.longestStreakEndDate) {
@@ -362,7 +371,7 @@ export function GraphBlock() {
         {/* MARK: 最长间隔天数 */}
         <div className="col-span-1 md:col-span-4 lg:col-span-4 lg:row-span-2">
           <StatCard
-            icon={<CalendarMinus2Icon className="size-5" />}
+            icon={<CalendarMinus2Icon className={STAT_CARD_ICON_SIZE} />}
             title={t('longestGap')}
             onMouseEnter={() => {
               if (statistics?.longestGapStartDate && statistics.longestGapEndDate) {
@@ -393,8 +402,11 @@ export function GraphBlock() {
 
         {/* MARK: 仓库数量 */}
         <div className="col-span-1 md:col-span-8 lg:col-span-5">
-          <StatCard
-            icon={<FolderGit2Icon className="size-5" />}
+          <ReposCard
+            error={reposError}
+            icon={<FolderGit2Icon className={STAT_CARD_ICON_SIZE} />}
+            isLoading={reposLoading}
+            repos={sortedReposDataSet}
             title={t('reposCreated', { year: queryYear })}
             onMouseEnter={() => {
               if (statistics?.longestGapStartDate && statistics.longestGapEndDate) {
@@ -408,81 +420,14 @@ export function GraphBlock() {
               }
             }}
             onMouseLeave={handleClearHighlight}
-          >
-            <div className="h-60">
-              <ScrollArea scrollFade className="h-full pt-grid-item-sm p-grid-item">
-                {reposLoading
-                  ? (
-                      <ul className="flex flex-col gap-3 px-grid-item">
-                        {Array.from({ length: 4 }).map((_, index) => (
-                          <li key={index}>
-                            <div className="space-y-1.5">
-                              <Skeleton className="h-4 w-full" />
-                              <Skeleton className="h-4 w-1/2" />
-                            </div>
-                          </li>
-                        ))}
-                      </ul>
-                    )
-                  : reposError
-                    ? (
-                        <div className="flex h-full items-center justify-center text-destructive text-sm">
-                          {tErrors('failedLoadRepos')}
-                        </div>
-                      )
-                    : sortedReposDataSet.length === 0
-                      ? (
-                          <Empty className="h-full border-0 p-0">
-                            <EmptyHeader>
-                              <EmptyMedia variant="icon">
-                                <FolderGit2Icon />
-                              </EmptyMedia>
-                              <EmptyDescription>
-                                {tErrors('noRepos')}
-                              </EmptyDescription>
-                            </EmptyHeader>
-                          </Empty>
-                        )
-                      : (
-                          <ul className="flex flex-col gap-1 pr-1">
-                            {sortedReposDataSet.map((repo: RepoInfo) => (
-                              <li key={repo.url}>
-                                <a
-                                  className="block rounded-md px-2 py-2 text-sm transition-colors hover:bg-foreground/6 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500/40"
-                                  href={repo.url}
-                                  rel="noreferrer"
-                                  target="_blank"
-                                >
-                                  <div className="flex items-center gap-2">
-                                    <span className="min-w-0 flex-1 truncate font-medium">
-                                      {repo.name}
-                                    </span>
-                                    <span className="shrink-0 text-foreground/60 text-xs tabular-nums">
-                                      ★ {repo.stargazerCount}
-                                    </span>
-                                  </div>
-
-                                  {repo.description
-                                    ? (
-                                        <div className="mt-1 line-clamp-2 text-foreground/70 text-xs">
-                                          {repo.description}
-                                        </div>
-                                      )
-                                    : null}
-                                </a>
-                              </li>
-                            ))}
-                          </ul>
-                        )}
-              </ScrollArea>
-            </div>
-          </StatCard>
+            onRemoveRepo={handleRemoveRepo}
+          />
         </div>
 
         {/* MARK: 顶级语言 */}
         <div className="col-span-1 md:col-span-8 lg:col-span-7">
           <TopLanguagesCard
-            icon={<SquareCodeIcon className="size-5" />}
+            icon={<SquareCodeIcon className={STAT_CARD_ICON_SIZE} />}
             isLoading={reposLoading}
             items={topLanguages}
             title={t('topLanguages', { year: queryYear })}
