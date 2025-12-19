@@ -264,6 +264,12 @@
     "modePublicMismatch": "Public mode (viewing another user)",
     "promptTitle": "Unlock your private contributions",
     "promptDescription": "Sign in with GitHub to include your private repository contributions when viewing your own profile.",
-    "scopeExplanation": "We only read your contribution data. We cannot modify your repositories."
+    "scopeExplanation": "We only read your contribution data. We cannot modify your repositories.",
+    "signInBenefitsTitle": "Sign in to unlock more",
+    "signInBenefitsIntro": "With GitHub authorization, you can:",
+    "signInBenefitsItemYearWrapped": "Open your Year Wrapped and deeper stats",
+    "signInBenefitsItemPrivateContrib": "Include private contributions (authorized mode)",
+    "signInBenefitsItemDeeperInsights": "Get more accurate language/repo/issue insights",
+    "signInBenefitsFooter": "We only read your contribution data. We can’t modify your repositories."
   }
 }

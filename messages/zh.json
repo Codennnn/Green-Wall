@@ -264,6 +264,12 @@
     "modePublicMismatch": "公开模式（正在查看其他用户）",
     "promptTitle": "解锁私有仓库贡献",
     "promptDescription": "登录 GitHub 后，查看自己的贡献墙时将包含私有仓库的贡献记录。",
-    "scopeExplanation": "我们仅读取你的贡献数据，不会对你的仓库进行任何修改。"
+    "scopeExplanation": "我们仅读取你的贡献数据，不会对你的仓库进行任何修改。",
+    "signInBenefitsTitle": "登录后可解锁更多数据",
+    "signInBenefitsIntro": "使用 GitHub 授权登录后，你可以：",
+    "signInBenefitsItemYearWrapped": "一键打开你的年度回顾与更完整的统计",
+    "signInBenefitsItemPrivateContrib": "包含私有仓库贡献（授权模式）",
+    "signInBenefitsItemDeeperInsights": "获取更准确的语言 / 仓库 / Issues 数据分析",
+    "signInBenefitsFooter": "我们只读取你的贡献数据，不会修改你的仓库。"
   }
 }

@@ -3,6 +3,7 @@
 import { useTranslations } from 'next-intl'
 import { CalendarIcon, LogInIcon, LogOutIcon } from 'lucide-react'
 
+import { LoginBenefitsPopoverContent } from '~/components/LoginBenefitsPopoverContent'
 import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar'
 import { Button } from '~/components/ui/button'
 import {
@@ -12,6 +13,11 @@ import {
   MenuSeparator,
   MenuTrigger,
 } from '~/components/ui/menu'
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '~/components/ui/popover'
 import { Spinner } from '~/components/ui/spinner'
 import { getCurrentYear } from '~/helpers'
 import { useCurrentPathWithSearch } from '~/hooks/useCurrentPathWithSearch'
@@ -105,12 +111,37 @@ export function AuthStatusButton() {
 
   // 未登录状态
   return (
-    <Button
-      variant="outline"
-      onClick={handleSignIn}
-    >
-      <LogInIcon />
-      <span className="hidden sm:inline">{t('signIn')}</span>
-    </Button>
+    <Popover>
+      <PopoverTrigger
+        openOnHover
+        closeDelay={100}
+        delay={100}
+        render={(triggerProps) => (
+          <Button
+            {...triggerProps}
+            variant="outline"
+            onClick={(event) => {
+              const e = event as React.MouseEvent<HTMLElement> & {
+                preventBaseUIHandler?: () => void
+              }
+              e.preventBaseUIHandler?.()
+              handleSignIn()
+            }}
+          >
+            <LogInIcon />
+            <span className="hidden sm:inline">{t('signIn')}</span>
+          </Button>
+        )}
+      />
+
+      <PopoverContent
+        align="end"
+        className="w-[min(92vw,340px)]"
+        side="bottom"
+        sideOffset={8}
+      >
+        <LoginBenefitsPopoverContent />
+      </PopoverContent>
+    </Popover>
   )
 }
