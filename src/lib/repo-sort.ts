@@ -1,4 +1,4 @@
-import type { RepoInfo } from '~/types'
+import type { RepoInfo, RepoInteraction } from '~/types'
 
 const SORT_WEIGHTS = {
   /** Star 数量权重（主要指标） */
@@ -132,4 +132,47 @@ export function sortReposByDisplayValue(repos: RepoInfo[]): RepoInfo[] {
   })
 
   return reposWithScore.map(({ repo }) => repo)
+}
+
+/**
+ * 按影响力对仓库列表进行排序
+ *
+ * 排序规则：
+ * 1. 主要指标：影响力评分（社区认可度 + 个人贡献的综合评分）
+ * 2. 同分时按 stars 数量降序（社区影响力优先）
+ * 3. 再按 commits 数量降序（个人贡献度）
+ * 4. 最后按 nameWithOwner 升序保证稳定性
+ *
+ * @param repos 原始仓库列表
+ * @returns 排序后的仓库列表（不修改原数组）
+ */
+export function sortReposByInfluence(
+  repos: RepoInteraction[],
+): RepoInteraction[] {
+  if (repos.length === 0) {
+    return repos
+  }
+
+  return [...repos].sort((a, b) => {
+    // 首先按影响力评分降序
+    if (b.score !== a.score) {
+      return b.score - a.score
+    }
+
+    // 同分时按 stars 数量降序（社区影响力优先）
+    const starsA = a.stargazerCount ?? 0
+    const starsB = b.stargazerCount ?? 0
+
+    if (starsB !== starsA) {
+      return starsB - starsA
+    }
+
+    // 再按 commits 数量降序（个人贡献度）
+    if (b.interaction.commits !== a.interaction.commits) {
+      return b.interaction.commits - a.interaction.commits
+    }
+
+    // 最后按 nameWithOwner 升序保证稳定性
+    return a.nameWithOwner.localeCompare(b.nameWithOwner)
+  })
 }

@@ -78,11 +78,16 @@ export function ShareButton() {
           <PopoverTitle className="flex-1">
             {t('title')}
           </PopoverTitle>
-          <PopoverClose className="ml-auto" title={tCommon('close')}>
-            <Button size="icon-sm" type="button" variant="ghost">
-              <XIcon />
-            </Button>
-          </PopoverClose>
+
+          <PopoverClose
+            className="ml-auto"
+            render={(
+              <Button size="icon-sm" type="button" variant="ghost">
+                <XIcon />
+              </Button>
+            )}
+            title={tCommon('close')}
+          />
         </div>
         <div className="max-w-[90vw] rounded-md pt-1 md:max-w-[min(40vw,300px)]">
           {shareUrl && (

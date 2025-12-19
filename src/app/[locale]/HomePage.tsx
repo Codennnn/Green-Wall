@@ -10,6 +10,7 @@ import { ErrorMessage } from '~/components/ErrorMessage'
 import { GraphActionBar } from '~/components/GraphActionBar'
 import { Loading } from '~/components/Loading/Loading'
 import { SearchForm } from '~/components/SearchForm'
+import { Separator } from '~/components/ui/separator'
 import { FamousUsersSection } from '~/components/UserDiscovery/FamousUsersSection'
 import { RecentUsersSection } from '~/components/UserDiscovery/RecentUsersSection'
 import { useRecentUsers } from '~/components/UserDiscovery/useRecentUsers'
@@ -21,10 +22,12 @@ import { useUrlUsername } from '~/hooks/useUrlUsername'
 
 function Divider() {
   return (
-    <div className="my-4 flex items-center justify-center gap-x-2 text-border">
-      <span className="h-px w-1/3 bg-linear-to-l from-current to-transparent" />
-      <DotIcon className="size-4" />
-      <span className="h-px w-1/3 bg-linear-to-r from-current to-transparent" />
+    <div className="w-full flex justify-center">
+      <div className="my-4 flex items-center gap-x-2 w-1/2">
+        <Separator className="flex-1" />
+        <DotIcon className="size-4 shrink-0 text-muted-foreground" />
+        <Separator className="flex-1" />
+      </div>
     </div>
   )
 }

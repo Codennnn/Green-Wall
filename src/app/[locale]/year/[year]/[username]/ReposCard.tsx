@@ -1,6 +1,7 @@
 import { useTranslations } from 'next-intl'
 import { FolderGit2Icon, XIcon } from 'lucide-react'
 
+import { InteractionBadges } from '~/components/InteractionBadges'
 import { Button } from '~/components/ui/button'
 import {
   Empty,
@@ -10,9 +11,13 @@ import {
 } from '~/components/ui/empty'
 import { ScrollArea } from '~/components/ui/scroll-area'
 import { Skeleton } from '~/components/ui/skeleton'
-import type { RepoInfo } from '~/types'
+import { Tabs, TabsList, TabsTab } from '~/components/ui/tabs'
+import { ReposCardMode } from '~/enums'
+import { numberWithCommas } from '~/helpers'
+import { cn } from '~/lib/utils'
+import type { RepoInfo, RepoInteraction } from '~/types'
 
-import { StatCard } from './StaticCard'
+import { StaticCard, StaticCardTitle } from './StaticCard'
 
 function StarIcon() {
   return (
@@ -34,12 +39,106 @@ function StarIcon() {
   )
 }
 
+interface RepoItemProps {
+  url: string
+  name: string
+  description?: string | null
+  stargazerCount?: number
+  forkCount?: number
+  showRemove: boolean
+  mode: ReposCardMode
+  interaction?: RepoInteraction['interaction']
+  onRemove?: () => void
+}
+
+function RepoItem(props: RepoItemProps) {
+  const {
+    url,
+    name,
+    description,
+    stargazerCount,
+    showRemove,
+    mode,
+    interaction,
+    onRemove,
+  } = props
+
+  const handleRemove = (ev: React.MouseEvent<HTMLButtonElement>) => {
+    ev.stopPropagation()
+    ev.preventDefault()
+    onRemove?.()
+  }
+
+  const showInteraction = mode === ReposCardMode.Interactions && interaction
+
+  return (
+    <li className="group">
+      <a
+        className="block rounded-md px-2 py-2 text-sm transition-colors hover:bg-muted"
+        href={url}
+        rel="noreferrer"
+        target="_blank"
+      >
+        <div className="flex items-center gap-2">
+          <span className="min-w-0 flex-1 truncate font-medium">
+            {name}
+          </span>
+
+          <div className="shrink-0 flex items-center gap-1 text-muted-foreground/90 text-xs tabular-nums">
+            {showRemove && (
+              <div className="relative hidden group-hover:block min-w-6">
+                <Button
+                  className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-muted-foreground bg-background hover:bg-muted"
+                  size="icon-xs"
+                  type="button"
+                  variant="ghost"
+                  onClick={handleRemove}
+                >
+                  <XIcon />
+                </Button>
+              </div>
+            )}
+
+            {typeof stargazerCount === 'number' && stargazerCount > 0 && (
+              <div className="flex items-center gap-1">
+                <StarIcon />
+                {numberWithCommas(stargazerCount)}
+              </div>
+            )}
+          </div>
+        </div>
+
+        {showInteraction && (
+          <div className="mt-1">
+            <InteractionBadges
+              forkCount={props.forkCount}
+              interaction={interaction}
+              stargazerCount={stargazerCount}
+            />
+          </div>
+        )}
+
+        {description && (
+          <div className="mt-1 line-clamp-2 text-foreground/70 text-xs">
+            {description}
+          </div>
+        )}
+      </a>
+    </li>
+  )
+}
+
 export interface ReposCardProps {
   icon: React.ReactNode
   title: string
-  isLoading: boolean
-  error: Error | null
-  repos: RepoInfo[]
+  mode: ReposCardMode
+  createdRepos: RepoInfo[]
+  createdLoading: boolean
+  createdError: Error | null
+  interactionRepos: RepoInteraction[]
+  interactionLoading: boolean
+  interactionError: Error | null
+  onModeChange?: (mode: ReposCardMode) => void
   onMouseEnter?: () => void
   onMouseLeave?: () => void
   onRemoveRepo?: (repoUrl: string) => void
@@ -49,117 +148,130 @@ export function ReposCard(props: ReposCardProps) {
   const {
     icon,
     title,
-    isLoading,
-    error,
-    repos,
+    mode,
+    createdRepos,
+    createdLoading,
+    createdError,
+    interactionRepos,
+    interactionLoading,
+    interactionError,
+    onModeChange,
     onMouseEnter,
     onMouseLeave,
     onRemoveRepo,
   } = props
 
+  const t = useTranslations('stats')
   const tErrors = useTranslations('errors')
   const showRemove = Boolean(onRemoveRepo)
 
+  const isLoading = mode === ReposCardMode.Created ? createdLoading : interactionLoading
+  const error = mode === ReposCardMode.Created ? createdError : interactionError
+  const repos = mode === ReposCardMode.Created ? createdRepos : interactionRepos
+  const emptyMessage = tErrors('noRepos')
+  const errorMessage = tErrors('failedLoadRepos')
+
+  const handleModeChange = (value: unknown) => {
+    if (value === ReposCardMode.Created || value === ReposCardMode.Interactions) {
+      onModeChange?.(value as ReposCardMode)
+    }
+  }
+
   return (
-    <StatCard
-      icon={icon}
-      title={title}
+    <div
+      className="h-full"
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
     >
-      <div className="h-60">
-        <ScrollArea scrollFade className="h-full pt-grid-item-sm p-grid-item">
-          {isLoading
-            ? (
-                <ul className="flex flex-col gap-3 px-grid-item">
-                  {Array.from({ length: 4 }).map((_, index) => (
-                    <li key={index}>
-                      <div className="space-y-1.5">
-                        <Skeleton className="h-4 w-full" />
-                        <Skeleton className="h-4 w-1/2" />
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              )
-            : error
+      <StaticCard>
+        <div className="flex items-center justify-between gap-grid-item p-grid-item">
+          <StaticCardTitle icon={icon}>
+            {title}
+          </StaticCardTitle>
+
+          <Tabs
+            value={mode}
+            onValueChange={handleModeChange}
+          >
+            <TabsList>
+              <TabsTab value={ReposCardMode.Interactions}>
+                {t('reposModeInteractions')}
+              </TabsTab>
+              <TabsTab value={ReposCardMode.Created}>
+                {t('reposModeCreated')}
+              </TabsTab>
+            </TabsList>
+          </Tabs>
+        </div>
+
+        <div className={cn(repos.length > 4 ? 'h-64' : 'h-52')}>
+          <ScrollArea scrollFade className="h-full pt-grid-item-sm p-grid-item">
+            {isLoading
               ? (
-                  <div className="flex h-full items-center justify-center text-destructive text-sm">
-                    {tErrors('failedLoadRepos')}
-                  </div>
+                  <ul className="flex flex-col gap-3 px-grid-item">
+                    {Array.from({ length: 4 }).map((_, index) => (
+                      <li key={index}>
+                        <div className="space-y-1.5">
+                          <Skeleton className="h-4 w-full" />
+                          <Skeleton className="h-4 w-1/2" />
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
                 )
-              : repos.length === 0
+              : error
                 ? (
-                    <Empty className="h-full border-0 p-0">
-                      <EmptyHeader>
-                        <EmptyMedia variant="icon">
-                          <FolderGit2Icon />
-                        </EmptyMedia>
-                        <EmptyDescription>
-                          {tErrors('noRepos')}
-                        </EmptyDescription>
-                      </EmptyHeader>
-                    </Empty>
+                    <div className="flex h-full items-center justify-center text-destructive text-sm">
+                      {errorMessage}
+                    </div>
                   )
-                : (
-                    <ul className="flex flex-col gap-1 pr-1">
-                      {repos.map((repo: RepoInfo) => {
-                        const handleRemove = (ev: React.MouseEvent<HTMLButtonElement>) => {
-                          ev.stopPropagation()
-                          ev.preventDefault()
-                          onRemoveRepo?.(repo.url)
-                        }
-
-                        return (
-                          <li key={repo.url} className="group">
-                            <a
-                              className="block rounded-md px-2 py-2 text-sm transition-colors hover:bg-muted"
-                              href={repo.url}
-                              rel="noreferrer"
-                              target="_blank"
-                            >
-                              <div className="flex items-center gap-2">
-                                <span className="min-w-0 flex-1 truncate font-medium">
-                                  {repo.name}
-                                </span>
-
-                                <div className="shrink-0 flex items-center gap-1 text-muted-foreground/90 text-xs tabular-nums">
-                                  {showRemove && (
-                                    <div className="relative hidden group-hover:block min-w-6">
-                                      <Button
-                                        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-muted-foreground bg-background hover:bg-muted"
-                                        size="icon-xs"
-                                        type="button"
-                                        variant="ghost"
-                                        onClick={handleRemove}
-                                      >
-                                        <XIcon />
-                                      </Button>
-                                    </div>
-                                  )}
-
-                                  <div className="flex items-center gap-1">
-                                    <StarIcon />
-                                    {repo.stargazerCount}
-                                  </div>
-                                </div>
-                              </div>
-
-                              {repo.description
-                                ? (
-                                    <div className="mt-1 line-clamp-2 text-foreground/70 text-xs">
-                                      {repo.description}
-                                    </div>
-                                  )
-                                : null}
-                            </a>
-                          </li>
-                        )
-                      })}
-                    </ul>
-                  )}
-        </ScrollArea>
-      </div>
-    </StatCard>
+                : repos.length > 0
+                  ? (
+                      <ul className="flex flex-col gap-1 pr-1">
+                        {mode === ReposCardMode.Created
+                          ? (repos as RepoInfo[]).map((repo) => (
+                              <RepoItem
+                                key={repo.url}
+                                description={repo.description}
+                                mode={mode}
+                                name={repo.name}
+                                showRemove={showRemove}
+                                stargazerCount={repo.stargazerCount}
+                                url={repo.url}
+                                onRemove={() => onRemoveRepo?.(repo.url)}
+                              />
+                            ))
+                          : (repos as RepoInteraction[]).map((repo) => (
+                              <RepoItem
+                                key={repo.url}
+                                description={repo.description}
+                                forkCount={repo.forkCount}
+                                interaction={repo.interaction}
+                                mode={mode}
+                                name={repo.nameWithOwner}
+                                showRemove={showRemove}
+                                stargazerCount={repo.stargazerCount}
+                                url={repo.url}
+                                onRemove={() => onRemoveRepo?.(repo.url)}
+                              />
+                            ))}
+                      </ul>
+                    )
+                  : (
+                      <Empty className="h-full border-0 p-0">
+                        <EmptyHeader>
+                          <EmptyMedia variant="icon">
+                            <FolderGit2Icon />
+                          </EmptyMedia>
+                          <EmptyDescription>
+                            {emptyMessage}
+                          </EmptyDescription>
+                        </EmptyHeader>
+                      </Empty>
+                    )}
+          </ScrollArea>
+        </div>
+      </StaticCard>
+    </div>
   )
 }

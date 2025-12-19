@@ -5,12 +5,9 @@ import type {
   GraphData,
   IssuesInYear,
   RepoCreatedInYear,
+  RepoInteractionsInYear,
   ResponseData,
 } from '~/types'
-
-/**
- * API 服务函数 - 封装所有的 API 调用
- */
 
 /**
  * 获取用户贡献数据
@@ -69,6 +66,18 @@ export async function fetchIssuesInYear(
 }
 
 /**
+ * 获取用户在指定年份与各仓库的交互统计
+ */
+export async function fetchRepoInteractionsInYear(
+  username: GitHubUsername,
+  year: ContributionYear,
+): Promise<RepoInteractionsInYear> {
+  return apiClient.get<RepoInteractionsInYear>('/api/repo-interactions', {
+    params: { username, year },
+  })
+}
+
+/**
  * 查询键工厂 - 用于生成一致的查询键
  */
 export const queryKeys = {
@@ -95,6 +104,10 @@ export const queryKeys = {
   // 问题相关
   issues: (username: GitHubUsername, year: ContributionYear) =>
     ['issues', username, year] as const,
+
+  // 仓库交互相关
+  repoInteractions: (username: GitHubUsername, year: ContributionYear) =>
+    ['repoInteractions', username, year] as const,
 
   // 用户所有数据（用于组合查询）
   userData: (username: GitHubUsername, year?: ContributionYear) =>

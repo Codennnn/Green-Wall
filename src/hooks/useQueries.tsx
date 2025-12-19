@@ -8,6 +8,7 @@ import type { ApiError } from '~/lib/api-client'
 import {
   fetchContributionData,
   fetchIssuesInYear,
+  fetchRepoInteractionsInYear,
   fetchReposInYear,
   queryKeys,
 } from '~/services/api'
@@ -17,6 +18,7 @@ import type {
   GraphData,
   IssuesInYear,
   RepoCreatedInYear,
+  RepoInteractionsInYear,
 } from '~/types'
 
 export function useContributionQuery(
@@ -60,6 +62,25 @@ export function useIssuesQuery(
   return useQuery({
     queryKey: queryKeys.issues(username, year),
     queryFn: () => fetchIssuesInYear(username, year),
+    enabled: !!username && !!year,
+    ...options,
+  })
+}
+
+/**
+ * 获取用户在指定年份与各仓库的交互统计
+ */
+export function useRepoInteractionsQuery(
+  username: GitHubUsername,
+  year: ContributionYear,
+  options?: Omit<
+    UseQueryOptions<RepoInteractionsInYear, ApiError>,
+    'queryKey' | 'queryFn'
+  >,
+) {
+  return useQuery<RepoInteractionsInYear, ApiError>({
+    queryKey: queryKeys.repoInteractions(username, year),
+    queryFn: () => fetchRepoInteractionsInYear(username, year),
     enabled: !!username && !!year,
     ...options,
   })

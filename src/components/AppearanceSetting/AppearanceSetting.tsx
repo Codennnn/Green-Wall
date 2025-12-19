@@ -17,6 +17,7 @@ import { YearRangeSelect } from './YearRangeSelect'
 
 export const AppearanceSetting = memo(function AppearanceSetting() {
   const t = useTranslations('settings')
+
   const { graphData, settings, dispatchSettings } = useData()
 
   const daysLabelId = useId()

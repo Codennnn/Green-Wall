@@ -9,6 +9,7 @@ import { DraggableAppearanceSetting } from '~/components/AppearanceSetting/Dragg
 import { SettingButton } from '~/components/SettingButton'
 import { ShareButton } from '~/components/ShareButton'
 import { Button } from '~/components/ui/button'
+import { Separator } from '~/components/ui/separator'
 import { useImageExport } from '~/hooks/useImageExport'
 import type { SettingPopupPosition } from '~/hooks/useSettingPopup'
 
@@ -89,7 +90,7 @@ export const GraphActionBar = memo(function GraphActionBar({
       <div className="flex flex-wrap items-center gap-x-2 md:justify-center">
         <ShareButton />
 
-        <div className="w-px h-4.5 bg-foreground/20" />
+        <Separator className="h-4.5" orientation="vertical" />
 
         <SettingButton
           content={appearanceSettingContent}

@@ -20,21 +20,23 @@ import type { GraphHighlightMode, GraphHighlightOptions } from '~/components/Con
 import { Button } from '~/components/ui/button'
 import { Skeleton } from '~/components/ui/skeleton'
 import { useData } from '~/DataContext'
+import { ReposCardMode } from '~/enums'
 import { useDateFormatters } from '~/hooks/useDateFormatters'
 import { useImageExport } from '~/hooks/useImageExport'
 import {
   useContributionQuery,
   useIssuesQuery,
+  useRepoInteractionsQuery,
   useReposQuery,
 } from '~/hooks/useQueries'
 import { getTopLanguagesFromRepos } from '~/lib/language-stats'
-import { sortReposByDisplayValue } from '~/lib/repo-sort'
+import { sortReposByDisplayValue, sortReposByInfluence } from '~/lib/repo-sort'
 import { deriveStatistics } from '~/lib/statistics'
 import {
   deriveYearlyTags,
   extractHighlights,
 } from '~/lib/yearly-report/deriveTags'
-import type { IssueInfo } from '~/types'
+import type { IssueInfo, RepoInteraction } from '~/types'
 
 import { MonthlyCommitChart } from './charts/MonthlyCommitChart'
 import { WeeklyCommitChart } from './charts/WeeklyCommitChart'
@@ -82,6 +84,24 @@ export function GraphBlock() {
     queryYear,
   )
 
+  const [reposCardMode, setReposCardMode] = useState<ReposCardMode>(ReposCardMode.Interactions)
+
+  const {
+    data: repoInteractionsData,
+    isLoading: repoInteractionsLoading,
+    error: repoInteractionsErrorRaw,
+  } = useRepoInteractionsQuery(
+    githubUsername,
+    queryYear,
+    {
+      enabled: reposCardMode === ReposCardMode.Interactions,
+    },
+  )
+  // 类型断言：react-query 的 error 类型默认为 unknown，需要显式转换
+  const repoInteractionsError: Error | null = repoInteractionsErrorRaw instanceof Error
+    ? repoInteractionsErrorRaw
+    : null
+
   const statistics = useMemo(() => deriveStatistics(contributionData), [contributionData])
 
   const repos = reposData?.repos
@@ -110,6 +130,18 @@ export function GraphBlock() {
 
     return sorted.filter((repo) => !hiddenRepoUrls.has(repo.url))
   }, [reposDataSet, hiddenRepoUrls])
+
+  const sortedInteractionRepos = useMemo((): RepoInteraction[] => {
+    const data = repoInteractionsData
+    const repos = data?.repos ?? []
+    const sorted = sortReposByInfluence(repos)
+
+    return sorted.filter((repo) => !hiddenRepoUrls.has(repo.url))
+  }, [repoInteractionsData, hiddenRepoUrls])
+
+  const handleReposCardModeChange = useEvent((mode: ReposCardMode) => {
+    setReposCardMode(mode)
+  })
 
   // 年度报告标签推导
   const yearlyTags = useMemo(() => {
@@ -334,6 +366,7 @@ export function GraphBlock() {
                 large
                 isLoading={!statistics}
                 subValue={formatDate(statistics?.maxContributionsDate)}
+                unit={t('unitContributions')}
                 value={statistics?.maxContributionsInADay}
               />
             </div>
@@ -361,6 +394,7 @@ export function GraphBlock() {
                   statistics?.longestStreakStartDate,
                   statistics?.longestStreakEndDate,
                 )}
+                unit={t('unitDays')}
                 value={statistics?.longestStreak}
 
               />
@@ -394,6 +428,7 @@ export function GraphBlock() {
                   statistics?.longestGapStartDate,
                   statistics?.longestGapEndDate,
                 )}
+                unit={t('unitDays')}
                 value={statistics?.longestGap}
               />
             </div>
@@ -403,23 +438,16 @@ export function GraphBlock() {
         {/* MARK: 仓库数量 */}
         <div className="col-span-1 md:col-span-8 lg:col-span-5">
           <ReposCard
-            error={reposError}
+            createdError={reposError}
+            createdLoading={reposLoading}
+            createdRepos={sortedReposDataSet}
             icon={<FolderGit2Icon className={STAT_CARD_ICON_SIZE} />}
-            isLoading={reposLoading}
-            repos={sortedReposDataSet}
-            title={t('reposCreated', { year: queryYear })}
-            onMouseEnter={() => {
-              if (statistics?.longestGapStartDate && statistics.longestGapEndDate) {
-                setHighlightMode('longestGap')
-                setHighlightOptions({
-                  longestGapRange: {
-                    start: statistics.longestGapStartDate,
-                    end: statistics.longestGapEndDate,
-                  },
-                })
-              }
-            }}
-            onMouseLeave={handleClearHighlight}
+            interactionError={repoInteractionsError}
+            interactionLoading={repoInteractionsLoading}
+            interactionRepos={sortedInteractionRepos}
+            mode={reposCardMode}
+            title={t('repos', { year: queryYear })}
+            onModeChange={handleReposCardModeChange}
             onRemoveRepo={handleRemoveRepo}
           />
         </div>

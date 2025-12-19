@@ -18,6 +18,7 @@ interface SettingButtonProps extends Omit<React.ComponentProps<'button'>, 'conte
 
 export function SettingButton(props: SettingButtonProps) {
   const { content, popoverContentId, onPopOut, ...buttonProps } = props
+
   const t = useTranslations('settings')
   const tCommon = useTranslations('common')
 
@@ -40,25 +41,33 @@ export function SettingButton(props: SettingButtonProps) {
 
               <PopoverClose
                 className="ml-auto hidden md:block"
+                render={(
+                  <Button size="icon-sm" type="button" variant="ghost">
+                    <PictureInPicture2Icon />
+                  </Button>
+                )}
                 title={t('popOut')}
                 onClick={() => {
                   onPopOut?.()
                 }}
-              >
-                <Button size="icon-sm" type="button" variant="ghost">
-                  <PictureInPicture2Icon />
-                </Button>
-              </PopoverClose>
+              />
             </div>
           </PopoverTitle>
 
-          <PopoverClose className="ml-auto" title={tCommon('close')}>
-            <Button size="icon-sm" type="button" variant="ghost">
-              <XIcon />
-            </Button>
-          </PopoverClose>
+          <PopoverClose
+            className="ml-auto"
+            render={(
+              <Button size="icon-sm" type="button" variant="ghost">
+                <XIcon />
+              </Button>
+            )}
+            title={tCommon('close')}
+          />
         </div>
-        {content}
+
+        <div className="pt-2">
+          {content}
+        </div>
       </PopoverContent>
     </Popover>
   )

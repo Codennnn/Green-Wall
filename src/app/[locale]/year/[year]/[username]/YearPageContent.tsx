@@ -7,13 +7,13 @@ import { DataProvider } from '~/DataContext'
 import { GraphBlock } from './GraphBlock'
 
 export default function YearPageContent() {
-  const { theme } = useTheme()
+  const { resolvedTheme } = useTheme()
 
   return (
     <DataProvider
       overrideSettings={{
         showAttribution: false,
-        theme: theme === 'dark' ? 'Midnight' : 'GreenWall',
+        theme: resolvedTheme === 'dark' ? 'Midnight' : 'GreenWall',
       }}
     >
       <GraphBlock />

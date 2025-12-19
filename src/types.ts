@@ -146,6 +146,39 @@ export const IssuesInYearSchema = object({
   issues: array(IssueInfoSchema),
 })
 
+/**
+ * 用户在某年度对单个仓库的交互统计
+ */
+export const RepoInteractionSchema = object({
+  /** 仓库名（含 owner，如 "owner/repo"） */
+  nameWithOwner: string(),
+  /** 仓库 URL */
+  url: string(),
+  /** 仓库描述（可选） */
+  description: optional(nullable(string())),
+  /** Star 数（可选，用于 tie-break 排序） */
+  stargazerCount: optional(number()),
+  /** Fork 数（可选） */
+  forkCount: optional(number()),
+  /** 交互计数 */
+  interaction: object({
+    commits: number(),
+    pullRequests: number(),
+    reviews: number(),
+    issues: number(),
+  }),
+  /** 综合交互评分（log 压缩加权） */
+  score: number(),
+})
+
+/**
+ * 用户在某年度的交互仓库列表
+ */
+export const RepoInteractionsInYearSchema = object({
+  count: number(),
+  repos: array(RepoInteractionSchema),
+})
+
 export type RepoInfo = InferInput<typeof RepoInfoSchema>
 
 export type IssueInfo = InferInput<typeof IssueInfoSchema>
@@ -171,6 +204,10 @@ export interface GitHubIssue {
 export type RepoCreatedInYear = InferInput<typeof ReposCreatedInYearSchema>
 
 export type IssuesInYear = InferInput<typeof IssuesInYearSchema>
+
+export type RepoInteraction = InferInput<typeof RepoInteractionSchema>
+
+export type RepoInteractionsInYear = InferInput<typeof RepoInteractionsInYearSchema>
 
 export interface ValuableStatistics {
   weekendContributions: number

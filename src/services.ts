@@ -13,6 +13,8 @@ import type {
   IssuesInYear,
   RepoCreatedInYear,
   RepoInfo,
+  RepoInteraction,
+  RepoInteractionsInYear,
 } from '~/types'
 
 /**
@@ -468,4 +470,286 @@ export async function fetchIssuesInYear(
   }
 
   return { count: issuesInYear.length, issues: issuesInYear }
+}
+
+/**
+ * 影响力评分权重配置
+ *
+ * 评分模型：
+ * - 社区影响力指标（主要）：star、fork
+ * - 个人贡献指标（次要）：commits、pullRequests、reviews、issues
+ */
+const INFLUENCE_WEIGHTS = {
+  /** Star 数量权重（社区影响力主要指标） */
+  star: 50,
+  /** Fork 数量权重（社区影响力次要指标） */
+  fork: 25,
+  /** Commit 数量权重（个人贡献指标） */
+  commit: 8,
+  /** Pull Request 数量权重（个人贡献指标） */
+  pullRequest: 6,
+  /** Review 数量权重（个人贡献指标） */
+  review: 3,
+  /** Issue 数量权重（个人贡献指标） */
+  issue: 3,
+} as const
+
+/**
+ * 计算单个仓库的影响力评分（log 压缩加权求和）
+ *
+ * 使用 log 压缩避免超高数值主导排序，让中小型有价值项目也有机会展示
+ */
+function computeInfluenceScore(repo: {
+  stargazerCount: number
+  forkCount: number
+  interaction: {
+    commits: number
+    pullRequests: number
+    reviews: number
+    issues: number
+  }
+}): number {
+  return (
+    INFLUENCE_WEIGHTS.star * Math.log(1 + repo.stargazerCount)
+    + INFLUENCE_WEIGHTS.fork * Math.log(1 + repo.forkCount)
+    + INFLUENCE_WEIGHTS.commit * Math.log(1 + repo.interaction.commits)
+    + INFLUENCE_WEIGHTS.pullRequest * Math.log(1 + repo.interaction.pullRequests)
+    + INFLUENCE_WEIGHTS.review * Math.log(1 + repo.interaction.reviews)
+    + INFLUENCE_WEIGHTS.issue * Math.log(1 + repo.interaction.issues)
+  )
+}
+
+interface FetchRepoInteractionsInYearParams {
+  username: GitHubUsername
+  year: ContributionYear
+}
+
+/**
+ * GitHub GraphQL contributionsCollection 按仓库聚合的响应结构
+ */
+interface ContributionsByRepository {
+  repository: {
+    nameWithOwner: string
+    url: string
+    description: string | null
+    stargazerCount: number
+    forkCount: number
+  }
+  contributions: {
+    totalCount: number
+  }
+}
+
+interface ContributionsCollectionResponse {
+  user: {
+    contributionsCollection: {
+      commitContributionsByRepository: ContributionsByRepository[]
+      pullRequestContributionsByRepository: ContributionsByRepository[]
+      pullRequestReviewContributionsByRepository: ContributionsByRepository[]
+      issueContributionsByRepository: ContributionsByRepository[]
+    }
+  } | null
+}
+
+/**
+ * 获取用户在指定年份对各仓库的交互贡献统计
+ *
+ * 基于 GitHub GraphQL contributionsCollection API，按仓库聚合以下维度：
+ * - commitContributionsByRepository
+ * - pullRequestContributionsByRepository
+ * - pullRequestReviewContributionsByRepository
+ * - issueContributionsByRepository
+ */
+export async function fetchRepoInteractionsInYear(
+  params: FetchRepoInteractionsInYearParams,
+  options?: ServiceOptions,
+): Promise<RepoInteractionsInYear> {
+  const { username, year } = params
+  const token = getAccessToken(options)
+
+  const from = `${year}-01-01T00:00:00Z`
+  const to = `${year}-12-31T23:59:59Z`
+
+  const query = `
+    query($username: String!, $from: DateTime!, $to: DateTime!) {
+      user(login: $username) {
+        contributionsCollection(from: $from, to: $to) {
+          commitContributionsByRepository(maxRepositories: 100) {
+            repository {
+              nameWithOwner
+              url
+              description
+              stargazerCount
+              forkCount
+            }
+            contributions {
+              totalCount
+            }
+          }
+          pullRequestContributionsByRepository(maxRepositories: 100) {
+            repository {
+              nameWithOwner
+              url
+              description
+              stargazerCount
+              forkCount
+            }
+            contributions {
+              totalCount
+            }
+          }
+          pullRequestReviewContributionsByRepository(maxRepositories: 100) {
+            repository {
+              nameWithOwner
+              url
+              description
+              stargazerCount
+              forkCount
+            }
+            contributions {
+              totalCount
+            }
+          }
+          issueContributionsByRepository(maxRepositories: 100) {
+            repository {
+              nameWithOwner
+              url
+              description
+              stargazerCount
+              forkCount
+            }
+            contributions {
+              totalCount
+            }
+          }
+        }
+      }
+    }
+  `
+
+  const variables = { username, from, to }
+
+  const res = await fetch(GQL_API_URL, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ query, variables }),
+  })
+
+  if (!res.ok) {
+    throw new Error(`fetch error: ${res.statusText}.`)
+  }
+
+  const resJson = await res.json() as GitHubApiJson<ContributionsCollectionResponse>
+
+  if (resJson.errors) {
+    const error = resJson.errors.at(0)
+
+    if (error) {
+      throw new Error(error.message)
+    }
+
+    throw new Error(resJson.message)
+  }
+
+  if (!resJson.data?.user) {
+    throw new Error(resJson.message ?? 'User not found')
+  }
+
+  const collection = resJson.data.user.contributionsCollection
+
+  // 按仓库 URL 聚合所有交互类型
+  const repoMap = new Map<string, {
+    nameWithOwner: string
+    url: string
+    description: string | null
+    stargazerCount: number
+    forkCount: number
+    commits: number
+    pullRequests: number
+    reviews: number
+    issues: number
+  }>()
+
+  // 辅助函数：合并贡献到 map
+  const mergeContributions = (
+    contributions: ContributionsByRepository[],
+    field: 'commits' | 'pullRequests' | 'reviews' | 'issues',
+  ) => {
+    for (const item of contributions) {
+      const { repository, contributions: contrib } = item
+      const existing = repoMap.get(repository.url)
+
+      if (existing) {
+        existing[field] += contrib.totalCount
+      }
+      else {
+        repoMap.set(repository.url, {
+          nameWithOwner: repository.nameWithOwner,
+          url: repository.url,
+          description: repository.description,
+          stargazerCount: repository.stargazerCount,
+          forkCount: repository.forkCount,
+          commits: field === 'commits' ? contrib.totalCount : 0,
+          pullRequests: field === 'pullRequests' ? contrib.totalCount : 0,
+          reviews: field === 'reviews' ? contrib.totalCount : 0,
+          issues: field === 'issues' ? contrib.totalCount : 0,
+        })
+      }
+    }
+  }
+
+  mergeContributions(collection.commitContributionsByRepository, 'commits')
+  mergeContributions(collection.pullRequestContributionsByRepository, 'pullRequests')
+  mergeContributions(collection.pullRequestReviewContributionsByRepository, 'reviews')
+  mergeContributions(collection.issueContributionsByRepository, 'issues')
+
+  // 转换为 RepoInteraction 数组并计算评分
+  const repos: RepoInteraction[] = []
+
+  for (const repo of repoMap.values()) {
+    const interaction = {
+      commits: repo.commits,
+      pullRequests: repo.pullRequests,
+      reviews: repo.reviews,
+      issues: repo.issues,
+    }
+
+    repos.push({
+      nameWithOwner: repo.nameWithOwner,
+      url: repo.url,
+      description: repo.description,
+      stargazerCount: repo.stargazerCount,
+      forkCount: repo.forkCount,
+      interaction,
+      score: computeInfluenceScore({
+        stargazerCount: repo.stargazerCount,
+        forkCount: repo.forkCount,
+        interaction,
+      }),
+    })
+  }
+
+  repos.sort((a, b) => {
+    if (b.score !== a.score) {
+      return b.score - a.score
+    }
+
+    const starsA = a.stargazerCount ?? 0
+    const starsB = b.stargazerCount ?? 0
+
+    if (starsB !== starsA) {
+      return starsB - starsA
+    }
+
+    if (b.interaction.commits !== a.interaction.commits) {
+      return b.interaction.commits - a.interaction.commits
+    }
+
+    return a.nameWithOwner.localeCompare(b.nameWithOwner)
+  })
+
+  return { count: repos.length, repos }
 }

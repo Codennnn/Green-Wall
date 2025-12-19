@@ -34,3 +34,8 @@ export const enum ColorScheme {
   Light = 'light',
   Dark = 'dark',
 }
+
+export const enum ReposCardMode {
+  Created = 'created',
+  Interactions = 'interactions',
+}

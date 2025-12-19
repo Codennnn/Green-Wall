@@ -67,10 +67,12 @@ export interface StatValueProps {
   fallback?: number | string
   /** 是否启用大尺寸展示样式（用于跨行卡片） */
   large?: boolean
+  /** 数值单位，显示在数值后面 */
+  unit?: string
 }
 
 export function StatValue(props: StatValueProps) {
-  const { value, subValue, isLoading, fallback = 0, large } = props
+  const { value, subValue, isLoading, fallback = 0, large, unit } = props
 
   const finalValue = value ?? fallback
 
@@ -93,6 +95,11 @@ export function StatValue(props: StatValueProps) {
                   )}
                 >
                   {finalValue}
+                  {unit && (
+                    <span className="ml-1 text-foreground/70 text-sm font-normal">
+                      {unit}
+                    </span>
+                  )}
                 </span>
 
                 {!!subValue && (
@@ -133,6 +140,8 @@ export interface StatCardProps {
     fallback?: number | string
     /** 是否启用大尺寸展示样式（用于跨行卡片） */
     large?: boolean
+    /** 数值单位，显示在数值后面 */
+    unit?: string
   }
 }
 
@@ -173,6 +182,7 @@ export function StatCard(props: React.PropsWithChildren<StatCardProps>) {
               isLoading={statValueProps.isLoading ?? true}
               large={statValueProps.large}
               subValue={statValueProps.subValue}
+              unit={statValueProps.unit}
               value={statValueProps.value}
             />
           )}
