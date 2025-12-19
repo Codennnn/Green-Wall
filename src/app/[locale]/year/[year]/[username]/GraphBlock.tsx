@@ -164,16 +164,18 @@ export function GraphBlock() {
   })
 
   return (
-    <div className="flex flex-col items-center py-5">
-      <div className="mb-4 flex w-full justify-end">
-        <Button
-          disabled={isDownloading || isLoading}
-          size="default"
-          onClick={handleDownloadClick}
-        >
-          <DownloadIcon />
-          {t('downloadYearlyReport')}
-        </Button>
+    <div className="flex flex-col items-center py-5 w-full">
+      <div className="flex items-center w-full p-grid-item">
+        <div className="ml-auto flex justify-end ring-4 ring-background bg-background">
+          <Button
+            disabled={isDownloading || isLoading}
+            size="default"
+            onClick={handleDownloadClick}
+          >
+            <DownloadIcon />
+            {t('downloadYearlyReport')}
+          </Button>
+        </div>
       </div>
 
       <div

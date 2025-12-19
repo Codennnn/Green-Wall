@@ -34,7 +34,7 @@ import type {
 
 import { StatCard } from './StaticCard'
 
-export interface AiYearlyReportCardProps {
+interface AiYearlyReportCardProps {
   username: string
   year: number
   locale?: string
@@ -45,6 +45,9 @@ export interface AiYearlyReportCardProps {
   /** 是否隐藏操作按钮 */
   hideActions?: boolean
 }
+
+const ACTION_BUTTON_SIZE = 'xs'
+const ACTION_ICON_SIZE = 'size-3.5'
 
 export function AiYearlyReportCard(props: AiYearlyReportCardProps) {
   const {
@@ -113,12 +116,39 @@ export function AiYearlyReportCard(props: AiYearlyReportCardProps) {
 
   const renderContent = () => {
     if (isError && error) {
+      const showBuiltinErrorHint = sourceInfo.source === 'builtin'
+
       return (
-        <Alert variant="error">
-          <AlertDescription>
-            {error}
-          </AlertDescription>
-        </Alert>
+        <div className="flex flex-col gap-2">
+          <Alert variant="error">
+            <AlertDescription>
+              {error}
+            </AlertDescription>
+          </Alert>
+
+          {showBuiltinErrorHint && (
+            <Alert variant="default">
+              <AlertDescription className="flex flex-col gap-2">
+                <span>{t('builtinErrorHint')}</span>
+                <AiConfigDialog
+                  config={aiConfig}
+                  trigger={(
+                    <Button
+                      className="w-fit"
+                      size={ACTION_BUTTON_SIZE}
+                      variant="outline"
+                    >
+                      <SettingsIcon className={ACTION_ICON_SIZE} />
+                      {t('configureCustomAi')}
+                    </Button>
+                  )}
+                  onReset={resetAiConfig}
+                  onSave={saveAiConfig}
+                />
+              </AlertDescription>
+            </Alert>
+          )}
+        </div>
       )
     }
 
@@ -156,7 +186,7 @@ export function AiYearlyReportCard(props: AiYearlyReportCardProps) {
                 void start()
               }}
             >
-              <WandSparklesIcon />
+              <WandSparklesIcon className="size-4" />
               {t('generate')}
             </Button>
           </EmptyContent>
@@ -188,23 +218,23 @@ export function AiYearlyReportCard(props: AiYearlyReportCardProps) {
           <div className="mt-auto flex flex-wrap items-center gap-2 p-grid-item-sm pt-0">
             {/* 生成中 - 取消按钮 */}
             {isStreaming && (
-              <Button size="xs" variant="outline" onClick={abort}>
-                <SquareIcon className="size-3.5" />
+              <Button size={ACTION_BUTTON_SIZE} variant="outline" onClick={abort}>
+                <SquareIcon className={ACTION_ICON_SIZE} />
                 {t('cancel')}
               </Button>
             )}
 
             {/* 生成完成或失败 - 重新生成按钮 */}
             {(isSuccess || isError || (status === 'aborted' && hasText)) && (
-              <Button size="xs" variant="outline" onClick={handleRegenerate}>
-                <RefreshCwIcon className="size-3.5" />
+              <Button size={ACTION_BUTTON_SIZE} variant="outline" onClick={handleRegenerate}>
+                <RefreshCwIcon className={ACTION_ICON_SIZE} />
                 {t('regenerate')}
               </Button>
             )}
 
             {/* 错误状态 - 重试按钮 */}
             {isError && (
-              <Button size="xs" onClick={() => void start()}>
+              <Button size={ACTION_BUTTON_SIZE} onClick={() => void start()}>
                 {t('retry')}
               </Button>
             )}
@@ -212,20 +242,20 @@ export function AiYearlyReportCard(props: AiYearlyReportCardProps) {
             {/* 生成完成 - 复制按钮 */}
             {isSuccess && hasText && (
               <Button
-                size="xs"
+                size={ACTION_BUTTON_SIZE}
                 variant="outline"
                 onClick={() => void handleCopy()}
               >
                 {copied
                   ? (
                       <>
-                        <CheckIcon className="size-3.5" />
+                        <CheckIcon className={ACTION_ICON_SIZE} />
                         {t('copied')}
                       </>
                     )
                   : (
                       <>
-                        <CopyIcon className="size-3.5" />
+                        <CopyIcon className={ACTION_ICON_SIZE} />
                         {t('copy')}
                       </>
                     )}
@@ -237,10 +267,10 @@ export function AiYearlyReportCard(props: AiYearlyReportCardProps) {
                 config={aiConfig}
                 trigger={(
                   <Button
-                    size={sourceInfo.source === 'custom' ? 'xs' : 'icon-xs'}
+                    size={sourceInfo.source === 'custom' ? ACTION_BUTTON_SIZE : 'icon-xs'}
                     variant="ghost"
                   >
-                    <SettingsIcon className="size-3.5" />
+                    <SettingsIcon className={ACTION_ICON_SIZE} />
                     {sourceInfo.source === 'custom' ? tConfig('configButton') : ''}
                   </Button>
                 )}

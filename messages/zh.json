@@ -132,7 +132,9 @@
     "copied": "已复制",
     "charCount": "{count} 字",
     "generating": "正在生成...",
-    "failed": "生成失败，请重试"
+    "failed": "生成失败，请重试",
+    "builtinErrorHint": "内置 AI 服务出现错误，你可以配置自定义 AI 服务作为备选方案。",
+    "configureCustomAi": "配置自定义 AI"
   },
   "aiConfig": {
     "configButton": "已配置",

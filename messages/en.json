@@ -132,7 +132,9 @@
     "copied": "Copied",
     "charCount": "{count} chars",
     "generating": "Generating...",
-    "failed": "Generation failed, please retry"
+    "failed": "Generation failed, please retry",
+    "builtinErrorHint": "The built-in AI service encountered an error. You can configure a custom AI service as an alternative.",
+    "configureCustomAi": "Configure Custom AI"
   },
   "aiConfig": {
     "configButton": "Custom",
