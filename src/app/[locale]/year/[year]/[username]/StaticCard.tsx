@@ -3,7 +3,11 @@ import { LoaderIcon } from 'lucide-react'
 import { cn } from '~/lib/utils'
 
 export function SpinningLoader() {
-  return <LoaderIcon className="size-4 animate-spin text-main-300" />
+  return (
+    <LoaderIcon
+      className="size-4 animate-spin text-muted-foreground"
+    />
+  )
 }
 
 export interface StaticCardTitleProps {

@@ -46,7 +46,7 @@ export function UserPage() {
 
   if (loading) {
     return (
-      <div className="flex flex-col items-center justify-center py-20 text-main-400">
+      <div className="flex flex-col items-center justify-center py-20 text-muted-foreground">
         <Image
           priority
           alt="loading"
@@ -63,7 +63,7 @@ export function UserPage() {
     return (
       <div className="py-10 md:py-14">
         <div className="flex w-full overflow-x-auto py-5 md:justify-center md:py-14">
-          <ContributionsGraph mockupClassName="md:shadow-2xl md:shadow-main-200" />
+          <ContributionsGraph mockupClassName="md:shadow-2xl md:shadow-muted-foreground" />
         </div>
       </div>
     )

@@ -9,7 +9,7 @@ export function ErrorMessage(props: { errorType?: ErrorType, text?: string }) {
   const t = useTranslations('errors')
 
   return (
-    <div className="flex flex-col items-center justify-center text-main-400/80">
+    <div className="flex flex-col items-center justify-center text-muted-foreground/80">
       <div className="select-none py-9 text-6xl opacity-90">
         <span>¯\_(ツ)_/¯</span>
       </div>

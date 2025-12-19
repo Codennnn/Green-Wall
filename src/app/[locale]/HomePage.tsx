@@ -12,10 +12,8 @@ import { Loading } from '~/components/Loading/Loading'
 import { SearchForm } from '~/components/SearchForm'
 import { Separator } from '~/components/ui/separator'
 import { FamousUsersSection } from '~/components/UserDiscovery/FamousUsersSection'
-import { RecentUsersSection } from '~/components/UserDiscovery/RecentUsersSection'
 import { useRecentUsers } from '~/components/UserDiscovery/useRecentUsers'
 import { useData } from '~/DataContext'
-import { trackEvent } from '~/helpers'
 import { useContributionSearch } from '~/hooks/useContributionSearch'
 import { useSettingPopup } from '~/hooks/useSettingPopup'
 import { useUrlUsername } from '~/hooks/useUrlUsername'
@@ -85,7 +83,6 @@ export function HomePage() {
 
   const handleRemoveRecentUser = (login: string) => {
     removeRecentUser(login)
-    trackEvent('Click Remove Recent User', { username: login })
   }
 
   const handleSettingClick = () => {
@@ -145,13 +142,6 @@ export function HomePage() {
             loadingLogin={loadingUsername}
             onSelect={handleQuickSearch}
           />
-          <RecentUsersSection
-            isLoading={isLoading}
-            loadingLogin={loadingUsername}
-            users={recentUsers}
-            onRemove={handleRemoveRecentUser}
-            onSelect={handleQuickSearch}
-          />
         </div>
       )
     }
@@ -167,8 +157,12 @@ export function HomePage() {
 
       <SearchForm
         isLoading={isLoading}
+        loadingLogin={loadingUsername}
+        recentUsers={recentUsers}
         value={searchName}
         onChange={setSearchName}
+        onRemoveUser={handleRemoveRecentUser}
+        onSelectUser={handleQuickSearch}
         onSubmit={handleSubmit}
       />
 

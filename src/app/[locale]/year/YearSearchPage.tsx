@@ -14,6 +14,7 @@ import {
   SelectValue,
 } from '~/components/ui/select'
 import { Separator } from '~/components/ui/separator'
+import { useRecentUsers } from '~/components/UserDiscovery/useRecentUsers'
 import { getCurrentYear, normalizeGitHubUsername } from '~/helpers'
 import { useSession } from '~/lib/auth-client'
 
@@ -40,6 +41,7 @@ export function YearSearchPage() {
   const [selectedYear, setSelectedYear] = useState<string>(String(currentYear))
 
   const { isNavigating, navigateToYearUser } = useYearWrappedNavigation()
+  const { recentUsers, removeRecentUser } = useRecentUsers()
 
   const isLoggedIn = Boolean(session?.user)
   const user = session?.user
@@ -77,6 +79,18 @@ export function YearSearchPage() {
     }
   }
 
+  const handleSelectUser = (login: string) => {
+    const year = Number(selectedYear)
+
+    if (login && year) {
+      navigateToYearUser({ year, username: login })
+    }
+  }
+
+  const handleRemoveUser = (login: string) => {
+    removeRecentUser(login)
+  }
+
   return (
     <div className="py-10 md:py-14">
       <h1 className="text-center text-3xl font-bold md:mx-auto md:px-20 md:text-4xl md:leading-[1.2] lg:text-5xl">
@@ -112,12 +126,16 @@ export function YearSearchPage() {
         <form onSubmit={handleSubmit}>
           <div className="flex flex-col items-center justify-center gap-y-6 md:flex-row md:gap-x-5">
             <SearchInput
-              autoFocus={!isLoggedIn}
               disabled={isNavigating}
+              isLoading={isNavigating}
+              loadingLogin={null}
               placeholder={t('usernamePlaceholder')}
+              recentUsers={recentUsers}
               translationNamespace="yearSearch"
               value={username}
               onChange={handleUsernameChange}
+              onRemoveUser={handleRemoveUser}
+              onSelectUser={handleSelectUser}
             />
 
             <Select

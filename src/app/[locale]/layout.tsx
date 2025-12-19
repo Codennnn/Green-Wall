@@ -72,17 +72,19 @@ export default async function LocaleLayout({ children, params }: Props) {
 
               <main className="flex-1">{children}</main>
 
-              <footer className="sticky top-[100vh] py-3 text-center text-xs text-main-400/70 md:text-sm">
+              <footer className="sticky top-[100vh] py-3 text-center text-xs text-muted-foreground/70 md:text-sm">
                 <Link
                   passHref
-                  className="transition-colors duration-200 hover:text-main-500/90"
+                  className="transition-colors hover:text-foreground"
                   href="https://github.com/Codennnn"
                   target="_blank"
                 >
                   {tFooter('madeBy', { author: 'LeoKu' })}
                 </Link>
+
                 <span className="mx-2 font-medium md:mx-3">·</span>
-                <Link className="transition-colors duration-200 hover:text-main-500/90" href={`/${locale}/about`}>
+
+                <Link className="transition-colors hover:text-foreground" href={`/${locale}/about`}>
                   {tNav('about')}
                 </Link>
               </footer>

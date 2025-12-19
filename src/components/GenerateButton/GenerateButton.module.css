@@ -11,7 +11,7 @@
 }
 
 .shadow {
-  @apply bg-main-800/20;
+  @apply bg-muted-foreground/20;
 
   will-change: transform;
   position: absolute;

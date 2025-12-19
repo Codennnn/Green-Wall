@@ -96,9 +96,9 @@ export function MainNav({ locale, className }: MainNavProps) {
                   <Link
                     className={cn(
                       'flex items-center rounded-md px-4 py-3 text-base font-medium transition-colors',
-                      'hover:bg-main-100 hover:text-main-600',
+                      'hover:bg-muted hover:text-muted-foreground',
                       item.isActive
-                        ? 'bg-main-50 text-main-600'
+                        ? 'bg-muted text-muted-foreground'
                         : 'text-muted-foreground',
                     )}
                     href={item.href}

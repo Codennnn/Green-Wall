@@ -58,7 +58,7 @@ const ThemeOption = memo(function ThemeOption({ theme, isSelected, onClick }: Th
         'ring-2 ring-offset-0',
         isSelected
           ? 'ring-brand-400/70 ring-offset-2 ring-offset-background hover:ring-brand-500/80'
-          : 'ring-transparent hover:ring-main-300/50 hover:ring-offset-1 hover:ring-offset-background hover:shadow-lg',
+          : 'ring-transparent hover:ring-muted-foreground/40 hover:ring-offset-1 hover:ring-offset-background hover:shadow-lg',
       )}
       style={themeProperties}
       title={theme.name}
