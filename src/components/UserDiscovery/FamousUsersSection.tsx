@@ -1,5 +1,6 @@
 import { useTranslations } from 'next-intl'
 
+import { eventTracker } from '~/lib/analytics'
 import type { GitHubUser } from '~/types'
 
 import { DiscoverySection } from './DiscoverySection'
@@ -34,7 +35,7 @@ export function FamousUsersSection(props: FamousUsersSectionProps) {
       title={t('popularProfiles')}
     >
       <div className="mt-4 grid grid-cols-2 gap-3 md:grid-cols-4">
-        {FAMOUS_USERS.map((user) => {
+        {FAMOUS_USERS.map((user, index) => {
           const cardLoading = Boolean(isLoading && loadingLogin && loadingLogin === user.login)
           const badgeText = t(`famousUsers.${user.badgeKey}`)
 
@@ -45,7 +46,10 @@ export function FamousUsersSection(props: FamousUsersSectionProps) {
               badgeText={badgeText}
               isLoading={cardLoading}
               login={user.login}
-              onSelect={onSelect}
+              onSelect={(login) => {
+                eventTracker.discovery.userClick('famous', FAMOUS_USERS.length, index + 1)
+                onSelect?.(login)
+              }}
             />
           )
         })}

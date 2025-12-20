@@ -3,6 +3,8 @@
 import { useRef, useState } from 'react'
 import { useEvent } from 'react-use-event-hook'
 
+import { eventTracker } from '~/lib/analytics'
+
 export interface SettingPopupPosition {
   offsetX: number
   offsetY: number
@@ -10,6 +12,7 @@ export interface SettingPopupPosition {
 
 export function useSettingPopup(graphWrapperId: string) {
   const actionRef = useRef<HTMLDivElement | null>(null)
+  const hasAutoOpenedRef = useRef(false)
 
   const [settingPopupPosition, setSettingPopupPosition] = useState<SettingPopupPosition>()
 
@@ -47,6 +50,11 @@ export function useSettingPopup(graphWrapperId: string) {
             offsetX: right + 20,
             offsetY: top,
           })
+
+          if (!hasAutoOpenedRef.current) {
+            hasAutoOpenedRef.current = true
+            eventTracker.ui.settings.open('auto')
+          }
         }
       }, 500)
     }

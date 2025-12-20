@@ -13,6 +13,7 @@ import {
 import { Button } from '~/components/ui/button'
 import { ScrollArea } from '~/components/ui/scroll-area'
 import type { RecentGitHubUser } from '~/components/UserDiscovery/useRecentUsers'
+import { eventTracker } from '~/lib/analytics'
 import { cn } from '~/lib/utils'
 
 interface SearchInputProps extends Omit<React.ComponentProps<'input'>, 'value' | 'onChange'> {
@@ -95,6 +96,8 @@ export function SearchInput({
     const matchedUser = recentUsers.find((user) => user.login === newValue)
 
     if (matchedUser) {
+      const position = recentUsers.findIndex((u) => u.login === newValue) + 1
+      eventTracker.discovery.userClick('recent', recentUsers.length, position > 0 ? position : undefined)
       setIsOpen(false)
       onSelectUser?.(newValue)
     }

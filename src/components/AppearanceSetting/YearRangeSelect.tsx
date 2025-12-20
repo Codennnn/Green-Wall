@@ -9,6 +9,7 @@ import {
   SelectValue,
 } from '~/components/ui/select'
 import { useData } from '~/DataContext'
+import { eventTracker } from '~/lib/analytics'
 import type { GraphData } from '~/types'
 
 interface YearRangeSelectProps {
@@ -36,6 +37,7 @@ export const YearRangeSelect = memo(function YearRangeSelect(props: YearRangeSel
         return
       }
 
+      eventTracker.ui.settings.change('year_range', `${year}-${endYear ?? ''}`)
       dispatchSettings({
         type: 'yearRange',
         payload: [year, endYear],
@@ -49,6 +51,7 @@ export const YearRangeSelect = memo(function YearRangeSelect(props: YearRangeSel
         return
       }
 
+      eventTracker.ui.settings.change('year_range', `${startYear ?? ''}-${year}`)
       dispatchSettings({
         type: 'yearRange',
         payload: [startYear, year],

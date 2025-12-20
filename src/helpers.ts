@@ -28,19 +28,8 @@ export function getCurrentYear(): number {
   return now.getFullYear()
 }
 
-const isDev: boolean = process.env.NODE_ENV === 'development'
-
-export function trackEvent(
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  event: string,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  data?: Record<string, string | number | boolean | undefined | null>,
-): void {
-  if (isDev) {
-    return
-  }
-
-  // TODO: Implement telemetry tracking system for monitoring user interactions and app performance.
+export function isDevelopment(): boolean {
+  return process.env.NODE_ENV === 'development'
 }
 
 interface SearchParams {

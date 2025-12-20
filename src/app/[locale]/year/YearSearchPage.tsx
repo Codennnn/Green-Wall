@@ -16,6 +16,7 @@ import {
 import { Separator } from '~/components/ui/separator'
 import { useRecentUsers } from '~/components/UserDiscovery/useRecentUsers'
 import { getCurrentYear, normalizeGitHubUsername } from '~/helpers'
+import { eventTracker } from '~/lib/analytics'
 import { useSession } from '~/lib/auth-client'
 
 import { YearQuickEntryCard } from './components/YearQuickEntryCard'
@@ -69,12 +70,14 @@ export function YearSearchPage() {
     const year = Number(selectedYear)
 
     if (normalizedUsername && year) {
+      eventTracker.year.search.submit(year, 'manual')
       navigateToYearUser({ year, username: normalizedUsername })
     }
   }
 
   const handleViewMyYear = () => {
     if (user?.login) {
+      eventTracker.year.quickEntry.click(currentYear, true)
       navigateToYearUser({ year: currentYear, username: user.login })
     }
   }
@@ -83,6 +86,7 @@ export function YearSearchPage() {
     const year = Number(selectedYear)
 
     if (login && year) {
+      eventTracker.year.search.submit(year, 'quick_entry')
       navigateToYearUser({ year, username: login })
     }
   }

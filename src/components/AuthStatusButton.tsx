@@ -21,6 +21,7 @@ import {
 import { Spinner } from '~/components/ui/spinner'
 import { getCurrentYear } from '~/helpers'
 import { useCurrentPathWithSearch } from '~/hooks/useCurrentPathWithSearch'
+import { eventTracker } from '~/lib/analytics'
 import { authClient, useSession } from '~/lib/auth-client'
 
 interface ExtendedUser {
@@ -51,6 +52,7 @@ export function AuthStatusButton() {
     const initials = displayName.slice(0, 2).toUpperCase()
 
     const handleSignOut = () => {
+      eventTracker.auth.signOut.click()
       void authClient.signOut()
     }
 
@@ -58,6 +60,7 @@ export function AuthStatusButton() {
       const username = user.login || user.name || ''
       const url = username ? `/year/${currentYear}/${username}` : '/year'
 
+      eventTracker.auth.yearReview.open(currentYear, Boolean(user.login))
       window.open(url, '_blank')
     }
 
@@ -103,6 +106,7 @@ export function AuthStatusButton() {
   }
 
   const handleSignIn = () => {
+    eventTracker.auth.signIn.click('header')
     void authClient.signIn.social({
       provider: 'github',
       callbackURL,

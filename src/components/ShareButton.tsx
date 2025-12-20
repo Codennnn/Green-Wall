@@ -14,8 +14,8 @@ import {
 } from '~/components/ui/popover'
 import { DEFAULT_SIZE, DEFAULT_THEME } from '~/constants'
 import { useData } from '~/DataContext'
-import { trackEvent } from '~/helpers'
 import { useCopyToClipboard } from '~/hooks/useCopyToClipboard'
+import { eventTracker } from '~/lib/analytics'
 
 export function ShareButton() {
   const t = useTranslations('share')
@@ -63,7 +63,13 @@ export function ShareButton() {
   }, [username, settings, firstYear, lastYear])
 
   return (
-    <Popover>
+    <Popover
+      onOpenChange={(open) => {
+        if (open) {
+          eventTracker.share.open()
+        }
+      }}
+    >
       <PopoverTrigger
         render={(
           <Button variant="ghost">
@@ -104,7 +110,13 @@ export function ShareButton() {
                     type="button"
                     variant="outline"
                     onClick={() => {
-                      trackEvent('Preview Share URL')
+                      eventTracker.share.preview({
+                        size: settings.size,
+                        theme: settings.theme,
+                        yearRange: settings.yearRange,
+                        showSafariHeader: settings.showSafariHeader,
+                        showAttribution: settings.showAttribution,
+                      })
                     }}
                   >
                     <span>{tCommon('preview')}</span>
@@ -116,7 +128,13 @@ export function ShareButton() {
                   variant="outline"
                   onClick={() => {
                     if (!copied) {
-                      trackEvent('Copy Share URL')
+                      eventTracker.share.copy({
+                        size: settings.size,
+                        theme: settings.theme,
+                        yearRange: settings.yearRange,
+                        showSafariHeader: settings.showSafariHeader,
+                        showAttribution: settings.showAttribution,
+                      })
                       void copy(shareUrl.toString())
                     }
                   }}

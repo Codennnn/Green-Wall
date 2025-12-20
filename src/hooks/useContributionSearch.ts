@@ -3,8 +3,9 @@
 import { type Dispatch, type SetStateAction, useEffect, useRef, useState } from 'react'
 import { useEvent } from 'react-use-event-hook'
 
-import { normalizeGitHubUsername, trackEvent } from '~/helpers'
+import { normalizeGitHubUsername } from '~/helpers'
 import { useContributionQuery } from '~/hooks/useQueries'
+import { eventTracker } from '~/lib/analytics'
 import type { GitHubUsername, GraphData } from '~/types'
 
 interface UseContributionSearchOptions {
@@ -15,6 +16,7 @@ interface UseContributionSearchOptions {
   setGraphData: Dispatch<SetStateAction<GraphData | undefined>>
   resetSettings: () => void
   addRecentUser: (user: { login: string, avatarUrl: string }) => void
+  yearRange?: [start_year: string | undefined, end_year: string | undefined]
 }
 
 export function useContributionSearch({
@@ -24,11 +26,18 @@ export function useContributionSearch({
   setGraphData,
   resetSettings,
   addRecentUser,
+  yearRange,
 }: UseContributionSearchOptions) {
   const [searchName, setSearchName] = useState<GitHubUsername>('')
 
   // 防止重复处理相同数据
   const lastProcessedUsernameRef = useRef<string>('')
+
+  const searchContextRef = useRef<{
+    entryPoint: 'url' | 'input_submit' | 'famous_user' | 'recent_user'
+    startedAt: number
+    username: string
+  } | null>(null)
 
   const resetPreviousUserDataIfNeeded = useEvent((nextUsername: string) => {
     const lastProcessed = lastProcessedUsernameRef.current
@@ -95,8 +104,21 @@ export function useContributionSearch({
       if (contributionData.login !== urlUsername) {
         setUsernameInUrl(contributionData.login, { replace: true })
       }
+
+      const normalizedLogin = contributionData.login
+      const context = searchContextRef.current
+
+      let entryPoint: 'url' | 'input_submit' | 'famous_user' | 'recent_user' = 'url'
+      let durationMs: number | undefined
+
+      if (context && context.username.toLowerCase() === normalizedLogin.toLowerCase()) {
+        entryPoint = context.entryPoint
+        durationMs = Date.now() - context.startedAt
+      }
+
+      eventTracker.user.search.success(entryPoint, true, durationMs, yearRange)
     }
-  }, [contributionData, urlUsername, setGraphData, addRecentUser, setUsernameInUrl])
+  }, [contributionData, urlUsername, setGraphData, addRecentUser, setUsernameInUrl, yearRange])
 
   // 处理 URL 清空
   useEffect(() => {
@@ -107,13 +129,50 @@ export function useContributionSearch({
     }
   }, [urlUsername, setGraphData, resetSettings])
 
+  // URL 直接进入（或外部导航）时补齐 start 埋点与耗时计算
+  useEffect(() => {
+    if (!isInvalidUrlUsername && urlUsername.length > 0) {
+      const lastProcessed = lastProcessedUsernameRef.current
+      const isAlreadyProcessed = (
+        lastProcessed.length > 0
+        && lastProcessed.toLowerCase() === urlUsername.toLowerCase()
+      )
+      const context = searchContextRef.current
+      const isAlreadyStarted = Boolean(
+        context
+        && context.username.toLowerCase() === urlUsername.toLowerCase(),
+      )
+
+      if (!isAlreadyProcessed && !isAlreadyStarted) {
+        searchContextRef.current = {
+          entryPoint: 'url',
+          startedAt: Date.now(),
+          username: urlUsername,
+        }
+
+        eventTracker.user.search.start('url', yearRange)
+      }
+    }
+  }, [urlUsername, isInvalidUrlUsername, yearRange])
+
   useEffect(() => {
     if (isError) {
       lastProcessedUsernameRef.current = ''
       setGraphData(undefined)
       resetSettings()
+
+      const context = searchContextRef.current
+      const entryPoint = context?.entryPoint ?? 'url'
+      const durationMs = context ? Date.now() - context.startedAt : undefined
+
+      eventTracker.user.search.error(
+        String(queryError.errorType),
+        queryError.status,
+        entryPoint,
+        durationMs,
+      )
     }
-  }, [isError, setGraphData, resetSettings])
+  }, [isError, queryError, setGraphData, resetSettings, urlUsername])
 
   const handleSubmit = useEvent(() => {
     const username = normalizeGitHubUsername(searchName)
@@ -121,7 +180,13 @@ export function useContributionSearch({
     if (username && !isLoading) {
       resetPreviousUserDataIfNeeded(username)
       setSearchName(username)
-      trackEvent('Click Generate')
+      searchContextRef.current = {
+        entryPoint: 'input_submit',
+        startedAt: Date.now(),
+        username,
+      }
+
+      eventTracker.user.search.start('input_submit', yearRange)
       setUsernameInUrl(username, { replace: false })
     }
     else if (!username) {
@@ -130,13 +195,19 @@ export function useContributionSearch({
     }
   })
 
-  const handleQuickSearch = useEvent((raw: string) => {
+  const handleQuickSearch = useEvent((raw: string, source: 'famous_user' | 'recent_user') => {
     const username = normalizeGitHubUsername(raw)
 
     if (username && !isLoading) {
       resetPreviousUserDataIfNeeded(username)
       setSearchName(username)
-      trackEvent('Click Quick Search', { username })
+      searchContextRef.current = {
+        entryPoint: source,
+        startedAt: Date.now(),
+        username,
+      }
+
+      eventTracker.user.search.start(source, yearRange)
       setUsernameInUrl(username, { replace: false })
     }
   })

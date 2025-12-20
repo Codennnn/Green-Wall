@@ -37,7 +37,7 @@ export function HomePage() {
   const settingPopoverContentId = useId()
   const graphWrapperId = useId()
 
-  const { graphData, setGraphData, dispatchSettings } = useData()
+  const { graphData, setGraphData, dispatchSettings, settings } = useData()
 
   const {
     urlUsername,
@@ -77,6 +77,7 @@ export function HomePage() {
       dispatchSettings({ type: 'reset' })
     },
     addRecentUser,
+    yearRange: settings.yearRange,
   })
 
   const loadingUsername = isLoading ? urlUsername : null
@@ -93,6 +94,10 @@ export function HomePage() {
 
   const handleSettingPopOutClick = () => {
     handleSettingPopOut(settingPopoverContentId)
+  }
+
+  const handleSettingPopupClose = () => {
+    closeSettingPopup()
   }
 
   const renderContent = () => {
@@ -116,7 +121,7 @@ export function HomePage() {
                   username={graphData.login}
                   onSettingClick={handleSettingClick}
                   onSettingPopOut={handleSettingPopOutClick}
-                  onSettingPopupClose={closeSettingPopup}
+                  onSettingPopupClose={handleSettingPopupClose}
                 />
               </div>
 
@@ -140,7 +145,9 @@ export function HomePage() {
           <FamousUsersSection
             isLoading={isLoading}
             loadingLogin={loadingUsername}
-            onSelect={handleQuickSearch}
+            onSelect={(login) => {
+              handleQuickSearch(login, 'famous_user')
+            }}
           />
         </div>
       )
@@ -162,7 +169,9 @@ export function HomePage() {
         value={searchName}
         onChange={setSearchName}
         onRemoveUser={handleRemoveRecentUser}
-        onSelectUser={handleQuickSearch}
+        onSelectUser={(login) => {
+          handleQuickSearch(login, 'recent_user')
+        }}
         onSubmit={handleSubmit}
       />
 

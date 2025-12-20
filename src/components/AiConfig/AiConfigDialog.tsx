@@ -19,6 +19,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '~/components/ui/dialog'
+import { eventTracker } from '~/lib/analytics'
 import type { AiRuntimeConfig, TestConnectionResponse } from '~/types/ai-config'
 
 import { AiConfigForm } from './AiConfigForm'
@@ -51,6 +52,7 @@ export function AiConfigDialog({
     if (newOpen) {
       setDraftConfig(config)
       setTestResult(null)
+      eventTracker.ai.config.open(config ? 'custom' : 'builtin')
     }
 
     setOpen(newOpen)
@@ -65,6 +67,11 @@ export function AiConfigDialog({
     setIsTesting(true)
     setTestResult(null)
 
+    const provider = new URL(configToTest.baseUrl).hostname
+    const startTime = performance.now()
+
+    eventTracker.ai.config.test.start(provider)
+
     try {
       const response = await fetch('/api/ai/test-connection', {
         method: 'POST',
@@ -73,9 +80,20 @@ export function AiConfigDialog({
       })
 
       const result = await response.json() as TestConnectionResponse
+      const latencyMs = performance.now() - startTime
+
+      if (result.ok) {
+        eventTracker.ai.config.test.success(provider, result.latencyMs ?? latencyMs)
+      }
+      else {
+        eventTracker.ai.config.test.error(provider, result.message ?? 'unknown', latencyMs)
+      }
+
       setTestResult(result)
     }
     catch {
+      const latencyMs = performance.now() - startTime
+      eventTracker.ai.config.test.error(provider, 'network_error', latencyMs)
       setTestResult({ ok: false, message: 'Network error' })
     }
     finally {
@@ -89,12 +107,15 @@ export function AiConfigDialog({
 
   const handleSave = useEvent(() => {
     if (draftConfig?.baseUrl && draftConfig.apiKey && draftConfig.model) {
+      const provider = new URL(draftConfig.baseUrl).hostname
+      eventTracker.ai.config.save(provider)
       onSave(draftConfig)
       setOpen(false)
     }
   })
 
   const handleReset = useEvent(() => {
+    eventTracker.ai.config.reset()
     onReset()
     setDraftConfig(null)
     setTestResult(null)

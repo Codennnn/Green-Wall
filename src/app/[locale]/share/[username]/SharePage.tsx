@@ -14,6 +14,7 @@ import { DEFAULT_THEME, THEME_PRESETS } from '~/constants'
 import { useData } from '~/DataContext'
 import type { GraphSize } from '~/enums'
 import { useContributionQuery } from '~/hooks/useQueries'
+import { eventTracker } from '~/lib/analytics'
 import type { GraphSettings, Themes } from '~/types'
 
 export function SharePage() {
@@ -108,6 +109,9 @@ export function SharePage() {
             render={(props) => <Link href="/" {...props} />}
             size="lg"
             variant="default"
+            onClick={() => {
+              eventTracker.share.cta.generateClick('share_page')
+            }}
           >
             {t('generateYours')}
           </Button>

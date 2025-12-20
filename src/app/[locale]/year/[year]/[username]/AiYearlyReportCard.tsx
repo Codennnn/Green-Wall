@@ -27,6 +27,7 @@ import { Skeleton } from '~/components/ui/skeleton'
 import { useAiConfig } from '~/hooks/useAiConfig'
 import { useCopyToClipboard } from '~/hooks/useCopyToClipboard'
 import { useYearlyAiReportStream } from '~/hooks/useYearlyAiReportStream'
+import { eventTracker } from '~/lib/analytics'
 import type {
   YearlyReportHighlights,
   YearlyReportTags,
@@ -101,6 +102,7 @@ export function AiYearlyReportCard(props: AiYearlyReportCardProps) {
     }
 
     await copy(text)
+    eventTracker.ai.report.copy(year, text.length)
   })
 
   const handleRegenerate = useEvent(() => {

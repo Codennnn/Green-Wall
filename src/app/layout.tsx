@@ -1,8 +1,10 @@
 import type { Metadata, Viewport } from 'next'
 import { Rubik } from 'next/font/google'
+import Script from 'next/script'
 import { getLocale, getTranslations } from 'next-intl/server'
 
 import { BgDecoration } from '~/components/BgDecoration'
+import { isDevelopment } from '~/helpers'
 import { cn } from '~/lib/utils'
 
 import '~/styles/globals.css'
@@ -46,6 +48,14 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default function RootLayout(props: React.PropsWithChildren) {
+  const isDev = isDevelopment()
+  const umamiEnabled = process.env.NEXT_PUBLIC_UMAMI_ENABLED === 'true'
+  const umamiScriptUrl = process.env.NEXT_PUBLIC_UMAMI_SCRIPT_URL
+  const umamiWebsiteId = process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID
+  const umamiDomains = process.env.NEXT_PUBLIC_UMAMI_DOMAINS
+
+  const shouldLoadUmami = !isDev && umamiEnabled && umamiWebsiteId && umamiScriptUrl
+
   return (
     <>
       <html
@@ -53,11 +63,23 @@ export default function RootLayout(props: React.PropsWithChildren) {
         className={cn(
           'h-full overflow-hidden motion-safe:scroll-smooth', rubik.className,
         )}
+        data-scroll-behavior="smooth"
       >
         <body className="m-0 h-full overflow-y-auto">
           {props.children}
         </body>
       </html>
+
+      {shouldLoadUmami && (
+        <Script
+          defer
+          data-do-not-track="true"
+          data-exclude-search="true"
+          data-website-id={umamiWebsiteId}
+          src={umamiScriptUrl}
+          {...(umamiDomains ? { 'data-domains': umamiDomains } : {})}
+        />
+      )}
 
       <BgDecoration />
     </>

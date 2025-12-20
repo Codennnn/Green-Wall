@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { useEvent } from 'react-use-event-hook'
 
-import { setSearchParamsToUrl, trackEvent } from '~/helpers'
+import { setSearchParamsToUrl } from '~/helpers'
+import { eventTracker } from '~/lib/analytics'
 import type { ContributionYear, ResponseData } from '~/types'
 
 interface UseGraphRequestConfig {
@@ -41,7 +42,11 @@ export function useGraphRequest(config: UseGraphRequestConfig = {}) {
       }
       catch (err) {
         if (err instanceof Error) {
-          trackEvent('Error: Fetch Ccontribution Data', { msg: err.message })
+          eventTracker.api.error(
+            'contribution_data',
+            0, // 没有具体HTTP状态码
+            'fetch_error',
+          )
         }
 
         onError()

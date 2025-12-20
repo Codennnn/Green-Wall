@@ -10,7 +10,7 @@ import { Toggle, ToggleGroup } from '~/components/ui/toggle-group'
 import { Tooltip, TooltipContent, TooltipTrigger } from '~/components/ui/tooltip'
 import { useData } from '~/DataContext'
 import { BlockShape, GraphSize } from '~/enums'
-import { trackEvent } from '~/helpers'
+import { eventTracker } from '~/lib/analytics'
 import type { Themes } from '~/types'
 
 import { YearRangeSelect } from './YearRangeSelect'
@@ -26,18 +26,21 @@ export const AppearanceSetting = memo(function AppearanceSetting() {
 
   const handleDaysLabelChange = useEvent(
     (checked: boolean) => {
+      eventTracker.ui.settings.change('days_label', checked)
       dispatchSettings({ type: 'daysLabel', payload: checked })
     },
   )
 
   const handleSafariHeaderChange = useEvent(
     (checked: boolean) => {
+      eventTracker.ui.settings.change('show_safari_header', checked)
       dispatchSettings({ type: 'showSafariHeader', payload: checked })
     },
   )
 
   const handleAttributionChange = useEvent(
     (checked: boolean) => {
+      eventTracker.ui.settings.change('show_attribution', checked)
       dispatchSettings({ type: 'showAttribution', payload: checked })
     },
   )
@@ -45,6 +48,7 @@ export const AppearanceSetting = memo(function AppearanceSetting() {
   const handleSizeChange = useEvent(
     (size: string[]) => {
       if (size.length > 0) {
+        eventTracker.ui.settings.change('graph_size', size[0])
         dispatchSettings({ type: 'size', payload: size[0] as GraphSize })
       }
     },
@@ -53,6 +57,7 @@ export const AppearanceSetting = memo(function AppearanceSetting() {
   const handleBlockShapeChange = useEvent(
     (shape: string[]) => {
       if (shape.length > 0) {
+        eventTracker.ui.settings.change('block_shape', shape[0])
         dispatchSettings({
           type: 'blockShape',
           payload: shape[0] as BlockShape,
@@ -63,7 +68,8 @@ export const AppearanceSetting = memo(function AppearanceSetting() {
 
   const handleThemeChange = useEvent(
     (theme: Themes) => {
-      trackEvent('Change theme', { themeName: theme })
+      eventTracker.ui.theme.change(theme)
+      eventTracker.ui.settings.change('theme', theme)
       dispatchSettings({ type: 'theme', payload: theme })
     },
   )

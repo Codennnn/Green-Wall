@@ -17,6 +17,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '~/components/ui/sheet'
+import { eventTracker } from '~/lib/analytics'
 import { cn } from '~/lib/utils'
 
 interface MainNavProps {
@@ -59,6 +60,9 @@ export function MainNav({ locale, className }: MainNavProps) {
                 : 'text-muted-foreground',
             )}
             href={item.href}
+            onClick={() => {
+              eventTracker.nav.click(item.label, 'desktop_nav')
+            }}
           >
             {item.label}
           </Link>
@@ -102,6 +106,9 @@ export function MainNav({ locale, className }: MainNavProps) {
                         : 'text-muted-foreground',
                     )}
                     href={item.href}
+                    onClick={() => {
+                      eventTracker.nav.click(item.label, 'mobile_nav')
+                    }}
                   />
                 )}
               >

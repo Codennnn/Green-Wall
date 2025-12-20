@@ -1,3 +1,5 @@
+import { useRef } from 'react'
+
 import { useTranslations } from 'next-intl'
 import { PictureInPicture2Icon, Settings2Icon, XIcon } from 'lucide-react'
 
@@ -9,6 +11,7 @@ import {
   PopoverTitle,
   PopoverTrigger,
 } from '~/components/ui/popover'
+import { eventTracker } from '~/lib/analytics'
 
 interface SettingButtonProps extends Omit<React.ComponentProps<'button'>, 'content'> {
   content?: React.ReactNode
@@ -22,8 +25,23 @@ export function SettingButton(props: SettingButtonProps) {
   const t = useTranslations('settings')
   const tCommon = useTranslations('common')
 
+  const popoutTriggeredRef = useRef(false)
+
   return (
-    <Popover>
+    <Popover
+      onOpenChange={(open) => {
+        if (open) {
+          eventTracker.ui.settings.open('button')
+        }
+        else if (!popoutTriggeredRef.current) {
+          eventTracker.ui.settings.close('button')
+        }
+
+        if (!open) {
+          popoutTriggeredRef.current = false
+        }
+      }}
+    >
       <PopoverTrigger
         render={(
           <Button variant="ghost" {...buttonProps}>
@@ -48,6 +66,9 @@ export function SettingButton(props: SettingButtonProps) {
                 )}
                 title={t('popOut')}
                 onClick={() => {
+                  popoutTriggeredRef.current = true
+                  eventTracker.ui.settings.popout()
+                  eventTracker.ui.settings.close('popout')
                   onPopOut?.()
                 }}
               />

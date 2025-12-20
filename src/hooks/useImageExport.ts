@@ -4,7 +4,8 @@ import { type RefObject, useState } from 'react'
 
 import { toBlob, toPng } from 'html-to-image'
 
-import { trackEvent } from '~/helpers'
+import { eventTracker } from '~/lib/analytics'
+import type { GraphSettings } from '~/types'
 
 interface UseImageExportOptions {
   filename?: string
@@ -13,8 +14,10 @@ interface UseImageExportOptions {
 export function useImageExport(
   graphRef: RefObject<HTMLDivElement | null>,
   username: string,
-  options?: UseImageExportOptions,
+  settings: GraphSettings,
+  options?: UseImageExportOptions & { context?: 'home' | 'year_report' },
 ) {
+  const context = options?.context ?? 'home'
   const canUseClipboardItem = typeof ClipboardItem !== 'undefined'
 
   const [isDownloading, setIsDownloading] = useState(false)
@@ -23,19 +26,28 @@ export function useImageExport(
 
   const handleDownload = async () => {
     if (graphRef.current && username && !isDownloading) {
+      eventTracker.image.download.click(context, settings.size)
+
       try {
         setIsDownloading(true)
-        trackEvent('Click Download')
 
         const dataURL = await toPng(graphRef.current)
         const trigger = document.createElement('a')
         trigger.href = dataURL
         trigger.download = options?.filename ?? `${username}_contributions`
         trigger.click()
+
+        eventTracker.image.download.success(
+          settings.size,
+          settings.theme ?? 'unknown',
+          settings.daysLabel ?? false,
+          settings.showAttribution ?? false,
+          context,
+        )
       }
       catch (err) {
         if (err instanceof Error) {
-          trackEvent('Error: Download Image', { msg: err.message })
+          eventTracker.image.download.error(err.message, context)
         }
       }
       finally {
@@ -48,9 +60,10 @@ export function useImageExport(
 
   const handleCopyImage = async () => {
     if (graphRef.current && username && canUseClipboardItem && !isCopying) {
+      eventTracker.image.copy.click(context, settings.size)
+
       try {
         setIsCopying(true)
-        trackEvent('Click Copy Image')
 
         const item = new ClipboardItem({
           'image/png': (async () => {
@@ -72,6 +85,13 @@ export function useImageExport(
 
         await navigator.clipboard.write([item])
 
+        eventTracker.image.copy.success(
+          settings.size,
+          settings.theme ?? 'unknown',
+          settings.daysLabel ?? false,
+          context,
+        )
+
         setCopySuccess(true)
 
         setTimeout(() => {
@@ -80,7 +100,7 @@ export function useImageExport(
       }
       catch (err) {
         if (err instanceof Error) {
-          trackEvent('Error: Copy Image', { msg: err.message })
+          eventTracker.image.copy.error(err.message, context)
         }
       }
       finally {

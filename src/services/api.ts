@@ -1,4 +1,5 @@
-import { apiClient } from '~/lib/api-client'
+import { eventTracker } from '~/lib/analytics'
+import { apiClient, ApiError } from '~/lib/api-client'
 import type {
   ContributionYear,
   GitHubUsername,
@@ -17,28 +18,43 @@ export async function fetchContributionData(
   years?: ContributionYear[],
   statistics = false,
 ): Promise<GraphData> {
-  const params: Record<string, string | string[]> = {}
+  const endpoint = `/api/contribution/${username}`
 
-  if (years && years.length > 0) {
-    params.years = years.map(String)
+  try {
+    const params: Record<string, string | string[]> = {}
+
+    if (years && years.length > 0) {
+      params.years = years.map(String)
+    }
+
+    if (statistics) {
+      params.statistics = 'true'
+    }
+
+    const response = await apiClient.get<ResponseData>(
+      endpoint,
+      {
+        params,
+      },
+    )
+
+    if (!response.data) {
+      throw new Error('No data received from contribution API')
+    }
+
+    return response.data
   }
+  catch (error) {
+    if (error instanceof ApiError) {
+      eventTracker.api.error(
+        endpoint,
+        error.status,
+        error.errorType,
+      )
+    }
 
-  if (statistics) {
-    params.statistics = 'true'
+    throw error
   }
-
-  const response = await apiClient.get<ResponseData>(
-    `/api/contribution/${username}`,
-    {
-      params,
-    },
-  )
-
-  if (!response.data) {
-    throw new Error('No data received from contribution API')
-  }
-
-  return response.data
 }
 
 /**
@@ -48,9 +64,24 @@ export async function fetchReposInYear(
   username: GitHubUsername,
   year: ContributionYear,
 ): Promise<RepoCreatedInYear> {
-  return apiClient.get<RepoCreatedInYear>('/api/repos', {
-    params: { username, year },
-  })
+  const endpoint = '/api/repos'
+
+  try {
+    return await apiClient.get<RepoCreatedInYear>(endpoint, {
+      params: { username, year },
+    })
+  }
+  catch (error) {
+    if (error instanceof ApiError) {
+      eventTracker.api.error(
+        endpoint,
+        error.status,
+        error.errorType,
+      )
+    }
+
+    throw error
+  }
 }
 
 /**
@@ -60,9 +91,24 @@ export async function fetchIssuesInYear(
   username: GitHubUsername,
   year: ContributionYear,
 ): Promise<IssuesInYear> {
-  return apiClient.get<IssuesInYear>('/api/issues', {
-    params: { username, year },
-  })
+  const endpoint = '/api/issues'
+
+  try {
+    return await apiClient.get<IssuesInYear>(endpoint, {
+      params: { username, year },
+    })
+  }
+  catch (error) {
+    if (error instanceof ApiError) {
+      eventTracker.api.error(
+        endpoint,
+        error.status,
+        error.errorType,
+      )
+    }
+
+    throw error
+  }
 }
 
 /**
@@ -72,9 +118,24 @@ export async function fetchRepoInteractionsInYear(
   username: GitHubUsername,
   year: ContributionYear,
 ): Promise<RepoInteractionsInYear> {
-  return apiClient.get<RepoInteractionsInYear>('/api/repo-interactions', {
-    params: { username, year },
-  })
+  const endpoint = '/api/repo-interactions'
+
+  try {
+    return await apiClient.get<RepoInteractionsInYear>(endpoint, {
+      params: { username, year },
+    })
+  }
+  catch (error) {
+    if (error instanceof ApiError) {
+      eventTracker.api.error(
+        endpoint,
+        error.status,
+        error.errorType,
+      )
+    }
+
+    throw error
+  }
 }
 
 /**

@@ -10,6 +10,7 @@ import { SettingButton } from '~/components/SettingButton'
 import { ShareButton } from '~/components/ShareButton'
 import { Button } from '~/components/ui/button'
 import { Separator } from '~/components/ui/separator'
+import { useData } from '~/DataContext'
 import { useImageExport } from '~/hooks/useImageExport'
 import type { SettingPopupPosition } from '~/hooks/useSettingPopup'
 
@@ -33,6 +34,7 @@ export const GraphActionBar = memo(function GraphActionBar({
   onSettingPopupClose,
 }: GraphActionBarProps) {
   const t = useTranslations('graph')
+  const { settings } = useData()
   const {
     canUseClipboardItem,
     isDownloading,
@@ -40,7 +42,7 @@ export const GraphActionBar = memo(function GraphActionBar({
     copySuccess,
     handleDownload,
     handleCopyImage,
-  } = useImageExport(graphRef, username)
+  } = useImageExport(graphRef, username, settings)
 
   const handleDownloadClick = useEvent(() => {
     void handleDownload()

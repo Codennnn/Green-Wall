@@ -23,8 +23,7 @@ import { useData } from '~/DataContext'
 import { ReposCardMode } from '~/enums'
 import { useDateFormatters } from '~/hooks/useDateFormatters'
 import { useImageExport } from '~/hooks/useImageExport'
-import {
-  useContributionQuery,
+import { useContributionQuery,
   useIssuesQuery,
   useRepoInteractionsQuery,
   useReposQuery,
@@ -192,7 +191,8 @@ export function GraphBlock() {
   const { isDownloading, handleDownload } = useImageExport(
     reportContainerRef,
     githubUsername,
-    { filename: `${githubUsername}_${queryYear}_yearly_report` },
+    {},
+    { filename: `${githubUsername}_${queryYear}_yearly_report`, context: 'year_report' },
   )
 
   const handleDownloadClick = useEvent(() => {

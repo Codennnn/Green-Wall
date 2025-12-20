@@ -2,6 +2,7 @@
 
 import { useCallback, useRef, useState } from 'react'
 
+import { eventTracker } from '~/lib/analytics'
 import { fetchYearlyReportStream, readTextStream } from '~/services/ai-report'
 import type { AiRuntimeConfig } from '~/types/ai-config'
 import type {
@@ -45,6 +46,7 @@ export function useYearlyAiReportStream(
   const [error, setError] = useState<string | null>(null)
 
   const abortControllerRef = useRef<AbortController | null>(null)
+  const startTimeRef = useRef<number>(0)
 
   const start = useCallback(async () => {
     if (abortControllerRef.current) {
@@ -54,6 +56,11 @@ export function useYearlyAiReportStream(
     setText('')
     setError(null)
     setStatus('streaming')
+
+    const configSource = aiConfig ? 'custom' : 'builtin'
+    startTimeRef.current = performance.now()
+
+    eventTracker.ai.report.generate.start(year, Boolean(highlights), configSource)
 
     const abortController = new AbortController()
     abortControllerRef.current = abortController
@@ -80,22 +87,30 @@ export function useYearlyAiReportStream(
         abortController.signal,
       )
 
+      const durationMs = performance.now() - startTimeRef.current
+      eventTracker.ai.report.generate.success(year, durationMs, text.length)
+
       setStatus('success')
     }
     catch (err) {
+      const durationMs = performance.now() - startTimeRef.current
+
       if (err instanceof DOMException && err.name === 'AbortError') {
+        eventTracker.ai.report.generate.abort(year, durationMs, text.length)
         setStatus('aborted')
 
         return
       }
 
-      setError(err instanceof Error ? err.message : 'Unknown error')
+      const errorMessage = err instanceof Error ? err.message : 'Unknown error'
+      eventTracker.ai.report.generate.error(year, errorMessage, durationMs, configSource)
+      setError(errorMessage)
       setStatus('error')
     }
     finally {
       abortControllerRef.current = null
     }
-  }, [username, year, locale, tags, highlights, aiConfig])
+  }, [username, year, locale, tags, highlights, aiConfig, text.length])
 
   const abort = useCallback(() => {
     if (abortControllerRef.current) {
