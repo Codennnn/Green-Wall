@@ -31,8 +31,14 @@ export const generateMetadata: GenerateMetadata = async ({ params }): Promise<Me
   }
 }
 
+const PageTitle = (props: React.PropsWithChildren) => (
+  <h1 className="mb-6 text-2xl font-bold md:mb-8 md:text-3xl">
+    {props.children}
+  </h1>
+)
+
 const SectionTitle = (props: React.PropsWithChildren) => (
-  <h2 className="mb-1 mt-5 text-lg font-bold first-of-type:mt-0 md:mb-2 md:mt-8 md:text-2xl">
+  <h2 className="mb-1 mt-5 text-lg font-bold md:mb-2 md:mt-8 md:text-2xl">
     {props.children}
   </h2>
 )
@@ -41,62 +47,45 @@ const Paragraph = (props: React.PropsWithChildren) => <p className="py-2">{props
 
 export default async function AboutPage() {
   const t = await getTranslations('about')
-  const tCommon = await getTranslations('common')
 
   return (
     <div className="py-10 md:py-14">
       <div className="px-2 md:px-20">
-        <SectionTitle>{t('goal')}</SectionTitle>
+        <PageTitle>{t('pageTitle')}</PageTitle>
         <Paragraph>
-          {t('goalContent')}
+          {t('intro')}
         </Paragraph>
 
-        <SectionTitle>{t('howItWorks')}</SectionTitle>
+        <SectionTitle>{t('whyWeBuilt')}</SectionTitle>
         <Paragraph>
-          {t('howItWorksContent')}
-          {' '}
-          <TextLink
-            passHref
-            className="font-bold"
-            href="https://github.com/Codennnn/Green-Wall/blob/3773c0dd49c09be78341a800f97b591b5b219efa/src/pages/api/contribution/%5Busername%5D.ts"
-            target="_blank"
-          >
-            {t('relevantFiles')}
-          </TextLink>
-          .
+          {t('whyWeBuiltContent')}
         </Paragraph>
 
-        <SectionTitle>{t('credits')}</SectionTitle>
+        <SectionTitle>{t('howItHelps')}</SectionTitle>
+        <Paragraph>
+          {t('howItHelpsIntro')}
+        </Paragraph>
         <ul className="list-inside list-disc py-2 pl-1 marker:text-sm marker:text-foreground/90">
-          <li>
-            <span className="mr-3 opacity-90">{t('inspiration')}{tCommon('colon')}</span>
-            <TextLink
-              passHref
-              href="https://github.com/sallar/github-contributions-chart"
-              target="_blank"
-            >
-              GitHub Contributions Chart Generator.
-            </TextLink>
+          <li className="py-1">
+            {t('howItHelpsItem1')}
           </li>
-          <li>
-            <span className="mr-3 opacity-90">{t('framework')}{tCommon('colon')}</span>
-            Next.js.
+          <li className="py-1">
+            {t('howItHelpsItem2')}
           </li>
-          <li>
-            <span className="mr-3 opacity-90">{t('font')}{tCommon('colon')}</span>
-            <TextLink passHref href="https://fonts.google.com/specimen/Rubik" target="_blank">
-              Rubik
-            </TextLink>
-            {' '}
-            by Google Fonts.
-          </li>
-          <li>
-            <span className="mr-3 opacity-90">{t('icons')}{tCommon('colon')}</span>
-            <TextLink passHref href="https://heroicons.com" target="_blank">
-              heroicons.
-            </TextLink>
+          <li className="py-1">
+            {t('howItHelpsItem3')}
           </li>
         </ul>
+
+        <SectionTitle>{t('inspiration')}</SectionTitle>
+        <Paragraph>
+          {t('inspirationContent')}
+        </Paragraph>
+
+        <SectionTitle>{t('finalMessage')}</SectionTitle>
+        <Paragraph>
+          {t('finalMessageContent')}
+        </Paragraph>
 
         <SectionTitle>{t('support')}</SectionTitle>
         <Paragraph>
