@@ -94,7 +94,11 @@
       "torvalds": "Linux & Git Creator",
       "gaearon": "React Core, Redux",
       "tj": "Express, Koa Author",
-      "sindresorhus": "1000+ npm Packages"
+      "sindresorhus": "1000+ npm Packages",
+      "yyx990803": "Vue.js Creator",
+      "rvagg": "Node.js Core Team",
+      "afc163": "Ant Design Maintainer",
+      "antfu": "Vue Ecosystem Contributor"
     }
   },
   "stats": {

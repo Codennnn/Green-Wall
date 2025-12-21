@@ -17,6 +17,10 @@ const FAMOUS_USERS: { login: GitHubUser['login'], badgeKey: string }[] = [
   { login: 'gaearon', badgeKey: 'gaearon' },
   { login: 'tj', badgeKey: 'tj' },
   { login: 'sindresorhus', badgeKey: 'sindresorhus' },
+  { login: 'yyx990803', badgeKey: 'yyx990803' },
+  { login: 'rvagg', badgeKey: 'rvagg' },
+  { login: 'afc163', badgeKey: 'afc163' },
+  { login: 'antfu', badgeKey: 'antfu' },
 ]
 
 function buildGitHubAvatarUrl(login: string, size = 80) {

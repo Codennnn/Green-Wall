@@ -94,7 +94,11 @@
       "torvalds": "Linux/Git 之父",
       "gaearon": "React 核心团队",
       "tj": "Express/Koa 作者",
-      "sindresorhus": "1000+ npm 包"
+      "sindresorhus": "1000+ npm 包",
+      "yyx990803": "Vue.js 作者",
+      "rvagg": "Node.js 核心团队",
+      "afc163": "Ant Design 维护者",
+      "antfu": "Vue 生态贡献者"
     }
   },
   "stats": {
