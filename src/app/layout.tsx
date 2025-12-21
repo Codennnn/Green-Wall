@@ -56,6 +56,26 @@ export default function RootLayout(props: React.PropsWithChildren) {
 
   const shouldLoadUmami = !isDev && umamiEnabled && umamiWebsiteId && umamiScriptUrl
 
+  // Umami configuration validation warning
+  if (!isDev && umamiEnabled) {
+    const missingConfig: string[] = []
+
+    if (!umamiWebsiteId) {
+      missingConfig.push('NEXT_PUBLIC_UMAMI_WEBSITE_ID')
+    }
+
+    if (!umamiScriptUrl) {
+      missingConfig.push('NEXT_PUBLIC_UMAMI_SCRIPT_URL')
+    }
+
+    if (missingConfig.length > 0) {
+      console.warn(
+        `Umami analytics is enabled but missing required environment variables: ${missingConfig.join(', ')}. `
+        + 'Please configure these variables in your environment or set NEXT_PUBLIC_UMAMI_ENABLED to false to disable analytics.',
+      )
+    }
+  }
+
   return (
     <>
       <html
