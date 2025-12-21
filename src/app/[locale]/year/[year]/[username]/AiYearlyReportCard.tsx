@@ -1,12 +1,13 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useEvent } from 'react-use-event-hook'
 
 import { useTranslations } from 'next-intl'
 import {
   CheckIcon,
   CopyIcon,
+  Maximize2Icon,
   RefreshCwIcon,
   SettingsIcon,
   SparklesIcon,
@@ -15,8 +16,18 @@ import {
 } from 'lucide-react'
 
 import { AiConfigDialog } from '~/components/AiConfig/AiConfigDialog'
+import { ProseContainer } from '~/components/ProseContainer'
 import { Alert, AlertDescription } from '~/components/ui/alert'
 import { Button } from '~/components/ui/button'
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogPanel,
+  DialogTitle,
+  DialogTrigger,
+} from '~/components/ui/dialog'
 import {
   Empty,
   EmptyContent,
@@ -24,8 +35,10 @@ import {
 } from '~/components/ui/empty'
 import { ScrollArea } from '~/components/ui/scroll-area'
 import { Skeleton } from '~/components/ui/skeleton'
+import { Tooltip, TooltipContent, TooltipTrigger } from '~/components/ui/tooltip'
 import { useAiConfig } from '~/hooks/useAiConfig'
 import { useCopyToClipboard } from '~/hooks/useCopyToClipboard'
+import { useMarkdownIt } from '~/hooks/useMarkdownIt'
 import { useYearlyAiReportStream } from '~/hooks/useYearlyAiReportStream'
 import { eventTracker } from '~/lib/analytics'
 import type {
@@ -89,12 +102,18 @@ export function AiYearlyReportCard(props: AiYearlyReportCardProps) {
     aiConfig,
   })
 
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
+
   useEffect(() => {
     // 等待配置加载完成再自动开始
     if (autoStart && status === 'idle' && isLoaded) {
       void start()
     }
   }, [autoStart, status, start, isLoaded])
+
+  const handleDialogOpenChange = useEvent((open: boolean) => {
+    setIsDialogOpen(open)
+  })
 
   const handleCopy = useEvent(async () => {
     if (!text) {
@@ -115,6 +134,16 @@ export function AiYearlyReportCard(props: AiYearlyReportCardProps) {
   const isSuccess = status === 'success'
   const isError = status === 'error'
   const hasText = text.length > 0
+
+  const { html: markdownHtml } = useMarkdownIt(text)
+
+  const renderDialogContent = () => {
+    return (
+      <ProseContainer className="text-muted-foreground leading-relaxed prose-p:first-of-type:mt-0 prose-p:last-of-type:mb-0">
+        <div dangerouslySetInnerHTML={{ __html: markdownHtml }} />
+      </ProseContainer>
+    )
+  }
 
   const renderContent = () => {
     if (isError && error) {
@@ -156,8 +185,10 @@ export function AiYearlyReportCard(props: AiYearlyReportCardProps) {
 
     if (hasText) {
       return (
-        <div className="whitespace-pre-wrap font-sans text-foreground/90 text-sm leading-relaxed p-1">
-          {text}
+        <div className="p-1 pt-0">
+          <ProseContainer className="text-muted-foreground leading-relaxed prose-p:first-of-type:mt-0 prose-p:last-of-type:mb-0 prose-sm">
+            <div dangerouslySetInnerHTML={{ __html: markdownHtml }} />
+          </ProseContainer>
         </div>
       )
     }
@@ -204,85 +235,140 @@ export function AiYearlyReportCard(props: AiYearlyReportCardProps) {
       icon={<SparklesIcon className="size-5" />}
       title={t('title')}
     >
-      <div className="flex flex-col gap-grid-item h-full">
-        {/* 内容区 */}
-        <div className="flex-1 py-0 overflow-auto">
-          <ScrollArea
-            scrollFade
-            className="p-grid-item"
-          >
-            {renderContent()}
-          </ScrollArea>
+      <Dialog open={isDialogOpen} onOpenChange={handleDialogOpenChange}>
+        <div className="flex flex-col gap-grid-item h-full">
+          {/* 内容区 */}
+          <div className="relative flex-1 py-0 overflow-auto">
+            <ScrollArea
+              scrollFade
+              className="p-grid-item"
+            >
+              {renderContent()}
+            </ScrollArea>
+          </div>
+
+          {/* 操作按钮 */}
+          {!hideActions && (
+            <div className="mt-auto flex flex-wrap items-center gap-2 p-grid-item-sm pt-0">
+              {/* 生成中 - 取消按钮 */}
+              {isStreaming && (
+                <Button size={ACTION_BUTTON_SIZE} variant="outline" onClick={abort}>
+                  <SquareIcon className={ACTION_ICON_SIZE} />
+                  {t('cancel')}
+                </Button>
+              )}
+
+              {/* 生成完成或失败 - 重新生成按钮 */}
+              {(isSuccess || isError || (status === 'aborted' && hasText)) && (
+                <Button size={ACTION_BUTTON_SIZE} variant="outline" onClick={handleRegenerate}>
+                  <RefreshCwIcon className={ACTION_ICON_SIZE} />
+                  {t('regenerate')}
+                </Button>
+              )}
+
+              {/* 错误状态 - 重试按钮 */}
+              {isError && (
+                <Button size={ACTION_BUTTON_SIZE} onClick={() => void start()}>
+                  {t('retry')}
+                </Button>
+              )}
+
+              {/* 生成完成 - 复制按钮 */}
+              {isSuccess && hasText && (
+                <Button
+                  size={ACTION_BUTTON_SIZE}
+                  variant="outline"
+                  onClick={() => void handleCopy()}
+                >
+                  {copied
+                    ? (
+                        <>
+                          <CheckIcon className={ACTION_ICON_SIZE} />
+                          {t('copied')}
+                        </>
+                      )
+                    : (
+                        <>
+                          <CopyIcon className={ACTION_ICON_SIZE} />
+                          {t('copy')}
+                        </>
+                      )}
+                </Button>
+              )}
+
+              {isSuccess && hasText && (
+                <Tooltip>
+                  <TooltipTrigger
+                    render={(
+                      <DialogTrigger
+                        render={(
+                          <Button
+                            size="icon-xs"
+                            variant="ghost"
+                          >
+                            <Maximize2Icon className={ACTION_ICON_SIZE} />
+                          </Button>
+                        )}
+                      />
+                    )}
+                  />
+                  <TooltipContent>
+                    {t('viewFull')}
+                  </TooltipContent>
+                </Tooltip>
+              )}
+
+              <div className="ml-auto flex items-center gap-2">
+                <AiConfigDialog
+                  config={aiConfig}
+                  trigger={(
+                    <Button
+                      size={sourceInfo.source === 'custom' ? ACTION_BUTTON_SIZE : 'icon-xs'}
+                      variant="ghost"
+                    >
+                      <SettingsIcon className={ACTION_ICON_SIZE} />
+                      {sourceInfo.source === 'custom' ? tConfig('configButton') : ''}
+                    </Button>
+                  )}
+                  onReset={resetAiConfig}
+                  onSave={saveAiConfig}
+                />
+              </div>
+            </div>
+          )}
         </div>
 
-        {/* 操作按钮 */}
-        {!hideActions && (
-          <div className="mt-auto flex flex-wrap items-center gap-2 p-grid-item-sm pt-0">
-            {/* 生成中 - 取消按钮 */}
-            {isStreaming && (
-              <Button size={ACTION_BUTTON_SIZE} variant="outline" onClick={abort}>
-                <SquareIcon className={ACTION_ICON_SIZE} />
-                {t('cancel')}
-              </Button>
-            )}
+        <DialogContent className="sm:max-w-3xl">
+          <DialogHeader>
+            <DialogTitle>{t('title')}</DialogTitle>
+          </DialogHeader>
 
-            {/* 生成完成或失败 - 重新生成按钮 */}
-            {(isSuccess || isError || (status === 'aborted' && hasText)) && (
-              <Button size={ACTION_BUTTON_SIZE} variant="outline" onClick={handleRegenerate}>
-                <RefreshCwIcon className={ACTION_ICON_SIZE} />
-                {t('regenerate')}
-              </Button>
-            )}
+          <DialogPanel>
+            {renderDialogContent()}
+          </DialogPanel>
 
-            {/* 错误状态 - 重试按钮 */}
-            {isError && (
-              <Button size={ACTION_BUTTON_SIZE} onClick={() => void start()}>
-                {t('retry')}
-              </Button>
-            )}
-
-            {/* 生成完成 - 复制按钮 */}
-            {isSuccess && hasText && (
-              <Button
-                size={ACTION_BUTTON_SIZE}
-                variant="outline"
-                onClick={() => void handleCopy()}
-              >
-                {copied
-                  ? (
-                      <>
-                        <CheckIcon className={ACTION_ICON_SIZE} />
-                        {t('copied')}
-                      </>
-                    )
-                  : (
-                      <>
-                        <CopyIcon className={ACTION_ICON_SIZE} />
-                        {t('copy')}
-                      </>
-                    )}
-              </Button>
-            )}
-
-            <div className="ml-auto flex items-center gap-2">
-              <AiConfigDialog
-                config={aiConfig}
-                trigger={(
-                  <Button
-                    size={sourceInfo.source === 'custom' ? ACTION_BUTTON_SIZE : 'icon-xs'}
-                    variant="ghost"
-                  >
-                    <SettingsIcon className={ACTION_ICON_SIZE} />
-                    {sourceInfo.source === 'custom' ? tConfig('configButton') : ''}
-                  </Button>
-                )}
-                onReset={resetAiConfig}
-                onSave={saveAiConfig}
-              />
-            </div>
-          </div>
-        )}
-      </div>
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => void handleCopy()}
+            >
+              {copied
+                ? (
+                    <>
+                      <CheckIcon className="size-4" />
+                      {t('copied')}
+                    </>
+                  )
+                : (
+                    <>
+                      <CopyIcon className="size-4" />
+                      {t('copy')}
+                    </>
+                  )}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </StatCard>
   )
 }

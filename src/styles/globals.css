@@ -4,6 +4,8 @@
 
 @source "../../src/{app,components}/**/*.{ts,tsx}";
 
+@plugin '@tailwindcss/typography';
+
 @layer components {
   .simple-button {
     @apply relative py-1 flex items-center gap-x-1 text-xs md:text-sm text-main-400 hover:text-main-500 transition-colors duration-300;

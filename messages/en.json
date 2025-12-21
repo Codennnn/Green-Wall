@@ -135,6 +135,7 @@
     "retry": "Retry",
     "copy": "Copy",
     "copied": "Copied",
+    "viewFull": "View full report",
     "charCount": "{count} chars",
     "generating": "Generating...",
     "failed": "Generation failed, please retry",

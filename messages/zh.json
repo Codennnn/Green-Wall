@@ -135,6 +135,7 @@
     "retry": "重试",
     "copy": "复制",
     "copied": "已复制",
+    "viewFull": "展开查看更多",
     "charCount": "{count} 字",
     "generating": "正在生成...",
     "failed": "生成失败，请重试",
