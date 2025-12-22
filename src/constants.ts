@@ -2,6 +2,15 @@ import { BlockShape, ColorScheme, type ContributionLevel, GraphSize } from '~/en
 
 import type { ThemePreset, Themes } from './types'
 
+export const enum StorageKeys {
+  /** 搜索输入持久化存储键 */
+  SearchInput = 'greenwall.searchInput.v1',
+  /** AI 配置持久化存储键 */
+  AiConfig = 'greenwall.aiConfig.v1',
+  /** 最近搜索的 GitHub 用户存储键 */
+  RecentUsers = 'gw:recent_github_users:v1',
+}
+
 export const levels = {
   Null: -1,
   NONE: 0,

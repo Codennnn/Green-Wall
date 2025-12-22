@@ -3,13 +3,12 @@
 import { useEffect, useState } from 'react'
 import { useEvent } from 'react-use-event-hook'
 
+import { StorageKeys } from '~/constants'
 import type {
   AiConfigSource,
   AiConfigState,
   AiRuntimeConfig,
 } from '~/types/ai-config'
-
-const STORAGE_KEY = 'greenwall.aiConfig.v1'
 
 function loadConfigFromStorage(): AiRuntimeConfig | null {
   if (typeof window === 'undefined') {
@@ -17,7 +16,7 @@ function loadConfigFromStorage(): AiRuntimeConfig | null {
   }
 
   try {
-    const stored = localStorage.getItem(STORAGE_KEY)
+    const stored = localStorage.getItem(StorageKeys.AiConfig)
 
     if (!stored) {
       return null
@@ -51,7 +50,7 @@ function saveConfigToStorage(config: AiRuntimeConfig): void {
   }
 
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(config))
+    localStorage.setItem(StorageKeys.AiConfig, JSON.stringify(config))
   }
   catch {
     // 忽略存储错误（如配额超限）
@@ -64,7 +63,7 @@ function removeConfigFromStorage(): void {
   }
 
   try {
-    localStorage.removeItem(STORAGE_KEY)
+    localStorage.removeItem(StorageKeys.AiConfig)
   }
   catch {
     // 忽略删除错误

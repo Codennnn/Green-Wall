@@ -1,6 +1,7 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useEvent } from 'react-use-event-hook'
 
-const STORAGE_KEY = 'greenwall.searchInput.v1'
+import { StorageKeys } from '~/constants'
 
 function loadSearchInputFromStorage(): string {
   if (typeof window === 'undefined') {
@@ -8,7 +9,7 @@ function loadSearchInputFromStorage(): string {
   }
 
   try {
-    const stored = localStorage.getItem(STORAGE_KEY)
+    const stored = localStorage.getItem(StorageKeys.SearchInput)
 
     return stored ?? ''
   }
@@ -24,10 +25,10 @@ function saveSearchInputToStorage(value: string): void {
 
   try {
     if (value) {
-      localStorage.setItem(STORAGE_KEY, value)
+      localStorage.setItem(StorageKeys.SearchInput, value)
     }
     else {
-      localStorage.removeItem(STORAGE_KEY)
+      localStorage.removeItem(StorageKeys.SearchInput)
     }
   }
   catch {
@@ -35,16 +36,13 @@ function saveSearchInputToStorage(value: string): void {
   }
 }
 
-/**
- * 清除 localStorage 中的搜索输入值
- */
 export function clearPersistedSearchInput(): void {
   if (typeof window === 'undefined') {
     return
   }
 
   try {
-    localStorage.removeItem(STORAGE_KEY)
+    localStorage.removeItem(StorageKeys.SearchInput)
   }
   catch {
     // 忽略存储错误
@@ -75,23 +73,12 @@ export interface UsePersistedSearchInputReturn {
  * 1. 从 localStorage 加载初始值
  * 2. 在值变化时自动保存到 localStorage
  * 3. 监听 storage 事件以在多个标签页间同步状态
- *
- * @example
- * ```tsx
- * const { value, setValue, clear } = usePersistedSearchInput()
- *
- * <SearchInput
- *   value={value}
- *   onChange={(e) => setValue(e.target.value)}
- * />
- * ```
  */
 export function usePersistedSearchInput(
   options: UsePersistedSearchInputOptions = {},
 ): UsePersistedSearchInputReturn {
   const { initialValue } = options
 
-  // 初始化状态：优先使用 initialValue，否则从 localStorage 加载
   const [value, setValueState] = useState<string>(() => {
     if (initialValue !== undefined) {
       return initialValue
@@ -100,26 +87,24 @@ export function usePersistedSearchInput(
     return loadSearchInputFromStorage()
   })
 
-  // 更新值并保存到 localStorage
-  const setValue = useCallback((newValue: string | ((prevValue: string) => string)) => {
+  const setValue = useEvent((newValue: string | ((prevValue: string) => string)) => {
     setValueState((prevValue) => {
       const resolvedValue = typeof newValue === 'function' ? newValue(prevValue) : newValue
       saveSearchInputToStorage(resolvedValue)
 
       return resolvedValue
     })
-  }, [])
+  })
 
-  // 清除值
-  const clear = useCallback(() => {
+  const clear = useEvent(() => {
     setValueState('')
     clearPersistedSearchInput()
-  }, [])
+  })
 
   // 监听 storage 事件以在多个标签页间同步
   useEffect(() => {
     const handleStorageChange = (event: StorageEvent) => {
-      if (event.key === STORAGE_KEY) {
+      if (event.key === StorageKeys.SearchInput) {
         setValueState(event.newValue ?? '')
       }
     }

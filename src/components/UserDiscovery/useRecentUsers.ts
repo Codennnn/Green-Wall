@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useEvent } from 'react-use-event-hook'
 
+import { StorageKeys } from '~/constants'
 import type { GitHubUser } from '~/types'
 
 export interface RecentGitHubUser {
@@ -9,7 +10,6 @@ export interface RecentGitHubUser {
   lastSearchedAt: number
 }
 
-const RECENT_USERS_STORAGE_KEY = 'gw:recent_github_users:v1'
 const RECENT_USERS_LIMIT = 8
 
 function isNonEmptyString(value: unknown): value is string {
@@ -37,7 +37,7 @@ function readRecentUsersFromStorage(): RecentGitHubUser[] {
   let users: RecentGitHubUser[] = []
 
   if (typeof window !== 'undefined') {
-    const raw = window.localStorage.getItem(RECENT_USERS_STORAGE_KEY)
+    const raw = window.localStorage.getItem(StorageKeys.RecentUsers)
 
     if (raw) {
       try {
@@ -59,7 +59,7 @@ function readRecentUsersFromStorage(): RecentGitHubUser[] {
 function writeRecentUsersToStorage(users: RecentGitHubUser[]) {
   if (typeof window !== 'undefined') {
     window.localStorage.setItem(
-      RECENT_USERS_STORAGE_KEY,
+      StorageKeys.RecentUsers,
       JSON.stringify(users.slice(0, RECENT_USERS_LIMIT)),
     )
   }
@@ -120,7 +120,7 @@ export function useRecentUsers() {
     addRecentUser,
     removeRecentUser,
     clearRecentUsers,
-    storageKey: RECENT_USERS_STORAGE_KEY,
+    storageKey: StorageKeys.RecentUsers,
     limit: RECENT_USERS_LIMIT,
   }
 }

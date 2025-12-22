@@ -1,6 +1,7 @@
 'use client'
 
-import { useCallback, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
+import { useEvent } from 'react-use-event-hook'
 
 import { eventTracker } from '~/lib/analytics'
 import { fetchYearlyReportStream, readTextStream } from '~/services/ai-report'
@@ -48,7 +49,7 @@ export function useYearlyAiReportStream(
   const abortControllerRef = useRef<AbortController | null>(null)
   const startTimeRef = useRef<number>(0)
 
-  const start = useCallback(async () => {
+  const start = useEvent(async () => {
     if (abortControllerRef.current) {
       abortControllerRef.current.abort()
     }
@@ -79,7 +80,7 @@ export function useYearlyAiReportStream(
         abortController.signal,
       )
 
-      await readTextStream(
+      const finalText = await readTextStream(
         response,
         (currentText) => {
           setText(currentText)
@@ -88,7 +89,7 @@ export function useYearlyAiReportStream(
       )
 
       const durationMs = performance.now() - startTimeRef.current
-      eventTracker.ai.report.generate.success(year, durationMs, text.length)
+      eventTracker.ai.report.generate.success(year, durationMs, finalText.length)
 
       setStatus('success')
     }
@@ -96,7 +97,9 @@ export function useYearlyAiReportStream(
       const durationMs = performance.now() - startTimeRef.current
 
       if (err instanceof DOMException && err.name === 'AbortError') {
-        eventTracker.ai.report.generate.abort(year, durationMs, text.length)
+        // 使用最新的 text 状态值（因为流被中止，无法获取最终文本）
+        const currentTextLength = text.length
+        eventTracker.ai.report.generate.abort(year, durationMs, currentTextLength)
         setStatus('aborted')
 
         return
@@ -110,21 +113,21 @@ export function useYearlyAiReportStream(
     finally {
       abortControllerRef.current = null
     }
-  }, [username, year, locale, tags, highlights, aiConfig, text.length])
+  })
 
-  const abort = useCallback(() => {
+  const abort = useEvent(() => {
     if (abortControllerRef.current) {
       abortControllerRef.current.abort()
       abortControllerRef.current = null
     }
-  }, [])
+  })
 
-  const reset = useCallback(() => {
+  const reset = useEvent(() => {
     abort()
     setText('')
     setError(null)
     setStatus('idle')
-  }, [abort])
+  })
 
   return {
     text,

@@ -1,6 +1,7 @@
 'use client'
 
-import { useCallback, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
+import { useEvent } from 'react-use-event-hook'
 
 import { normalizeGitHubUsername } from '~/helpers'
 import { useRouter } from '~/i18n/navigation'
@@ -21,7 +22,7 @@ export function useYearWrappedNavigation(): UseYearWrappedNavigationResult {
   const [isNavigating, setIsNavigating] = useState(false)
   const navigationStartTimeRef = useRef<number>(0)
 
-  const navigateToYearUser = useCallback(
+  const navigateToYearUser = useEvent(
     ({ year, username }: NavigateParams): boolean => {
       const normalizedUsername = normalizeGitHubUsername(username)
 
@@ -37,7 +38,6 @@ export function useYearWrappedNavigation(): UseYearWrappedNavigationResult {
 
       return true
     },
-    [router],
   )
 
   return {
