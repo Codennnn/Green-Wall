@@ -139,7 +139,7 @@
     "retry": "重试",
     "copy": "复制",
     "copied": "已复制",
-    "viewFull": "展开查看更多",
+    "viewFull": "展开",
     "charCount": "{count} 字",
     "generating": "正在生成...",
     "failed": "生成失败，请重试",
@@ -286,5 +286,39 @@
     "signInBenefitsItemPrivateContrib": "包含私有仓库贡献（授权模式）",
     "signInBenefitsItemDeeperInsights": "获取更准确的语言 / 仓库 / Issues 数据分析",
     "signInBenefitsFooter": "我们只读取你的贡献数据，不会修改你的仓库。"
+  },
+  "yearlyTags": {
+    "activityLevel": {
+      "low": "摸鱼选手",
+      "medium": "正常打工人",
+      "high": "卷王预备役",
+      "intense": "超级肝帝"
+    },
+    "commitStyle": {
+      "consistent": "打卡狂魔",
+      "intermittent": "灵感型选手",
+      "sprint": "Deadline 战士",
+      "steadyVaried": "稳中带皮"
+    },
+    "timePattern": {
+      "weekdayHeavy": "上班偷偷卷",
+      "weekendHeavy": "周末不休息",
+      "balanced": "时间管理学大师",
+      "specificDay": "今天心情好"
+    },
+    "repoPattern": {
+      "fewQuality": "宁缺毋滥型",
+      "manyExperiments": "遍地开花型",
+      "hasHit": "爆款制造机",
+      "collaborative": "社交达人型"
+    },
+    "techFocus": {
+      "unknown": "还在摸索中",
+      "specialist": "{language} 死忠粉",
+      "majorMinor": "{major} 主菜，{minor} 配菜",
+      "dual": "{lang1} 和 {lang2} 左右互搏",
+      "polyglot": "语言收集癖",
+      "primarySecondary": "{primary} 扛把子，{secondary} 打辅助"
+    }
   }
 }

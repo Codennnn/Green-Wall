@@ -17,21 +17,6 @@ import {
  * 内部使用 next-intl 的翻译系统，确保与项目其他部分的 i18n 实现一致。
  *
  * @returns 包含格式化函数的对象
- *
- * @example
- * ```tsx
- * function MyComponent() {
- *   const { formatDate, formatMonth, formatDateRange } = useDateFormatters()
- *
- *   return (
- *     <div>
- *       <p>日期: {formatDate('2024-01-15')}</p>
- *       <p>月份: {formatMonth('2024-01')}</p>
- *       <p>范围: {formatDateRange('2024-01-01', '2024-01-15')}</p>
- *     </div>
- *   )
- * }
- * ```
  */
 export function useDateFormatters(): DateFormatters {
   const tMonths = useTranslations('months')
@@ -47,7 +32,7 @@ export function useDateFormatters(): DateFormatters {
  * @example
  * ```tsx
  * const formatDate = useDateFormatter()
- * formatDate('2024-01-15') // => "Jan 15" or "1月 15"
+ * formatDate('2024-01-15') // => "Jan 15" or "1月15日"
  * ```
  */
 export function useDateFormatter(): (date: string | undefined) => string {
@@ -81,7 +66,7 @@ export function useMonthFormatter(): (month: string | undefined) => string {
  * @example
  * ```tsx
  * const formatDateRange = useDateRangeFormatter()
- * formatDateRange('2024-01-01', '2024-01-15') // => "Jan 1 - Jan 15"
+ * formatDateRange('2024-01-01', '2024-01-15') // => "Jan 1 - Jan 15" or "1月1日 - 1月15日"
  * ```
  */
 export function useDateRangeFormatter(): (

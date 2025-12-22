@@ -253,12 +253,6 @@ export function createDateRangeFormatter(
  *
  * @param tMonths - 月份翻译函数
  * @returns 包含所有格式化函数的对象
- *
- * @example
- * ```tsx
- * const tMonths = useTranslations('months')
- * const { formatDate, formatMonth, formatDateRange } = createDateFormatters(tMonths)
- * ```
  */
 export function createDateFormatters(tMonths: Translator): DateFormatters {
   const formatDate = createDateFormatter(tMonths)

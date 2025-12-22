@@ -137,14 +137,6 @@ export function AiYearlyReportCard(props: AiYearlyReportCardProps) {
 
   const { html: markdownHtml } = useMarkdownIt(text)
 
-  const renderDialogContent = () => {
-    return (
-      <ProseContainer className="text-muted-foreground leading-relaxed prose-p:first-of-type:mt-0 prose-p:last-of-type:mb-0">
-        <div dangerouslySetInnerHTML={{ __html: markdownHtml }} />
-      </ProseContainer>
-    )
-  }
-
   const renderContent = () => {
     if (isError && error) {
       const showBuiltinErrorHint = sourceInfo.source === 'builtin'
@@ -340,11 +332,20 @@ export function AiYearlyReportCard(props: AiYearlyReportCardProps) {
 
         <DialogContent className="sm:max-w-3xl">
           <DialogHeader>
-            <DialogTitle>{t('title')}</DialogTitle>
+            <DialogTitle>
+              <div className="flex items-center gap-3">
+                <SparklesIcon className="shrink-0 size-5" />
+                <span>
+                  {t('title')}
+                </span>
+              </div>
+            </DialogTitle>
           </DialogHeader>
 
           <DialogPanel>
-            {renderDialogContent()}
+            <ProseContainer className="text-muted-foreground leading-relaxed prose-p:first-of-type:mt-0 prose-p:last-of-type:mb-0 prose-sm">
+              <div dangerouslySetInnerHTML={{ __html: markdownHtml }} />
+            </ProseContainer>
           </DialogPanel>
 
           <DialogFooter>
@@ -355,13 +356,13 @@ export function AiYearlyReportCard(props: AiYearlyReportCardProps) {
               {copied
                 ? (
                     <>
-                      <CheckIcon className="size-4" />
+                      <CheckIcon />
                       {t('copied')}
                     </>
                   )
                 : (
                     <>
-                      <CopyIcon className="size-4" />
+                      <CopyIcon />
                       {t('copy')}
                     </>
                   )}

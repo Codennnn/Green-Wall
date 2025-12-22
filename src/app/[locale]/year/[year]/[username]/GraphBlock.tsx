@@ -31,6 +31,7 @@ import { useContributionQuery,
 import { getTopLanguagesFromRepos } from '~/lib/language-stats'
 import { sortReposByDisplayValue, sortReposByInfluence } from '~/lib/repo-sort'
 import { deriveStatistics } from '~/lib/statistics'
+import { createTagTranslator } from '~/lib/yearly-report/createTagTranslator'
 import {
   deriveYearlyTags,
   extractHighlights,
@@ -54,6 +55,7 @@ export function GraphBlock() {
   const currentLocale = String(locale)
   const t = useTranslations('stats')
   const tErrors = useTranslations('errors')
+  const tYearlyTags = useTranslations('yearlyTags')
 
   const { setGraphData } = useData()
 
@@ -142,6 +144,10 @@ export function GraphBlock() {
     setReposCardMode(mode)
   })
 
+  const tagTranslator = useMemo(() => {
+    return createTagTranslator(tYearlyTags)
+  }, [tYearlyTags])
+
   // 年度报告标签推导
   const yearlyTags = useMemo(() => {
     return deriveYearlyTags({
@@ -150,7 +156,7 @@ export function GraphBlock() {
       topLanguages,
       reposData,
       issuesData,
-      locale: currentLocale,
+      translator: tagTranslator,
     })
   }, [
     statistics,
@@ -158,7 +164,7 @@ export function GraphBlock() {
     topLanguages,
     reposData,
     issuesData,
-    currentLocale,
+    tagTranslator,
   ])
 
   // 年度报告高光数据

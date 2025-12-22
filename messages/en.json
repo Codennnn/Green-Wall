@@ -139,7 +139,7 @@
     "retry": "Retry",
     "copy": "Copy",
     "copied": "Copied",
-    "viewFull": "View full report",
+    "viewFull": "Expand",
     "charCount": "{count} chars",
     "generating": "Generating...",
     "failed": "Generation failed, please retry",
@@ -286,5 +286,39 @@
     "signInBenefitsItemPrivateContrib": "Include private contributions (authorized mode)",
     "signInBenefitsItemDeeperInsights": "Get more accurate language/repo/issue insights",
     "signInBenefitsFooter": "We only read your contribution data. We can’t modify your repositories."
+  },
+  "yearlyTags": {
+    "activityLevel": {
+      "low": "Slack Master",
+      "medium": "Regular Grinder",
+      "high": "Hustle Candidate",
+      "intense": "Code Warrior"
+    },
+    "commitStyle": {
+      "consistent": "Daily Pusher",
+      "intermittent": "Mood Coder",
+      "sprint": "Deadline Rusher",
+      "steadyVaried": "Steady with Spice"
+    },
+    "timePattern": {
+      "weekdayHeavy": "Weekday Sneaker",
+      "weekendHeavy": "Weekend Warrior",
+      "balanced": "Time Management Pro",
+      "specificDay": "Feeling It Today"
+    },
+    "repoPattern": {
+      "fewQuality": "Quality Over Quantity",
+      "manyExperiments": "Lab Rat Style",
+      "hasHit": "Hit Maker",
+      "collaborative": "Team Player"
+    },
+    "techFocus": {
+      "unknown": "Still Exploring",
+      "specialist": "{language} Hardcore Fan",
+      "majorMinor": "{major} Main, {minor} Side",
+      "dual": "{lang1} & {lang2} Double Threat",
+      "polyglot": "Language Collector",
+      "primarySecondary": "{primary} Lead, {secondary} Support"
+    }
   }
 }
