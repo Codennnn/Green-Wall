@@ -19,9 +19,6 @@ This project leverages the GitHub GraphQL API to retrieve data and employs Next.
 
 To showcase a live preview of your contributions on your GitHub README or website, you can use the following examples.
 
-> **If the public demo is down**  
-> Self-deploy in minutes (see **Deploy to Vercel** below), then replace `https://green-wall.leoku.dev` with your own domain.
-
 **Optional Parameters**
 
 | Parameter | Description                      | Type     | Default Value | Example         |

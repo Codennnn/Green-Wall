@@ -19,9 +19,6 @@ _为你的 GitHub 贡献拍张快照 📸，然后分享出去！_
 
 如果你想在自己的 GitHub README 或网站中展示贡献墙的实时预览，可以参考下面的示例。
 
-> **如果公开演示站点不可用**  
-> 你可以在几分钟内完成自部署（见下方 **部署到 Vercel**），然后把 `https://green-wall.leoku.dev` 替换为你自己的域名。
-
 **可选参数**
 
 | 参数     | 说明             | 类型     | 默认值    | 示例            |
@@ -82,12 +79,12 @@ _为你的 GitHub 贡献拍张快照 📸，然后分享出去！_
 3. **在 Vercel 配置环境变量**
    - 在导入时（或之后通过 **Project → Settings → Environment Variables**），设置以下变量（完整说明见 [`.env.example`](./.env.example)）：
 
-| 变量                    | 必填 | 说明                                                        | 推荐值                           |
-| ----------------------- | ---- | ----------------------------------------------------------- | -------------------------------- |
-| `GITHUB_ACCESS_TOKEN`   | 是   | 服务端调用 GitHub GraphQL API 所需的 GitHub Token           | 你的 PAT                         |
-| `AI_BASE_URL`           | 否   | OpenAI-compatible API 的 Base URL                           | e.g. `https://api.openai.com/v1` |
-| `AI_API_KEY`            | 否\* | AI 服务的 API Key                                           | Provider key                     |
-| `AI_MODEL`              | 否   | 该 AI 服务支持的模型名称                                    | e.g. `gpt-4o-mini`               |
+| 变量                  | 必填 | 说明                                              | 推荐值                           |
+| --------------------- | ---- | ------------------------------------------------- | -------------------------------- |
+| `GITHUB_ACCESS_TOKEN` | 是   | 服务端调用 GitHub GraphQL API 所需的 GitHub Token | 你的 PAT                         |
+| `AI_BASE_URL`         | 否   | OpenAI-compatible API 的 Base URL                 | e.g. `https://api.openai.com/v1` |
+| `AI_API_KEY`          | 否\* | AI 服务的 API Key                                 | Provider key                     |
+| `AI_MODEL`            | 否   | 该 AI 服务支持的模型名称                          | e.g. `gpt-4o-mini`               |
 
 > 说明：AI 相关变量仅用于 **AI 年度总结** 功能（`/api/ai/yearly-report`）。如果你设置了 `AI_API_KEY`，也请确保 `AI_BASE_URL` 与 `AI_MODEL` 配置正确可用。
 
