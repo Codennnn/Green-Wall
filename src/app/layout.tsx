@@ -10,9 +10,10 @@ import { cn } from '~/lib/utils'
 import '~/styles/globals.css'
 
 const rubik = Rubik({
-  weight: ['400', '500'],
+  weight: ['500', '600', '700'],
   display: 'swap',
   subsets: ['latin'],
+  variable: '--font-sans',
 })
 
 export const viewport: Viewport = {
@@ -47,7 +48,9 @@ export async function generateMetadata(): Promise<Metadata> {
   }
 }
 
-export default function RootLayout(props: React.PropsWithChildren) {
+export default async function RootLayout(props: React.PropsWithChildren) {
+  const locale = await getLocale()
+  const isZh = locale === 'zh'
   const isDev = isDevelopment()
   const umamiEnabled = process.env.NEXT_PUBLIC_UMAMI_ENABLED === 'true'
   const umamiScriptUrl = process.env.NEXT_PUBLIC_UMAMI_SCRIPT_URL
@@ -81,9 +84,15 @@ export default function RootLayout(props: React.PropsWithChildren) {
       <html
         suppressHydrationWarning
         className={cn(
-          'h-full overflow-hidden motion-safe:scroll-smooth', rubik.className,
+          'h-full overflow-hidden motion-safe:scroll-smooth',
+          rubik.variable,
         )}
         data-scroll-behavior="smooth"
+        {...(isZh && {
+          style: {
+            '--font-sans': 'vivoSans, sans-serif',
+          } as React.CSSProperties,
+        })}
       >
         <body className="m-0 h-full overflow-y-auto">
           {props.children}

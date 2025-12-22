@@ -6,6 +6,42 @@
 
 @plugin '@tailwindcss/typography';
 
+@font-face {
+  font-family: vivoSans;
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  src: url('https://cdn.jsdelivr.net/gh/Codennnn/static@main/fonts/vivoSans-Regular.woff2')
+    format('woff2');
+}
+
+@font-face {
+  font-family: vivoSans;
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+  src: url('https://cdn.jsdelivr.net/gh/Codennnn/static@main/fonts/vivoSans-Medium.woff2')
+    format('woff2');
+}
+
+@font-face {
+  font-family: vivoSans;
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+  src: url('https://cdn.jsdelivr.net/gh/Codennnn/static@main/fonts/vivoSans-SemiBold.woff2')
+    format('woff2');
+}
+
+@font-face {
+  font-family: vivoSans;
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+  src: url('https://cdn.jsdelivr.net/gh/Codennnn/static@main/fonts/vivoSans-Bold.woff2')
+    format('woff2');
+}
+
 @layer components {
   .simple-button {
     @apply relative py-1 flex items-center gap-x-1 text-xs md:text-sm text-main-400 hover:text-main-500 transition-colors duration-300;
@@ -233,6 +269,10 @@
 @layer base {
   * {
     @apply border-border outline-ring/50;
+  }
+
+  html {
+    font-family: var(--font-sans, sans-serif);
   }
 
   body {
