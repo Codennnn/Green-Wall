@@ -16,6 +16,7 @@ import {
 import { Separator } from '~/components/ui/separator'
 import { useRecentUsers } from '~/components/UserDiscovery/useRecentUsers'
 import { getCurrentYear, normalizeGitHubUsername } from '~/helpers'
+import { usePersistedSearchInput } from '~/hooks/usePersistedSearchInput'
 import { eventTracker } from '~/lib/analytics'
 import { useSession } from '~/lib/auth-client'
 
@@ -38,7 +39,7 @@ export function YearSearchPage() {
     return years
   }, [currentYear])
 
-  const [username, setUsername] = useState('')
+  const { value: username, setValue: setUsername } = usePersistedSearchInput()
   const [selectedYear, setSelectedYear] = useState<string>(String(currentYear))
 
   const { isNavigating, navigateToYearUser } = useYearWrappedNavigation()

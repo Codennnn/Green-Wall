@@ -1,12 +1,13 @@
 'use client'
 
-import { type Dispatch, type SetStateAction, useEffect, useRef, useState } from 'react'
+import { type Dispatch, type SetStateAction, useEffect, useRef } from 'react'
 import { useEvent } from 'react-use-event-hook'
 
 import { normalizeGitHubUsername } from '~/helpers'
+import { usePersistedSearchInput } from '~/hooks/usePersistedSearchInput'
 import { useContributionQuery } from '~/hooks/useQueries'
 import { eventTracker } from '~/lib/analytics'
-import type { GitHubUsername, GraphData } from '~/types'
+import type { GraphData } from '~/types'
 
 interface UseContributionSearchOptions {
   urlUsername: string
@@ -28,7 +29,7 @@ export function useContributionSearch({
   addRecentUser,
   yearRange,
 }: UseContributionSearchOptions) {
-  const [searchName, setSearchName] = useState<GitHubUsername>('')
+  const { value: searchName, setValue: setSearchName } = usePersistedSearchInput()
 
   // 防止重复处理相同数据
   const lastProcessedUsernameRef = useRef<string>('')
@@ -72,13 +73,13 @@ export function useContributionSearch({
 
   // 同步 URL 用户名到输入框
   useEffect(() => {
-    setSearchName((currentSearchName) => {
-      const targetValue = urlUsername.length > 0 ? urlUsername : ''
-
-      // 只有值不同时才更新，避免中断滚动动画
-      return currentSearchName === targetValue ? currentSearchName : targetValue
-    })
-  }, [urlUsername])
+    if (urlUsername.length > 0) {
+      setSearchName((currentSearchName) => {
+        // 只有值不同时才更新，避免中断滚动动画
+        return currentSearchName === urlUsername ? currentSearchName : urlUsername
+      })
+    }
+  }, [urlUsername, setSearchName])
 
   useEffect(() => {
     resetPreviousUserDataIfNeeded(urlUsername)
