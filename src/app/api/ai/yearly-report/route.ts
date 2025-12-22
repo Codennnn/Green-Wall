@@ -1,10 +1,8 @@
 import { type NextRequest, NextResponse } from 'next/server'
-import { getTranslations } from 'next-intl/server'
 import { streamText } from 'ai'
 import { number, object, optional, parse, string } from 'valibot'
 
 import { getModelFromRequest, isModelFactoryError } from '~/lib/ai/runtime-model'
-import { createTagTranslator } from '~/lib/yearly-report/createTagTranslator'
 import { buildYearlyReportPrompt } from '~/lib/yearly-report/prompt'
 
 export const maxDuration = 30

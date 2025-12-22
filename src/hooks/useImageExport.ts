@@ -11,6 +11,14 @@ interface UseImageExportOptions {
   filename?: string
 }
 
+function isFirefoxBrowser(): boolean {
+  if (typeof navigator === 'undefined') {
+    return false
+  }
+
+  return navigator.userAgent.toLowerCase().includes('firefox')
+}
+
 export function useImageExport(
   graphRef: RefObject<HTMLDivElement | null>,
   username: string,
@@ -31,7 +39,11 @@ export function useImageExport(
       try {
         setIsDownloading(true)
 
-        const dataURL = await toPng(graphRef.current)
+        // Firefox 兼容性处理：跳过字体嵌入以避免 "font is undefined" 错误
+        // @see https://github.com/bubkoo/html-to-image/issues/508
+        const skipFonts = isFirefoxBrowser()
+        const dataURL = await toPng(graphRef.current, { skipFonts })
+
         const trigger = document.createElement('a')
         trigger.href = dataURL
         trigger.download = options?.filename ?? `${username}_contributions`
@@ -49,6 +61,8 @@ export function useImageExport(
         if (err instanceof Error) {
           eventTracker.image.download.error(err.message, context)
         }
+
+        console.error(err)
       }
       finally {
         setTimeout(() => {
@@ -65,6 +79,10 @@ export function useImageExport(
       try {
         setIsCopying(true)
 
+        // Firefox 兼容性处理：跳过字体嵌入以避免 "font is undefined" 错误
+        // @see https://github.com/bubkoo/html-to-image/issues/508
+        const skipFonts = isFirefoxBrowser()
+
         const item = new ClipboardItem({
           'image/png': (async () => {
             // To be able to use `ClipboardItem` in safari, need to pass promise directly into it.
@@ -73,7 +91,7 @@ export function useImageExport(
               throw new Error()
             }
 
-            const blobData = await toBlob(graphRef.current)
+            const blobData = await toBlob(graphRef.current, { skipFonts })
 
             if (!blobData) {
               throw new Error()
