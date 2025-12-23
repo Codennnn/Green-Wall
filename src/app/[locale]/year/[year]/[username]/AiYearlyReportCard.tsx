@@ -61,6 +61,7 @@ interface AiYearlyReportCardProps {
 }
 
 const ACTION_BUTTON_SIZE = 'xs'
+const ACTION_ICON_BUTTON_SIZE = 'icon-xs'
 const ACTION_ICON_SIZE = 'size-3.5'
 
 export function AiYearlyReportCard(props: AiYearlyReportCardProps) {
@@ -295,7 +296,7 @@ export function AiYearlyReportCard(props: AiYearlyReportCardProps) {
                       <DialogTrigger
                         render={(
                           <Button
-                            size="icon-xs"
+                            size={ACTION_ICON_BUTTON_SIZE}
                             variant="ghost"
                           >
                             <Maximize2Icon className={ACTION_ICON_SIZE} />
@@ -315,7 +316,9 @@ export function AiYearlyReportCard(props: AiYearlyReportCardProps) {
                   config={aiConfig}
                   trigger={(
                     <Button
-                      size={sourceInfo.source === 'custom' ? ACTION_BUTTON_SIZE : 'icon-xs'}
+                      size={sourceInfo.source === 'custom'
+                        ? ACTION_BUTTON_SIZE
+                        : ACTION_ICON_BUTTON_SIZE}
                       variant="ghost"
                     >
                       <SettingsIcon className={ACTION_ICON_SIZE} />
