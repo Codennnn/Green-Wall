@@ -1,9 +1,10 @@
 import { type NextRequest, NextResponse } from 'next/server'
+import { getTranslations } from 'next-intl/server'
 import { streamText } from 'ai'
 import { number, object, optional, parse, string } from 'valibot'
 
 import { getModelFromRequest, isModelFactoryError } from '~/lib/ai/runtime-model'
-import { buildYearlyReportPrompt } from '~/lib/yearly-report/prompt'
+import { buildYearlyReportPrompt, type TagCategoryNames } from '~/lib/yearly-report/prompt'
 
 export const maxDuration = 30
 
@@ -58,16 +59,28 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // 3. 构建 Prompt
+    // 3. 获取标签类别名称的本地化翻译
+    const effectiveLocale = locale ?? 'en'
+    const t = await getTranslations({ locale: effectiveLocale, namespace: 'yearlyTags.categoryNames' })
+    const categoryNames: TagCategoryNames = {
+      activityLevel: t('activityLevel'),
+      commitStyle: t('commitStyle'),
+      timePattern: t('timePattern'),
+      techFocus: t('techFocus'),
+      repoPattern: t('repoPattern'),
+    }
+
+    // 4. 构建 Prompt
     const { system, prompt } = buildYearlyReportPrompt({
       username,
       year,
       locale,
       tags,
       highlights,
+      categoryNames,
     })
 
-    // 4. 调用 AI SDK streamText（使用固定的合理默认值）
+    // 5. 调用 AI SDK streamText（使用固定的合理默认值）
     const result = streamText({
       model: modelResult.model,
       system,
@@ -76,7 +89,7 @@ export async function POST(request: NextRequest) {
       maxOutputTokens: 3000,
     })
 
-    // 5. 返回纯文本流式响应
+    // 6. 返回纯文本流式响应
     const response = result.toTextStreamResponse()
     response.headers.set('Cache-Control', 'no-store')
 

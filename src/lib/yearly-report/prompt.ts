@@ -3,12 +3,21 @@ import type {
   YearlyReportTags,
 } from '~/types/ai-report'
 
+export interface TagCategoryNames {
+  activityLevel: string
+  commitStyle: string
+  timePattern: string
+  techFocus: string
+  repoPattern: string
+}
+
 export interface BuildPromptOptions {
   username: string
   year: number
   locale?: string
   tags: YearlyReportTags
   highlights?: YearlyReportHighlights
+  categoryNames: TagCategoryNames
 }
 
 const SYSTEM_PROMPT = `你是一位嘴上不饶人、但内心善良的程序员旁白，
@@ -36,7 +45,7 @@ const SYSTEM_PROMPT = `你是一位嘴上不饶人、但内心善良的程序员
 输出格式和结构要求必须严格遵守。`
 
 function buildUserPromptContent(options: BuildPromptOptions): string {
-  const { username, year, locale, tags, highlights } = options
+  const { username, year, locale, tags, highlights, categoryNames } = options
 
   let prompt = `请为用户 ${username} 生成一段 ${year} 年度 GitHub Wrapped 风格的总结文案。
 
@@ -53,11 +62,11 @@ function buildUserPromptContent(options: BuildPromptOptions): string {
 - 不要解释标签来源
 
 【用户标签】：
-- 活跃度：${tags.activity_level}
-- 提交节奏：${tags.commit_style}
-- 时间习惯：${tags.time_pattern}
-- 技术侧重：${tags.tech_focus}
-- 项目模式：${tags.repo_pattern}`
+- ${categoryNames.activityLevel}：${tags.activity_level}
+- ${categoryNames.commitStyle}：${tags.commit_style}
+- ${categoryNames.timePattern}：${tags.time_pattern}
+- ${categoryNames.techFocus}：${tags.tech_focus}
+- ${categoryNames.repoPattern}：${tags.repo_pattern}`
 
   if (highlights) {
     const highlightLines: string[] = []
@@ -96,12 +105,12 @@ ${highlightLines.join('\n')}
 
 严格按照以下 Markdown 结构输出：
 
-第一部分：年度概览  
+第一部分：年度概览
 - 使用 1 个自然段
 - 像是在快速翻完这一年 commit 后的第一反应
 - 不使用标题，仅用普通段落
 
-第二部分：标签解读（核心部分）  
+第二部分：标签解读（核心部分）
 - 使用 Markdown 四级标题（####）
 - 每个标签一个独立分节
 - 标题格式为：#### 标签名：一句带情绪或态度的总结
@@ -110,23 +119,22 @@ ${highlightLines.join('\n')}
 - 禁止将多个标签合并在同一段落中
 
 必须包含以下 5 个分节，且「标签名」必须原样保留：
-- 活跃度
-- 提交节奏
-- 时间习惯
-- 技术侧重
-- 项目模式
+- ${categoryNames.activityLevel}
+- ${categoryNames.commitStyle}
+- ${categoryNames.timePattern}
+- ${categoryNames.techFocus}
+- ${categoryNames.repoPattern}
 
-第三部分：高光时刻  
+第三部分：高光时刻
 - 使用普通段落
 - 选取 2–3 个最有代表性的高光数据
 - 写“当时可能发生了什么”，而不是罗列数字
 
-第四部分：趋势洞察  
+第四部分：趋势洞察
 - 使用普通段落
 - 提炼 1–2 个有趣、像人类观察的行为或时间模式
 - 可以略带调侃，但不要上价值
-
-第五部分：收尾点评  
+第五部分：收尾点评
 - 使用普通段落
 - 像一句意味深长的年末备注
 - 克制、有余味

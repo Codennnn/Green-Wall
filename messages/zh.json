@@ -288,6 +288,13 @@
     "signInBenefitsFooter": "我们只读取你的贡献数据，不会修改你的仓库。"
   },
   "yearlyTags": {
+    "categoryNames": {
+      "activityLevel": "活跃度",
+      "commitStyle": "提交节奏",
+      "timePattern": "时间习惯",
+      "techFocus": "技术侧重",
+      "repoPattern": "项目模式"
+    },
     "activityLevel": {
       "low": "摸鱼选手",
       "medium": "正常打工人",

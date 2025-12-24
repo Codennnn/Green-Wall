@@ -288,6 +288,13 @@
     "signInBenefitsFooter": "We only read your contribution data. We can’t modify your repositories."
   },
   "yearlyTags": {
+    "categoryNames": {
+      "activityLevel": "Activity Level",
+      "commitStyle": "Commit Style",
+      "timePattern": "Time Pattern",
+      "techFocus": "Tech Focus",
+      "repoPattern": "Repo Pattern"
+    },
     "activityLevel": {
       "low": "Slack Master",
       "medium": "Regular Grinder",
