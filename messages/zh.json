@@ -128,7 +128,8 @@
     "issuesIn": "{year} 年你碰过的 Issues",
     "downloadYearlyReport": "下载我的年度回顾",
     "unitContributions": "次贡献",
-    "unitDays": "天"
+    "unitDays": "天",
+    "removeRepo": "移除仓库"
   },
   "aiReport": {
     "title": "AI 年度总结",

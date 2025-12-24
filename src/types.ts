@@ -146,9 +146,6 @@ export const IssuesInYearSchema = object({
   issues: array(IssueInfoSchema),
 })
 
-/**
- * 用户在某年度对单个仓库的交互统计
- */
 export const RepoInteractionSchema = object({
   /** 仓库名（含 owner，如 "owner/repo"） */
   nameWithOwner: string(),
@@ -167,12 +164,14 @@ export const RepoInteractionSchema = object({
     reviews: number(),
     issues: number(),
   }),
-  /** 综合交互评分（log 压缩加权） */
+  /** 综合影响力评分（基于 star、fork 和交互活动的 log 压缩加权） */
   score: number(),
 })
 
 /**
- * 用户在某年度的交互仓库列表
+ * 用户在某年度有交互活动的自有仓库列表
+ *
+ * 说明：仅包含用户自己创建的仓库中，在指定年份有过交互活动的仓库
  */
 export const RepoInteractionsInYearSchema = object({
   count: number(),

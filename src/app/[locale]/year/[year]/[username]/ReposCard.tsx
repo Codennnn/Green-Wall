@@ -12,6 +12,11 @@ import {
 import { ScrollArea } from '~/components/ui/scroll-area'
 import { Skeleton } from '~/components/ui/skeleton'
 import { Tabs, TabsList, TabsTab } from '~/components/ui/tabs'
+import {
+  Tooltip,
+  TooltipPopup,
+  TooltipTrigger,
+} from '~/components/ui/tooltip'
 import { ReposCardMode } from '~/enums'
 import { numberWithCommas } from '~/helpers'
 import { cn } from '~/lib/utils'
@@ -63,6 +68,8 @@ function RepoItem(props: RepoItemProps) {
     onRemove,
   } = props
 
+  const t = useTranslations('stats')
+
   const handleRemove = (ev: React.MouseEvent<HTMLButtonElement>) => {
     ev.stopPropagation()
     ev.preventDefault()
@@ -87,15 +94,24 @@ function RepoItem(props: RepoItemProps) {
           <div className="shrink-0 flex items-center gap-1 text-muted-foreground/90 text-xs tabular-nums">
             {showRemove && (
               <div className="relative hidden group-hover:block min-w-6">
-                <Button
-                  className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-muted-foreground bg-background hover:bg-muted"
-                  size="icon-xs"
-                  type="button"
-                  variant="ghost"
-                  onClick={handleRemove}
-                >
-                  <XIcon />
-                </Button>
+                <Tooltip>
+                  <TooltipTrigger
+                    render={(
+                      <Button
+                        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-muted-foreground bg-background hover:bg-muted"
+                        size="icon-xs"
+                        type="button"
+                        variant="ghost"
+                        onClick={handleRemove}
+                      >
+                        <XIcon />
+                      </Button>
+                    )}
+                  />
+                  <TooltipPopup side="top">
+                    {t('removeRepo')}
+                  </TooltipPopup>
+                </Tooltip>
               </div>
             )}
 
@@ -132,9 +148,11 @@ export interface ReposCardProps {
   icon: React.ReactNode
   title: string
   mode: ReposCardMode
+  /** 用户在指定年份创建的仓库列表 */
   createdRepos: RepoInfo[]
   createdLoading: boolean
   createdError: Error | null
+  /** 用户自有仓库中在指定年份有交互活动的仓库列表 */
   interactionRepos: RepoInteraction[]
   interactionLoading: boolean
   interactionError: Error | null

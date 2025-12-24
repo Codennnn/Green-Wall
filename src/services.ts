@@ -552,13 +552,12 @@ interface ContributionsCollectionResponse {
 }
 
 /**
- * 获取用户在指定年份对各仓库的交互贡献统计
+ * 获取用户在指定年份有交互活动的自有仓库列表
  *
- * 基于 GitHub GraphQL contributionsCollection API，按仓库聚合以下维度：
- * - commitContributionsByRepository
- * - pullRequestContributionsByRepository
- * - pullRequestReviewContributionsByRepository
- * - issueContributionsByRepository
+ * 功能说明：
+ * - 获取用户历年来创建的所有仓库中，在指定年份有过交互活动的仓库
+ * - 只包含用户自己创建的仓库（通过 nameWithOwner 匹配用户名）
+ * - 按影响力评分排序（基于 star、fork 和交互活动的综合评分）
  */
 export async function fetchRepoInteractionsInYear(
   params: FetchRepoInteractionsInYearParams,
@@ -732,7 +731,14 @@ export async function fetchRepoInteractionsInYear(
     })
   }
 
-  repos.sort((a, b) => {
+  // 只保留用户自己创建的仓库（在指定年份有交互活动的自有仓库）
+  const filteredRepos = repos.filter((repo) => {
+    const owner = repo.nameWithOwner.split('/')[0]
+
+    return owner.toLowerCase() === username.toLowerCase()
+  })
+
+  filteredRepos.sort((a, b) => {
     if (b.score !== a.score) {
       return b.score - a.score
     }
@@ -751,5 +757,5 @@ export async function fetchRepoInteractionsInYear(
     return a.nameWithOwner.localeCompare(b.nameWithOwner)
   })
 
-  return { count: repos.length, repos }
+  return { count: filteredRepos.length, repos: filteredRepos }
 }

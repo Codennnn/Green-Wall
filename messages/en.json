@@ -128,7 +128,8 @@
     "issuesIn": "Issues you touched in {year}",
     "downloadYearlyReport": "Download My Year in Review",
     "unitContributions": "contributions",
-    "unitDays": "days"
+    "unitDays": "days",
+    "removeRepo": "Remove repository"
   },
   "aiReport": {
     "title": "AI Year in Review",
