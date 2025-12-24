@@ -4,12 +4,23 @@
 
 _Take a snapshot 📸 of your GitHub contributions, then share it!_
 
-**Green Wall** is a powerful web tool that simplifies the way you review your GitHub :octocat: contributions over time. This tool allows you to generate an image of your contributions, which you can save and share with others.
+**Green Wall** is a powerful web tool that simplifies the way you review your GitHub :octocat: contributions over time. This tool allows you to generate beautiful contribution images and get AI-powered yearly reports, which you can save and share with others.
 
-[![Screenshot](./screenshot.webp)](https://green-wall.leoku.dev/)
+|                                 Contribution Wall                                 |                                   Yearly Report                                   |
+| :-------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------: |
+| [![Screenshot 1](https://i.imgur.com/nMZPjuS.png)](https://green-wall.leoku.dev/) | [![Screenshot 2](https://i.imgur.com/kx7wF27.png)](https://green-wall.leoku.dev/) |
+|            Generate and view contribution graphs across multiple years            |                  AI-powered yearly review with detailed insights                  |
+
+## Features
+
+**Contribution Wall**  
+Generate and visualize your GitHub contribution graphs across multiple years. Track your coding journey with beautiful, shareable images. Customize themes, sizes, and styles to make your contributions stand out.
+
+**Yearly Report**  
+Get an AI-powered yearly review of your GitHub contributions. Receive detailed insights and summaries about your coding activity throughout the year, including key statistics and highlights from your development journey.
 
 > **Demo availability (Netlify Free plan)**  
-> The public demo may be **temporarily unavailable** when the Netlify Free plan monthly quota is exhausted (bandwidth / requests / functions). If you hit this, it’s not your fault—please use **self-deploy** (recommended: Vercel one-click) to keep using the service.
+> The public demo may be **temporarily unavailable** when the Netlify Free plan monthly quota is exhausted. If you hit this, it’s not your fault—please use **self-deploy** (recommended: Vercel one-click) to keep using the service.
 
 ## How it works
 
