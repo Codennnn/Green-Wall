@@ -55,10 +55,14 @@ export const auth = betterAuth({
 
   // Session 配置
   session: {
+    // Session 过期时间（30 天）
+    expiresIn: 60 * 60 * 24 * 30,
+    // Session 更新周期（7 天）：每次用户访问时，如果距离上次更新超过 7 天，则延长 session 有效期
+    updateAge: 60 * 60 * 24 * 7,
     // 启用 cookie 缓存以优化性能
     cookieCache: {
       enabled: true,
-      maxAge: 5 * 60, // 5 分钟
+      maxAge: 5 * 60, // 5 分钟（仅用于服务器端缓存优化）
       strategy: 'jwt',
     },
   },
