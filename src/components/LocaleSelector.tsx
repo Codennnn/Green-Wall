@@ -12,7 +12,7 @@ import {
   MenuTrigger,
 } from '~/components/ui/menu'
 import { usePathname, useRouter } from '~/i18n/navigation'
-import { type Locale, routing } from '~/i18n/routing'
+import { getLocaleNativeName, type Locale, routing } from '~/i18n/routing'
 
 export function LocaleSelector() {
   const locale = useLocale() as Locale
@@ -21,14 +21,9 @@ export function LocaleSelector() {
   const t = useTranslations('locale')
 
   const locales = routing.locales.map((loc) => {
-    const NATIVE_NAMES: Record<Locale, string> = {
-      en: 'English',
-      zh: '简体中文',
-    }
-
     return {
       value: loc,
-      label: `${t(loc)}${loc !== locale ? ` (${NATIVE_NAMES[loc]})` : ''}`,
+      label: `${t(loc)}${loc !== locale ? ` (${getLocaleNativeName(loc)})` : ''}`,
     }
   })
 
@@ -50,7 +45,10 @@ export function LocaleSelector() {
       />
 
       <MenuPopup>
-        <MenuRadioGroup value={locale} onValueChange={handleLocaleChange}>
+        <MenuRadioGroup
+          value={locale}
+          onValueChange={handleLocaleChange}
+        >
           {locales.map((loc) => (
             <MenuRadioItem
               key={loc.value}

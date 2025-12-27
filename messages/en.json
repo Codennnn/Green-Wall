@@ -213,7 +213,9 @@
   },
   "locale": {
     "en": "English",
-    "zh": "Chinese"
+    "zh": "Simplified Chinese",
+    "zh-tw": "Traditional Chinese",
+    "ja": "Japanese"
   },
   "weekdays": {
     "sun": "Sun",
@@ -312,7 +314,7 @@
       "weekdayHeavy": "Weekday Sneaker",
       "weekendHeavy": "Weekend Warrior",
       "balanced": "Time Management Pro",
-      "specificDay": "Feeling It Today"
+      "specificDay": "Fixed Day Fighter"
     },
     "repoPattern": {
       "fewQuality": "Quality Over Quantity",

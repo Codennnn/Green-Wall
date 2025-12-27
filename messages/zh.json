@@ -213,7 +213,9 @@
   },
   "locale": {
     "en": "英语",
-    "zh": "简体中文"
+    "zh": "简体中文",
+    "zh-tw": "繁体中文",
+    "ja": "日语"
   },
   "weekdays": {
     "sun": "日",
@@ -312,7 +314,7 @@
       "weekdayHeavy": "上班偷偷卷",
       "weekendHeavy": "周末不休息",
       "balanced": "时间管理学大师",
-      "specificDay": "今天心情好"
+      "specificDay": "某天特别卷"
     },
     "repoPattern": {
       "fewQuality": "宁缺毋滥型",

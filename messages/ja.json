@@ -91,8 +91,8 @@
     "recentDescription": "前回の続きから",
     "lastViewed": "最終表示 {time}",
     "famousUsers": {
-      "torvalds": "Linux/Git 作成者",
-      "gaearon": "React コア、Redux",
+      "torvalds": "Linux・Git 生みの親",
+      "gaearon": "React コアチーム、Redux",
       "tj": "Express、Koa 作者",
       "sindresorhus": "1000+ npm パッケージ",
       "yyx990803": "Vue.js 作成者",
@@ -106,7 +106,7 @@
     "averagePerDay": "1日あたりの平均",
     "mostActiveDay": "最も忙しい曜日",
     "mostActiveMonth": "ピーク月",
-    "longestStreak": "最長コーディング連続記録",
+    "longestStreak": "最長連続コーディング",
     "longestGap": "最長休止期間",
     "repos": "{year} 年のリポジトリ",
     "reposCreated": "{year} 年に開始した新しいリポジトリ",
@@ -166,7 +166,7 @@
     "save": "保存",
     "cancel": "キャンセル",
     "resetToDefault": "デフォルトにリセット",
-    "securityWarning": "API キーはブラウザのローカルストレージに保存されます。制限付きまたは取り消し可能なキーの使用を推奨し、公開デバイスでの保存は避けてください。"
+    "securityWarning": "API キーはブラウザのローカルストレージに保存されます。権限制限付きまたは失効可能なキーのご使用を推奨し、公共のデバイスでの保存は避けてください。"
   },
   "errors": {
     "somethingWentWrong": "問題が発生しました。",
@@ -213,7 +213,8 @@
   },
   "locale": {
     "en": "英語",
-    "zh": "中国語",
+    "zh": "中国語（簡体字）",
+    "zh-tw": "中国語（繁体字）",
     "ja": "日本語"
   },
   "weekdays": {
@@ -305,7 +306,7 @@
     },
     "commitStyle": {
       "consistent": "毎日継続",
-      "intermittent": "気分屋",
+      "intermittent": "気分乗りがち",
       "sprint": "締め切り駆け込み派",
       "steadyVaried": "安定と刺激"
     },
@@ -313,7 +314,7 @@
       "weekdayHeavy": "平日集中型",
       "weekendHeavy": "週末集中型",
       "balanced": "バランス重視",
-      "specificDay": "一点集中型"
+      "specificDay": "不定期集中型"
     },
     "repoPattern": {
       "fewQuality": "量より質",
@@ -324,7 +325,7 @@
     "techFocus": {
       "unknown": "まだ探索中",
       "specialist": "{language} ハードコアファン",
-      "majorMinor": "{major} メイン、{minor} サイド",
+      "majorMinor": "{major} メイン、{minor} サブ",
       "dual": "{lang1} と {lang2} デュアルスレット",
       "polyglot": "言語コレクター",
       "primarySecondary": "{primary} リード、{secondary} サポート"
