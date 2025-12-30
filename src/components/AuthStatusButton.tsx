@@ -4,7 +4,6 @@ import { useTranslations } from 'next-intl'
 import { CalendarIcon, LogInIcon, LogOutIcon } from 'lucide-react'
 
 import { LoginBenefitsPopoverContent } from '~/components/LoginBenefitsPopoverContent'
-import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar'
 import { Button } from '~/components/ui/button'
 import {
   Menu,
@@ -19,6 +18,7 @@ import {
   PopoverTrigger,
 } from '~/components/ui/popover'
 import { Spinner } from '~/components/ui/spinner'
+import { UserAvatar } from '~/components/UserAvatar'
 import { getCurrentYear } from '~/helpers'
 import { useCurrentPathWithSearch } from '~/hooks/useCurrentPathWithSearch'
 import { eventTracker } from '~/lib/analytics'
@@ -48,8 +48,6 @@ export function AuthStatusButton() {
   if (session?.user) {
     const user = session.user as ExtendedUser
     const displayName = user.name ?? user.login ?? 'User'
-    const avatarUrl = user.image ?? ''
-    const initials = displayName.slice(0, 2).toUpperCase()
 
     const handleSignOut = () => {
       eventTracker.auth.signOut.click()
@@ -73,10 +71,12 @@ export function AuthStatusButton() {
               {...props}
               className="flex items-center rounded-full p-1 bg-foreground/10 overflow-hidden"
             >
-              <Avatar className="size-8">
-                <AvatarImage alt={displayName} src={avatarUrl} />
-                <AvatarFallback>{initials}</AvatarFallback>
-              </Avatar>
+              <UserAvatar
+                avatarUrl={user.image}
+                className="size-8"
+                login={user.login}
+                name={user.name}
+              />
             </button>
           )}
         />

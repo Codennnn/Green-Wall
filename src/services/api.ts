@@ -5,6 +5,7 @@ import type {
   GitHubUsername,
   GraphData,
   IssuesInYear,
+  RepoAnalysisResponse,
   RepoCreatedInYear,
   RepoInteractionsInYear,
   ResponseData,
@@ -139,6 +140,40 @@ export async function fetchRepoInteractionsInYear(
 }
 
 /**
+ * 获取单个仓库的深度分析数据
+ */
+export async function fetchRepoAnalysis(
+  owner: string,
+  repo: string,
+  metrics?: ('basic' | 'health' | 'techstack')[],
+): Promise<RepoAnalysisResponse> {
+  const endpoint = `/api/repo/${owner}/${repo}`
+
+  try {
+    const params: Record<string, string> = {}
+
+    if (metrics && metrics.length > 0) {
+      params.includeMetrics = metrics.join(',')
+    }
+
+    return await apiClient.get<RepoAnalysisResponse>(endpoint, {
+      params,
+    })
+  }
+  catch (error) {
+    if (error instanceof ApiError) {
+      eventTracker.api.error(
+        endpoint,
+        error.status,
+        error.errorType,
+      )
+    }
+
+    throw error
+  }
+}
+
+/**
  * 查询键工厂 - 用于生成一致的查询键
  */
 export const queryKeys = {
@@ -169,6 +204,10 @@ export const queryKeys = {
   // 仓库交互相关
   repoInteractions: (username: GitHubUsername, year: ContributionYear) =>
     ['repoInteractions', username, year] as const,
+
+  // 单仓库深度分析相关
+  repoAnalysis: (owner: string, repo: string, metrics?: string[]) =>
+    ['repoAnalysis', owner, repo, ...(metrics ? [{ metrics }] : [])] as const,
 
   // 用户所有数据（用于组合查询）
   userData: (username: GitHubUsername, year?: ContributionYear) =>

@@ -1,7 +1,9 @@
+import type { LinkProps } from 'next/link'
 import { useTranslations } from 'next-intl'
-import { FolderGit2Icon, XIcon } from 'lucide-react'
+import { ChevronRightIcon, FolderGit2Icon, XIcon } from 'lucide-react'
 
 import { InteractionBadges } from '~/components/InteractionBadges'
+import { StaticCard, StaticCardTitle } from '~/components/StaticCard'
 import { Button } from '~/components/ui/button'
 import {
   Empty,
@@ -15,14 +17,14 @@ import { Tabs, TabsList, TabsTab } from '~/components/ui/tabs'
 import {
   Tooltip,
   TooltipPopup,
+  TooltipProvider,
   TooltipTrigger,
 } from '~/components/ui/tooltip'
 import { ReposCardMode } from '~/enums'
 import { numberWithCommas } from '~/helpers'
+import { Link } from '~/i18n/navigation'
 import { cn } from '~/lib/utils'
 import type { RepoInfo, RepoInteraction } from '~/types'
-
-import { StaticCard, StaticCardTitle } from './StaticCard'
 
 function StarIcon() {
   return (
@@ -72,8 +74,15 @@ function RepoItem(props: RepoItemProps) {
 
   const handleRemove = (ev: React.MouseEvent<HTMLButtonElement>) => {
     ev.stopPropagation()
-    ev.preventDefault()
     onRemove?.()
+  }
+
+  const match = /^([^/]+)\/(.+)$/.exec(name)
+  const owner = match?.[1]
+  const repo = match?.[2]
+
+  const handleViewAnalysis: LinkProps['onClick'] = (ev) => {
+    ev.stopPropagation()
   }
 
   const showInteraction = mode === ReposCardMode.Interactions && interaction
@@ -91,37 +100,66 @@ function RepoItem(props: RepoItemProps) {
             {name}
           </span>
 
-          <div className="shrink-0 flex items-center gap-1 text-muted-foreground/90 text-xs tabular-nums">
-            {showRemove && (
+          <TooltipProvider>
+            <div className="shrink-0 flex items-center gap-1 text-muted-foreground/90 text-xs tabular-nums">
               <div className="relative hidden group-hover:block min-w-6">
                 <Tooltip>
                   <TooltipTrigger
                     render={(
                       <Button
                         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-muted-foreground bg-background hover:bg-muted"
+                        render={(
+                          <Link
+                            href={`/repo/${owner}/${repo}`}
+                            target="_blank"
+                            onClick={handleViewAnalysis}
+                          >
+                            <ChevronRightIcon />
+                          </Link>
+                        )}
                         size="icon-xs"
                         type="button"
                         variant="ghost"
-                        onClick={handleRemove}
-                      >
-                        <XIcon />
-                      </Button>
+                      />
                     )}
                   />
                   <TooltipPopup side="top">
-                    {t('removeRepo')}
+                    {t('viewRepoAnalysis')}
                   </TooltipPopup>
                 </Tooltip>
               </div>
-            )}
 
-            {typeof stargazerCount === 'number' && stargazerCount > 0 && (
-              <div className="flex items-center gap-1">
-                <StarIcon />
-                {numberWithCommas(stargazerCount)}
-              </div>
-            )}
-          </div>
+              {showRemove && (
+                <div className="relative hidden group-hover:block min-w-6">
+                  <Tooltip>
+                    <TooltipTrigger
+                      render={(
+                        <Button
+                          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-muted-foreground bg-background hover:bg-muted"
+                          size="icon-xs"
+                          type="button"
+                          variant="ghost"
+                          onClick={handleRemove}
+                        >
+                          <XIcon />
+                        </Button>
+                      )}
+                    />
+                    <TooltipPopup side="top">
+                      {t('removeRepo')}
+                    </TooltipPopup>
+                  </Tooltip>
+                </div>
+              )}
+            </div>
+          </TooltipProvider>
+
+          {typeof stargazerCount === 'number' && stargazerCount > 0 && (
+            <div className="flex items-center gap-1">
+              <StarIcon />
+              {numberWithCommas(stargazerCount)}
+            </div>
+          )}
         </div>
 
         {showInteraction && (

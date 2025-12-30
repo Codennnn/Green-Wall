@@ -11,10 +11,15 @@ import type {
   GitHubUsername,
   IssueInfo,
   IssuesInYear,
+  RepoAnalysis,
+  RepoBasicMetrics,
   RepoCreatedInYear,
+  RepoHealthMetrics,
   RepoInfo,
   RepoInteraction,
   RepoInteractionsInYear,
+  RepoOwnerInfo,
+  RepoTechStackMetrics,
 } from '~/types'
 
 /**
@@ -758,4 +763,418 @@ export async function fetchRepoInteractionsInYear(
   })
 
   return { count: filteredRepos.length, repos: filteredRepos }
+}
+
+interface FetchRepoAnalysisParams {
+  owner: string
+  repo: string
+  /** 要获取的指标类别 */
+  metrics?: ('basic' | 'health' | 'techstack')[]
+}
+
+/**
+ * GitHub GraphQL API 返回的仓库数据结构
+ */
+interface GitHubRepositoryResponse {
+  nameWithOwner: string
+  url: string
+  description: string | null
+  stargazerCount: number
+  forkCount: number
+  pushedAt: string
+  createdAt: string
+  updatedAt: string
+  isArchived: boolean
+  isPrivate: boolean
+  isFork: boolean
+  isDisabled: boolean
+  defaultBranchRef: {
+    name: string
+    target?: {
+      history?: {
+        totalCount: number
+      }
+    } | null
+  } | null
+  issues: {
+    totalCount: number
+  }
+  openIssues?: {
+    totalCount: number
+  }
+  closedIssues?: {
+    totalCount: number
+  }
+  pullRequests?: {
+    totalCount: number
+  }
+  openPullRequests?: {
+    totalCount: number
+  }
+  mergedPullRequests?: {
+    totalCount: number
+  }
+  closedPullRequests?: {
+    totalCount: number
+  }
+  languages?: {
+    totalSize: number
+    edges: {
+      size: number
+      node: {
+        name: string
+      }
+    }[]
+  }
+  licenseInfo?: {
+    spdxId: string | null
+    name: string | null
+    url: string | null
+  } | null
+  releases?: {
+    totalCount: number
+  }
+  latestRelease?: {
+    tagName: string
+    publishedAt: string
+    url: string
+  } | null
+  repositoryTopics?: {
+    nodes: {
+      topic: {
+        name: string
+      }
+    }[]
+  }
+  diskUsage?: number | null
+  owner?: {
+    login: string
+    __typename: string
+    avatarUrl: string
+    url: string
+  } & (
+    | {
+      __typename: 'User'
+      name: string | null
+      bio: string | null
+      createdAt: string
+      followers: {
+        totalCount: number
+      }
+      following: {
+        totalCount: number
+      }
+      repositories: {
+        totalCount: number
+      }
+    }
+    | {
+      __typename: 'Organization'
+      name: string | null
+      description: string | null
+      createdAt: string
+      membersWithRole: {
+        totalCount: number
+      }
+      repositories: {
+        totalCount: number
+      }
+    }
+  )
+}
+
+/**
+ * 获取单个仓库的深度分析数据
+ *
+ * 功能说明：
+ * - 按需获取仓库的核心指标、健康度指标和技术栈指标
+ * - 通过 metrics 参数控制返回的数据类型
+ * - 默认返回 basic 和 health 指标
+ */
+export async function fetchRepoAnalysis(
+  params: FetchRepoAnalysisParams,
+  options?: ServiceOptions,
+): Promise<RepoAnalysis> {
+  const { owner, repo, metrics = ['basic', 'health'] } = params
+  const token = getAccessToken(options)
+
+  const includeHealth = metrics.includes('health')
+  const includeTechStack = metrics.includes('techstack')
+
+  const query = `
+    query {
+      repository(owner: "${owner}", name: "${repo}") {
+        nameWithOwner
+        url
+        description
+        stargazerCount
+        forkCount
+        pushedAt
+        createdAt
+        updatedAt
+        isArchived
+        isPrivate
+        isFork
+        isDisabled
+
+        defaultBranchRef {
+          name
+          target {
+            ... on Commit {
+              history {
+                totalCount
+              }
+            }
+          }
+        }
+
+        issues {
+          totalCount
+        }
+
+        ${includeHealth
+          ? `
+          openIssues: issues(states: OPEN) {
+            totalCount
+          }
+          closedIssues: issues(states: CLOSED) {
+            totalCount
+          }
+
+          pullRequests {
+            totalCount
+          }
+          openPullRequests: pullRequests(states: OPEN) {
+            totalCount
+          }
+          mergedPullRequests: pullRequests(states: MERGED) {
+            totalCount
+          }
+          closedPullRequests: pullRequests(states: CLOSED) {
+            totalCount
+          }
+        `
+          : ''}
+
+        ${includeTechStack
+          ? `
+          languages(first: 100, orderBy: {field: SIZE, direction: DESC}) {
+            totalSize
+            edges {
+              size
+              node {
+                name
+              }
+            }
+          }
+
+          licenseInfo {
+            spdxId
+            name
+            url
+          }
+
+          releases {
+            totalCount
+          }
+          latestRelease {
+            tagName
+            publishedAt
+            url
+          }
+
+          repositoryTopics(first: 20) {
+            nodes {
+              topic {
+                name
+              }
+            }
+          }
+
+          diskUsage
+        `
+          : ''}
+
+        owner {
+          login
+          __typename
+          avatarUrl
+          url
+          ... on User {
+            name
+            bio
+            createdAt
+            followers {
+              totalCount
+            }
+            following {
+              totalCount
+            }
+            repositories(privacy: PUBLIC) {
+              totalCount
+            }
+          }
+          ... on Organization {
+            name
+            description
+            createdAt
+            membersWithRole {
+              totalCount
+            }
+            repositories(privacy: PUBLIC) {
+              totalCount
+            }
+          }
+        }
+      }
+    }
+  `
+
+  const res = await fetch(GQL_API_URL, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ query }),
+  })
+
+  if (!res.ok) {
+    throw new Error(`fetch error: ${res.statusText}.`)
+  }
+
+  const resJson = await res.json() as GitHubApiJson<{ repository: GitHubRepositoryResponse | null }>
+
+  if (resJson.errors) {
+    const error = resJson.errors.at(0)
+
+    if (error) {
+      throw new Error(error.message)
+    }
+
+    throw new Error(resJson.message ?? 'Failed to fetch repository analysis')
+  }
+
+  const repository = resJson.data?.repository
+
+  if (!repository) {
+    throw new Error('Repository not found')
+  }
+
+  // 转换核心指标
+  const basic: RepoBasicMetrics = {
+    nameWithOwner: repository.nameWithOwner,
+    url: repository.url,
+    description: repository.description ?? null,
+    stargazerCount: repository.stargazerCount,
+    forkCount: repository.forkCount,
+    commitCount: repository.defaultBranchRef?.target?.history?.totalCount ?? 0,
+    issueCount: repository.issues.totalCount,
+    pushedAt: repository.pushedAt,
+    createdAt: repository.createdAt,
+    updatedAt: repository.updatedAt,
+    defaultBranchName: repository.defaultBranchRef?.name ?? null,
+    status: {
+      isArchived: repository.isArchived,
+      isPrivate: repository.isPrivate,
+      isFork: repository.isFork,
+      isDisabled: repository.isDisabled,
+    },
+  }
+
+  // 转换健康度指标
+  let health: RepoHealthMetrics | null = null
+
+  if (includeHealth) {
+    const openIssues = repository.openIssues?.totalCount ?? 0
+    const closedIssues = repository.closedIssues?.totalCount ?? 0
+    const totalIssues = repository.issues.totalCount
+
+    const openPRs = repository.openPullRequests?.totalCount ?? 0
+    const mergedPRs = repository.mergedPullRequests?.totalCount ?? 0
+    const closedPRs = repository.closedPullRequests?.totalCount ?? 0
+    const totalPRs = repository.pullRequests?.totalCount ?? 0
+
+    health = {
+      issues: {
+        total: totalIssues,
+        open: openIssues,
+        closed: closedIssues,
+        openRatio: totalIssues > 0 ? openIssues / totalIssues : 0,
+      },
+      pullRequests: {
+        total: totalPRs,
+        open: openPRs,
+        merged: mergedPRs,
+        closed: closedPRs,
+        mergedRatio: totalPRs > 0 ? mergedPRs / totalPRs : 0,
+      },
+    }
+  }
+
+  // 转换技术栈指标
+  let techStack: RepoTechStackMetrics | null = null
+
+  if (includeTechStack) {
+    const languages = repository.languages?.edges ?? []
+    const totalSize = repository.languages?.totalSize ?? 0
+
+    techStack = {
+      languages: {
+        totalSize,
+        items: languages.map((edge) => ({
+          name: edge.node.name,
+          size: edge.size,
+          percentage: totalSize > 0 ? (edge.size / totalSize) * 100 : 0,
+        })),
+      },
+      license: repository.licenseInfo
+        ? {
+            spdxId: repository.licenseInfo.spdxId,
+            name: repository.licenseInfo.name,
+            url: repository.licenseInfo.url,
+          }
+        : null,
+      releases: {
+        totalCount: repository.releases?.totalCount ?? 0,
+        latest: repository.latestRelease
+          ? {
+              tagName: repository.latestRelease.tagName,
+              publishedAt: repository.latestRelease.publishedAt,
+              url: repository.latestRelease.url,
+            }
+          : null,
+      },
+      topics: repository.repositoryTopics?.nodes.map((node) => node.topic.name) ?? [],
+      diskUsage: repository.diskUsage ?? null,
+    }
+  }
+
+  // 转换 owner 信息
+  let ownerInfo: RepoOwnerInfo | null = null
+
+  if (repository.owner) {
+    const ownerData = repository.owner
+    const isUser = ownerData.__typename === 'User'
+
+    ownerInfo = {
+      login: ownerData.login,
+      name: ownerData.name,
+      avatarUrl: ownerData.avatarUrl,
+      bio: isUser ? ownerData.bio : ownerData.description,
+      url: ownerData.url,
+      followers: isUser ? ownerData.followers.totalCount : ownerData.membersWithRole.totalCount,
+      following: isUser ? ownerData.following.totalCount : 0,
+      repositories: ownerData.repositories.totalCount,
+      createdAt: ownerData.createdAt,
+      type: isUser ? 'User' : 'Organization',
+    }
+  }
+
+  return {
+    basic,
+    health,
+    techStack,
+    owner: ownerInfo,
+  }
 }

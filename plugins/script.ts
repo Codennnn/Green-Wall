@@ -450,6 +450,7 @@ const handler = () => {
     retryBtn.classList.add('btn')
     retryBtn.textContent = 'Retry'
     retryBtn.addEventListener('click', () => {
+      // eslint-disable-next-line @typescript-eslint/no-use-before-define
       handleLoadData()
     })
 

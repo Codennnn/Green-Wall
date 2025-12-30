@@ -17,6 +17,7 @@ import {
 
 import { ContributionsGraph } from '~/components/ContributionsGraph/ContributionsGraph'
 import type { GraphHighlightMode, GraphHighlightOptions } from '~/components/ContributionsGraph/graphHighlightUtils'
+import { StatCard, StatValue } from '~/components/StaticCard'
 import { Button } from '~/components/ui/button'
 import { Skeleton } from '~/components/ui/skeleton'
 import { useData } from '~/DataContext'
@@ -43,7 +44,6 @@ import { WeeklyCommitChart } from './charts/WeeklyCommitChart'
 import { AiYearlyReportCard } from './AiYearlyReportCard'
 import { ReposCard } from './ReposCard'
 import { StatCardWithPopover } from './StatCardWithPopover'
-import { StatCard, StatValue } from './StaticCard'
 import { TopLanguagesCard } from './TopLanguagesCard'
 
 const STAT_CARD_ICON_SIZE = 'size-5'

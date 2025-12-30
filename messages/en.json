@@ -16,7 +16,10 @@
     "aboutOgDescription": "Learn how Green Wall helps you visualize and share your GitHub contributions.",
     "yearTitle": "{username}'s {year} GitHub Wrapped · Green Wall",
     "yearOgTitle": "{username}'s {year} GitHub Wrapped",
-    "yearOgDescription": "Explore {username}'s GitHub activity and contribution statistics for {year}."
+    "yearOgDescription": "Explore {username}'s GitHub activity and contribution statistics for {year}.",
+    "repoTitle": "{owner}/{repo} Repository Analysis · Green Wall",
+    "repoDescription": "Explore comprehensive metrics, health insights, and technical stack of {owner}/{repo}.",
+    "repoOgTitle": "{owner}/{repo} Repository Analysis"
   },
   "common": {
     "appName": "Green Wall",
@@ -129,7 +132,8 @@
     "downloadYearlyReport": "Download My Year in Review",
     "unitContributions": "contributions",
     "unitDays": "days",
-    "removeRepo": "Remove repository"
+    "removeRepo": "Remove repository",
+    "viewRepoAnalysis": "View Details"
   },
   "aiReport": {
     "title": "AI Year in Review",
@@ -330,5 +334,89 @@
       "polyglot": "Language Collector",
       "primarySecondary": "{primary} Lead, {secondary} Support"
     }
+  },
+  "repo": {
+    "analysis": {
+      "title": "Repository Deep Analysis",
+      "error": "Failed to load repository data",
+      "coreMetrics": {
+        "title": "Core Metrics",
+        "stars": "Stars",
+        "forks": "Forks",
+        "commits": "Commits",
+        "issues": "Issues"
+      },
+      "healthMetrics": {
+        "title": "Health Analysis",
+        "issueStatus": "Issue Status",
+        "prStatus": "PR Status",
+        "openRatio": "Open Ratio",
+        "mergedRatio": "Merged Ratio"
+      },
+      "status": {
+        "archived": "Archived",
+        "private": "Private",
+        "fork": "Fork",
+        "disabled": "Disabled"
+      },
+      "lastPush": "Last Push",
+      "createdAt": "Created",
+      "defaultBranch": "Default Branch",
+      "noDescription": "No description",
+      "techStack": {
+        "title": "Tech Stack Analysis",
+        "languages": "Language Distribution",
+        "license": "License",
+        "releases": "Releases",
+        "latestRelease": "Latest Release",
+        "totalReleases": "Total Releases",
+        "releaseCount": "{count} releases",
+        "topics": "Topics",
+        "diskUsage": "Repository Size",
+        "noLicense": "No license",
+        "noReleases": "No releases yet",
+        "noTopics": "No topics",
+        "noLanguages": "No language data",
+        "publishedAt": "Published",
+        "viewRelease": "View Release"
+      },
+      "owner": {
+        "title": "Owner Information",
+        "followers": "Followers",
+        "following": "Following",
+        "members": "Members",
+        "repositories": "Repositories",
+        "joined": "Joined"
+      }
+    }
+  },
+  "repoAnalysis": {
+    "title": "Repository Analysis",
+    "totalRepos": "Total Repositories",
+    "sortBy": "Sort by",
+    "sortOptions": {
+      "healthScore": "Health Score",
+      "engagement": "Engagement",
+      "stars": "Stars",
+      "updated": "Last Updated",
+      "created": "Created"
+    },
+    "error": "Error",
+    "retry": "Retry",
+    "emptyState": {
+      "title": "No repositories found",
+      "description": "This user doesn't have any repositories to analyze."
+    },
+    "forks": "Forks",
+    "healthScore": "Health Score",
+    "engagementScore": "Engagement Score",
+    "lastUpdated": "Last Updated",
+    "today": "Today",
+    "daysAgo": "{days} days ago",
+    "statsOverview": "Statistics Overview",
+    "totalStars": "Total Stars",
+    "totalForks": "Total Forks",
+    "avgHealthScore": "Avg Health Score",
+    "avgEngagementScore": "Avg Engagement Score"
   }
 }

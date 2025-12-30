@@ -4,9 +4,8 @@ import type { ReactNode } from 'react'
 
 import { useTranslations } from 'next-intl'
 
+import { SpinningLoader, StaticCard, StaticCardTitle } from '~/components/StaticCard'
 import { cn } from '~/lib/utils'
-
-import { SpinningLoader, StaticCard, StaticCardTitle } from '../StaticCard'
 
 export interface ChartCardProps {
   /** 卡片图标 */

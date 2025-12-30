@@ -16,7 +16,10 @@
     "aboutOgDescription": "了解 Green Wall 如何幫助你視覺化和分享你的 GitHub 貢獻。",
     "yearTitle": "{username} 的 {year} 年度報告 · Green Wall",
     "yearOgTitle": "{username} 的 {year} 年度報告",
-    "yearOgDescription": "探索 {username} 在 {year} 年的 GitHub 活動和貢獻統計。"
+    "yearOgDescription": "探索 {username} 在 {year} 年的 GitHub 活動和貢獻統計。",
+    "repoTitle": "{owner}/{repo} 儲存庫深度分析 · Green Wall",
+    "repoDescription": "探索 {owner}/{repo} 的全面指標、健康度洞察與技術棧分析。",
+    "repoOgTitle": "{owner}/{repo} 儲存庫深度分析"
   },
   "common": {
     "appName": "Green Wall",
@@ -129,7 +132,8 @@
     "downloadYearlyReport": "下載我的年度回顧",
     "unitContributions": "次貢獻",
     "unitDays": "天",
-    "removeRepo": "移除儲存庫"
+    "removeRepo": "移除儲存庫",
+    "viewRepoAnalysis": "查看詳情"
   },
   "aiReport": {
     "title": "AI 年度總結",
@@ -330,5 +334,89 @@
       "polyglot": "語言收集癖",
       "primarySecondary": "{primary} 扛霸子，{secondary} 打輔助"
     }
+  },
+  "repo": {
+    "analysis": {
+      "title": "儲存庫深度分析",
+      "error": "載入儲存庫資料失敗",
+      "coreMetrics": {
+        "title": "核心指標",
+        "stars": "星標",
+        "forks": "派生",
+        "commits": "提交",
+        "issues": "問題"
+      },
+      "healthMetrics": {
+        "title": "健康度分析",
+        "issueStatus": "Issue 狀態",
+        "prStatus": "PR 狀態",
+        "openRatio": "Open 佔比",
+        "mergedRatio": "Merged 佔比"
+      },
+      "status": {
+        "archived": "已封存",
+        "private": "私有",
+        "fork": "Fork",
+        "disabled": "已停用"
+      },
+      "lastPush": "最近推送",
+      "createdAt": "建立於",
+      "defaultBranch": "預設分支",
+      "noDescription": "暫無描述",
+      "techStack": {
+        "title": "技術棧分析",
+        "languages": "語言分佈",
+        "license": "授權條款",
+        "releases": "版本發佈",
+        "latestRelease": "最新版本",
+        "totalReleases": "總發佈數",
+        "releaseCount": "{count} 個版本",
+        "topics": "專案標籤",
+        "diskUsage": "儲存庫大小",
+        "noLicense": "無授權條款",
+        "noReleases": "暫無發佈版本",
+        "noTopics": "暫無標籤",
+        "noLanguages": "暫無語言資料",
+        "publishedAt": "發佈於",
+        "viewRelease": "檢視 Release"
+      },
+      "owner": {
+        "title": "擁有者資訊",
+        "followers": "關注者",
+        "following": "正在關注",
+        "members": "成員",
+        "repositories": "儲存庫",
+        "joined": "加入時間"
+      }
+    }
+  },
+  "repoAnalysis": {
+    "title": "儲存庫分析",
+    "totalRepos": "儲存庫總數",
+    "sortBy": "排序方式",
+    "sortOptions": {
+      "healthScore": "健康度評分",
+      "engagement": "參與度",
+      "stars": "星標數",
+      "updated": "最近更新",
+      "created": "建立時間"
+    },
+    "error": "錯誤",
+    "retry": "重試",
+    "emptyState": {
+      "title": "未找到儲存庫",
+      "description": "該使用者沒有任何可分析的儲存庫。"
+    },
+    "forks": "派生",
+    "healthScore": "健康度評分",
+    "engagementScore": "參與度評分",
+    "lastUpdated": "最近更新",
+    "today": "今天",
+    "daysAgo": "{days} 天前",
+    "statsOverview": "統計概覽",
+    "totalStars": "總星標數",
+    "totalForks": "總派生數",
+    "avgHealthScore": "平均健康度",
+    "avgEngagementScore": "平均參與度"
   }
 }

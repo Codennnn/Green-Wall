@@ -16,7 +16,10 @@
     "aboutOgDescription": "Green Wall が GitHub 貢献を可視化・共有する方法を学ぶ。",
     "yearTitle": "{username} の {year} 年 GitHub ラップド · Green Wall",
     "yearOgTitle": "{username} の {year} 年 GitHub ラップド",
-    "yearOgDescription": "{username} の {year} 年の GitHub アクティビティと貢献統計を探索。"
+    "yearOgDescription": "{username} の {year} 年の GitHub アクティビティと貢献統計を探索。",
+    "repoTitle": "{owner}/{repo} リポジトリ詳細分析 · Green Wall",
+    "repoDescription": "{owner}/{repo} の包括的なメトリクス、ヘルスインサイト、技術スタックを探索。",
+    "repoOgTitle": "{owner}/{repo} リポジトリ詳細分析"
   },
   "common": {
     "appName": "Green Wall",
@@ -129,7 +132,8 @@
     "downloadYearlyReport": "年間レビューをダウンロード",
     "unitContributions": "貢献",
     "unitDays": "日",
-    "removeRepo": "リポジトリを削除"
+    "removeRepo": "リポジトリを削除",
+    "viewRepoAnalysis": "詳細"
   },
   "aiReport": {
     "title": "AI 年間レビュー",
@@ -330,5 +334,89 @@
       "polyglot": "言語コレクター",
       "primarySecondary": "{primary} リード、{secondary} サポート"
     }
+  },
+  "repo": {
+    "analysis": {
+      "title": "リポジトリ詳細分析",
+      "error": "リポジトリデータの読み込みに失敗しました",
+      "coreMetrics": {
+        "title": "コアメトリクス",
+        "stars": "スター",
+        "forks": "フォーク",
+        "commits": "コミット",
+        "issues": "Issue"
+      },
+      "healthMetrics": {
+        "title": "ヘルス分析",
+        "issueStatus": "Issue ステータス",
+        "prStatus": "PR ステータス",
+        "openRatio": "Open 比率",
+        "mergedRatio": "Merged 比率"
+      },
+      "status": {
+        "archived": "アーカイブ済み",
+        "private": "プライベート",
+        "fork": "フォーク",
+        "disabled": "無効"
+      },
+      "lastPush": "最終プッシュ",
+      "createdAt": "作成日",
+      "defaultBranch": "デフォルトブランチ",
+      "noDescription": "説明なし",
+      "techStack": {
+        "title": "技術スタック分析",
+        "languages": "言語分布",
+        "license": "ライセンス",
+        "releases": "リリース",
+        "latestRelease": "最新リリース",
+        "totalReleases": "総リリース数",
+        "releaseCount": "{count} リリース",
+        "topics": "トピック",
+        "diskUsage": "リポジトリサイズ",
+        "noLicense": "ライセンスなし",
+        "noReleases": "リリースなし",
+        "noTopics": "トピックなし",
+        "noLanguages": "言語データなし",
+        "publishedAt": "公開日",
+        "viewRelease": "リリースを表示"
+      },
+      "owner": {
+        "title": "オーナー情報",
+        "followers": "フォロワー",
+        "following": "フォロー中",
+        "members": "メンバー",
+        "repositories": "リポジトリ",
+        "joined": "参加日"
+      }
+    }
+  },
+  "repoAnalysis": {
+    "title": "リポジトリ分析",
+    "totalRepos": "リポジトリ総数",
+    "sortBy": "並び替え",
+    "sortOptions": {
+      "healthScore": "ヘルススコア",
+      "engagement": "エンゲージメント",
+      "stars": "スター数",
+      "updated": "最終更新",
+      "created": "作成日"
+    },
+    "error": "エラー",
+    "retry": "再試行",
+    "emptyState": {
+      "title": "リポジトリが見つかりません",
+      "description": "このユーザーには分析可能なリポジトリがありません。"
+    },
+    "forks": "フォーク",
+    "healthScore": "ヘルススコア",
+    "engagementScore": "エンゲージメントスコア",
+    "lastUpdated": "最終更新",
+    "today": "今日",
+    "daysAgo": "{days} 日前",
+    "statsOverview": "統計概要",
+    "totalStars": "スター総数",
+    "totalForks": "フォーク総数",
+    "avgHealthScore": "平均ヘルススコア",
+    "avgEngagementScore": "平均エンゲージメントスコア"
   }
 }

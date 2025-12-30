@@ -76,6 +76,14 @@ function normalizeApiEndpointForAnalytics(endpoint: string): {
     )
     endpointName = 'contribution'
   }
+  else if (normalizedEndpoint.startsWith('/api/repo/')) {
+    // 避免把 owner/repo 上报到分析系统（高敏 + 高基数）
+    normalizedEndpoint = normalizedEndpoint.replace(
+      /^\/api\/repo\/[^/]+\/[^/?#]+/,
+      '/api/repo/:owner/:repo',
+    )
+    endpointName = 'repo_analysis'
+  }
   else if (normalizedEndpoint === '/api/repos') {
     endpointName = 'repos'
   }
@@ -285,21 +293,6 @@ export const eventTracker = {
     },
   },
 
-  analytics: {
-    view: (chartType: 'monthly' | 'weekly' | 'languages' | 'yearly', year?: number) => {
-      trackEvent('analytics.view', {
-        chart_type: chartType,
-        year: year,
-      })
-    },
-    interaction: (chartType: string, interactionType: 'hover' | 'click' | 'scroll') => {
-      trackEvent('analytics.interaction', {
-        chart_type: chartType,
-        interaction_type: interactionType,
-      })
-    },
-  },
-
   discovery: {
     userClick: (userType: 'recent' | 'famous', userCount?: number, position?: number) => {
       trackEvent('discovery.user.click', {
@@ -475,6 +468,23 @@ export const eventTracker = {
         destination,
         source,
       })
+    },
+  },
+
+  repo: {
+    metrics: {
+      load: (metricsType: string[], durationMs: number) => {
+        trackEvent('repo.metrics.load', {
+          metrics_type: metricsType.join(','),
+          duration_ms: durationMs,
+        })
+      },
+      error: (errorType: string, status: number) => {
+        trackEvent('repo.metrics.error', {
+          error_category: errorType,
+          http_status: status,
+        })
+      },
     },
   },
 }

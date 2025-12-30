@@ -2,6 +2,7 @@ import { useTranslations } from 'next-intl'
 import { SquareCodeIcon } from 'lucide-react'
 
 import { LanguageIcon } from '~/components/LanguageIcon'
+import { StatCard, type StatCardProps } from '~/components/StaticCard'
 import { Badge } from '~/components/ui/badge'
 import {
   Empty,
@@ -16,8 +17,6 @@ import {
 } from '~/components/ui/progress'
 import { Skeleton } from '~/components/ui/skeleton'
 import type { TopLanguageItem } from '~/lib/language-stats'
-
-import { StatCard, type StatCardProps } from './StaticCard'
 
 function formatPercent(value: number): string {
   const percent = Math.round(value * 1000) / 10

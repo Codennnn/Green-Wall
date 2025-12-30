@@ -8,6 +8,7 @@ import type { ApiError } from '~/lib/api-client'
 import {
   fetchContributionData,
   fetchIssuesInYear,
+  fetchRepoAnalysis,
   fetchRepoInteractionsInYear,
   fetchReposInYear,
   queryKeys,
@@ -17,6 +18,7 @@ import type {
   GitHubUsername,
   GraphData,
   IssuesInYear,
+  RepoAnalysisResponse,
   RepoCreatedInYear,
   RepoInteractionsInYear,
 } from '~/types'
@@ -146,4 +148,27 @@ export function useUserDataQueries(
       .filter((result) => result.error)
       .map((result) => result.error),
   }
+}
+
+/**
+ * 获取单个仓库的深度分析数据
+ */
+export function useRepoAnalysisQuery(
+  owner: string,
+  repo: string,
+  metrics?: ('basic' | 'health' | 'techstack')[],
+  options?: Omit<
+    UseQueryOptions<RepoAnalysisResponse, ApiError>,
+    'queryKey' | 'queryFn'
+  >,
+) {
+  return useQuery({
+    queryKey: queryKeys.repoAnalysis(owner, repo, metrics),
+    queryFn: () => fetchRepoAnalysis(owner, repo, metrics),
+    enabled: !!owner && !!repo,
+    staleTime: 1000 * 60 * 5, // 5 分钟
+    gcTime: 1000 * 60 * 30, // 30 分钟（gcTime 是 cacheTime 的新名称）
+    refetchOnWindowFocus: false,
+    ...options,
+  })
 }

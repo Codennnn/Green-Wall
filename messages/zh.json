@@ -16,7 +16,10 @@
     "aboutOgDescription": "了解 Green Wall 如何帮助你可视化和分享你的 GitHub 贡献。",
     "yearTitle": "{username} 的 {year} 年度报告 · Green Wall",
     "yearOgTitle": "{username} 的 {year} 年度报告",
-    "yearOgDescription": "探索 {username} 在 {year} 年的 GitHub 活动和贡献统计。"
+    "yearOgDescription": "探索 {username} 在 {year} 年的 GitHub 活动和贡献统计。",
+    "repoTitle": "{owner}/{repo} 仓库深度分析 · Green Wall",
+    "repoDescription": "查看 {owner}/{repo} 的全面指标、健康度洞察和技术栈分析。",
+    "repoOgTitle": "{owner}/{repo} 仓库深度分析"
   },
   "common": {
     "appName": "Green Wall",
@@ -129,7 +132,8 @@
     "downloadYearlyReport": "下载我的年度回顾",
     "unitContributions": "次贡献",
     "unitDays": "天",
-    "removeRepo": "移除仓库"
+    "removeRepo": "移除仓库",
+    "viewRepoAnalysis": "查看详情"
   },
   "aiReport": {
     "title": "AI 年度总结",
@@ -330,5 +334,89 @@
       "polyglot": "语言收集癖",
       "primarySecondary": "{primary} 扛把子，{secondary} 打辅助"
     }
+  },
+  "repo": {
+    "analysis": {
+      "title": "仓库深度分析",
+      "error": "加载仓库数据失败",
+      "coreMetrics": {
+        "title": "核心指标",
+        "stars": "星标",
+        "forks": "派生",
+        "commits": "提交",
+        "issues": "问题"
+      },
+      "healthMetrics": {
+        "title": "健康度分析",
+        "issueStatus": "Issue 状态",
+        "prStatus": "PR 状态",
+        "openRatio": "Open 占比",
+        "mergedRatio": "Merged 占比"
+      },
+      "status": {
+        "archived": "已归档",
+        "private": "私有",
+        "fork": "Fork",
+        "disabled": "已禁用"
+      },
+      "lastPush": "最近推送",
+      "createdAt": "创建于",
+      "defaultBranch": "默认分支",
+      "noDescription": "暂无描述",
+      "techStack": {
+        "title": "技术栈分析",
+        "languages": "语言分布",
+        "license": "许可证",
+        "releases": "版本发布",
+        "latestRelease": "最新版本",
+        "totalReleases": "总发布数",
+        "releaseCount": "{count} 个版本",
+        "topics": "项目标签",
+        "diskUsage": "仓库大小",
+        "noLicense": "无许可证",
+        "noReleases": "暂无发布版本",
+        "noTopics": "暂无标签",
+        "noLanguages": "暂无语言数据",
+        "publishedAt": "发布于",
+        "viewRelease": "查看 Release"
+      },
+      "owner": {
+        "title": "拥有者信息",
+        "followers": "关注者",
+        "following": "正在关注",
+        "members": "成员",
+        "repositories": "仓库",
+        "joined": "加入时间"
+      }
+    }
+  },
+  "repoAnalysis": {
+    "title": "仓库分析",
+    "totalRepos": "仓库总数",
+    "sortBy": "排序方式",
+    "sortOptions": {
+      "healthScore": "健康度评分",
+      "engagement": "参与度",
+      "stars": "星标数",
+      "updated": "最近更新",
+      "created": "创建时间"
+    },
+    "error": "错误",
+    "retry": "重试",
+    "emptyState": {
+      "title": "未找到仓库",
+      "description": "该用户没有任何可分析的仓库。"
+    },
+    "forks": "派生",
+    "healthScore": "健康度评分",
+    "engagementScore": "参与度评分",
+    "lastUpdated": "最近更新",
+    "today": "今天",
+    "daysAgo": "{days} 天前",
+    "statsOverview": "统计概览",
+    "totalStars": "总星标数",
+    "totalForks": "总派生数",
+    "avgHealthScore": "平均健康度",
+    "avgEngagementScore": "平均参与度"
   }
 }

@@ -4,10 +4,10 @@ import { useTranslations } from 'next-intl'
 import { RefreshCwIcon, SparklesIcon } from 'lucide-react'
 
 import { Alert, AlertDescription, AlertTitle } from '~/components/ui/alert'
-import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar'
 import { Button } from '~/components/ui/button'
 import { Card, CardPanel } from '~/components/ui/card'
 import { Skeleton } from '~/components/ui/skeleton'
+import { UserAvatar } from '~/components/UserAvatar'
 import { useCurrentPathWithSearch } from '~/hooks/useCurrentPathWithSearch'
 import { eventTracker } from '~/lib/analytics'
 import { authClient } from '~/lib/auth-client'
@@ -41,8 +41,6 @@ export function YearQuickEntryCard({
   }
 
   const displayName = user.name ?? user.login ?? 'User'
-  const avatarUrl = user.image ?? ''
-  const initials = displayName.slice(0, 2).toUpperCase()
   const hasLogin = Boolean(user.login)
 
   const handleReSignIn = () => {
@@ -83,10 +81,12 @@ export function YearQuickEntryCard({
                   )
                 : (
                     <div className="flex items-center gap-4">
-                      <Avatar className="size-12">
-                        <AvatarImage alt={displayName} src={avatarUrl} />
-                        <AvatarFallback>{initials}</AvatarFallback>
-                      </Avatar>
+                      <UserAvatar
+                        avatarUrl={user.image}
+                        className="size-12"
+                        login={user.login}
+                        name={user.name}
+                      />
 
                       <div className="min-w-0 flex-1">
                         <div className="truncate font-medium">{displayName}</div>

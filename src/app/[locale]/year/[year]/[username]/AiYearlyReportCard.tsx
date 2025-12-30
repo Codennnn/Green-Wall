@@ -17,6 +17,7 @@ import {
 
 import { AiConfigDialog } from '~/components/AiConfig/AiConfigDialog'
 import { ProseContainer } from '~/components/ProseContainer'
+import { StatCard } from '~/components/StaticCard'
 import { Alert, AlertDescription } from '~/components/ui/alert'
 import { Button } from '~/components/ui/button'
 import {
@@ -45,8 +46,6 @@ import type {
   YearlyReportHighlights,
   YearlyReportTags,
 } from '~/types/ai-report'
-
-import { StatCard } from './StaticCard'
 
 interface AiYearlyReportCardProps {
   username: string

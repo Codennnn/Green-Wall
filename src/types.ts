@@ -235,3 +235,141 @@ export interface ThemePreset {
   colorBackgroundContainer: string
   levelColors: [level_0: string, level_1: string, level_2: string, level_3: string, level_4: string]
 }
+
+/**
+ * 单仓库深度分析 - 核心指标
+ */
+export interface RepoBasicMetrics {
+  /** 仓库完整名称（owner/name） */
+  nameWithOwner: string
+  /** 仓库 URL */
+  url: string
+  /** 描述 */
+  description: string | null
+  /** 星标数 */
+  stargazerCount: number
+  /** Fork 数 */
+  forkCount: number
+  /** 默认分支提交总数 */
+  commitCount: number
+  /** Issue 总数 */
+  issueCount: number
+  /** 最近推送时间 */
+  pushedAt: string
+  /** 创建时间 */
+  createdAt: string
+  /** 更新时间 */
+  updatedAt: string
+  /** 默认分支名 */
+  defaultBranchName: string | null
+  /** 仓库状态 */
+  status: {
+    isArchived: boolean
+    isPrivate: boolean
+    isFork: boolean
+    isDisabled: boolean
+  }
+}
+
+/**
+ * 健康度指标
+ */
+export interface RepoHealthMetrics {
+  /** Issue 统计 */
+  issues: {
+    total: number
+    open: number
+    closed: number
+    openRatio: number
+  }
+  /** PR 统计 */
+  pullRequests: {
+    total: number
+    open: number
+    merged: number
+    closed: number
+    mergedRatio: number
+  }
+}
+
+/**
+ * 技术栈指标
+ */
+export interface RepoTechStackMetrics {
+  /** 语言分布 */
+  languages: {
+    totalSize: number
+    items: {
+      name: string
+      size: number
+      percentage: number
+    }[]
+  }
+  /** 许可证 */
+  license: {
+    spdxId: string | null
+    name: string | null
+    url: string | null
+  } | null
+  /** Release 信息 */
+  releases: {
+    totalCount: number
+    latest: {
+      tagName: string
+      publishedAt: string
+      url: string
+    } | null
+  }
+  /** Topics */
+  topics: string[]
+  /** 仓库体量（KB） */
+  diskUsage: number | null
+}
+
+/**
+ * 仓库拥有者信息
+ */
+export interface RepoOwnerInfo {
+  /** 用户名 */
+  login: string
+  /** 用户全名 */
+  name: string | null
+  /** 头像 URL */
+  avatarUrl: string
+  /** 用户简介 */
+  bio: string | null
+  /** GitHub 主页 URL */
+  url: string
+  /** 关注者数量 */
+  followers: number
+  /** 正在关注数量 */
+  following: number
+  /** 公开仓库数量 */
+  repositories: number
+  /** 加入 GitHub 时间 */
+  createdAt: string
+  /** 用户类型 */
+  type: 'User' | 'Organization'
+}
+
+/**
+ * 完整的仓库深度分析数据
+ */
+export interface RepoAnalysis {
+  basic: RepoBasicMetrics
+  health: RepoHealthMetrics | null
+  techStack: RepoTechStackMetrics | null
+  owner: RepoOwnerInfo | null
+}
+
+/**
+ * API 响应包装
+ */
+export interface RepoAnalysisResponse {
+  data: RepoAnalysis
+  meta: {
+    mode: DataMode
+    fetchedAt: string
+    metrics: string[]
+  }
+}
