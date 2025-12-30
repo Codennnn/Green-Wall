@@ -1,34 +1,13 @@
-import Link from 'next/link'
-import { getTranslations } from 'next-intl/server'
+'use client'
 
-import { NotFoundPageClient } from './NotFoundPageClient'
+import Error from 'next/error'
 
-export default async function NotFoundPage() {
-  const t = await getTranslations('notFound')
-
+export default function RootNotFoundPage() {
   return (
-    <>
-      <NotFoundPageClient />
-      <div className="px-2 py-12 md:px-20 md:py-24">
-        <h2 className="text-4xl font-semibold md:text-5xl">
-          <span className="text-brand-500">{t('sorry')}</span>
-          {' '}
-          {t('title')}
-        </h2>
-
-        <p className="mt-6 md:mt-9 md:text-lg">
-          {t('description')}
-        </p>
-
-        <p className="mt-6 md:mt-9">
-          {t('backHome')}
-          {' '}
-          <Link className="text-brand-500" href="/">
-            {t('homePage')}
-          </Link>
-          .
-        </p>
-      </div>
-    </>
+    <html lang="en">
+      <body>
+        <Error statusCode={404} />
+      </body>
+    </html>
   )
 }

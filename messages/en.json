@@ -29,7 +29,7 @@
     "close": "Close",
     "preview": "Preview",
     "openSource": "Open Source",
-    "colon": ":"
+    "colon": ": "
   },
   "nav": {
     "home": "Home",
@@ -185,9 +185,9 @@
   },
   "notFound": {
     "sorry": "Sorry,",
-    "title": "this page isn't available.",
+    "title": " this page isn't available.",
     "description": "The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.",
-    "backHome": "Go back to the",
+    "backHome": "Go back to the ",
     "homePage": "home page"
   },
   "about": {

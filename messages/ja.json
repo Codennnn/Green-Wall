@@ -184,11 +184,11 @@
     "failedLoadIssues": "Issues の読み込みに失敗しました。"
   },
   "notFound": {
-    "sorry": "申し訳ありません、",
-    "title": "このページは利用できません。",
+    "sorry": "",
+    "title": "申し訳ありません、このページは利用できません。",
     "description": "探しているページは削除された、名前が変更された、または一時的に利用できない可能性があります。",
-    "backHome": "に戻る",
-    "homePage": "ホームページ"
+    "backHome": "",
+    "homePage": "ホームページに戻る"
   },
   "about": {
     "pageTitle": "Green Wall について",

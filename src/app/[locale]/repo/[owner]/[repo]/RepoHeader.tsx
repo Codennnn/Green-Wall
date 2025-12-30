@@ -62,7 +62,6 @@ export default function RepoHeader({ basic, healthMetrics, topics }: RepoHeaderP
             <Badge variant="outline">
               {t('defaultBranch')}
               {tRoot('common.colon')}
-              {' '}
               {basic.defaultBranchName}
             </Badge>
           )}
@@ -101,11 +100,9 @@ export default function RepoHeader({ basic, healthMetrics, topics }: RepoHeaderP
         <div>
           {t('createdAt')}
           {tRoot('common.colon')}
-          {' '}
           <time dateTime={basic.createdAt}>
             {createdDistance}
           </time>
-          {' '}
           <span className="text-xs">
             ({new Date(basic.createdAt).toLocaleDateString(locale)})
           </span>
@@ -114,7 +111,6 @@ export default function RepoHeader({ basic, healthMetrics, topics }: RepoHeaderP
         <div>
           {t('lastPush')}
           {tRoot('common.colon')}
-          {' '}
           <time dateTime={basic.pushedAt}>
             {lastPushDistance}
           </time>
