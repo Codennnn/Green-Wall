@@ -4,6 +4,7 @@ import Script from 'next/script'
 import { getLocale, getTranslations } from 'next-intl/server'
 
 import { BgDecoration } from '~/components/BgDecoration'
+import { siteConfig } from '~/config/site'
 import { isDevelopment } from '~/helpers'
 import { cn } from '~/lib/utils'
 
@@ -25,7 +26,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations({ locale, namespace: 'metadata' })
 
   return {
-    metadataBase: new URL('https://green-wall.leoku.dev'),
+    metadataBase: new URL(siteConfig.url),
     icons: [{ url: '/favicon.svg', type: 'image/svg+xml', media: '(prefers-color-scheme: light)' }],
     title: t('defaultTitle'),
     description: t('defaultDescription'),
@@ -33,7 +34,7 @@ export async function generateMetadata(): Promise<Metadata> {
       type: 'website',
       title: t('defaultOgTitle'),
       description: t('defaultOgDescription'),
-      url: 'https://green-wall.leoku.dev',
+      url: siteConfig.url,
       images:
         'https://user-images.githubusercontent.com/47730755/188365689-c8bfbccc-01d6-45e7-ae8e-084fbbdce75f.jpg',
     },

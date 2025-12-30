@@ -3,6 +3,7 @@ import { Suspense } from 'react'
 import type { Metadata } from 'next'
 import { getTranslations } from 'next-intl/server'
 
+import { getAbsoluteURL } from '~/config/site'
 import { DataProvider } from '~/DataContext'
 
 import { SharePage } from './SharePage'
@@ -17,8 +18,8 @@ export const generateMetadata = async ({
 
   const sharingTitle = t('shareOgTitle', { username })
   const sharingDescription = t('shareOgDescription')
-  const sharingURL = `https://green-wall.leoku.dev/share/${username}`
-  const image = `https://green-wall.leoku.dev/api/og/share/${username}`
+  const sharingURL = getAbsoluteURL(`/share/${username}`)
+  const image = getAbsoluteURL(`/api/og/share/${username}`)
 
   return {
     title: t('shareTitle', { username }),

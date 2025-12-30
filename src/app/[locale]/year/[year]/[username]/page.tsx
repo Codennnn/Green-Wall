@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
 import { getTranslations } from 'next-intl/server'
 
+import { getAbsoluteURL } from '~/config/site'
+
 import YearPageContent from './YearPageContent'
 
 type GenerateMetadata = (params: {
@@ -14,7 +16,7 @@ export const generateMetadata: GenerateMetadata = async ({ params }): Promise<Me
   const title = t('yearTitle', { username, year })
   const ogTitle = t('yearOgTitle', { username, year })
   const ogDescription = t('yearOgDescription', { username, year })
-  const sharingURL = `https://green-wall.leoku.dev/year/${year}/${username}`
+  const sharingURL = getAbsoluteURL(`/year/${year}/${username}`)
 
   return {
     title,

@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { getTranslations } from 'next-intl/server'
 
 import { TextLink } from '~/components/TextLink'
+import { getAbsoluteURL } from '~/config/site'
 
 type GenerateMetadata = (params: {
   params: Promise<{ locale: string }>
@@ -22,7 +23,7 @@ export const generateMetadata: GenerateMetadata = async ({ params }): Promise<Me
     openGraph: {
       title: ogTitle,
       description: ogDescription,
-      url: 'https://green-wall.leoku.dev/about',
+      url: getAbsoluteURL('/about'),
     },
     twitter: {
       title: ogTitle,

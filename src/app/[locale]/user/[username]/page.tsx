@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { getTranslations } from 'next-intl/server'
 
+import { getAbsoluteURL } from '~/config/site'
 import { DataProvider } from '~/DataContext'
 
 import { UserPage } from './UserPage'
@@ -15,8 +16,8 @@ export const generateMetadata: GenerateMetadata = async ({ params }): Promise<Me
 
   const title = t('userOgTitle', { username })
   const description = t('userOgDescription', { username })
-  const sharingURL = `https://green-wall.leoku.dev/share/${username}`
-  const image = `https://green-wall.leoku.dev/api/og/share/${username}`
+  const sharingURL = getAbsoluteURL(`/share/${username}`)
+  const image = getAbsoluteURL(`/api/og/share/${username}`)
 
   return {
     title: t('userTitle', { username }),
