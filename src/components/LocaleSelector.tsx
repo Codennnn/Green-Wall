@@ -23,7 +23,8 @@ export function LocaleSelector() {
   const locales = routing.locales.map((loc) => {
     return {
       value: loc,
-      label: `${t(loc)}${loc !== locale ? ` (${getLocaleNativeName(loc)})` : ''}`,
+      translatedName: t(loc),
+      nativeName: getLocaleNativeName(loc),
     }
   })
 
@@ -55,7 +56,12 @@ export function LocaleSelector() {
               closeOnClick
               value={loc.value}
             >
-              {loc.label}
+              <div className="flex flex-col">
+                <span>{loc.translatedName}</span>
+                <span className="text-xs text-muted-foreground">
+                  {loc.nativeName}
+                </span>
+              </div>
             </MenuRadioItem>
           ))}
         </MenuRadioGroup>
