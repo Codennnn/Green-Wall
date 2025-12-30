@@ -1,6 +1,6 @@
-中文 | [English](./README.md)
+中文 | [English][readme-en]
 
-# [Green Wall](https://green-wall.leoku.dev/)
+# [Green Wall][site]
 
 _为你的 GitHub 贡献拍张快照 📸，然后分享出去！_
 
@@ -8,23 +8,23 @@ _为你的 GitHub 贡献拍张快照 📸，然后分享出去！_
 
 |                                      贡献墙                                       |                                     年度报告                                      |
 | :-------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------: |
-| [![Screenshot 1](https://i.imgur.com/nMZPjuS.png)](https://green-wall.leoku.dev/) | [![Screenshot 2](https://i.imgur.com/kx7wF27.png)](https://green-wall.leoku.dev/) |
+| [![Screenshot 1][screenshot-wall]][site] | [![Screenshot 2][screenshot-report]][site] |
 |                               生成并查看多年贡献图                                |                          AI 驱动的年度回顾，提供详细洞察                          |
 
 ## 功能特性
 
-**贡献墙**  
+**贡献墙**
 生成并可视化你在 GitHub 多年来的贡献图。用精美的图片记录你的编程历程，随时查看和分享。支持自定义主题、尺寸和样式，让你的贡献墙更加个性化和吸引人。
 
-**年度报告**  
+**年度报告**
 获取 AI 驱动的 GitHub 贡献年度回顾。接收关于你一年编程活动的详细洞察和总结，包括关键统计数据和开发历程中的亮点。
 
-> **演示站点可用性（Netlify Free 计划）**  
+> **演示站点可用性（Netlify Free 计划）**
 > 当 Netlify Free 计划的月度额度用尽时，公开演示站点可能会**暂时不可用**。遇到这种情况不是你的问题——建议使用**自部署**（推荐：Vercel 一键部署）继续使用服务。
 
 ## 工作原理
 
-本项目通过 GitHub GraphQL API 拉取数据，并使用 Next.js API Routes 处理请求。想了解我们如何处理你的数据，可以从[这个文件](./src/app/api/contribution/%5Busername%5D/route.ts)开始阅读。
+本项目通过 GitHub GraphQL API 拉取数据，并使用 Next.js API Routes 处理请求。想了解我们如何处理你的数据，可以从[这个文件][api-route]开始阅读。
 
 ## 使用方法
 
@@ -60,26 +60,26 @@ _为你的 GitHub 贡献拍张快照 📸，然后分享出去！_
 
 ## 部署到 Vercel
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FCodennnn%2FGreen-Wall&project-name=green-wall&repository-name=green-wall&env=GITHUB_ACCESS_TOKEN&envDescription=Required%3A%20GITHUB_ACCESS_TOKEN%20to%20call%20the%20GitHub%20GraphQL%20API.&envLink=https%3A%2F%2Fgithub.com%2FCodennnn%2FGreen-Wall%2Fblob%2Fmain%2F.env.example)
+[![Deploy with Vercel](https://vercel.com/button)][vercel-deploy]
 
 本项目是一个 Next.js 应用，会通过 GitHub GraphQL API 拉取数据。最省心的部署方式是使用 Vercel（Next.js 背后的平台）。
 
-> **当演示站点不可用时**  
+> **当演示站点不可用时**
 > 使用 Vercel 一键部署通常是恢复可用性的最快方式。你会得到一个稳定的专属访问地址，并绕开公开演示站点在免费额度上的限制。
 
-> **国内网络提示**  
+> **国内网络提示**
 > 在部分网络环境下，访问 GitHub / Vercel 可能会不稳定：如果你遇到授权登录失败、拉取仓库/依赖超时等问题，建议切换网络或配置代理后再重试部署流程。
 
 ### 分步操作
 
-1. **点击 “Deploy with Vercel”**
+1. **点击 "Deploy with Vercel"**
 
    - 登录 Vercel，并在提示时授权 GitHub。
    - （推荐）如果你准备做二次定制，请先 Fork 本仓库，再从自己的 Fork 进行部署。
 
 2. **获取 GitHub Personal Access Token（PAT）**
 
-   - 参考 GitHub 官方文档创建 Token：[Creating a personal access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token)
+   - 参考 GitHub 官方文档创建 Token：[Creating a personal access token][github-pat]
    - Token 类型：
      - **Fine-grained token**：权限控制更细，推荐（按你的需求选择最小必要权限）。
      - **Classic token**：同样可用。
@@ -88,13 +88,13 @@ _为你的 GitHub 贡献拍张快照 📸，然后分享出去！_
    - **不要把 Token 提交到仓库**。请像密码一样妥善保管。
 
 3. **在 Vercel 配置环境变量**
-   - 在导入时（或之后通过 **Project → Settings → Environment Variables**），设置以下变量（完整说明见 [`.env.example`](./.env.example)）：
+   - 在导入时（或之后通过 **Project → Settings → Environment Variables**），设置以下变量（完整说明见 [`.env.example`][env-example]）：
 
 | 变量                  | 必填 | 说明                                              | 推荐值                           |
 | --------------------- | ---- | ------------------------------------------------- | -------------------------------- |
 | `GITHUB_ACCESS_TOKEN` | 是   | 服务端调用 GitHub GraphQL API 所需的 GitHub Token | 你的 PAT                         |
 | `AI_BASE_URL`         | 否   | OpenAI-compatible API 的 Base URL                 | e.g. `https://api.openai.com/v1` |
-| `AI_API_KEY`          | 否\* | AI 服务的 API Key                                 | Provider key                     |
+| `AI_API_KEY`          | 否\\* | AI 服务的 API Key                                 | Provider key                     |
 | `AI_MODEL`            | 否   | 该 AI 服务支持的模型名称                          | e.g. `gpt-4o-mini`               |
 
 > 说明：AI 相关变量仅用于 **AI 年度总结** 功能（`/api/ai/yearly-report`）。如果你设置了 `AI_API_KEY`，也请确保 `AI_BASE_URL` 与 `AI_MODEL` 配置正确可用。
@@ -114,15 +114,15 @@ _为你的 GitHub 贡献拍张快照 📸，然后分享出去！_
 
 ## Tampermonkey
 
-我们还提供了一个 [Tampermonkey script](https://greasyfork.org/en/scripts/492478-greenwall-view-all-contribution-graphs-in-github)，让你可以在任意人的 GitHub 个人主页上查看「贡献墙」。脚本会在 GitHub 个人主页增加一个按钮，点击后会显示该用户多年贡献图的聚合视图。
+我们还提供了一个 [Tampermonkey script][greasyfork]，让你可以在任意人的 GitHub 个人主页上查看「贡献墙」。脚本会在 GitHub 个人主页增加一个按钮，点击后会显示该用户多年贡献图的聚合视图。
 
-脚本源码位于 [`/plugins/script.ts`](./plugins/script.ts)。
+脚本源码位于 [`/plugins/script.ts`][tampermonkey-script]。
 
-https://github.com/user-attachments/assets/694a5653-348b-4bec-9736-21e777e3ede8
+[demo-video]
 
 ## 本地运行
 
-本项目会使用 [GitHub API](https://docs.github.com/en/graphql) 拉取数据，因此你需要一个用于鉴权的 personal access token。获取方式请参考「[Creating a personal access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token)」。
+本项目会使用 [GitHub API][github-api] 拉取数据，因此你需要一个用于鉴权的 personal access token。获取方式请参考「[Creating a personal access token][github-pat]」。
 
 拿到 token 后，在项目根目录新建 `.env.local` 文件，并按如下格式写入：
 
@@ -136,3 +136,19 @@ GITHUB_ACCESS_TOKEN="ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 ```
 
 随后运行 `pnpm dev` 即可开始本地开发。
+
+<!-- Link References -->
+[site]: https://green-wall.leoku.dev/
+[repo]: https://github.com/Codennnn/Green-Wall
+[readme-zh]: ./README.zh.md
+[readme-en]: ./README.md
+[env-example]: ./.env.example
+[api-route]: ./src/app/api/contribution/[username]/route.ts
+[tampermonkey-script]: ./plugins/script.ts
+[greasyfork]: https://greasyfork.org/en/scripts/492478-greenwall-view-all-contribution-graphs-in-github
+[github-pat]: https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token
+[github-api]: https://docs.github.com/en/graphql
+[screenshot-wall]: https://i.imgur.com/nMZPjuS.png
+[screenshot-report]: https://i.imgur.com/kx7wF27.png
+[demo-video]: https://github.com/user-attachments/assets/694a5653-348b-4bec-9736-21e777e3ede8
+[vercel-deploy]: https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FCodennnn%2FGreen-Wall&project-name=green-wall&repository-name=green-wall&env=GITHUB_ACCESS_TOKEN&envDescription=Required%3A%20GITHUB_ACCESS_TOKEN%20to%20call%20the%20GitHub%20GraphQL%20API.&envLink=https%3A%2F%2Fgithub.com%2FCodennnn%2FGreen-Wall%2Fblob%2Fmain%2F.env.example
