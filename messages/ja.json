@@ -418,5 +418,13 @@
     "totalForks": "フォーク総数",
     "avgHealthScore": "平均ヘルススコア",
     "avgEngagementScore": "平均エンゲージメントスコア"
+  },
+  "relativeTime": {
+    "today": "今日",
+    "yesterday": "昨日",
+    "daysAgo": "{count} 日前",
+    "weeksAgo": "{count} 週間前",
+    "monthsAgo": "{count} ヶ月前",
+    "yearsAgo": "{count} 年前"
   }
 }

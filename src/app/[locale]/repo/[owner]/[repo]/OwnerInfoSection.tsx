@@ -6,40 +6,19 @@ import { AtSignIcon, BuildingIcon, CalendarIcon, DotIcon, GitForkIcon, UsersIcon
 import { StaticCard } from '~/components/StaticCard'
 import { TextLink } from '~/components/TextLink'
 import { UserAvatar } from '~/components/UserAvatar'
+import { getRelativeTime } from '~/helpers'
 import type { RepoOwnerInfo } from '~/types'
 
 interface OwnerInfoSectionProps {
   owner: RepoOwnerInfo
 }
 
-/**
- * 格式化日期为相对时间
- */
-function getRelativeTime(dateString: string, locale: string): string {
-  const date = new Date(dateString)
-  const now = new Date()
-  const diffMs = now.getTime() - date.getTime()
-  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24))
-  const diffYears = Math.floor(diffDays / 365)
-
-  if (diffYears > 0) {
-    return locale === 'zh' ? `${diffYears} 年前` : `${diffYears} years ago`
-  }
-
-  const diffMonths = Math.floor(diffDays / 30)
-
-  if (diffMonths > 0) {
-    return locale === 'zh' ? `${diffMonths} 个月前` : `${diffMonths} months ago`
-  }
-
-  return locale === 'zh' ? `${diffDays} 天前` : `${diffDays} days ago`
-}
-
 export default function OwnerInfoSection({ owner }: OwnerInfoSectionProps) {
   const t = useTranslations('repo.analysis.owner')
+  const tRoot = useTranslations()
   const locale = t('title').includes('Owner') ? 'en' : 'zh'
 
-  const joinedTime = getRelativeTime(owner.createdAt, locale)
+  const joinedTime = getRelativeTime(owner.createdAt, tRoot)
   const isOrganization = owner.type === 'Organization'
 
   return (

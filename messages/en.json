@@ -418,5 +418,13 @@
     "totalForks": "Total Forks",
     "avgHealthScore": "Avg Health Score",
     "avgEngagementScore": "Avg Engagement Score"
+  },
+  "relativeTime": {
+    "today": "today",
+    "yesterday": "yesterday",
+    "daysAgo": "{count} days ago",
+    "weeksAgo": "{count} weeks ago",
+    "monthsAgo": "{count} months ago",
+    "yearsAgo": "{count} years ago"
   }
 }

@@ -395,3 +395,47 @@ export function normalizeGitHubUsername(input: string): GitHubUsername | null {
 
   return normalized
 }
+
+/**
+ * 计算距今天数并返回相对时间描述
+ * @param dateString - ISO 8601 格式的日期字符串
+ * @param t - next-intl 翻译函数
+ * @returns 相对时间描述，例如："今天"、"3天前"、"2个月前"
+ */
+export function getRelativeTime(
+  dateString: string,
+  t: (key: string, params?: Record<string, string | number | Date>) => string,
+): string {
+  const date = new Date(dateString)
+  const now = new Date()
+  const diffMs = now.getTime() - date.getTime()
+  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24))
+
+  if (diffDays === 0) {
+    return t('relativeTime.today')
+  }
+
+  if (diffDays === 1) {
+    return t('relativeTime.yesterday')
+  }
+
+  if (diffDays < 7) {
+    return t('relativeTime.daysAgo', { count: diffDays })
+  }
+
+  if (diffDays < 30) {
+    const weeks = Math.floor(diffDays / 7)
+
+    return t('relativeTime.weeksAgo', { count: weeks })
+  }
+
+  if (diffDays < 365) {
+    const months = Math.floor(diffDays / 30)
+
+    return t('relativeTime.monthsAgo', { count: months })
+  }
+
+  const years = Math.floor(diffDays / 365)
+
+  return t('relativeTime.yearsAgo', { count: years })
+}

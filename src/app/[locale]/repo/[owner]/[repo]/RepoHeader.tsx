@@ -1,10 +1,17 @@
 'use client'
 
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { FileTextIcon, GitCommitIcon, GitForkIcon, StarIcon } from 'lucide-react'
 
 import { TextLink } from '~/components/TextLink'
 import { Badge } from '~/components/ui/badge'
+import {
+  Tooltip,
+  TooltipPopup,
+  TooltipProvider,
+  TooltipTrigger,
+} from '~/components/ui/tooltip'
+import { getRelativeTime } from '~/helpers'
 import type { RepoBasicMetrics } from '~/types'
 
 interface RepoHeaderProps {
@@ -16,51 +23,13 @@ interface RepoHeaderProps {
   topics?: string[]
 }
 
-/**
- * 计算距今天数
- */
-function getRelativeTime(dateString: string, locale: string): string {
-  const date = new Date(dateString)
-  const now = new Date()
-  const diffMs = now.getTime() - date.getTime()
-  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24))
-
-  if (diffDays === 0) {
-    return locale === 'zh' ? '今天' : 'today'
-  }
-
-  if (diffDays === 1) {
-    return locale === 'zh' ? '昨天' : 'yesterday'
-  }
-
-  if (diffDays < 7) {
-    return locale === 'zh' ? `${diffDays} 天前` : `${diffDays} days ago`
-  }
-
-  if (diffDays < 30) {
-    const weeks = Math.floor(diffDays / 7)
-
-    return locale === 'zh' ? `${weeks} 周前` : `${weeks} weeks ago`
-  }
-
-  if (diffDays < 365) {
-    const months = Math.floor(diffDays / 30)
-
-    return locale === 'zh' ? `${months} 个月前` : `${months} months ago`
-  }
-
-  const years = Math.floor(diffDays / 365)
-
-  return locale === 'zh' ? `${years} 年前` : `${years} years ago`
-}
-
 export default function RepoHeader({ basic, healthMetrics, topics }: RepoHeaderProps) {
   const t = useTranslations('repo.analysis')
-  const locale = t('lastPush').includes('Last') ? 'en' : 'zh'
+  const tRoot = useTranslations()
+  const locale = useLocale()
 
-  // 计算距今天数
-  const lastPushDistance = getRelativeTime(basic.pushedAt, locale)
-  const createdDistance = getRelativeTime(basic.createdAt, locale)
+  const lastPushDistance = getRelativeTime(basic.pushedAt, tRoot)
+  const createdDistance = getRelativeTime(basic.createdAt, tRoot)
 
   return (
     <div className="space-y-4">
@@ -92,7 +61,8 @@ export default function RepoHeader({ basic, healthMetrics, topics }: RepoHeaderP
           {basic.defaultBranchName && (
             <Badge variant="outline">
               {t('defaultBranch')}
-              {': '}
+              {tRoot('common.colon')}
+              {' '}
               {basic.defaultBranchName}
             </Badge>
           )}
@@ -130,19 +100,21 @@ export default function RepoHeader({ basic, healthMetrics, topics }: RepoHeaderP
       <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-fg-muted">
         <div>
           {t('createdAt')}
-          {': '}
+          {tRoot('common.colon')}
+          {' '}
           <time dateTime={basic.createdAt}>
             {createdDistance}
           </time>
           {' '}
           <span className="text-xs">
-            ({new Date(basic.createdAt).toLocaleDateString(locale === 'zh' ? 'zh-CN' : 'en-US')})
+            ({new Date(basic.createdAt).toLocaleDateString(locale)})
           </span>
         </div>
         <span className="text-fg-muted/50">•</span>
         <div>
           {t('lastPush')}
-          {': '}
+          {tRoot('common.colon')}
+          {' '}
           <time dateTime={basic.pushedAt}>
             {lastPushDistance}
           </time>
@@ -150,63 +122,85 @@ export default function RepoHeader({ basic, healthMetrics, topics }: RepoHeaderP
       </div>
 
       {/* 指标概览 - 紧凑展示 */}
-      <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-fg-muted">
-        {/* 星标数 */}
-        <div className="flex items-center gap-1.5">
-          <StarIcon className="size-3.5" />
-          <span>
-            {basic.stargazerCount.toLocaleString()}
-          </span>
+      <TooltipProvider>
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-fg-muted">
+          {/* 星标数 */}
+          <Tooltip>
+            <TooltipTrigger>
+              <div className="flex items-center gap-1.5">
+                <StarIcon className="size-3.5" />
+                <span>
+                  {basic.stargazerCount.toLocaleString()}
+                </span>
+              </div>
+            </TooltipTrigger>
+            <TooltipPopup>Stars</TooltipPopup>
+          </Tooltip>
+
+          {/* Fork 数 */}
+          <Tooltip>
+            <TooltipTrigger>
+              <div className="flex items-center gap-1.5">
+                <GitForkIcon className="size-3.5" />
+                <span>
+                  {basic.forkCount.toLocaleString()}
+                </span>
+              </div>
+            </TooltipTrigger>
+            <TooltipPopup>Forks</TooltipPopup>
+          </Tooltip>
+
+          {/* Commit 数 */}
+          <Tooltip>
+            <TooltipTrigger>
+              <div className="flex items-center gap-1.5">
+                <GitCommitIcon className="size-3.5" />
+                <span>
+                  {basic.commitCount.toLocaleString()}
+                </span>
+              </div>
+            </TooltipTrigger>
+            <TooltipPopup>Commits</TooltipPopup>
+          </Tooltip>
+
+          {/* Issues 总数 */}
+          <Tooltip>
+            <TooltipTrigger>
+              <div className="flex items-center gap-1.5">
+                <FileTextIcon className="size-3.5" />
+                <span>
+                  {basic.issueCount.toLocaleString()}
+                </span>
+              </div>
+            </TooltipTrigger>
+            <TooltipPopup>Issues</TooltipPopup>
+          </Tooltip>
+
+          {/* 健康分数 */}
+          {healthMetrics?.healthScore !== undefined && healthMetrics.healthScore > 0 && (
+            <div className="flex items-center gap-1.5">
+              <span className="text-xs font-medium">
+                {t('healthScore')}
+              </span>
+              <span className="font-medium">
+                {healthMetrics.healthScore.toFixed(1)}
+              </span>
+            </div>
+          )}
+
+          {/* 参与度分数 */}
+          {healthMetrics?.engagementScore !== undefined && healthMetrics.engagementScore > 0 && (
+            <div className="flex items-center gap-1.5">
+              <span className="text-xs font-medium">
+                {t('engagementScore')}
+              </span>
+              <span className="font-medium">
+                {healthMetrics.engagementScore.toFixed(1)}
+              </span>
+            </div>
+          )}
         </div>
-
-        {/* Fork 数 */}
-        <div className="flex items-center gap-1.5">
-          <GitForkIcon className="size-3.5" />
-          <span>
-            {basic.forkCount.toLocaleString()}
-          </span>
-        </div>
-
-        {/* Commit 数 */}
-        <div className="flex items-center gap-1.5">
-          <GitCommitIcon className="size-3.5" />
-          <span>
-            {basic.commitCount.toLocaleString()}
-          </span>
-        </div>
-
-        {/* Issues 总数 */}
-        <div className="flex items-center gap-1.5">
-          <FileTextIcon className="size-3.5" />
-          <span>
-            {basic.issueCount.toLocaleString()}
-          </span>
-        </div>
-
-        {/* 健康分数 */}
-        {healthMetrics?.healthScore !== undefined && healthMetrics.healthScore > 0 && (
-          <div className="flex items-center gap-1.5">
-            <span className="text-xs font-medium">
-              {t('healthScore')}
-            </span>
-            <span className="font-medium">
-              {healthMetrics.healthScore.toFixed(1)}
-            </span>
-          </div>
-        )}
-
-        {/* 参与度分数 */}
-        {healthMetrics?.engagementScore !== undefined && healthMetrics.engagementScore > 0 && (
-          <div className="flex items-center gap-1.5">
-            <span className="text-xs font-medium">
-              {t('engagementScore')}
-            </span>
-            <span className="font-medium">
-              {healthMetrics.engagementScore.toFixed(1)}
-            </span>
-          </div>
-        )}
-      </div>
+      </TooltipProvider>
     </div>
   )
 }

@@ -418,5 +418,13 @@
     "totalForks": "總派生數",
     "avgHealthScore": "平均健康度",
     "avgEngagementScore": "平均參與度"
+  },
+  "relativeTime": {
+    "today": "今天",
+    "yesterday": "昨天",
+    "daysAgo": "{count} 天前",
+    "weeksAgo": "{count} 週前",
+    "monthsAgo": "{count} 個月前",
+    "yearsAgo": "{count} 年前"
   }
 }

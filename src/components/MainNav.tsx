@@ -56,8 +56,8 @@ export function MainNav({ locale, className }: MainNavProps) {
               'relative rounded-md px-2 py-1 text-sm font-medium transition-colors',
               'hover:bg-muted',
               item.isActive
-                ? 'text-current bg-muted'
-                : 'text-muted-foreground',
+                ? 'bg-muted'
+                : '',
             )}
             href={item.href}
             onClick={() => {
