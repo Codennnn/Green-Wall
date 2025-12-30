@@ -15,7 +15,8 @@
     "lint:es": "eslint \"**/*.{ts,tsx}\" --fix",
     "lint:ts": "tsc --noEmit --skipLibCheck",
     "start": "next start",
-    "prettier": "prettier --write ./src"
+    "prettier": "prettier --write ./src",
+    "check-i18n": "node scripts/check-i18n.mjs"
   },
   "dependencies": {
     "@ai-sdk/openai-compatible": "^1.0.29",
