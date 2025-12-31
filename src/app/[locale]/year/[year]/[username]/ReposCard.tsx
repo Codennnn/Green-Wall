@@ -1,4 +1,3 @@
-import type { LinkProps } from 'next/link'
 import { useTranslations } from 'next-intl'
 import { ChevronRightIcon, FolderGit2Icon, XIcon } from 'lucide-react'
 
@@ -22,7 +21,6 @@ import {
 } from '~/components/ui/tooltip'
 import { ReposCardMode } from '~/enums'
 import { numberWithCommas } from '~/helpers'
-import { Link } from '~/i18n/navigation'
 import { cn } from '~/lib/utils'
 import type { RepoInfo, RepoInteraction } from '~/types'
 
@@ -78,11 +76,13 @@ function RepoItem(props: RepoItemProps) {
   }
 
   const match = /^([^/]+)\/(.+)$/.exec(name)
-  const owner = match?.[1]
-  const repo = match?.[2]
+  const owner = match?.at(1)
+  const repo = match?.at(2)
 
-  const handleViewAnalysis: LinkProps['onClick'] = (ev) => {
+  const handleViewAnalysis = (ev: React.MouseEvent<HTMLButtonElement>) => {
     ev.stopPropagation()
+
+    window.open(`/repo/${owner}/${repo}`, '_blank')
   }
 
   const showInteraction = mode === ReposCardMode.Interactions && interaction
@@ -108,19 +108,13 @@ function RepoItem(props: RepoItemProps) {
                     render={(
                       <Button
                         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-muted-foreground bg-background hover:bg-muted"
-                        render={(
-                          <Link
-                            href={`/repo/${owner}/${repo}`}
-                            target="_blank"
-                            onClick={handleViewAnalysis}
-                          >
-                            <ChevronRightIcon />
-                          </Link>
-                        )}
                         size="icon-xs"
                         type="button"
                         variant="ghost"
-                      />
+                        onClick={handleViewAnalysis}
+                      >
+                        <ChevronRightIcon />
+                      </Button>
                     )}
                   />
                   <TooltipPopup side="top">
@@ -172,7 +166,7 @@ function RepoItem(props: RepoItemProps) {
           </div>
         )}
 
-        {description && (
+        {!!description && (
           <div className="mt-1 line-clamp-2 text-foreground/70 text-xs">
             {description}
           </div>

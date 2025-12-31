@@ -16,7 +16,6 @@ interface OwnerInfoSectionProps {
 export default function OwnerInfoSection({ owner }: OwnerInfoSectionProps) {
   const t = useTranslations('repo.analysis.owner')
   const tRoot = useTranslations()
-  const locale = t('title').includes('Owner') ? 'en' : 'zh'
 
   const joinedTime = getRelativeTime(owner.createdAt, tRoot)
   const isOrganization = owner.type === 'Organization'
