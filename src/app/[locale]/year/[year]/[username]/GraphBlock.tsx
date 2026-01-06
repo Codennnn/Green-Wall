@@ -19,9 +19,17 @@ import { ContributionsGraph } from '~/components/ContributionsGraph/Contribution
 import type { GraphHighlightMode, GraphHighlightOptions } from '~/components/ContributionsGraph/graphHighlightUtils'
 import { StatCard, StatValue } from '~/components/StaticCard'
 import { Button } from '~/components/ui/button'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '~/components/ui/select'
 import { Skeleton } from '~/components/ui/skeleton'
 import { useData } from '~/DataContext'
 import { ReposCardMode } from '~/enums'
+import { getCurrentYear } from '~/helpers'
 import { useDateFormatters } from '~/hooks/useDateFormatters'
 import { useImageExport } from '~/hooks/useImageExport'
 import { useContributionQuery,
@@ -29,6 +37,7 @@ import { useContributionQuery,
   useRepoInteractionsQuery,
   useReposQuery,
 } from '~/hooks/useQueries'
+import { useRouter } from '~/i18n/navigation'
 import { getTopLanguagesFromRepos } from '~/lib/language-stats'
 import { sortReposByDisplayValue, sortReposByInfluence } from '~/lib/repo-sort'
 import { deriveStatistics } from '~/lib/statistics'
@@ -58,6 +67,27 @@ export function GraphBlock() {
   const tYearlyTags = useTranslations('yearlyTags')
 
   const { setGraphData } = useData()
+
+  const router = useRouter()
+
+  const currentYear = getCurrentYear()
+  const yearOptions = useMemo(() => {
+    const years: number[] = []
+
+    for (let y = currentYear; y >= 2008; y--) {
+      years.push(y)
+    }
+
+    return years
+  }, [currentYear])
+
+  const handleYearChange = useEvent((value: string | null) => {
+    if (value === null || Number(value) === queryYear) {
+      return
+    }
+
+    router.push(`/year/${value}/${githubUsername}`)
+  })
 
   const {
     data: contributionData,
@@ -213,7 +243,25 @@ export function GraphBlock() {
   return (
     <div className="flex flex-col items-center py-5 w-full">
       <div className="flex items-center w-full p-grid-item">
-        <div className="ml-auto flex justify-end ring-4 ring-background bg-background">
+        <div className="ml-auto flex items-center gap-3 ring-4 ring-background bg-background">
+          <Select
+            disabled={isDownloading || isLoading}
+            value={String(queryYear)}
+            onValueChange={handleYearChange}
+          >
+            <SelectTrigger className="h-10 w-[100px] justify-center text-center">
+              <SelectValue className="font-bold text-lg" />
+            </SelectTrigger>
+
+            <SelectContent alignItemWithTrigger={false}>
+              {yearOptions.map((y) => (
+                <SelectItem key={y} value={String(y)}>
+                  {y}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+
           <Button
             disabled={isDownloading || isLoading}
             size="default"
