@@ -292,7 +292,19 @@
     "signInBenefitsItemYearWrapped": "一键打开你的年度回顾与更完整的统计",
     "signInBenefitsItemPrivateContrib": "包含私有仓库贡献（授权模式）",
     "signInBenefitsItemDeeperInsights": "获取更准确的语言 / 仓库 / Issues 数据分析",
-    "signInBenefitsFooter": "我们只读取你的贡献数据，不会修改你的仓库。"
+    "signInBenefitsFooter": "我们只读取你的贡献数据，不会修改你的仓库。",
+    "error": {
+      "title": "登录失败",
+      "defaultMessage": "登录过程中出现问题，请重试。",
+      "networkTimeout": "连接 GitHub 超时，请检查网络后重试。",
+      "networkError": "无法连接到 GitHub，请检查网络连接。",
+      "invalidCode": "授权码已过期或无效，请重新登录。",
+      "accessDenied": "你取消了授权请求。登录后可解锁更多功能。",
+      "serverError": "GitHub 服务暂时不可用，请稍后重试。",
+      "configError": "OAuth 配置错误，请联系管理员。",
+      "retry": "重试",
+      "backHome": "返回首页"
+    }
   },
   "yearlyTags": {
     "categoryNames": {

@@ -112,7 +112,7 @@ export function useContributionSearch({
       let entryPoint: 'url' | 'input_submit' | 'famous_user' | 'recent_user' = 'url'
       let durationMs: number | undefined
 
-      if (context && context.username.toLowerCase() === normalizedLogin.toLowerCase()) {
+      if (context?.username.toLowerCase() === normalizedLogin.toLowerCase()) {
         entryPoint = context.entryPoint
         durationMs = Date.now() - context.startedAt
       }
@@ -140,8 +140,7 @@ export function useContributionSearch({
       )
       const context = searchContextRef.current
       const isAlreadyStarted = Boolean(
-        context
-        && context.username.toLowerCase() === urlUsername.toLowerCase(),
+        context?.username.toLowerCase() === urlUsername.toLowerCase(),
       )
 
       if (!isAlreadyProcessed && !isAlreadyStarted) {

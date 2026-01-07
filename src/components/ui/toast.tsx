@@ -48,7 +48,7 @@ function ToastProvider({
   )
 }
 
-function Toasts({ position = 'bottom-right' }: { position: ToastPosition }) {
+function Toasts({ position }: { position: ToastPosition }) {
   const { toasts } = Toast.useToastManager()
   const isTop = position.startsWith('top')
 

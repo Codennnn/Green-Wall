@@ -292,7 +292,19 @@
     "signInBenefitsItemYearWrapped": "一鍵打開你的年度回顧與更完整的統計",
     "signInBenefitsItemPrivateContrib": "包含私人儲存庫貢獻（授權模式）",
     "signInBenefitsItemDeeperInsights": "取得更準確的語言 / 儲存庫 / Issues 資料分析",
-    "signInBenefitsFooter": "我們只讀取你的貢獻資料，不會修改你的儲存庫。"
+    "signInBenefitsFooter": "我們只讀取你的貢獻資料，不會修改你的儲存庫。",
+    "error": {
+      "title": "登入失敗",
+      "defaultMessage": "登入過程中出現問題，請重試。",
+      "networkTimeout": "連線 GitHub 逾時，請檢查網路後重試。",
+      "networkError": "無法連線到 GitHub，請檢查網路連線。",
+      "invalidCode": "授權碼已過期或無效，請重新登入。",
+      "accessDenied": "你取消了授權請求。登入後可解鎖更多功能。",
+      "serverError": "GitHub 服務暫時不可用，請稍後重試。",
+      "configError": "OAuth 設定錯誤，請聯繫管理員。",
+      "retry": "重試",
+      "backHome": "返回首頁"
+    }
   },
   "yearlyTags": {
     "categoryNames": {

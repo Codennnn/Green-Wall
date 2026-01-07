@@ -292,7 +292,19 @@
     "signInBenefitsItemYearWrapped": "年間ラップドとより深い統計を開く",
     "signInBenefitsItemPrivateContrib": "プライベート貢献を含む（認可モード）",
     "signInBenefitsItemDeeperInsights": "より正確な言語/リポジトリ/Issue インサイトを取得",
-    "signInBenefitsFooter": "貢献データのみを読み取ります。リポジトリを変更することはできません。"
+    "signInBenefitsFooter": "貢献データのみを読み取ります。リポジトリを変更することはできません。",
+    "error": {
+      "title": "サインイン失敗",
+      "defaultMessage": "サインイン中に問題が発生しました。もう一度お試しください。",
+      "networkTimeout": "GitHub への接続がタイムアウトしました。ネットワークを確認して再試行してください。",
+      "networkError": "GitHub に接続できません。ネットワーク接続を確認してください。",
+      "invalidCode": "認証コードの有効期限が切れているか無効です。再度サインインしてください。",
+      "accessDenied": "認証リクエストがキャンセルされました。サインインするとさらに多くの機能を利用できます。",
+      "serverError": "GitHub が一時的に利用できません。しばらくしてから再試行してください。",
+      "configError": "OAuth 設定エラーです。管理者にお問い合わせください。",
+      "retry": "再試行",
+      "backHome": "ホームに戻る"
+    }
   },
   "yearlyTags": {
     "categoryNames": {
