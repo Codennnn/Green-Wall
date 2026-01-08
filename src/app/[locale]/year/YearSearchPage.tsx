@@ -1,20 +1,14 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 
 import { useTranslations } from 'next-intl'
 
 import { GenerateButton } from '~/components/GenerateButton/GenerateButton'
 import { SearchInput } from '~/components/SearchInput'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '~/components/ui/select'
 import { Separator } from '~/components/ui/separator'
 import { useRecentUsers } from '~/components/UserDiscovery/useRecentUsers'
+import { YearSelect } from '~/components/YearSelect/YearSelect'
 import { getCurrentYear, normalizeGitHubUsername } from '~/helpers'
 import { usePersistedSearchInput } from '~/hooks/usePersistedSearchInput'
 import { eventTracker } from '~/lib/analytics'
@@ -28,16 +22,6 @@ export function YearSearchPage() {
   const { data: session, isPending: isSessionPending } = useSession()
 
   const currentYear = getCurrentYear()
-
-  const yearOptions = useMemo(() => {
-    const years: number[] = []
-
-    for (let year = currentYear; year >= 2008; year--) {
-      years.push(year)
-    }
-
-    return years
-  }, [currentYear])
 
   const { value: username, setValue: setUsername } = usePersistedSearchInput()
   const [selectedYear, setSelectedYear] = useState<string>(String(currentYear))
@@ -143,22 +127,13 @@ export function YearSearchPage() {
               onSelectUser={handleSelectUser}
             />
 
-            <Select
+            <YearSelect
               disabled={isNavigating}
+              triggerClassName="h-[2.8rem] w-[120px]"
               value={selectedYear}
+              valueClassName="text-xl"
               onValueChange={handleYearChange}
-            >
-              <SelectTrigger className="h-[2.8rem] w-[120px] justify-center text-center">
-                <SelectValue className="text-xl font-medium" />
-              </SelectTrigger>
-              <SelectContent>
-                {yearOptions.map((year) => (
-                  <SelectItem key={year} value={String(year)}>
-                    {year}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            />
 
             <GenerateButton loading={isNavigating} type="submit">
               {t('viewWrapped')}
