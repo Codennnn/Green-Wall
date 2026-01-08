@@ -133,7 +133,9 @@
     "unitContributions": "contributions",
     "unitDays": "days",
     "removeRepo": "Remove repository",
-    "viewRepoAnalysis": "View Details"
+    "viewRepoAnalysis": "View Details",
+    "longestGapZero": "Zero breaks, 100% commitment",
+    "longestGapFullYear": "Taking a well-deserved break"
   },
   "aiReport": {
     "title": "AI Year in Review",

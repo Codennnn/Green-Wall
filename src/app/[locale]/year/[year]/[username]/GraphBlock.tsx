@@ -447,16 +447,49 @@ export function GraphBlock() {
             onMouseLeave={handleClearHighlight}
           >
             <div className="pt-grid-item-sm p-grid-item">
-              <StatValue
-                large
-                isLoading={!statistics}
-                subValue={formatDateRange(
-                  statistics?.longestGapStartDate,
-                  statistics?.longestGapEndDate,
-                )}
-                unit={t('unitDays')}
-                value={statistics?.longestGap}
-              />
+              {(() => {
+                const isLeapYear
+                  = (queryYear % 4 === 0 && queryYear % 100 !== 0)
+                    || (queryYear % 400 === 0)
+                const daysInYear = isLeapYear ? 366 : 365
+                const longestGap = statistics?.longestGap
+
+                // 全年无间断
+                if (longestGap === 0) {
+                  return (
+                    <StatValue
+                      large
+                      isLoading={!statistics}
+                      value={t('longestGapZero')}
+                    />
+                  )
+                }
+
+                // 整年没有贡献
+                if (longestGap !== undefined && longestGap >= daysInYear) {
+                  return (
+                    <StatValue
+                      large
+                      isLoading={!statistics}
+                      value={t('longestGapFullYear')}
+                    />
+                  )
+                }
+
+                // 正常情况
+                return (
+                  <StatValue
+                    large
+                    isLoading={!statistics}
+                    subValue={formatDateRange(
+                      statistics?.longestGapStartDate,
+                      statistics?.longestGapEndDate,
+                    )}
+                    unit={t('unitDays')}
+                    value={longestGap}
+                  />
+                )
+              })()}
             </div>
           </StatCard>
         </div>

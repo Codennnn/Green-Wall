@@ -133,7 +133,9 @@
     "unitContributions": "貢献",
     "unitDays": "日",
     "removeRepo": "リポジトリを削除",
-    "viewRepoAnalysis": "詳細"
+    "viewRepoAnalysis": "詳細",
+    "longestGapZero": "年間無休、コード三昧",
+    "longestGapFullYear": "長い休暇を取りました"
   },
   "aiReport": {
     "title": "AI 年間レビュー",

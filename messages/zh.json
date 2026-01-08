@@ -133,7 +133,9 @@
     "unitContributions": "次贡献",
     "unitDays": "天",
     "removeRepo": "移除仓库",
-    "viewRepoAnalysis": "查看详情"
+    "viewRepoAnalysis": "查看详情",
+    "longestGapZero": "全年在线，代码不停",
+    "longestGapFullYear": "给自己放了个长假"
   },
   "aiReport": {
     "title": "AI 年度总结",
