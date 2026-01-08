@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useEvent } from 'react-use-event-hook'
 
-import { DEFAULT_LEVEL_COLORS, levels } from '~/constants'
+import { DEFAULT_LEVEL_COLORS, levels, SVG_GRAPH_CONSTANTS } from '~/constants'
 import { useData } from '~/DataContext'
 import { BlockShape, ContributionLevel } from '~/enums'
 import { cn, rgbToHex } from '~/lib/utils'
@@ -11,13 +11,13 @@ import type { ContributionCalendar, ContributionDay } from '~/types'
 
 import styles from './Graph.module.css'
 
-// SVG 坐标常量（使用相对单位）
-const CELL_UNIT = 1 // 每个单元格占 1 个单位
-const BLOCK_RATIO = 0.77 // 方块大小占单元格的比例 (10 / 13 ≈ 0.77)
-
-// 圆角常量（viewBox 单位）
-const ROUND_SQUARE = 0.12 // 方形：小圆角
-const ROUND_CIRCLE = BLOCK_RATIO / 2 // 圆形：半径为宽度的一半
+const {
+  DAYS_IN_WEEK,
+  CELL_UNIT,
+  BLOCK_RATIO,
+  CORNER_RADIUS_SQUARE,
+  CORNER_RADIUS_ROUND,
+} = SVG_GRAPH_CONSTANTS
 
 export interface GraphSvgBlocksProps {
   weeks: ContributionCalendar['weeks']
@@ -42,13 +42,13 @@ export function GraphSvgBlocks({
 
   // 根据 blockShape 设置圆角值（使用 viewBox 单位）
   const blockRadius = settings.blockShape === BlockShape.Round
-    ? ROUND_CIRCLE
-    : ROUND_SQUARE
+    ? CORNER_RADIUS_ROUND
+    : CORNER_RADIUS_SQUARE
 
   // 计算 viewBox 尺寸
   const totalWeeks = weeks.length
   const viewBoxWidth = totalWeeks * CELL_UNIT
-  const viewBoxHeight = 7 * CELL_UNIT
+  const viewBoxHeight = DAYS_IN_WEEK * CELL_UNIT
 
   useEffect(() => {
     if (!svgRef.current) {
@@ -87,9 +87,10 @@ export function GraphSvgBlocks({
     weeks.forEach((week, weekIndex) => {
       let days = week.days
 
-      // 填充不足 7 天的周
-      if (days.length < 7) {
-        const fills = Array.from(Array(7 - days.length)).map<ContributionDay>(
+      // 填充不足一周天数的周（首周在前面填充，末周在后面填充）
+      if (days.length < DAYS_IN_WEEK) {
+        const fillCount = DAYS_IN_WEEK - days.length
+        const fills = Array.from({ length: fillCount }).map<ContributionDay>(
           () => ({
             level: ContributionLevel.Null,
             count: 0,
