@@ -279,7 +279,7 @@ export function GraphBlock() {
                     highlightOptions={highlightOptions}
                     mockupWrapperClassName="p-grid-item"
                     showInspect={false}
-                    titleRender={() => null}
+                    titleRender={null}
                   />
                 )
           }

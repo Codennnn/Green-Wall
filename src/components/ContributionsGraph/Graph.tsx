@@ -21,14 +21,14 @@ export interface GraphProps extends React.ComponentProps<'div'> {
   daysLabel?: boolean
   showInspect?: boolean
   highlightedDates?: Set<string>
-  titleRender?: (params: {
+  titleRender?: ((params: {
     year: number
     total: number
     isNewYear: boolean
-  }) => React.ReactNode | null
+  }) => React.ReactNode) | null
 }
 
-function InnerGraph(props: GraphProps) {
+function GraphComponent(props: GraphProps) {
   const {
     data: calendar,
     daysLabel,
@@ -88,27 +88,35 @@ function InnerGraph(props: GraphProps) {
     },
   )
 
+  const renderTitle = () => {
+    if (titleRender === null) {
+      return null
+    }
+
+    if (typeof titleRender === 'function') {
+      return titleRender({
+        year: calendar.year,
+        total: calendar.total,
+        isNewYear,
+      })
+    }
+
+    return (
+      <div className="text-sm tabular-nums">
+        <span className="mr-2 font-medium">{calendar.year}:</span>
+        <span className="opacity-80">
+          {isNewYear && calendar.total === 0
+            ? t('newYearText')
+            : `${numberWithCommas(calendar.total)} ${t('contributions')}`}
+        </span>
+      </div>
+    )
+  }
+
   return (
     <div {...rest} className={cn('group', rest.className)}>
       <div className="mb-2 flex items-center">
-        {typeof titleRender === 'function'
-          ? (
-              titleRender({
-                year: calendar.year,
-                total: calendar.total,
-                isNewYear,
-              })
-            )
-          : (
-              <div className="text-sm tabular-nums">
-                <span className="mr-2 font-medium">{calendar.year}:</span>
-                <span className="opacity-80">
-                  {isNewYear && calendar.total === 0
-                    ? t('newYearText')
-                    : `${numberWithCommas(calendar.total)} ${t('contributions')}`}
-                </span>
-              </div>
-            )}
+        {renderTitle()}
 
         {showInspect && (
           <Button
@@ -184,34 +192,7 @@ function InnerGraph(props: GraphProps) {
   )
 }
 
-export const Graph = memo(InnerGraph, (prevProps, nextProps) => {
-  if (prevProps === nextProps) {
-    return true
-  }
-
-  if (prevProps.data !== nextProps.data) {
-    return false
-  }
-
-  if (prevProps.daysLabel !== nextProps.daysLabel) {
-    return false
-  }
-
-  if (prevProps.showInspect !== nextProps.showInspect) {
-    return false
-  }
-
-  if (prevProps.className !== nextProps.className) {
-    return false
-  }
-
-  if (prevProps.highlightedDates !== nextProps.highlightedDates) {
-    return false
-  }
-
-  if (prevProps.titleRender !== nextProps.titleRender) {
-    return false
-  }
-
-  return true
-})
+/**
+ * Graph 组件 - 显示单年的 GitHub 贡献热力图
+ */
+export const Graph = memo(GraphComponent)
