@@ -1,4 +1,4 @@
-import { forwardRef, memo, useImperativeHandle, useMemo, useRef } from 'react'
+import { forwardRef, useImperativeHandle, useMemo, useRef } from 'react'
 
 import { MockupSafari } from '~/components/mockup/MockupSafari'
 import { DEFAULT_SIZE, DEFAULT_THEME, sizeProperties, THEME_PRESETS } from '~/constants'
@@ -31,7 +31,10 @@ interface ContributionsGraphProps
   highlightOptions?: GraphHighlightOptions
 }
 
-function InnerContributionsGraph(
+/**
+ * ContributionsGraph - 完整的 GitHub 贡献图组件
+ */
+function ContributionsGraphInner(
   props: ContributionsGraphProps,
   ref: React.Ref<HTMLDivElement | null>,
 ) {
@@ -165,4 +168,4 @@ function InnerContributionsGraph(
   )
 }
 
-export const ContributionsGraph = memo(forwardRef(InnerContributionsGraph))
+export const ContributionsGraph = forwardRef(ContributionsGraphInner)

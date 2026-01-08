@@ -1,4 +1,3 @@
-import { memo } from 'react'
 import { useEvent } from 'react-use-event-hook'
 
 import { THEME_PRESETS } from '~/constants'
@@ -44,7 +43,7 @@ interface ThemeOptionProps {
   onClick: (themeName: Themes) => void
 }
 
-const ThemeOption = memo(function ThemeOption({ theme, isSelected, onClick }: ThemeOptionProps) {
+function ThemeOption({ theme, isSelected, onClick }: ThemeOptionProps) {
   const themeProperties = getThemeProperties(theme)
 
   const handleClick = useEvent(() => {
@@ -77,9 +76,9 @@ const ThemeOption = memo(function ThemeOption({ theme, isSelected, onClick }: Th
       </div>
     </div>
   )
-})
+}
 
-export const ThemeSelector = memo(function ThemeSelector(props: ThemeSelectorProps) {
+export function ThemeSelector(props: ThemeSelectorProps) {
   const { value, onChange, className, ...rest } = props
 
   const handleThemeClick = useEvent(
@@ -108,4 +107,4 @@ export const ThemeSelector = memo(function ThemeSelector(props: ThemeSelectorPro
       ))}
     </div>
   )
-})
+}

@@ -1,4 +1,4 @@
-import { memo, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useEvent } from 'react-use-event-hook'
 
 import Link from 'next/link'
@@ -28,7 +28,10 @@ export interface GraphProps extends React.ComponentProps<'div'> {
   }) => React.ReactNode) | null
 }
 
-function GraphComponent(props: GraphProps) {
+/**
+ * Graph 组件 - 显示单年的 GitHub 贡献热力图
+ */
+export function Graph(props: GraphProps) {
   const {
     data: calendar,
     daysLabel,
@@ -191,8 +194,3 @@ function GraphComponent(props: GraphProps) {
     </div>
   )
 }
-
-/**
- * Graph 组件 - 显示单年的 GitHub 贡献热力图
- */
-export const Graph = memo(GraphComponent)

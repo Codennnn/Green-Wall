@@ -1,12 +1,12 @@
 'use client'
 
-import { memo, useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useEvent } from 'react-use-event-hook'
 
 import { DEFAULT_LEVEL_COLORS, levels } from '~/constants'
 import { useData } from '~/DataContext'
 import { BlockShape, ContributionLevel } from '~/enums'
-import { cn } from '~/lib/utils'
+import { cn, rgbToHex } from '~/lib/utils'
 import type { ContributionCalendar, ContributionDay } from '~/types'
 
 import styles from './Graph.module.css'
@@ -19,32 +19,16 @@ const BLOCK_RATIO = 0.77 // 方块大小占单元格的比例 (10 / 13 ≈ 0.77)
 const ROUND_SQUARE = 0.12 // 方形：小圆角
 const ROUND_CIRCLE = BLOCK_RATIO / 2 // 圆形：半径为宽度的一半
 
-/**
- * 将 rgb(r, g, b) 格式的颜色转换为 #rrggbb 格式
- * 这是必需的，因为 html-to-image 需要绝对颜色值而不是 CSS 函数
- */
-function rgbToHex(rgb: string): string {
-  // 匹配 rgb(r, g, b) 或 rgba(r, g, b, a) 格式
-  const match = /rgba?\((\d+),\s*(\d+),\s*(\d+)/.exec(rgb)
-
-  if (!match) {
-    return rgb
-  }
-
-  const r = Number.parseInt(match[1], 10)
-  const g = Number.parseInt(match[2], 10)
-  const b = Number.parseInt(match[3], 10)
-
-  return `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}`
-}
-
 export interface GraphSvgBlocksProps {
   weeks: ContributionCalendar['weeks']
   highlightedDates?: Set<string>
   onDayHover?: (day: ContributionDay | null, element: SVGRectElement | null) => void
 }
 
-function InnerGraphSvgBlocks({
+/**
+ * GraphSvgBlocks - 渲染 SVG 贡献热力图方块
+ */
+export function GraphSvgBlocks({
   weeks,
   highlightedDates,
   onDayHover,
@@ -196,26 +180,3 @@ function InnerGraphSvgBlocks({
     </svg>
   )
 }
-
-export const GraphSvgBlocks = memo(
-  InnerGraphSvgBlocks,
-  (prevProps, nextProps) => {
-    if (prevProps === nextProps) {
-      return true
-    }
-
-    if (prevProps.weeks !== nextProps.weeks) {
-      return false
-    }
-
-    if (prevProps.highlightedDates !== nextProps.highlightedDates) {
-      return false
-    }
-
-    if (prevProps.onDayHover !== nextProps.onDayHover) {
-      return false
-    }
-
-    return true
-  },
-)
