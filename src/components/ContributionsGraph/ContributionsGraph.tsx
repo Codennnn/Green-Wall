@@ -4,6 +4,7 @@ import { MockupSafari } from '~/components/mockup/MockupSafari'
 import { DEFAULT_SIZE, DEFAULT_THEME, sizeProperties, THEME_PRESETS } from '~/constants'
 import { useData } from '~/DataContext'
 import { BlockShape } from '~/enums'
+import { useComputedLevelColors } from '~/hooks/useComputedLevelColors'
 import { cn } from '~/lib/utils'
 
 import { Graph, type GraphProps } from './Graph'
@@ -65,6 +66,8 @@ function ContributionsGraphInner(
     },
     [settings.theme],
   )
+
+  const computedColors = useComputedLevelColors(graphRef, applyingTheme)
 
   const highlightDatesMap = useMemo(() => {
     const map = new Map<number, Set<string>>()
@@ -146,7 +149,9 @@ function ContributionsGraphInner(
               return (
                 <Graph
                   key={calendar.year}
+                  blockShape={settings.blockShape}
                   className={shouldDisplay ? '' : 'hidden'}
+                  computedColors={computedColors}
                   data={calendar}
                   daysLabel={settings.daysLabel}
                   highlightedDates={highlightedDates}

@@ -9,7 +9,9 @@ import { GraphSvgBlocks } from '~/components/ContributionsGraph/GraphSvgBlocks'
 import { GraphTooltip } from '~/components/ContributionsGraph/GraphTooltip'
 import { GraphTooltipLabel } from '~/components/ContributionsGraph/GraphTooltipLabel'
 import { Button } from '~/components/ui/button'
+import { DEFAULT_BLOCK_SHAPE } from '~/constants'
 import { useData } from '~/DataContext'
+import type { BlockShape } from '~/enums'
 import { numberWithCommas } from '~/helpers'
 import { cn } from '~/lib/utils'
 import type { ContributionCalendar, ContributionDay } from '~/types'
@@ -21,6 +23,8 @@ export interface GraphProps extends React.ComponentProps<'div'> {
   daysLabel?: boolean
   showInspect?: boolean
   highlightedDates?: Set<string>
+  blockShape?: BlockShape
+  computedColors?: string[]
   titleRender?: ((params: {
     year: number
     total: number
@@ -38,6 +42,8 @@ export function Graph(props: GraphProps) {
     showInspect = true,
     titleRender,
     highlightedDates,
+    blockShape,
+    computedColors,
     ...rest
   } = props
 
@@ -186,6 +192,8 @@ export function Graph(props: GraphProps) {
 
         {/* Day Blocks */}
         <GraphSvgBlocks
+          blockShape={blockShape ?? DEFAULT_BLOCK_SHAPE}
+          computedColors={computedColors}
           highlightedDates={highlightedDates}
           weeks={calendar.weeks}
           onDayHover={handleDayHover}
