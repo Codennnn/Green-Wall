@@ -134,6 +134,20 @@ GITHUB_ACCESS_TOKEN="ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 
 Then you are ready to run `pnpm dev` to develop.
 
+## Docker Build
+
+Build Docker image：
+
+```shell
+docker build -t green-wall .
+```
+
+Run the Docker image：
+
+```shell
+docker run -p 8000:8000 green-wall
+```
+
 <!-- Link References -->
 [site]: https://green-wall.leoku.dev/
 [repo]: https://github.com/Codennnn/Green-Wall

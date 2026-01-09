@@ -137,6 +137,20 @@ GITHUB_ACCESS_TOKEN="ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 
 随后运行 `pnpm dev` 即可开始本地开发。
 
+## Docker 部署
+
+构建Docker镜像：
+
+```shell
+docker build -t green-wall .
+```
+
+运行Docker镜像：
+
+```shell
+docker run -p 8000:8000 green-wall
+```
+
 <!-- Link References -->
 [site]: https://green-wall.leoku.dev/
 [repo]: https://github.com/Codennnn/Green-Wall
