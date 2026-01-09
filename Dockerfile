@@ -25,6 +25,9 @@ RUN pnpm build
 # 使用一个更轻的镜像来运行应用
 FROM node:20-alpine
 
+# 安装 pnpm
+RUN npm install -g pnpm
+
 # 设置工作目录
 WORKDIR /app
 
