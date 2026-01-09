@@ -19,7 +19,7 @@ export interface YearQuickEntryUser {
 }
 
 interface YearQuickEntryCardProps {
-  currentYear: number
+  year: number
   user: YearQuickEntryUser | null
   disabled?: boolean
   isPending?: boolean
@@ -27,7 +27,7 @@ interface YearQuickEntryCardProps {
 }
 
 export function YearQuickEntryCard({
-  currentYear,
+  year,
   user,
   disabled = false,
   isPending = false,
@@ -97,7 +97,7 @@ export function YearQuickEntryCard({
 
                       <Button disabled={disabled} onClick={onViewMyYear}>
                         <SparklesIcon />
-                        {t('myQuickEntryCta', { year: currentYear })}
+                        {t('myQuickEntryCta', { year })}
                       </Button>
                     </div>
                   )

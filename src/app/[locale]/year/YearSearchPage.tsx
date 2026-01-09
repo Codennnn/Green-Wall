@@ -62,8 +62,10 @@ export function YearSearchPage() {
 
   const handleViewMyYear = () => {
     if (user?.login) {
-      eventTracker.year.quickEntry.click(currentYear, true)
-      navigateToYearUser({ year: currentYear, username: user.login })
+      const year = Number(selectedYear)
+
+      eventTracker.year.quickEntry.click(year, true)
+      navigateToYearUser({ year, username: user.login })
     }
   }
 
@@ -83,21 +85,21 @@ export function YearSearchPage() {
   return (
     <div className="py-10 md:py-14">
       <h1 className="text-center text-3xl font-bold md:mx-auto md:px-20 md:text-4xl md:leading-[1.2] lg:text-5xl">
-        {t('titleWithYear', { year: currentYear })}
+        {t('titleWithYear', { year: selectedYear })}
       </h1>
 
       <p className="mx-auto mt-4 max-w-2xl text-center text-muted-foreground">
-        {t('descriptionWithYear', { year: currentYear })}
+        {t('descriptionWithYear', { year: selectedYear })}
       </p>
 
       {isLoggedIn && (
         <>
           <div className="mt-8">
             <YearQuickEntryCard
-              currentYear={currentYear}
               disabled={isNavigating}
               isPending={isSessionPending}
               user={user}
+              year={Number(selectedYear)}
               onViewMyYear={handleViewMyYear}
             />
           </div>

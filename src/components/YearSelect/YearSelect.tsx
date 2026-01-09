@@ -33,11 +33,6 @@ export interface YearSelectProps {
   alignItemWithTrigger?: boolean
 }
 
-/**
- * 年份选择组件
- *
- * 封装了年份选择的通用逻辑，支持自定义年份范围、样式和回调函数
- */
 export function YearSelect({
   value,
   onValueChange,
