@@ -250,7 +250,7 @@ export function GraphBlock() {
         className="grid w-full grid-cols-1 gap-4 bg-background p-grid-item md:grid-cols-8 lg:grid-cols-12"
       >
         {/* MARK: 贡献日历热力图 */}
-        <div className="col-span-1 md:col-span-5 lg:col-span-7">
+        <div className="col-span-1 md:col-span-5 lg:col-span-7 h-full">
           {
             isLoading
               ? (
@@ -277,9 +277,11 @@ export function GraphBlock() {
                   <ContributionsGraph
                     highlightMode={highlightMode}
                     highlightOptions={highlightOptions}
-                    mockupWrapperClassName="p-grid-item"
+                    mockupClassName="h-full"
+                    mockupWrapperClassName="p-grid-item h-full"
                     showInspect={false}
                     titleRender={null}
+                    wrapperClassName="h-full"
                   />
                 )
           }

@@ -22,6 +22,7 @@ interface ContributionsGraphProps
   extends Pick<GraphProps, 'showInspect' | 'titleRender'> {
   /** Unique ID for the contributions graph container. */
   wrapperId?: string
+  wrapperClassName?: string
   /**
    * Custom Mockup component to wrap the contributions graph.
    * @default MockupArc
@@ -41,9 +42,10 @@ function ContributionsGraphInner(
   ref: React.Ref<HTMLDivElement | null>,
 ) {
   const {
+    wrapperId,
+    wrapperClassName,
     mockupWrapperClassName,
     mockupClassName,
-    wrapperId,
     showInspect,
     titleRender,
     highlightMode,
@@ -105,6 +107,7 @@ function ContributionsGraphInner(
   return (
     <div
       ref={graphRef}
+      className={wrapperClassName}
       id={wrapperId}
       style={{
         ...cssProperties,
