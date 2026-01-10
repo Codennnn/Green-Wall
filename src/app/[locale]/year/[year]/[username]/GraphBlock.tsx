@@ -456,24 +456,26 @@ export function GraphBlock() {
                 const daysInYear = isLeapYear ? 366 : 365
                 const longestGap = statistics?.longestGap
 
-                // 全年无间断
                 if (longestGap === 0) {
                   return (
                     <StatValue
                       large
                       isLoading={!statistics}
-                      value={t('longestGapZero')}
+                      subValue={t('longestGapZero')}
+                      unit={t('unitDays')}
+                      value={longestGap}
                     />
                   )
                 }
 
-                // 整年没有贡献
                 if (longestGap !== undefined && longestGap >= daysInYear) {
                   return (
                     <StatValue
                       large
                       isLoading={!statistics}
-                      value={t('longestGapFullYear')}
+                      subValue={t('longestGapFullYear')}
+                      unit={t('unitDays')}
+                      value={longestGap}
                     />
                   )
                 }
