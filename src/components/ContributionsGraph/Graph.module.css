@@ -1,7 +1,7 @@
 @reference "../../styles/globals.css";
 
 .graph {
-  --week-width: calc(var(--block-size, 10px) + var(--block-gap, 3px));
+  --week-width: calc(var(--block-size, 10px) + var(--block-gap, 2px));
 
   @apply text-xs gap-1;
 
@@ -34,7 +34,7 @@
   display: grid;
   grid-area: days;
   grid-template-rows: repeat(7, var(--block-size, 10px));
-  gap: var(--block-gap, 3px);
+  gap: var(--block-gap, 2px);
 }
 
 .months,
@@ -79,8 +79,8 @@
 /* SVG Blocks */
 .svgBlocks {
   grid-area: blocks;
-  width: calc((var(--block-size, 10px) + var(--block-gap, 3px)) * 53 - var(--block-gap, 3px));
-  height: calc((var(--block-size, 10px) + var(--block-gap, 3px)) * 7 - var(--block-gap, 3px));
+  width: calc((var(--block-size, 10px) + var(--block-gap, 2px)) * 53 - var(--block-gap, 2px));
+  height: calc((var(--block-size, 10px) + var(--block-gap, 2px)) * 7 - var(--block-gap, 2px));
 }
 
 .svgBlocks rect {

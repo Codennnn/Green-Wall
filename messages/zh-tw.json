@@ -133,7 +133,9 @@
     "unitContributions": "次貢獻",
     "unitDays": "天",
     "removeRepo": "移除儲存庫",
-    "viewRepoAnalysis": "查看詳情"
+    "viewRepoAnalysis": "查看詳情",
+    "longestGapZero": "全年在線，代碼不停",
+    "longestGapFullYear": "給自己放了個長假"
   },
   "aiReport": {
     "title": "AI 年度總結",
@@ -157,7 +159,6 @@
     "dialogDescription": "設定你自己的 OpenAI 相容 AI 服務。",
     "baseUrl": "API 位址",
     "baseUrlPlaceholder": "https://api.openai.com/v1",
-    "baseUrlHint": "OpenAI 相容介面的根位址",
     "apiKey": "API 金鑰",
     "apiKeyPlaceholder": "",
     "apiKeyHint": "你的 API 金鑰將儲存在本地，僅用於發送請求",
@@ -292,7 +293,19 @@
     "signInBenefitsItemYearWrapped": "一鍵打開你的年度回顧與更完整的統計",
     "signInBenefitsItemPrivateContrib": "包含私人儲存庫貢獻（授權模式）",
     "signInBenefitsItemDeeperInsights": "取得更準確的語言 / 儲存庫 / Issues 資料分析",
-    "signInBenefitsFooter": "我們只讀取你的貢獻資料，不會修改你的儲存庫。"
+    "signInBenefitsFooter": "我們只讀取你的貢獻資料，不會修改你的儲存庫。",
+    "error": {
+      "title": "登入失敗",
+      "defaultMessage": "登入過程中出現問題，請重試。",
+      "networkTimeout": "連線 GitHub 逾時，請檢查網路後重試。",
+      "networkError": "無法連線到 GitHub，請檢查網路連線。",
+      "invalidCode": "授權碼已過期或無效，請重新登入。",
+      "accessDenied": "你取消了授權請求。登入後可解鎖更多功能。",
+      "serverError": "GitHub 服務暫時不可用，請稍後重試。",
+      "configError": "OAuth 設定錯誤，請聯繫管理員。",
+      "retry": "重試",
+      "backHome": "返回首頁"
+    }
   },
   "yearlyTags": {
     "categoryNames": {

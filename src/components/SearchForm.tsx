@@ -1,6 +1,7 @@
 import { GenerateButton } from '~/components/GenerateButton/GenerateButton'
 import { SearchInput } from '~/components/SearchInput'
 import type { RecentGitHubUser } from '~/components/UserDiscovery/useRecentUsers'
+import { clearPersistedSearchInput, saveSearchInputToStorage } from '~/hooks/usePersistedSearchInput'
 
 interface SearchFormProps {
   value: string
@@ -25,11 +26,14 @@ export function SearchForm({
 }: SearchFormProps) {
   const handleSubmit = (ev: React.FormEvent) => {
     ev.preventDefault()
+    clearPersistedSearchInput()
     onSubmit()
   }
 
   const handleChange = (ev: React.ChangeEvent<HTMLInputElement>) => {
-    onChange(ev.target.value)
+    const newValue = ev.target.value
+    saveSearchInputToStorage(newValue)
+    onChange(newValue)
   }
 
   return (

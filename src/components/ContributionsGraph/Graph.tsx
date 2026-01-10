@@ -1,4 +1,4 @@
-import { memo, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useEvent } from 'react-use-event-hook'
 
 import Link from 'next/link'
@@ -9,7 +9,9 @@ import { GraphSvgBlocks } from '~/components/ContributionsGraph/GraphSvgBlocks'
 import { GraphTooltip } from '~/components/ContributionsGraph/GraphTooltip'
 import { GraphTooltipLabel } from '~/components/ContributionsGraph/GraphTooltipLabel'
 import { Button } from '~/components/ui/button'
+import { DEFAULT_BLOCK_SHAPE } from '~/constants'
 import { useData } from '~/DataContext'
+import type { BlockShape } from '~/enums'
 import { numberWithCommas } from '~/helpers'
 import { cn } from '~/lib/utils'
 import type { ContributionCalendar, ContributionDay } from '~/types'
@@ -21,20 +23,27 @@ export interface GraphProps extends React.ComponentProps<'div'> {
   daysLabel?: boolean
   showInspect?: boolean
   highlightedDates?: Set<string>
-  titleRender?: (params: {
+  blockShape?: BlockShape
+  computedColors?: string[]
+  titleRender?: ((params: {
     year: number
     total: number
     isNewYear: boolean
-  }) => React.ReactNode | null
+  }) => React.ReactNode) | null
 }
 
-function InnerGraph(props: GraphProps) {
+/**
+ * Graph 组件 - 显示单年的 GitHub 贡献热力图
+ */
+export function Graph(props: GraphProps) {
   const {
     data: calendar,
     daysLabel,
     showInspect = true,
     titleRender,
     highlightedDates,
+    blockShape,
+    computedColors,
     ...rest
   } = props
 
@@ -88,27 +97,35 @@ function InnerGraph(props: GraphProps) {
     },
   )
 
+  const renderTitle = () => {
+    if (titleRender === null) {
+      return null
+    }
+
+    if (typeof titleRender === 'function') {
+      return titleRender({
+        year: calendar.year,
+        total: calendar.total,
+        isNewYear,
+      })
+    }
+
+    return (
+      <div className="text-sm tabular-nums">
+        <span className="mr-2 font-medium">{calendar.year}:</span>
+        <span className="opacity-80">
+          {isNewYear && calendar.total === 0
+            ? t('newYearText')
+            : `${numberWithCommas(calendar.total)} ${t('contributions')}`}
+        </span>
+      </div>
+    )
+  }
+
   return (
     <div {...rest} className={cn('group', rest.className)}>
       <div className="mb-2 flex items-center">
-        {typeof titleRender === 'function'
-          ? (
-              titleRender({
-                year: calendar.year,
-                total: calendar.total,
-                isNewYear,
-              })
-            )
-          : (
-              <div className="text-sm tabular-nums">
-                <span className="mr-2 font-medium">{calendar.year}:</span>
-                <span className="opacity-80">
-                  {isNewYear && calendar.total === 0
-                    ? t('newYearText')
-                    : `${numberWithCommas(calendar.total)} ${t('contributions')}`}
-                </span>
-              </div>
-            )}
+        {renderTitle()}
 
         {showInspect && (
           <Button
@@ -175,6 +192,8 @@ function InnerGraph(props: GraphProps) {
 
         {/* Day Blocks */}
         <GraphSvgBlocks
+          blockShape={blockShape ?? DEFAULT_BLOCK_SHAPE}
+          computedColors={computedColors}
           highlightedDates={highlightedDates}
           weeks={calendar.weeks}
           onDayHover={handleDayHover}
@@ -183,35 +202,3 @@ function InnerGraph(props: GraphProps) {
     </div>
   )
 }
-
-export const Graph = memo(InnerGraph, (prevProps, nextProps) => {
-  if (prevProps === nextProps) {
-    return true
-  }
-
-  if (prevProps.data !== nextProps.data) {
-    return false
-  }
-
-  if (prevProps.daysLabel !== nextProps.daysLabel) {
-    return false
-  }
-
-  if (prevProps.showInspect !== nextProps.showInspect) {
-    return false
-  }
-
-  if (prevProps.className !== nextProps.className) {
-    return false
-  }
-
-  if (prevProps.highlightedDates !== nextProps.highlightedDates) {
-    return false
-  }
-
-  if (prevProps.titleRender !== nextProps.titleRender) {
-    return false
-  }
-
-  return true
-})

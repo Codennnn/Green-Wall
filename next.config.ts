@@ -3,6 +3,8 @@ import createNextIntlPlugin from 'next-intl/plugin'
 import { createSecureHeaders } from 'next-secure-headers'
 
 const nextConfig: NextConfig = {
+  reactCompiler: true,
+
   /**
    * Security Headers Configuration:
    * - Uses the `createSecureHeaders()` function from the `next-secure-headers` package

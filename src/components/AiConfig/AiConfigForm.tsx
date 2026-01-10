@@ -12,10 +12,25 @@ import {
   XCircleIcon,
 } from 'lucide-react'
 
+import {
+  Autocomplete,
+  AutocompleteInput,
+  AutocompleteItem,
+  AutocompleteList,
+  AutocompletePopup,
+} from '~/components/ui/autocomplete'
 import { Button } from '~/components/ui/button'
 import { Input } from '~/components/ui/input'
 import { Label } from '~/components/ui/label'
 import type { AiRuntimeConfig, TestConnectionResponse } from '~/types/ai-config'
+
+const AI_PROVIDERS: { name: string, url: string }[] = [
+  { name: 'OpenAI', url: 'https://api.openai.com/v1' },
+  { name: 'DeepSeek', url: 'https://api.deepseek.com' },
+  { name: '通义千问', url: 'https://dashscope.aliyuncs.com/compatible-mode/v1' },
+  { name: '智谱 AI', url: 'https://open.bigmodel.cn/api/paas/v4' },
+  { name: 'Minimax', url: 'https://api.minimax.chat/v1' },
+] as const
 
 export interface AiConfigFormProps {
   /** 当前配置（用于初始化表单） */
@@ -45,6 +60,7 @@ export function AiConfigForm({
   const [baseUrl, setBaseUrl] = useState(initialConfig?.baseUrl ?? '')
   const [apiKey, setApiKey] = useState(initialConfig?.apiKey ?? '')
   const [model, setModel] = useState(initialConfig?.model ?? '')
+  const [isBaseUrlOpen, setIsBaseUrlOpen] = useState(false)
 
   const [showApiKey, setShowApiKey] = useState(false)
 
@@ -88,21 +104,55 @@ export function AiConfigForm({
 
   return (
     <div className="flex flex-col gap-4">
-      {/* Base URL */}
+      {/* MARK: Base URL */}
       <div className="space-y-2">
         <Label htmlFor="baseUrl">{t('baseUrl')}</Label>
-        <Input
-          id="baseUrl"
-          placeholder={t('baseUrlPlaceholder')}
+        <Autocomplete
+          itemToStringValue={(url) => {
+            const provider = AI_PROVIDERS.find((p) => p.url === url)
+
+            if (provider) {
+              return provider.url
+            }
+
+            return url
+          }}
+          items={AI_PROVIDERS.map((p) => p.url)}
+          mode="none"
+          open={isBaseUrlOpen}
           value={baseUrl}
-          onChange={(e) => { handleFieldChange('baseUrl', e.target.value) }}
-        />
-        <p className="text-muted-foreground text-xs">
-          {t('baseUrlHint')}
-        </p>
+          onOpenChange={setIsBaseUrlOpen}
+          onValueChange={(value) => { handleFieldChange('baseUrl', value) }}
+        >
+          <AutocompleteInput
+            showTrigger
+            id="baseUrl"
+            placeholder={t('baseUrlPlaceholder')}
+            showClear={!!baseUrl}
+            onClick={() => { setIsBaseUrlOpen(true) }}
+            onFocus={() => { setIsBaseUrlOpen(true) }}
+          />
+          <AutocompletePopup>
+            <AutocompleteList>
+              {(url: string) => {
+                const provider = AI_PROVIDERS.find((p) => p.url === url)
+
+                return (
+                  <AutocompleteItem key={url} value={url}>
+                    <span className="text-foreground whitespace-nowrap">{provider?.name}</span>
+                    <span className="text-muted-foreground text-xs">
+                      <span className="mx-1.5">-</span>
+                      {url}
+                    </span>
+                  </AutocompleteItem>
+                )
+              }}
+            </AutocompleteList>
+          </AutocompletePopup>
+        </Autocomplete>
       </div>
 
-      {/* API Key */}
+      {/* MARK: API Key */}
       <div className="space-y-2">
         <Label htmlFor="apiKey">{t('apiKey')}</Label>
         <div className="relative">
@@ -127,7 +177,7 @@ export function AiConfigForm({
         </p>
       </div>
 
-      {/* Model */}
+      {/* MARK: Model */}
       <div className="space-y-2">
         <Label htmlFor="model">{t('model')}</Label>
         <Input

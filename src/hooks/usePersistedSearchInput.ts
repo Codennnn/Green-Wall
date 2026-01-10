@@ -18,7 +18,7 @@ function loadSearchInputFromStorage(): string {
   }
 }
 
-function saveSearchInputToStorage(value: string): void {
+export function saveSearchInputToStorage(value: string): void {
   if (typeof window === 'undefined') {
     return
   }
@@ -60,8 +60,10 @@ export interface UsePersistedSearchInputOptions {
 export interface UsePersistedSearchInputReturn {
   /** 当前搜索输入值 */
   value: string
-  /** 更新搜索输入值（支持函数式更新） */
+  /** 更新搜索输入值并持久化到 localStorage（支持函数式更新） */
   setValue: (value: string | ((prevValue: string) => string)) => void
+  /** 仅更新状态值，不写入 localStorage（用于从 URL 同步等场景） */
+  setValueWithoutPersist: (value: string | ((prevValue: string) => string)) => void
   /** 清除搜索输入值 */
   clear: () => void
 }
@@ -96,6 +98,13 @@ export function usePersistedSearchInput(
     })
   })
 
+  // 仅更新状态值，不写入 localStorage（用于从 URL 同步等场景）
+  const setValueWithoutPersist = useEvent((newValue: string | ((prevValue: string) => string)) => {
+    setValueState((prevValue) => {
+      return typeof newValue === 'function' ? newValue(prevValue) : newValue
+    })
+  })
+
   const clear = useEvent(() => {
     setValueState('')
     clearPersistedSearchInput()
@@ -127,6 +136,7 @@ export function usePersistedSearchInput(
   return {
     value,
     setValue,
+    setValueWithoutPersist,
     clear,
   }
 }

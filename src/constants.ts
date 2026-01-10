@@ -28,21 +28,38 @@ export const DEFAULT_LEVEL_COLORS: ThemePreset['levelColors'] = [
   '#216e39',
 ]
 
+/**
+ * 图表基础尺寸配置（像素值）
+ */
+export const GRAPH_SIZE_BASE = {
+  small: { blockSize: 10, blockGap: 2, blockRound: 2 },
+  medium: { blockSize: 11, blockGap: 2.5, blockRound: 3 },
+  large: { blockSize: 12, blockGap: 4, blockRound: 3 },
+} as const
+
+/**
+ * 图表 CSS 变量配置
+ *
+ * 根据不同尺寸设置对应的 CSS 变量值，用于控制：
+ * - 图表容器的实际像素尺寸
+ * - HTML 元素（月份标签、星期标签、图例）的布局
+ * - SVG 容器的外部尺寸
+ */
 export const sizeProperties = {
   [GraphSize.Small]: {
-    ['--block-size']: '10px',
-    ['--block-round']: '2px',
-    ['--block-gap']: '2px',
+    ['--block-size']: `${GRAPH_SIZE_BASE.small.blockSize}px`,
+    ['--block-round']: `${GRAPH_SIZE_BASE.small.blockRound}px`,
+    ['--block-gap']: `${GRAPH_SIZE_BASE.small.blockGap}px`,
   },
   [GraphSize.Medium]: {
-    ['--block-size']: '11px',
-    ['--block-round']: '3px',
-    ['--block-gap']: '2.5px',
+    ['--block-size']: `${GRAPH_SIZE_BASE.medium.blockSize}px`,
+    ['--block-round']: `${GRAPH_SIZE_BASE.medium.blockRound}px`,
+    ['--block-gap']: `${GRAPH_SIZE_BASE.medium.blockGap}px`,
   },
   [GraphSize.Large]: {
-    ['--block-size']: '12px',
-    ['--block-round']: '3px',
-    ['--block-gap']: '4px',
+    ['--block-size']: `${GRAPH_SIZE_BASE.large.blockSize}px`,
+    ['--block-round']: `${GRAPH_SIZE_BASE.large.blockRound}px`,
+    ['--block-gap']: `${GRAPH_SIZE_BASE.large.blockGap}px`,
   },
 } as const satisfies Record<
   GraphSize,
@@ -52,6 +69,23 @@ export const sizeProperties = {
     ['--block-gap']: string
   }
 >
+
+/**
+ * SVG 热力图相关常量
+ *
+ * 这些常量用于 SVG viewBox 坐标系统，基于 Small 尺寸的像素值计算相对比例。
+ * SVG 使用相对单位，通过 CSS 控制实际渲染尺寸，确保缩放时保持正确的比例。
+ */
+const _base = GRAPH_SIZE_BASE.small
+const _cellUnit = _base.blockSize + _base.blockGap
+
+export const SVG_GRAPH_CONSTANTS = {
+  DAYS_IN_WEEK: 7,
+  CELL_UNIT: 1,
+  BLOCK_RATIO: _base.blockSize / _cellUnit,
+  CORNER_RADIUS_SQUARE: _base.blockRound / _cellUnit,
+  CORNER_RADIUS_ROUND: (_base.blockSize / _cellUnit) / 2,
+} as const
 
 export const DEFAULT_SIZE: GraphSize = GraphSize.Small
 
@@ -99,7 +133,7 @@ export const THEME_PRESETS = [
     colorBorder: 'color-mix(in srgb, rgba(176, 172, 172, 0.36), transparent 0%)',
     colorBackgroundContainer: 'url(/images/background/sunset.webp) no-repeat center center / cover',
     levelColors: [
-      'var(--theme-secondary)',
+      'color-mix(in srgb, var(--theme-primary) 10%, var(--theme-secondary))',
       'color-mix(in srgb, var(--theme-primary) 35%, var(--theme-secondary))',
       'color-mix(in srgb, var(--theme-primary) 60%, var(--theme-secondary))',
       'color-mix(in srgb, var(--theme-primary) 75%, var(--theme-secondary))',
@@ -140,5 +174,6 @@ export const THEME_PRESETS = [
       'var(--color-brand-700)',
       'var(--color-brand-900)',
     ],
+    selectable: false,
   },
 ] satisfies ThemePreset[]

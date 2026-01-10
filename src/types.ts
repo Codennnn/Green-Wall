@@ -234,6 +234,7 @@ export interface ThemePreset {
   colorBorder: string
   colorBackgroundContainer: string
   levelColors: [level_0: string, level_1: string, level_2: string, level_3: string, level_4: string]
+  selectable?: boolean
 }
 
 /**

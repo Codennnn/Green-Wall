@@ -133,7 +133,9 @@
     "unitContributions": "contributions",
     "unitDays": "days",
     "removeRepo": "Remove repository",
-    "viewRepoAnalysis": "View Details"
+    "viewRepoAnalysis": "View Details",
+    "longestGapZero": "Zero breaks, 100% commitment",
+    "longestGapFullYear": "Taking a well-deserved break"
   },
   "aiReport": {
     "title": "AI Year in Review",
@@ -157,7 +159,6 @@
     "dialogDescription": "Configure your own OpenAI-compatible AI service.",
     "baseUrl": "API Endpoint",
     "baseUrlPlaceholder": "https://api.openai.com/v1",
-    "baseUrlHint": "Base URL for OpenAI-compatible API",
     "apiKey": "API Key",
     "apiKeyPlaceholder": "",
     "apiKeyHint": "Your API key is stored locally and only used for requests",
@@ -292,7 +293,19 @@
     "signInBenefitsItemYearWrapped": "Open your Year Wrapped and deeper stats",
     "signInBenefitsItemPrivateContrib": "Include private contributions (authorized mode)",
     "signInBenefitsItemDeeperInsights": "Get more accurate language/repo/issue insights",
-    "signInBenefitsFooter": "We only read your contribution data. We can’t modify your repositories."
+    "signInBenefitsFooter": "We only read your contribution data. We can’t modify your repositories.",
+    "error": {
+      "title": "Sign in failed",
+      "defaultMessage": "Something went wrong during sign in. Please try again.",
+      "networkTimeout": "Connection to GitHub timed out. Please check your network and try again.",
+      "networkError": "Unable to connect to GitHub. Please check your network connection.",
+      "invalidCode": "The authorization code has expired or is invalid. Please try signing in again.",
+      "accessDenied": "You denied the authorization request. Sign in to unlock more features.",
+      "serverError": "GitHub is temporarily unavailable. Please try again later.",
+      "configError": "OAuth configuration error. Please contact the administrator.",
+      "retry": "Try again",
+      "backHome": "Back to home"
+    }
   },
   "yearlyTags": {
     "categoryNames": {

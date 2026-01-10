@@ -1,88 +1,85 @@
 import { betterAuth } from 'better-auth'
 import { customSession } from 'better-auth/plugins'
 
+/** Session 有效期：30 天（秒） */
+const SESSION_MAX_AGE = 60 * 60 * 24 * 30
+
 /**
- * Better Auth 配置
+ * Better Auth 实例
  *
- * - 使用 GitHub Provider + Stateless 模式（无需数据库）
- * - access token 存储于 account cookie，不暴露给客户端
- * - session 只暴露 login/name/image 等公开信息
- * - 通过 customSession 插件注入 user.login 字段
+ * 运行模式：Stateless（无数据库）
+ * - Session 数据存储在签名的 JWT cookie 中，服务器无需查询数据库即可验证
+ * - GitHub access token 存储在加密的 account cookie 中，不暴露给客户端
+ * - 通过 customSession 插件扩展 session，注入 GitHub login 字段
  */
 export const auth = betterAuth({
+  /** 用于签名和加密 cookie 的密钥 */
   secret: process.env.AUTH_SECRET,
 
+  /** 服务的公开 URL，用于生成 OAuth 回调地址 */
   baseURL: process.env.AUTH_URL,
 
-  // GitHub OAuth 配置
   socialProviders: {
     github: {
       clientId: process.env.AUTH_GITHUB_ID ?? '',
       clientSecret: process.env.AUTH_GITHUB_SECRET ?? '',
-      // 保持与原 NextAuth 相同的 scope：读取用户信息、邮箱、私有仓库
       scope: ['read:user', 'user:email', 'repo'],
-      // 将 GitHub profile 数据映射到用户字段
-      mapProfileToUser: (profile) => {
-        return {
-          name: profile.name || profile.login,
-          email: profile.email,
-          image: profile.avatar_url,
-          // 存储 GitHub login（用户名）到 additionalFields
-          login: profile.login,
-        }
-      },
+      mapProfileToUser: (profile) => ({
+        name: profile.name || profile.login,
+        email: profile.email,
+        image: profile.avatar_url,
+        login: profile.login,
+      }),
     },
   },
 
-  // 用户配置：添加 login 字段
   user: {
     additionalFields: {
+      /** GitHub 用户名，用于匹配请求的目标用户 */
       login: {
         type: 'string',
         required: false,
-        input: false, // 不允许用户在注册时输入
+        input: false,
       },
     },
   },
 
-  // 账户配置
-  account: {
-    // 在无数据库模式下，将账户信息存储在 cookie 中（包含 access token）
-    storeAccountCookie: true,
-    // 每次登录时更新账户信息（确保 token 是最新的）
-    updateAccountOnSignIn: true,
-  },
-
-  // Session 配置
   session: {
-    // Session 过期时间（30 天）
-    expiresIn: 60 * 60 * 24 * 30,
-    // Session 更新周期（7 天）：每次用户访问时，如果距离上次更新超过 7 天，则延长 session 有效期
-    updateAge: 60 * 60 * 24 * 7,
-    // 启用 cookie 缓存以优化性能
     cookieCache: {
       enabled: true,
-      maxAge: 5 * 60, // 5 分钟（仅用于服务器端缓存优化）
+      maxAge: SESSION_MAX_AGE,
       strategy: 'jwt',
+      refreshCache: true,
     },
   },
 
-  // 插件配置
+  account: {
+    /** 将 OAuth provider 的 access token 存储在加密 cookie 中 */
+    storeAccountCookie: true,
+    /** 每次登录时更新 token，确保使用最新凭证 */
+    updateAccountOnSignIn: true,
+  },
+
+  /** OAuth 错误处理：重定向到自定义错误页面 */
+  onAPIError: {
+    errorURL: '/auth/error',
+    onError: (error) => {
+      // 将网络超时等错误记录到服务器日志
+      const errorMessage = error instanceof Error ? error.message : String(error)
+      console.error('[Auth Error]', errorMessage)
+    },
+  },
+
   plugins: [
-    // 自定义 session 返回结构，确保 user.login 可用
     // eslint-disable-next-line @typescript-eslint/require-await
-    customSession(async ({ user, session }) => {
-      return {
-        session,
-        user: {
-          ...user,
-          // 确保 login 字段在 session 中可访问
-          login: (user as { login?: string }).login ?? undefined,
-        },
-      }
-    }),
+    customSession(async ({ user, session }) => ({
+      session,
+      user: {
+        ...user,
+        login: (user as { login?: string }).login,
+      },
+    })),
   ],
 })
 
-// 导出 auth 类型供客户端使用
 export type Auth = typeof auth

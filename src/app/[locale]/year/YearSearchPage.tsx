@@ -1,20 +1,14 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 
 import { useTranslations } from 'next-intl'
 
 import { GenerateButton } from '~/components/GenerateButton/GenerateButton'
 import { SearchInput } from '~/components/SearchInput'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '~/components/ui/select'
 import { Separator } from '~/components/ui/separator'
 import { useRecentUsers } from '~/components/UserDiscovery/useRecentUsers'
+import { YearSelect } from '~/components/YearSelect/YearSelect'
 import { getCurrentYear, normalizeGitHubUsername } from '~/helpers'
 import { usePersistedSearchInput } from '~/hooks/usePersistedSearchInput'
 import { eventTracker } from '~/lib/analytics'
@@ -28,16 +22,6 @@ export function YearSearchPage() {
   const { data: session, isPending: isSessionPending } = useSession()
 
   const currentYear = getCurrentYear()
-
-  const yearOptions = useMemo(() => {
-    const years: number[] = []
-
-    for (let year = currentYear; year >= 2008; year--) {
-      years.push(year)
-    }
-
-    return years
-  }, [currentYear])
 
   const { value: username, setValue: setUsername } = usePersistedSearchInput()
   const [selectedYear, setSelectedYear] = useState<string>(String(currentYear))
@@ -78,8 +62,10 @@ export function YearSearchPage() {
 
   const handleViewMyYear = () => {
     if (user?.login) {
-      eventTracker.year.quickEntry.click(currentYear, true)
-      navigateToYearUser({ year: currentYear, username: user.login })
+      const year = Number(selectedYear)
+
+      eventTracker.year.quickEntry.click(year, true)
+      navigateToYearUser({ year, username: user.login })
     }
   }
 
@@ -99,21 +85,21 @@ export function YearSearchPage() {
   return (
     <div className="py-10 md:py-14">
       <h1 className="text-center text-3xl font-bold md:mx-auto md:px-20 md:text-4xl md:leading-[1.2] lg:text-5xl">
-        {t('titleWithYear', { year: currentYear })}
+        {t('titleWithYear', { year: selectedYear })}
       </h1>
 
       <p className="mx-auto mt-4 max-w-2xl text-center text-muted-foreground">
-        {t('descriptionWithYear', { year: currentYear })}
+        {t('descriptionWithYear', { year: selectedYear })}
       </p>
 
       {isLoggedIn && (
         <>
           <div className="mt-8">
             <YearQuickEntryCard
-              currentYear={currentYear}
               disabled={isNavigating}
               isPending={isSessionPending}
               user={user}
+              year={Number(selectedYear)}
               onViewMyYear={handleViewMyYear}
             />
           </div>
@@ -143,22 +129,13 @@ export function YearSearchPage() {
               onSelectUser={handleSelectUser}
             />
 
-            <Select
+            <YearSelect
               disabled={isNavigating}
+              triggerClassName="h-[2.8rem] w-[120px]"
               value={selectedYear}
+              valueClassName="text-xl"
               onValueChange={handleYearChange}
-            >
-              <SelectTrigger className="h-[2.8rem] w-[120px] justify-center text-center">
-                <SelectValue className="text-xl font-medium" />
-              </SelectTrigger>
-              <SelectContent>
-                {yearOptions.map((year) => (
-                  <SelectItem key={year} value={String(year)}>
-                    {year}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            />
 
             <GenerateButton loading={isNavigating} type="submit">
               {t('viewWrapped')}

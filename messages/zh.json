@@ -133,7 +133,9 @@
     "unitContributions": "次贡献",
     "unitDays": "天",
     "removeRepo": "移除仓库",
-    "viewRepoAnalysis": "查看详情"
+    "viewRepoAnalysis": "查看详情",
+    "longestGapZero": "全年在线，代码不停",
+    "longestGapFullYear": "给自己放了个长假"
   },
   "aiReport": {
     "title": "AI 年度总结",
@@ -157,7 +159,6 @@
     "dialogDescription": "配置你自己的 OpenAI 兼容 AI 服务。",
     "baseUrl": "API 地址",
     "baseUrlPlaceholder": "https://api.openai.com/v1",
-    "baseUrlHint": "OpenAI 兼容接口的根地址",
     "apiKey": "API 密钥",
     "apiKeyPlaceholder": "",
     "apiKeyHint": "你的 API 密钥将保存在本地，仅用于发送请求",
@@ -292,7 +293,19 @@
     "signInBenefitsItemYearWrapped": "一键打开你的年度回顾与更完整的统计",
     "signInBenefitsItemPrivateContrib": "包含私有仓库贡献（授权模式）",
     "signInBenefitsItemDeeperInsights": "获取更准确的语言 / 仓库 / Issues 数据分析",
-    "signInBenefitsFooter": "我们只读取你的贡献数据，不会修改你的仓库。"
+    "signInBenefitsFooter": "我们只读取你的贡献数据，不会修改你的仓库。",
+    "error": {
+      "title": "登录失败",
+      "defaultMessage": "登录过程中出现问题，请重试。",
+      "networkTimeout": "连接 GitHub 超时，请检查网络后重试。",
+      "networkError": "无法连接到 GitHub，请检查网络连接。",
+      "invalidCode": "授权码已过期或无效，请重新登录。",
+      "accessDenied": "你取消了授权请求。登录后可解锁更多功能。",
+      "serverError": "GitHub 服务暂时不可用，请稍后重试。",
+      "configError": "OAuth 配置错误，请联系管理员。",
+      "retry": "重试",
+      "backHome": "返回首页"
+    }
   },
   "yearlyTags": {
     "categoryNames": {

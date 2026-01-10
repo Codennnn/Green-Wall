@@ -1,101 +1,56 @@
 'use client'
 
-import { memo, useEffect, useMemo, useRef, useState } from 'react'
+import { useMemo } from 'react'
 import { useEvent } from 'react-use-event-hook'
 
-import { DEFAULT_LEVEL_COLORS, levels } from '~/constants'
-import { useData } from '~/DataContext'
+import { DEFAULT_LEVEL_COLORS, levels, SVG_GRAPH_CONSTANTS } from '~/constants'
 import { BlockShape, ContributionLevel } from '~/enums'
 import { cn } from '~/lib/utils'
 import type { ContributionCalendar, ContributionDay } from '~/types'
 
+import type { PixelMatrix, PixelOverride } from './animations/types'
+
 import styles from './Graph.module.css'
 
-// SVG 坐标常量（使用相对单位）
-const CELL_UNIT = 1 // 每个单元格占 1 个单位
-const BLOCK_RATIO = 0.77 // 方块大小占单元格的比例 (10 / 13 ≈ 0.77)
-
-// 圆角常量（viewBox 单位）
-const ROUND_SQUARE = 0.12 // 方形：小圆角
-const ROUND_CIRCLE = BLOCK_RATIO / 2 // 圆形：半径为宽度的一半
-
-/**
- * 将 rgb(r, g, b) 格式的颜色转换为 #rrggbb 格式
- * 这是必需的，因为 html-to-image 需要绝对颜色值而不是 CSS 函数
- */
-function rgbToHex(rgb: string): string {
-  // 匹配 rgb(r, g, b) 或 rgba(r, g, b, a) 格式
-  const match = /rgba?\((\d+),\s*(\d+),\s*(\d+)/.exec(rgb)
-
-  if (!match) {
-    return rgb
-  }
-
-  const r = Number.parseInt(match[1], 10)
-  const g = Number.parseInt(match[2], 10)
-  const b = Number.parseInt(match[3], 10)
-
-  return `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}`
-}
+const {
+  DAYS_IN_WEEK,
+  CELL_UNIT,
+  BLOCK_RATIO,
+  CORNER_RADIUS_SQUARE,
+  CORNER_RADIUS_ROUND,
+} = SVG_GRAPH_CONSTANTS
 
 export interface GraphSvgBlocksProps {
   weeks: ContributionCalendar['weeks']
+  blockShape: BlockShape
+  computedColors?: string[]
   highlightedDates?: Set<string>
   onDayHover?: (day: ContributionDay | null, element: SVGRectElement | null) => void
+  pixelOverrides?: PixelMatrix
+  animationMode?: boolean
 }
 
-function InnerGraphSvgBlocks({
+/**
+ * GraphSvgBlocks - 渲染 SVG 贡献热力图方块
+ */
+export function GraphSvgBlocks({
   weeks,
+  blockShape,
+  computedColors = DEFAULT_LEVEL_COLORS,
   highlightedDates,
   onDayHover,
+  pixelOverrides,
+  animationMode = false,
 }: GraphSvgBlocksProps) {
-  const { settings, applyingTheme } = useData()
   const shouldDimNonHighlighted = highlightedDates && highlightedDates.size > 0
-  const svgRef = useRef<SVGSVGElement>(null)
 
-  // 存储计算后的实际颜色值（用于图片导出）
-  const [computedColors, setComputedColors] = useState<string[]>(DEFAULT_LEVEL_COLORS)
+  const blockRadius = blockShape === BlockShape.Round
+    ? CORNER_RADIUS_ROUND
+    : CORNER_RADIUS_SQUARE
 
-  // 根据 blockShape 设置圆角值（使用 viewBox 单位）
-  const blockRadius = settings.blockShape === BlockShape.Round
-    ? ROUND_CIRCLE
-    : ROUND_SQUARE
-
-  // 计算 viewBox 尺寸
   const totalWeeks = weeks.length
   const viewBoxWidth = totalWeeks * CELL_UNIT
-  const viewBoxHeight = 7 * CELL_UNIT
-
-  useEffect(() => {
-    if (!svgRef.current) {
-      return
-    }
-
-    const svg = svgRef.current
-    const computedStyle = getComputedStyle(svg)
-    const colors: string[] = []
-
-    for (let i = 0; i <= 4; i++) {
-      const cssVar = computedStyle.getPropertyValue(`--level-${i}`).trim()
-
-      if (cssVar) {
-        // 创建临时元素来解析可能包含 color-mix() 的颜色值
-        const tempDiv = document.createElement('div')
-        tempDiv.style.cssText = `color: ${cssVar}; display: none;`
-        document.body.appendChild(tempDiv)
-
-        const resolved = getComputedStyle(tempDiv).color
-        document.body.removeChild(tempDiv)
-
-        colors.push(rgbToHex(resolved))
-      }
-      else {
-        colors.push(DEFAULT_LEVEL_COLORS[i])
-      }
-    }
-
-    setComputedColors(colors)
-  }, [applyingTheme])
+  const viewBoxHeight = DAYS_IN_WEEK * CELL_UNIT
 
   const rects = useMemo(() => {
     const elements: React.ReactElement[] = []
@@ -103,9 +58,10 @@ function InnerGraphSvgBlocks({
     weeks.forEach((week, weekIndex) => {
       let days = week.days
 
-      // 填充不足 7 天的周
-      if (days.length < 7) {
-        const fills = Array.from(Array(7 - days.length)).map<ContributionDay>(
+      // 填充不足一周天数的周（首周在前面填充，末周在后面填充）
+      if (days.length < DAYS_IN_WEEK) {
+        const fillCount = DAYS_IN_WEEK - days.length
+        const fills = Array.from({ length: fillCount }).map<ContributionDay>(
           () => ({
             level: ContributionLevel.Null,
             count: 0,
@@ -129,16 +85,28 @@ function InnerGraphSvgBlocks({
         const level = levels[day.level]
         const isNull = level === -1
 
-        const fillColor = level >= 0 && level <= 4
-          ? computedColors[level]
-          : 'transparent'
+        const pixelOverride: PixelOverride | undefined = animationMode
+          ? pixelOverrides?.[weekIndex]?.[dayIndex]
+          : undefined
+
+        // 检查是否有动画像素覆盖（有颜色才算有覆盖）
+        const hasPixelOverride = Boolean(pixelOverride?.color)
+
+        const fillColor: string = pixelOverride?.color
+          ?? (level >= 0 && level <= 4 ? (computedColors[level] ?? 'transparent') : 'transparent')
+
+        // 动画模式下使用覆盖透明度
+        const fillOpacity: number | undefined = pixelOverride?.opacity
+
+        // 在动画模式下且有像素覆盖时，不设置 data-level 以避免 CSS 覆盖 fill 颜色
+        const dataLevel = (animationMode && hasPixelOverride) ? undefined : level
 
         elements.push(
           <rect
             key={day.date || `fill-${weekIndex}-${dayIndex}`}
             className={cn(
               styles.svgRect,
-              shouldDimNonHighlighted && !isNull
+              !animationMode && shouldDimNonHighlighted && !isNull
                 ? isHighlighted
                   ? styles.highlighted
                   : styles.dimmed
@@ -146,9 +114,10 @@ function InnerGraphSvgBlocks({
             )}
             data-count={day.count}
             data-date={day.date}
-            data-level={level}
+            data-level={dataLevel}
             data-level-key={day.level}
             fill={fillColor}
+            fillOpacity={fillOpacity}
             height={BLOCK_RATIO}
             rx={blockRadius}
             ry={blockRadius}
@@ -161,7 +130,15 @@ function InnerGraphSvgBlocks({
     })
 
     return elements
-  }, [weeks, highlightedDates, shouldDimNonHighlighted, blockRadius, computedColors])
+  }, [
+    weeks,
+    highlightedDates,
+    shouldDimNonHighlighted,
+    blockRadius,
+    computedColors,
+    animationMode,
+    pixelOverrides,
+  ])
 
   const handleMouseMove = useEvent((e: React.MouseEvent<SVGSVGElement>) => {
     const target = e.target as SVGRectElement
@@ -185,7 +162,6 @@ function InnerGraphSvgBlocks({
 
   return (
     <svg
-      ref={svgRef}
       className={styles.svgBlocks}
       preserveAspectRatio="xMinYMin meet"
       viewBox={`0 0 ${viewBoxWidth} ${viewBoxHeight}`}
@@ -196,26 +172,3 @@ function InnerGraphSvgBlocks({
     </svg>
   )
 }
-
-export const GraphSvgBlocks = memo(
-  InnerGraphSvgBlocks,
-  (prevProps, nextProps) => {
-    if (prevProps === nextProps) {
-      return true
-    }
-
-    if (prevProps.weeks !== nextProps.weeks) {
-      return false
-    }
-
-    if (prevProps.highlightedDates !== nextProps.highlightedDates) {
-      return false
-    }
-
-    if (prevProps.onDayHover !== nextProps.onDayHover) {
-      return false
-    }
-
-    return true
-  },
-)

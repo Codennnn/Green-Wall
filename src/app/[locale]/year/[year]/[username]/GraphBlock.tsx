@@ -19,17 +19,10 @@ import { ContributionsGraph } from '~/components/ContributionsGraph/Contribution
 import type { GraphHighlightMode, GraphHighlightOptions } from '~/components/ContributionsGraph/graphHighlightUtils'
 import { StatCard, StatValue } from '~/components/StaticCard'
 import { Button } from '~/components/ui/button'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '~/components/ui/select'
 import { Skeleton } from '~/components/ui/skeleton'
+import { YearSelect } from '~/components/YearSelect/YearSelect'
 import { useData } from '~/DataContext'
 import { ReposCardMode } from '~/enums'
-import { getCurrentYear } from '~/helpers'
 import { useDateFormatters } from '~/hooks/useDateFormatters'
 import { useImageExport } from '~/hooks/useImageExport'
 import { useContributionQuery,
@@ -69,17 +62,6 @@ export function GraphBlock() {
   const { setGraphData } = useData()
 
   const router = useRouter()
-
-  const currentYear = getCurrentYear()
-  const yearOptions = useMemo(() => {
-    const years: number[] = []
-
-    for (let y = currentYear; y >= 2008; y--) {
-      years.push(y)
-    }
-
-    return years
-  }, [currentYear])
 
   const handleYearChange = useEvent((value: string | null) => {
     if (value === null || Number(value) === queryYear) {
@@ -244,23 +226,13 @@ export function GraphBlock() {
     <div className="flex flex-col items-center py-5 w-full">
       <div className="flex items-center w-full p-grid-item">
         <div className="ml-auto flex items-center gap-3 ring-4 ring-background bg-background">
-          <Select
+          <YearSelect
+            alignItemWithTrigger={false}
             disabled={isDownloading || isLoading}
             value={String(queryYear)}
+            valueClassName="font-bold text-lg"
             onValueChange={handleYearChange}
-          >
-            <SelectTrigger className="h-10 w-[100px] justify-center text-center">
-              <SelectValue className="font-bold text-lg" />
-            </SelectTrigger>
-
-            <SelectContent alignItemWithTrigger={false}>
-              {yearOptions.map((y) => (
-                <SelectItem key={y} value={String(y)}>
-                  {y}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          />
 
           <Button
             disabled={isDownloading || isLoading}
@@ -278,7 +250,7 @@ export function GraphBlock() {
         className="grid w-full grid-cols-1 gap-4 bg-background p-grid-item md:grid-cols-8 lg:grid-cols-12"
       >
         {/* MARK: 贡献日历热力图 */}
-        <div className="col-span-1 md:col-span-5 lg:col-span-7">
+        <div className="col-span-1 md:col-span-5 lg:col-span-7 h-full">
           {
             isLoading
               ? (
@@ -305,9 +277,11 @@ export function GraphBlock() {
                   <ContributionsGraph
                     highlightMode={highlightMode}
                     highlightOptions={highlightOptions}
-                    mockupWrapperClassName="p-grid-item"
+                    mockupClassName="h-full"
+                    mockupWrapperClassName="p-grid-item h-full"
                     showInspect={false}
-                    titleRender={() => null}
+                    titleRender={null}
+                    wrapperClassName="h-full"
                   />
                 )
           }
@@ -475,16 +449,51 @@ export function GraphBlock() {
             onMouseLeave={handleClearHighlight}
           >
             <div className="pt-grid-item-sm p-grid-item">
-              <StatValue
-                large
-                isLoading={!statistics}
-                subValue={formatDateRange(
-                  statistics?.longestGapStartDate,
-                  statistics?.longestGapEndDate,
-                )}
-                unit={t('unitDays')}
-                value={statistics?.longestGap}
-              />
+              {(() => {
+                const isLeapYear
+                  = (queryYear % 4 === 0 && queryYear % 100 !== 0)
+                    || (queryYear % 400 === 0)
+                const daysInYear = isLeapYear ? 366 : 365
+                const longestGap = statistics?.longestGap
+
+                if (longestGap === 0) {
+                  return (
+                    <StatValue
+                      large
+                      isLoading={!statistics}
+                      subValue={t('longestGapZero')}
+                      unit={t('unitDays')}
+                      value={longestGap}
+                    />
+                  )
+                }
+
+                if (longestGap !== undefined && longestGap >= daysInYear) {
+                  return (
+                    <StatValue
+                      large
+                      isLoading={!statistics}
+                      subValue={t('longestGapFullYear')}
+                      unit={t('unitDays')}
+                      value={longestGap}
+                    />
+                  )
+                }
+
+                // 正常情况
+                return (
+                  <StatValue
+                    large
+                    isLoading={!statistics}
+                    subValue={formatDateRange(
+                      statistics?.longestGapStartDate,
+                      statistics?.longestGapEndDate,
+                    )}
+                    unit={t('unitDays')}
+                    value={longestGap}
+                  />
+                )
+              })()}
             </div>
           </StatCard>
         </div>

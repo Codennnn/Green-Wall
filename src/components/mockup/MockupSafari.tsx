@@ -27,7 +27,7 @@ export function MockupSafari(props: MockupSafariProps) {
       )}
     >
       <div className={cn('relative z-10 overflow-hidden', className)}>
-        <div className="rounded-2xl border-2 border-double border-(--theme-border) bg-(--theme-background)">
+        <div className="h-full rounded-2xl border-2 border-double border-(--theme-border) bg-(--theme-background)">
           {settings.showSafariHeader && (
             <div className="relative flex h-14 items-center gap-x-2 px-6">
               <div className="flex items-center gap-2">
