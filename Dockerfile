@@ -1,47 +1,96 @@
-# 基于 Node.js 20 的官方镜像
-FROM node:20-alpine as build
+# Green-Wall Next.js Application
+# Supports both development and production environments
 
-# 设置工作目录
+# Base stage: install pnpm and set up common configuration
+FROM node:22-alpine AS base
+
+# Install libc6-compat for npm package compatibility
+RUN apk add --no-cache libc6-compat
+
+# Enable corepack and setup pnpm
+ENV COREPACK_ENABLE_DOWNLOAD_PROMPT=0
+RUN corepack enable && \
+    corepack prepare pnpm@9.15.3 --activate
+
 WORKDIR /app
 
-# 复制 package.json 和 pnpm-lock.yaml
+# Set pnpm store directory for caching
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+
+# Dependencies stage: install all dependencies
+FROM base AS deps
+
 COPY package.json pnpm-lock.yaml ./
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
+    pnpm install --frozen-lockfile --prefer-offline
 
-# 安装 pnpm
-RUN npm install -g pnpm
+# Production dependencies stage: install only production dependencies
+FROM base AS deps-prod
 
-# 安装依赖
-RUN pnpm install --frozen-lockfile
+COPY package.json pnpm-lock.yaml ./
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
+    pnpm install --frozen-lockfile --prefer-offline --prod
 
-# 复制源代码
+# Development stage: for local development with hot reload
+FROM base AS development
+
+COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-# 复制 .env.local 配置文件到容器
-COPY .env.local .env.local
+EXPOSE 8000
 
-# 打包项目
+ENV NODE_ENV=development
+ENV HOSTNAME="0.0.0.0"
+ENV PORT=8000
+
+# Note: development uses root user to avoid volume mount permission issues
+# Production environment uses non-root user for security
+
+CMD ["pnpm", "dev"]
+
+# Builder stage: compile production version
+FROM base AS builder
+
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+
+# Build-time environment variable (can be overridden via --build-arg)
+ARG NEXT_PUBLIC_SITE_URL
+ENV NEXT_PUBLIC_SITE_URL=${NEXT_PUBLIC_SITE_URL}
+ENV NEXT_TELEMETRY_DISABLED=1
+
 RUN pnpm build
 
-# 使用一个更轻的镜像来运行应用
-FROM node:20-alpine
+# Production stage: minimal runtime image
+FROM base AS production
 
-# 安装 pnpm
-RUN npm install -g pnpm
+# Create non-root user for security
+RUN addgroup --system --gid 1001 nodejs && \
+    adduser --system --uid 1001 nextjs
 
-# 设置工作目录
 WORKDIR /app
 
-# 复制构建好的文件
-COPY --from=build /app ./
+ENV NODE_ENV=production
+ENV NEXT_TELEMETRY_DISABLED=1
+ENV HOSTNAME="0.0.0.0"
+ENV PORT=3000
 
-# 复制 .env.local 配置文件到容器
-COPY --from=build /app/.env.local .env.local
+COPY --from=deps-prod /app/node_modules ./node_modules
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/.next ./.next
+COPY --from=builder /app/package.json ./package.json
 
-# 暴露端口
+# For standalone output mode, use:
+# COPY --from=builder /app/.next/standalone ./
+# COPY --from=builder /app/.next/static ./.next/static
+# COPY --from=builder /app/public ./public
+
+# Create cache directory and set permissions for ISR
+RUN mkdir -p .next/cache && chown -R nextjs:nodejs .next
+
+USER nextjs
+
 EXPOSE 3000
 
-# 设置环境变量（如果有的话，譬如生产环境的 NODE_ENV）
-ENV NODE_ENV=production
-
-# 启动应用
 CMD ["pnpm", "start"]

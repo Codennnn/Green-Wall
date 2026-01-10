@@ -6,10 +6,10 @@ _Take a snapshot 📸 of your GitHub contributions, then share it!_
 
 **Green Wall** is a powerful web tool that simplifies the way you review your GitHub :octocat: contributions over time. This tool allows you to generate beautiful contribution images and get AI-powered yearly reports, which you can save and share with others.
 
-|                                 Contribution Wall                                 |                                   Yearly Report                                   |
-| :-------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------: |
-| [![Screenshot 1][screenshot-wall]][site] | [![Screenshot 2][screenshot-report]][site] |
-|            Generate and view contribution graphs across multiple years            |                  AI-powered yearly review with detailed insights                  |
+|                      Contribution Wall                      |                  Yearly Report                  |
+| :---------------------------------------------------------: | :---------------------------------------------: |
+|          [![Screenshot 1][screenshot-wall]][site]           |   [![Screenshot 2][screenshot-report]][site]    |
+| Generate and view contribution graphs across multiple years | AI-powered yearly review with detailed insights |
 
 ## Features
 
@@ -91,7 +91,7 @@ This project is a Next.js app that fetches data from the GitHub GraphQL API. The
 | --------------------- | -------- | -------------------------------------------------------------- | -------------------------------- |
 | `GITHUB_ACCESS_TOKEN` | Yes      | GitHub token used by the server to call the GitHub GraphQL API | Your PAT                         |
 | `AI_BASE_URL`         | No       | Base URL of an OpenAI-compatible API endpoint                  | e.g. `https://api.openai.com/v1` |
-| `AI_API_KEY`          | No\\*     | API key for the AI provider                                    | Provider key                     |
+| `AI_API_KEY`          | No\\\*   | API key for the AI provider                                    | Provider key                     |
 | `AI_MODEL`            | No       | Model name supported by your provider                          | e.g. `gpt-4o-mini`               |
 
 > Note: AI variables are only needed for the **Yearly AI Report** feature (`/api/ai/yearly-report`). If you set `AI_API_KEY`, make sure `AI_BASE_URL` and `AI_MODEL` are also valid.
@@ -121,6 +121,8 @@ The source code for the script is located in the file [`/plugins/script.ts`][tam
 
 To run this project, which uses the [GitHub API][github-api] to fetch data, you'll need a personal access token for authentication. For details on obtaining this token, see "[Creating a personal access token][github-pat]".
 
+### Option 1: Direct Run (Recommended for Quick Development)
+
 Once you have your personal access token, create a file named `.env.local` at the root of the project and insert the token as follows:
 
 ```sh
@@ -134,34 +136,67 @@ GITHUB_ACCESS_TOKEN="ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 
 Then you are ready to run `pnpm dev` to develop.
 
-## Docker Build
+### Option 2: Using Docker (Recommended for Production Deployment)
 
-First, create a `.env.local` file in the project's root directory and enter the correct `GITHUB_ACCESS_TOKEN` variable.
+This project provides complete Docker support with configurations for both development and production environments.
 
-Build Docker image：
+#### Environment Variable Configuration
 
-```shell
-docker build -t green-wall .
+1. **Create application configuration files**
+
+   Create environment-specific configuration files based on `.env.example`:
+
+   ```bash
+   # For development environment
+   cp .env.example .env.dev
+   # Or for production environment
+   cp .env.example .env.prod
+   ```
+
+   Then edit the corresponding file and fill in the required environment variables (refer to detailed descriptions in `.env.example`).
+
+2. **（Optional）Customize Docker Compose configuration**
+
+   If you need to modify ports or other container configurations, create a `.env` file:
+
+   ```bash
+   # .env (Docker Compose specific, optional)
+   DEV_PORT=8000          # Development environment port
+   PROD_PORT=3000         # Production environment port
+   DEV_ENV_FILE=.env.dev  # Development configuration file
+   PROD_ENV_FILE=.env.prod # Production configuration file
+   ```
+
+   If this file is not created, the default values in `docker-compose.yml` will be used.
+
+#### Start Services
+
+```bash
+# Development environment (with hot reload)
+docker compose up dev
+
+# Production environment
+docker compose up prod
+
+# Run in background
+docker compose up -d prod
+
+# Stop services
+docker compose down
 ```
 
-Run the Docker image：
+#### Backward Compatibility
 
-```shell
-docker run -d -p 8000:3000 --name green-wall green-wall
-```
-
-Last visited address:
-
-```text
-http://localhost:8000
-```
+For backward compatibility, if `.env.dev` or `.env.prod` doesn't exist, the service will automatically fall back to using the `.env.local` file. Therefore, existing configurations will continue to work.
 
 <!-- Link References -->
+
 [site]: https://green-wall.leoku.dev/
 [repo]: https://github.com/Codennnn/Green-Wall
 [readme-zh]: ./README.zh.md
 [readme-en]: ./README.md
 [env-example]: ./.env.example
+
 [api-route]: ./src/app/api/contribution/[username]/route.ts
 [tampermonkey-script]: ./plugins/script.ts
 [greasyfork]: https://greasyfork.org/en/scripts/492478-greenwall-view-all-contribution-graphs-in-github

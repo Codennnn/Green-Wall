@@ -1,0 +1,60 @@
+services:
+  dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: development
+    container_name: green-wall-dev
+    ports:
+      - "${DEV_PORT:-8000}:${DEV_PORT:-8000}"
+    volumes:
+      # Mount source code for hot reload
+      - .:/app
+      # Use anonymous volume to preserve container's node_modules
+      - /app/node_modules
+      # Mount .next directory to cache build artifacts
+      - /app/.next
+    environment:
+      - NODE_ENV=development
+      - HOSTNAME=0.0.0.0
+      - PORT=${DEV_PORT:-8000}
+      - COREPACK_ENABLE_DOWNLOAD_PROMPT=0
+    env_file:
+      - ${DEV_ENV_FILE:-.env.dev}
+    stdin_open: true
+    tty: true
+    restart: unless-stopped
+
+  prod:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+      args:
+        # Inject public environment variables at build time
+        NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL:-https://green-wall.leoku.dev}
+    container_name: green-wall-prod
+    ports:
+      - "${PROD_PORT:-3000}:${PROD_PORT:-3000}"
+    environment:
+      - NODE_ENV=production
+      - HOSTNAME=0.0.0.0
+      - PORT=${PROD_PORT:-3000}
+      - COREPACK_ENABLE_DOWNLOAD_PROMPT=0
+    env_file:
+      - ${PROD_ENV_FILE:-.env.prod}
+    restart: always
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "wget",
+          "--no-verbose",
+          "--tries=1",
+          "--spider",
+          "http://localhost:${PROD_PORT:-3000}/",
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s

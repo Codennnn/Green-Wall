@@ -6,10 +6,10 @@ _为你的 GitHub 贡献拍张快照 📸，然后分享出去！_
 
 **Green Wall** 是一个强大的 Web 工具，帮你更轻松地回顾自己在 GitHub :octocat: 上多年来的贡献记录。它可以把你的贡献数据生成精美的图片，还能提供 AI 驱动的年度报告，方便保存与分享。
 
-|                                      贡献墙                                       |                                     年度报告                                      |
-| :-------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------: |
+|                  贡献墙                  |                  年度报告                  |
+| :--------------------------------------: | :----------------------------------------: |
 | [![Screenshot 1][screenshot-wall]][site] | [![Screenshot 2][screenshot-report]][site] |
-|                               生成并查看多年贡献图                                |                          AI 驱动的年度回顾，提供详细洞察                          |
+|           生成并查看多年贡献图           |      AI 驱动的年度回顾，提供详细洞察       |
 
 ## 功能特性
 
@@ -90,12 +90,12 @@ _为你的 GitHub 贡献拍张快照 📸，然后分享出去！_
 3. **在 Vercel 配置环境变量**
    - 在导入时（或之后通过 **Project → Settings → Environment Variables**），设置以下变量（完整说明见 [`.env.example`][env-example]）：
 
-| 变量                  | 必填 | 说明                                              | 推荐值                           |
-| --------------------- | ---- | ------------------------------------------------- | -------------------------------- |
-| `GITHUB_ACCESS_TOKEN` | 是   | 服务端调用 GitHub GraphQL API 所需的 GitHub Token | 你的 PAT                         |
-| `AI_BASE_URL`         | 否   | OpenAI-compatible API 的 Base URL                 | e.g. `https://api.openai.com/v1` |
-| `AI_API_KEY`          | 否\\* | AI 服务的 API Key                                 | Provider key                     |
-| `AI_MODEL`            | 否   | 该 AI 服务支持的模型名称                          | e.g. `gpt-4o-mini`               |
+| 变量                  | 必填   | 说明                                              | 推荐值                           |
+| --------------------- | ------ | ------------------------------------------------- | -------------------------------- |
+| `GITHUB_ACCESS_TOKEN` | 是     | 服务端调用 GitHub GraphQL API 所需的 GitHub Token | 你的 PAT                         |
+| `AI_BASE_URL`         | 否     | OpenAI-compatible API 的 Base URL                 | e.g. `https://api.openai.com/v1` |
+| `AI_API_KEY`          | 否\\\* | AI 服务的 API Key                                 | Provider key                     |
+| `AI_MODEL`            | 否     | 该 AI 服务支持的模型名称                          | e.g. `gpt-4o-mini`               |
 
 > 说明：AI 相关变量仅用于 **AI 年度总结** 功能（`/api/ai/yearly-report`）。如果你设置了 `AI_API_KEY`，也请确保 `AI_BASE_URL` 与 `AI_MODEL` 配置正确可用。
 
@@ -124,6 +124,8 @@ _为你的 GitHub 贡献拍张快照 📸，然后分享出去！_
 
 本项目会使用 [GitHub API][github-api] 拉取数据，因此你需要一个用于鉴权的 personal access token。获取方式请参考「[Creating a personal access token][github-pat]」。
 
+### 方式 1：直接运行（推荐用于快速开发）
+
 拿到 token 后，在项目根目录新建 `.env.local` 文件，并按如下格式写入：
 
 ```sh
@@ -137,34 +139,67 @@ GITHUB_ACCESS_TOKEN="ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 
 随后运行 `pnpm dev` 即可开始本地开发。
 
-## Docker 部署
+### 方式 2：使用 Docker（推荐用于生产部署）
 
-先在项目根目录下创建好 `.env.local` 文件并写入正确的 `GITHUB_ACCESS_TOKEN` 变量。
+本项目提供了完整的 Docker 支持，包含开发和生产两种环境配置。
 
-构建Docker镜像：
+#### 环境变量配置
 
-```shell
-docker build -t green-wall .
+1. **创建应用配置文件**
+
+   根据 `.env.example` 创建环境特定的配置文件：
+
+   ```bash
+   # 开发环境配置
+   cp .env.example .env.dev
+   # 或生产环境配置
+   cp .env.example .env.prod
+   ```
+
+   然后编辑对应文件，填入必需的环境变量（参考 `.env.example` 中的详细说明）。
+
+2. **（可选）自定义 Docker Compose 配置**
+
+   如果需要修改端口等容器配置，可创建 `.env` 文件：
+
+   ```bash
+   # .env（Docker Compose 专用，可选）
+   DEV_PORT=8000          # 开发环境端口
+   PROD_PORT=3000         # 生产环境端口
+   DEV_ENV_FILE=.env.dev  # 开发环境配置文件
+   PROD_ENV_FILE=.env.prod # 生产环境配置文件
+   ```
+
+   如果不创建此文件，将使用 `docker-compose.yml` 中的默认值。
+
+#### 启动服务
+
+```bash
+# 开发环境（支持热重载）
+docker compose up dev
+
+# 生产环境
+docker compose up prod
+
+# 后台运行
+docker compose up -d prod
+
+# 停止服务
+docker compose down
 ```
 
-运行Docker镜像：
+#### 向后兼容
 
-```shell
-docker run -d -p 8000:3000 --name green-wall green-wall
-```
-
-最后访问地址:
-
-```text
-http://localhost:8000
-```
+为了保持向后兼容，如果 `.env.dev` 或 `.env.prod` 不存在，服务会自动回退使用 `.env.local` 文件。因此现有的配置仍然可以正常工作。
 
 <!-- Link References -->
+
 [site]: https://green-wall.leoku.dev/
 [repo]: https://github.com/Codennnn/Green-Wall
 [readme-zh]: ./README.zh.md
 [readme-en]: ./README.md
 [env-example]: ./.env.example
+
 [api-route]: ./src/app/api/contribution/[username]/route.ts
 [tampermonkey-script]: ./plugins/script.ts
 [greasyfork]: https://greasyfork.org/en/scripts/492478-greenwall-view-all-contribution-graphs-in-github
