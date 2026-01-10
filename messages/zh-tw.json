@@ -159,7 +159,6 @@
     "dialogDescription": "設定你自己的 OpenAI 相容 AI 服務。",
     "baseUrl": "API 位址",
     "baseUrlPlaceholder": "https://api.openai.com/v1",
-    "baseUrlHint": "OpenAI 相容介面的根位址",
     "apiKey": "API 金鑰",
     "apiKeyPlaceholder": "",
     "apiKeyHint": "你的 API 金鑰將儲存在本地，僅用於發送請求",

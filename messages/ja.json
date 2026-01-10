@@ -159,7 +159,6 @@
     "dialogDescription": "独自の OpenAI 互換 AI サービスを設定。",
     "baseUrl": "API エンドポイント",
     "baseUrlPlaceholder": "https://api.openai.com/v1",
-    "baseUrlHint": "OpenAI 互換 API のベース URL",
     "apiKey": "API キー",
     "apiKeyPlaceholder": "",
     "apiKeyHint": "API キーはローカルに保存され、リクエストにのみ使用されます",

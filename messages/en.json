@@ -159,7 +159,6 @@
     "dialogDescription": "Configure your own OpenAI-compatible AI service.",
     "baseUrl": "API Endpoint",
     "baseUrlPlaceholder": "https://api.openai.com/v1",
-    "baseUrlHint": "Base URL for OpenAI-compatible API",
     "apiKey": "API Key",
     "apiKeyPlaceholder": "",
     "apiKeyHint": "Your API key is stored locally and only used for requests",
