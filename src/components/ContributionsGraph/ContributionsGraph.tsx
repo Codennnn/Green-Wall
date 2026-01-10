@@ -1,9 +1,11 @@
-import { forwardRef, memo, useImperativeHandle, useMemo, useRef } from 'react'
+import { forwardRef, useImperativeHandle, useMemo, useRef } from 'react'
 
 import { MockupSafari } from '~/components/mockup/MockupSafari'
+import { getThemeProperties } from '~/components/ThemeVariablesProvider'
 import { DEFAULT_SIZE, DEFAULT_THEME, sizeProperties, THEME_PRESETS } from '~/constants'
 import { useData } from '~/DataContext'
 import { BlockShape } from '~/enums'
+import { useComputedLevelColors } from '~/hooks/useComputedLevelColors'
 import { cn } from '~/lib/utils'
 
 import { Graph, type GraphProps } from './Graph'
@@ -20,6 +22,7 @@ interface ContributionsGraphProps
   extends Pick<GraphProps, 'showInspect' | 'titleRender'> {
   /** Unique ID for the contributions graph container. */
   wrapperId?: string
+  wrapperClassName?: string
   /**
    * Custom Mockup component to wrap the contributions graph.
    * @default MockupArc
@@ -31,14 +34,18 @@ interface ContributionsGraphProps
   highlightOptions?: GraphHighlightOptions
 }
 
-function InnerContributionsGraph(
+/**
+ * ContributionsGraph - 完整的 GitHub 贡献图组件
+ */
+function ContributionsGraphInner(
   props: ContributionsGraphProps,
   ref: React.Ref<HTMLDivElement | null>,
 ) {
   const {
+    wrapperId,
+    wrapperClassName,
     mockupWrapperClassName,
     mockupClassName,
-    wrapperId,
     showInspect,
     titleRender,
     highlightMode,
@@ -63,6 +70,8 @@ function InnerContributionsGraph(
     [settings.theme],
   )
 
+  const computedColors = useComputedLevelColors(graphRef, applyingTheme)
+
   const highlightDatesMap = useMemo(() => {
     const map = new Map<number, Set<string>>()
 
@@ -83,21 +92,7 @@ function InnerContributionsGraph(
     return null
   }
 
-  const themeProperties = applyingTheme
-    ? {
-        '--theme-foreground': applyingTheme.colorForeground,
-        '--theme-background': applyingTheme.colorBackground,
-        '--theme-background-container': applyingTheme.colorBackgroundContainer,
-        '--theme-secondary': applyingTheme.colorSecondary,
-        '--theme-primary': applyingTheme.colorPrimary,
-        '--theme-border': applyingTheme.colorBorder,
-        '--level-0': applyingTheme.levelColors[0],
-        '--level-1': applyingTheme.levelColors[1],
-        '--level-2': applyingTheme.levelColors[2],
-        '--level-3': applyingTheme.levelColors[3],
-        '--level-4': applyingTheme.levelColors[4],
-      }
-    : {}
+  const themeProperties = applyingTheme ? getThemeProperties(applyingTheme) : {}
 
   const cssProperties = {
     ...themeProperties,
@@ -112,6 +107,7 @@ function InnerContributionsGraph(
   return (
     <div
       ref={graphRef}
+      className={wrapperClassName}
       id={wrapperId}
       style={{
         ...cssProperties,
@@ -143,7 +139,9 @@ function InnerContributionsGraph(
               return (
                 <Graph
                   key={calendar.year}
+                  blockShape={settings.blockShape}
                   className={shouldDisplay ? '' : 'hidden'}
+                  computedColors={computedColors}
                   data={calendar}
                   daysLabel={settings.daysLabel}
                   highlightedDates={highlightedDates}
@@ -165,4 +163,4 @@ function InnerContributionsGraph(
   )
 }
 
-export const ContributionsGraph = memo(forwardRef(InnerContributionsGraph))
+export const ContributionsGraph = forwardRef(ContributionsGraphInner)

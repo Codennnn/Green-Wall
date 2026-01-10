@@ -133,7 +133,9 @@
     "unitContributions": "貢献",
     "unitDays": "日",
     "removeRepo": "リポジトリを削除",
-    "viewRepoAnalysis": "詳細"
+    "viewRepoAnalysis": "詳細",
+    "longestGapZero": "年間無休、コード三昧",
+    "longestGapFullYear": "長い休暇を取りました"
   },
   "aiReport": {
     "title": "AI 年間レビュー",
@@ -157,7 +159,6 @@
     "dialogDescription": "独自の OpenAI 互換 AI サービスを設定。",
     "baseUrl": "API エンドポイント",
     "baseUrlPlaceholder": "https://api.openai.com/v1",
-    "baseUrlHint": "OpenAI 互換 API のベース URL",
     "apiKey": "API キー",
     "apiKeyPlaceholder": "",
     "apiKeyHint": "API キーはローカルに保存され、リクエストにのみ使用されます",
@@ -292,7 +293,19 @@
     "signInBenefitsItemYearWrapped": "年間ラップドとより深い統計を開く",
     "signInBenefitsItemPrivateContrib": "プライベート貢献を含む（認可モード）",
     "signInBenefitsItemDeeperInsights": "より正確な言語/リポジトリ/Issue インサイトを取得",
-    "signInBenefitsFooter": "貢献データのみを読み取ります。リポジトリを変更することはできません。"
+    "signInBenefitsFooter": "貢献データのみを読み取ります。リポジトリを変更することはできません。",
+    "error": {
+      "title": "サインイン失敗",
+      "defaultMessage": "サインイン中に問題が発生しました。もう一度お試しください。",
+      "networkTimeout": "GitHub への接続がタイムアウトしました。ネットワークを確認して再試行してください。",
+      "networkError": "GitHub に接続できません。ネットワーク接続を確認してください。",
+      "invalidCode": "認証コードの有効期限が切れているか無効です。再度サインインしてください。",
+      "accessDenied": "認証リクエストがキャンセルされました。サインインするとさらに多くの機能を利用できます。",
+      "serverError": "GitHub が一時的に利用できません。しばらくしてから再試行してください。",
+      "configError": "OAuth 設定エラーです。管理者にお問い合わせください。",
+      "retry": "再試行",
+      "backHome": "ホームに戻る"
+    }
   },
   "yearlyTags": {
     "categoryNames": {

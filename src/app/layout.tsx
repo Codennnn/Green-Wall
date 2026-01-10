@@ -4,6 +4,7 @@ import Script from 'next/script'
 import { getLocale, getTranslations } from 'next-intl/server'
 
 import { BgDecoration } from '~/components/BgDecoration'
+import { ThemeProvider } from '~/components/ThemeProvider'
 import { siteConfig } from '~/config/site'
 import { isDevelopment } from '~/helpers'
 import { cn } from '~/lib/utils'
@@ -96,7 +97,9 @@ export default async function RootLayout(props: React.PropsWithChildren) {
         })}
       >
         <body className="m-0 h-full overflow-y-auto">
-          {props.children}
+          <ThemeProvider>
+            {props.children}
+          </ThemeProvider>
         </body>
       </html>
 

@@ -4,7 +4,7 @@ import { type Dispatch, type SetStateAction, useEffect, useRef } from 'react'
 import { useEvent } from 'react-use-event-hook'
 
 import { normalizeGitHubUsername } from '~/helpers'
-import { usePersistedSearchInput } from '~/hooks/usePersistedSearchInput'
+import { clearPersistedSearchInput, usePersistedSearchInput } from '~/hooks/usePersistedSearchInput'
 import { useContributionQuery } from '~/hooks/useQueries'
 import { eventTracker } from '~/lib/analytics'
 import type { GraphData } from '~/types'
@@ -29,7 +29,11 @@ export function useContributionSearch({
   addRecentUser,
   yearRange,
 }: UseContributionSearchOptions) {
-  const { value: searchName, setValue: setSearchName } = usePersistedSearchInput()
+  const {
+    value: searchName,
+    setValue: setSearchName,
+    setValueWithoutPersist: setSearchNameWithoutPersist,
+  } = usePersistedSearchInput()
 
   // 防止重复处理相同数据
   const lastProcessedUsernameRef = useRef<string>('')
@@ -71,15 +75,15 @@ export function useContributionSearch({
     },
   )
 
-  // 同步 URL 用户名到输入框
+  // 同步 URL 用户名到输入框（不写入 localStorage，避免覆盖 clearPersistedSearchInput 的效果）
   useEffect(() => {
     if (urlUsername.length > 0) {
-      setSearchName((currentSearchName) => {
+      setSearchNameWithoutPersist((currentSearchName) => {
         // 只有值不同时才更新，避免中断滚动动画
         return currentSearchName === urlUsername ? currentSearchName : urlUsername
       })
     }
-  }, [urlUsername, setSearchName])
+  }, [urlUsername, setSearchNameWithoutPersist])
 
   useEffect(() => {
     resetPreviousUserDataIfNeeded(urlUsername)
@@ -112,7 +116,7 @@ export function useContributionSearch({
       let entryPoint: 'url' | 'input_submit' | 'famous_user' | 'recent_user' = 'url'
       let durationMs: number | undefined
 
-      if (context && context.username.toLowerCase() === normalizedLogin.toLowerCase()) {
+      if (context?.username.toLowerCase() === normalizedLogin.toLowerCase()) {
         entryPoint = context.entryPoint
         durationMs = Date.now() - context.startedAt
       }
@@ -140,8 +144,7 @@ export function useContributionSearch({
       )
       const context = searchContextRef.current
       const isAlreadyStarted = Boolean(
-        context
-        && context.username.toLowerCase() === urlUsername.toLowerCase(),
+        context?.username.toLowerCase() === urlUsername.toLowerCase(),
       )
 
       if (!isAlreadyProcessed && !isAlreadyStarted) {
@@ -201,7 +204,10 @@ export function useContributionSearch({
 
     if (username && !isLoading) {
       resetPreviousUserDataIfNeeded(username)
-      setSearchName(username)
+      // 使用不持久化的方法设置值，保证搜索框显示用户名但不写入 localStorage
+      setSearchNameWithoutPersist(username)
+      // 确保 localStorage 中没有残留的搜索输入
+      clearPersistedSearchInput()
       searchContextRef.current = {
         entryPoint: source,
         startedAt: Date.now(),

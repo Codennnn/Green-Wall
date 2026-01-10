@@ -1,5 +1,7 @@
 'use client'
 
+import { useEffect, useState } from 'react'
+
 import { useTranslations } from 'next-intl'
 import { CalendarIcon, LogInIcon, LogOutIcon } from 'lucide-react'
 
@@ -31,18 +33,28 @@ interface ExtendedUser {
   login?: string
 }
 
+function AuthStatusButtonSkeleton() {
+  return (
+    <Button disabled size="icon" variant="outline">
+      <Spinner />
+    </Button>
+  )
+}
+
 export function AuthStatusButton() {
+  const [isHydrated, setIsHydrated] = useState(false)
   const { data: session, isPending } = useSession()
   const t = useTranslations('auth')
   const currentYear = getCurrentYear()
   const callbackURL = useCurrentPathWithSearch()
 
-  if (isPending) {
-    return (
-      <Button disabled size="icon" variant="outline">
-        <Spinner />
-      </Button>
-    )
+  // 仅在客户端执行，确保 hydration 完成后才渲染实际内容
+  useEffect(() => {
+    setIsHydrated(true)
+  }, [])
+
+  if (!isHydrated || isPending) {
+    return <AuthStatusButtonSkeleton />
   }
 
   if (session?.user) {
@@ -69,7 +81,7 @@ export function AuthStatusButton() {
             <button
               type="button"
               {...props}
-              className="flex items-center rounded-full p-1 bg-foreground/10 overflow-hidden"
+              className="flex items-center rounded-full p-0.75 bg-foreground/10 overflow-hidden hover:ring-1 hover:ring-border"
             >
               <UserAvatar
                 avatarUrl={user.image}

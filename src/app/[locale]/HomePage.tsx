@@ -1,6 +1,6 @@
 'use client'
 
-import { useId, useRef } from 'react'
+import { useEffect, useId, useRef } from 'react'
 
 import { useTranslations } from 'next-intl'
 import { DotIcon } from 'lucide-react'
@@ -79,6 +79,22 @@ export function HomePage() {
     addRecentUser,
     yearRange: settings.yearRange,
   })
+
+  useEffect(() => {
+    if (settingPopupPosition) {
+      const handleKeyDown = (event: KeyboardEvent) => {
+        if (event.key === 'Escape') {
+          closeSettingPopup()
+        }
+      }
+
+      document.addEventListener('keydown', handleKeyDown)
+
+      return () => {
+        document.removeEventListener('keydown', handleKeyDown)
+      }
+    }
+  }, [settingPopupPosition, closeSettingPopup])
 
   const loadingUsername = isLoading ? urlUsername : null
 
