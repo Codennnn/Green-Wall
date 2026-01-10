@@ -38,7 +38,7 @@ COPY --from=build /app ./
 COPY --from=build /app/.env.local .env.local
 
 # 暴露端口
-EXPOSE 8000
+EXPOSE 3000
 
 # 设置环境变量（如果有的话，譬如生产环境的 NODE_ENV）
 ENV NODE_ENV=production

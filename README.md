@@ -136,6 +136,8 @@ Then you are ready to run `pnpm dev` to develop.
 
 ## Docker Build
 
+First, create a `.env.local` file in the project's root directory and enter the correct `GITHUB_ACCESS_TOKEN` variable.
+
 Build Docker image：
 
 ```shell
@@ -145,7 +147,13 @@ docker build -t green-wall .
 Run the Docker image：
 
 ```shell
-docker run -p 8000:8000 green-wall
+docker run -d -p 8000:3000 --name green-wall green-wall
+```
+
+Last visited address:
+
+```text
+http://localhost:8000
 ```
 
 <!-- Link References -->
