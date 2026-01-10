@@ -9,6 +9,7 @@ import {
   useState,
 } from 'react'
 
+import { ThemeVariablesProvider } from '~/components/ThemeVariablesProvider'
 import { DEFAULT_THEME, THEME_PRESETS } from '~/constants'
 import { useGraphSetting } from '~/hooks/useGraphSetting'
 import type { GitHubUsername, GraphData, GraphSettings, ThemePreset } from '~/types'
@@ -95,7 +96,9 @@ export function DataProvider(props: DataProviderProps) {
 
   return (
     <Setting.Provider value={contextValue}>
-      {children}
+      <ThemeVariablesProvider theme={finalSettings.theme ?? DEFAULT_THEME}>
+        {children}
+      </ThemeVariablesProvider>
     </Setting.Provider>
   )
 }

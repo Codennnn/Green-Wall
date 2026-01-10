@@ -1,6 +1,7 @@
 import { forwardRef, useImperativeHandle, useMemo, useRef } from 'react'
 
 import { MockupSafari } from '~/components/mockup/MockupSafari'
+import { getThemeProperties } from '~/components/ThemeVariablesProvider'
 import { DEFAULT_SIZE, DEFAULT_THEME, sizeProperties, THEME_PRESETS } from '~/constants'
 import { useData } from '~/DataContext'
 import { BlockShape } from '~/enums'
@@ -89,21 +90,7 @@ function ContributionsGraphInner(
     return null
   }
 
-  const themeProperties = applyingTheme
-    ? {
-        '--theme-foreground': applyingTheme.colorForeground,
-        '--theme-background': applyingTheme.colorBackground,
-        '--theme-background-container': applyingTheme.colorBackgroundContainer,
-        '--theme-secondary': applyingTheme.colorSecondary,
-        '--theme-primary': applyingTheme.colorPrimary,
-        '--theme-border': applyingTheme.colorBorder,
-        '--level-0': applyingTheme.levelColors[0],
-        '--level-1': applyingTheme.levelColors[1],
-        '--level-2': applyingTheme.levelColors[2],
-        '--level-3': applyingTheme.levelColors[3],
-        '--level-4': applyingTheme.levelColors[4],
-      }
-    : {}
+  const themeProperties = applyingTheme ? getThemeProperties(applyingTheme) : {}
 
   const cssProperties = {
     ...themeProperties,

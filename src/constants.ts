@@ -133,7 +133,7 @@ export const THEME_PRESETS = [
     colorBorder: 'color-mix(in srgb, rgba(176, 172, 172, 0.36), transparent 0%)',
     colorBackgroundContainer: 'url(/images/background/sunset.webp) no-repeat center center / cover',
     levelColors: [
-      'var(--theme-secondary)',
+      'color-mix(in srgb, var(--theme-primary) 10%, var(--theme-secondary))',
       'color-mix(in srgb, var(--theme-primary) 35%, var(--theme-secondary))',
       'color-mix(in srgb, var(--theme-primary) 60%, var(--theme-secondary))',
       'color-mix(in srgb, var(--theme-primary) 75%, var(--theme-secondary))',
@@ -174,5 +174,6 @@ export const THEME_PRESETS = [
       'var(--color-brand-700)',
       'var(--color-brand-900)',
     ],
+    selectable: false,
   },
 ] satisfies ThemePreset[]

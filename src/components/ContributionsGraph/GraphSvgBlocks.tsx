@@ -8,6 +8,8 @@ import { BlockShape, ContributionLevel } from '~/enums'
 import { cn } from '~/lib/utils'
 import type { ContributionCalendar, ContributionDay } from '~/types'
 
+import type { PixelMatrix, PixelOverride } from './animations/types'
+
 import styles from './Graph.module.css'
 
 const {
@@ -24,6 +26,8 @@ export interface GraphSvgBlocksProps {
   computedColors?: string[]
   highlightedDates?: Set<string>
   onDayHover?: (day: ContributionDay | null, element: SVGRectElement | null) => void
+  pixelOverrides?: PixelMatrix
+  animationMode?: boolean
 }
 
 /**
@@ -35,6 +39,8 @@ export function GraphSvgBlocks({
   computedColors = DEFAULT_LEVEL_COLORS,
   highlightedDates,
   onDayHover,
+  pixelOverrides,
+  animationMode = false,
 }: GraphSvgBlocksProps) {
   const shouldDimNonHighlighted = highlightedDates && highlightedDates.size > 0
 
@@ -79,16 +85,28 @@ export function GraphSvgBlocks({
         const level = levels[day.level]
         const isNull = level === -1
 
-        const fillColor = level >= 0 && level <= 4
-          ? computedColors[level]
-          : 'transparent'
+        const pixelOverride: PixelOverride | undefined = animationMode
+          ? pixelOverrides?.[weekIndex]?.[dayIndex]
+          : undefined
+
+        // 检查是否有动画像素覆盖（有颜色才算有覆盖）
+        const hasPixelOverride = Boolean(pixelOverride?.color)
+
+        const fillColor: string = pixelOverride?.color
+          ?? (level >= 0 && level <= 4 ? (computedColors[level] ?? 'transparent') : 'transparent')
+
+        // 动画模式下使用覆盖透明度
+        const fillOpacity: number | undefined = pixelOverride?.opacity
+
+        // 在动画模式下且有像素覆盖时，不设置 data-level 以避免 CSS 覆盖 fill 颜色
+        const dataLevel = (animationMode && hasPixelOverride) ? undefined : level
 
         elements.push(
           <rect
             key={day.date || `fill-${weekIndex}-${dayIndex}`}
             className={cn(
               styles.svgRect,
-              shouldDimNonHighlighted && !isNull
+              !animationMode && shouldDimNonHighlighted && !isNull
                 ? isHighlighted
                   ? styles.highlighted
                   : styles.dimmed
@@ -96,9 +114,10 @@ export function GraphSvgBlocks({
             )}
             data-count={day.count}
             data-date={day.date}
-            data-level={level}
+            data-level={dataLevel}
             data-level-key={day.level}
             fill={fillColor}
+            fillOpacity={fillOpacity}
             height={BLOCK_RATIO}
             rx={blockRadius}
             ry={blockRadius}
@@ -111,7 +130,15 @@ export function GraphSvgBlocks({
     })
 
     return elements
-  }, [weeks, highlightedDates, shouldDimNonHighlighted, blockRadius, computedColors])
+  }, [
+    weeks,
+    highlightedDates,
+    shouldDimNonHighlighted,
+    blockRadius,
+    computedColors,
+    animationMode,
+    pixelOverrides,
+  ])
 
   const handleMouseMove = useEvent((e: React.MouseEvent<SVGSVGElement>) => {
     const target = e.target as SVGRectElement
