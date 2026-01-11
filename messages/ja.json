@@ -151,7 +151,9 @@
     "generating": "生成中...",
     "failed": "生成に失敗しました。再試行してください",
     "builtinErrorHint": "内蔵 AI サービスでエラーが発生しました。カスタム AI サービスを代替として設定できます。",
-    "configureCustomAi": "カスタム AI を設定"
+    "configureCustomAi": "カスタム AI を設定",
+    "previousVersion": "前のバージョン",
+    "nextVersion": "次のバージョン"
   },
   "aiConfig": {
     "configButton": "カスタム",

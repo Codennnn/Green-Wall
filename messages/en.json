@@ -151,7 +151,9 @@
     "generating": "Generating...",
     "failed": "Generation failed, please retry",
     "builtinErrorHint": "The built-in AI service encountered an error. You can configure a custom AI service as an alternative.",
-    "configureCustomAi": "Configure Custom AI"
+    "configureCustomAi": "Configure Custom AI",
+    "previousVersion": "Previous version",
+    "nextVersion": "Next version"
   },
   "aiConfig": {
     "configButton": "Custom",

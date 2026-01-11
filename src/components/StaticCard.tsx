@@ -19,9 +19,9 @@ export function StaticCardTitle(props: StaticCardTitleProps) {
   const { icon, children } = props
 
   return (
-    <span className="flex items-center gap-x-3">
+    <span className="flex-1 flex items-center gap-x-3">
       {icon}
-      <span className="font-medium">{children}</span>
+      <span className="font-medium w-full">{children}</span>
     </span>
   )
 }

@@ -93,23 +93,26 @@ interface ParsedMonth {
  */
 function parseDateString(date: string): ParsedDate | null {
   const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(date)
+  let result: ParsedDate | null = null
 
-  if (!match) {
-    return null
+  if (match) {
+    const year = Number(match[1])
+    const month = Number(match[2])
+    const day = Number(match[3])
+
+    // 验证日期有效性
+    const utcDate = new Date(Date.UTC(year, month - 1, day))
+    const isValidDate
+      = utcDate.getUTCFullYear() === year
+        && utcDate.getUTCMonth() === month - 1
+        && utcDate.getUTCDate() === day
+
+    if (isValidDate) {
+      result = { year, month, day }
+    }
   }
 
-  const year = Number(match[1])
-  const month = Number(match[2])
-  const day = Number(match[3])
-
-  // 验证日期有效性
-  const utcDate = new Date(Date.UTC(year, month - 1, day))
-  const isValidDate
-    = utcDate.getUTCFullYear() === year
-      && utcDate.getUTCMonth() === month - 1
-      && utcDate.getUTCDate() === day
-
-  return isValidDate ? { year, month, day } : null
+  return result
 }
 
 /**
@@ -119,19 +122,18 @@ function parseDateString(date: string): ParsedDate | null {
  */
 function parseMonthString(month: string): ParsedMonth | null {
   const match = /^(\d{4})-(\d{2})$/.exec(month)
+  let result: ParsedMonth | null = null
 
-  if (!match) {
-    return null
+  if (match) {
+    const year = Number(match[1])
+    const monthNumber = Number(match[2])
+
+    if (monthNumber >= 1 && monthNumber <= 12) {
+      result = { year, month: monthNumber }
+    }
   }
 
-  const year = Number(match[1])
-  const monthNumber = Number(match[2])
-
-  if (monthNumber < 1 || monthNumber > 12) {
-    return null
-  }
-
-  return { year, month: monthNumber }
+  return result
 }
 
 /**

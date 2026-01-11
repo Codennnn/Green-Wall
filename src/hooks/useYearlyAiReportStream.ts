@@ -101,14 +101,13 @@ export function useYearlyAiReportStream(
         const currentTextLength = text.length
         eventTracker.ai.report.generate.abort(year, durationMs, currentTextLength)
         setStatus('aborted')
-
-        return
       }
-
-      const errorMessage = err instanceof Error ? err.message : 'Unknown error'
-      eventTracker.ai.report.generate.error(year, errorMessage, durationMs, configSource)
-      setError(errorMessage)
-      setStatus('error')
+      else {
+        const errorMessage = err instanceof Error ? err.message : 'Unknown error'
+        eventTracker.ai.report.generate.error(year, errorMessage, durationMs, configSource)
+        setError(errorMessage)
+        setStatus('error')
+      }
     }
     finally {
       abortControllerRef.current = null

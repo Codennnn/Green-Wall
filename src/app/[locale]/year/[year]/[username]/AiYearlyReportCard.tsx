@@ -6,6 +6,8 @@ import { useEvent } from 'react-use-event-hook'
 import { useTranslations } from 'next-intl'
 import {
   CheckIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
   CopyIcon,
   Maximize2Icon,
   RefreshCwIcon,
@@ -38,6 +40,7 @@ import { ScrollArea } from '~/components/ui/scroll-area'
 import { Skeleton } from '~/components/ui/skeleton'
 import { Tooltip, TooltipContent, TooltipTrigger } from '~/components/ui/tooltip'
 import { useAiConfig } from '~/hooks/useAiConfig'
+import { useAiReportHistory } from '~/hooks/useAiReportHistory'
 import { useCopyToClipboard } from '~/hooks/useCopyToClipboard'
 import { useMarkdownIt } from '~/hooks/useMarkdownIt'
 import { useYearlyAiReportStream } from '~/hooks/useYearlyAiReportStream'
@@ -102,11 +105,32 @@ export function AiYearlyReportCard(props: AiYearlyReportCardProps) {
     aiConfig,
   })
 
+  const {
+    currentVersion,
+    currentIndex,
+    history,
+    hasHistory,
+    isFirstVersion,
+    isLastVersion,
+    isGeneratingNew,
+    goToPrevious,
+    goToNext,
+  } = useAiReportHistory({
+    text,
+    status,
+    aiConfig,
+  })
+
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [isAiConfigDialogOpen, setIsAiConfigDialogOpen] = useState(false)
 
+  const isStreaming = status === 'streaming'
+  const isSuccess = status === 'success'
+  const isError = status === 'error'
+  const displayText = isGeneratingNew ? text : (currentVersion.text || text)
+  const hasText = displayText.length > 0
+
   useEffect(() => {
-    // 等待配置加载完成再自动开始
     if (autoStart && status === 'idle' && isLoaded) {
       void start()
     }
@@ -125,12 +149,12 @@ export function AiYearlyReportCard(props: AiYearlyReportCardProps) {
   })
 
   const handleCopy = useEvent(async () => {
-    if (!text) {
-      return
-    }
+    const textToCopy = displayText
 
-    await copy(text)
-    eventTracker.ai.report.copy(year, text.length)
+    if (textToCopy) {
+      await copy(textToCopy)
+      eventTracker.ai.report.copy(year, textToCopy.length)
+    }
   })
 
   const handleRegenerate = useEvent(() => {
@@ -138,13 +162,7 @@ export function AiYearlyReportCard(props: AiYearlyReportCardProps) {
     void start()
   })
 
-  // 状态判断
-  const isStreaming = status === 'streaming'
-  const isSuccess = status === 'success'
-  const isError = status === 'error'
-  const hasText = text.length > 0
-
-  const { html: markdownHtml } = useMarkdownIt(text)
+  const { html: markdownHtml } = useMarkdownIt(displayText)
 
   const renderContent = () => {
     if (isError && error) {
@@ -228,7 +246,63 @@ export function AiYearlyReportCard(props: AiYearlyReportCardProps) {
       cardClassName="h-full max-h-[360px]"
       cardContentClassName="overflow-hidden"
       icon={<SparklesIcon className="size-5" />}
-      title={t('title')}
+      title={(
+        <div className="flex items-center gap-2">
+          <span>{t('title')}</span>
+
+          {hasHistory && (
+            <div className="ml-auto flex items-center gap-1 text-xs text-muted-foreground">
+              <div className="flex items-center gap-0.5">
+                <Tooltip>
+                  <TooltipTrigger
+                    render={(
+                      <Button
+                        aria-label={t('previousVersion')}
+                        className="size-6"
+                        disabled={isFirstVersion || isStreaming}
+                        size={ACTION_ICON_BUTTON_SIZE}
+                        variant="ghost"
+                        onClick={goToPrevious}
+                      >
+                        <ChevronLeftIcon className={ACTION_ICON_SIZE} />
+                      </Button>
+                    )}
+                  />
+                  <TooltipContent>
+                    {t('previousVersion')}
+                  </TooltipContent>
+                </Tooltip>
+
+                <span className="tabular-nums inline-flex items-center select-none">
+                  {currentIndex + 1}
+                  <span className="mx-1">/</span>
+                  {history.length}
+                </span>
+
+                <Tooltip>
+                  <TooltipTrigger
+                    render={(
+                      <Button
+                        aria-label={t('nextVersion')}
+                        className="size-6"
+                        disabled={isLastVersion || isStreaming}
+                        size={ACTION_ICON_BUTTON_SIZE}
+                        variant="ghost"
+                        onClick={goToNext}
+                      >
+                        <ChevronRightIcon className={ACTION_ICON_SIZE} />
+                      </Button>
+                    )}
+                  />
+                  <TooltipContent>
+                    {t('nextVersion')}
+                  </TooltipContent>
+                </Tooltip>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
     >
       <AiConfigDialog
         config={aiConfig}
@@ -246,7 +320,12 @@ export function AiYearlyReportCard(props: AiYearlyReportCardProps) {
               scrollFade
               className="p-grid-item"
             >
-              {renderContent()}
+              <div
+                key={currentVersion.id || 'current'}
+                className="transition-opacity duration-200 ease-in-out"
+              >
+                {renderContent()}
+              </div>
             </ScrollArea>
           </div>
 

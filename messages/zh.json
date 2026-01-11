@@ -151,7 +151,9 @@
     "generating": "正在生成...",
     "failed": "生成失败，请重试",
     "builtinErrorHint": "内置 AI 服务出现错误，你可以配置自定义 AI 服务作为备选方案。",
-    "configureCustomAi": "配置自定义 AI"
+    "configureCustomAi": "配置自定义 AI",
+    "previousVersion": "上一个版本",
+    "nextVersion": "下一个版本"
   },
   "aiConfig": {
     "configButton": "已配置",
