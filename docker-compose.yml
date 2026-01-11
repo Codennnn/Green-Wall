@@ -20,7 +20,7 @@ services:
       - PORT=${DEV_PORT:-8000}
       - COREPACK_ENABLE_DOWNLOAD_PROMPT=0
     env_file:
-      - ${DEV_ENV_FILE:-.env.dev}
+      - ${DEV_ENV_FILE:-.env.development}
     stdin_open: true
     tty: true
     restart: unless-stopped
@@ -42,7 +42,7 @@ services:
       - PORT=${PROD_PORT:-3000}
       - COREPACK_ENABLE_DOWNLOAD_PROMPT=0
     env_file:
-      - ${PROD_ENV_FILE:-.env.prod}
+      - ${PROD_ENV_FILE:-.env.production}
     restart: always
     healthcheck:
       test:

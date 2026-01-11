@@ -123,10 +123,10 @@ To run this project, which uses the [GitHub API][github-api] to fetch data, you'
 
 ### Option 1: Direct Run (Recommended for Quick Development)
 
-Once you have your personal access token, create a file named `.env.dev` at the root of the project and insert the token as follows:
+Once you have your personal access token, create a file named `.env.development` at the root of the project and insert the token as follows:
 
 ```sh
-# .env.dev
+# .env.development
 
 # The format should be: GITHUB_ACCESS_TOKEN="[YOUR_TOKEN]"
 
@@ -148,9 +148,9 @@ This project provides complete Docker support with configurations for both devel
 
    ```bash
    # For development environment
-   cp .env.example .env.dev
+   cp .env.example .env.development
    # Or for production environment
-   cp .env.example .env.prod
+   cp .env.example .env.production
    ```
 
    Then edit the corresponding file and fill in the required environment variables (refer to detailed descriptions in `.env.example`).
@@ -163,8 +163,8 @@ This project provides complete Docker support with configurations for both devel
    # .env (Docker Compose specific, optional)
    DEV_PORT=8000          # Development environment port
    PROD_PORT=3000         # Production environment port
-   DEV_ENV_FILE=.env.dev  # Development configuration file
-   PROD_ENV_FILE=.env.prod # Production configuration file
+   DEV_ENV_FILE=.env.development  # Development configuration file
+   PROD_ENV_FILE=.env.production # Production configuration file
    ```
 
    If this file is not created, the default values in `docker-compose.yml` will be used.
@@ -187,7 +187,7 @@ docker compose down
 
 #### Notes
 
-Make sure to configure the appropriate environment file (`.env.dev` for development, `.env.prod` for production) before starting the services.
+Make sure to configure the appropriate environment file (`.env.development` for development, `.env.production` for production) before starting the services.
 
 <!-- Link References -->
 

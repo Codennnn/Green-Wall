@@ -126,10 +126,10 @@ _为你的 GitHub 贡献拍张快照 📸，然后分享出去！_
 
 ### 方式 1：直接运行（推荐用于快速开发）
 
-拿到 token 后，在项目根目录新建 `.env.dev` 文件，并按如下格式写入：
+拿到 token 后，在项目根目录新建 `.env.development` 文件，并按如下格式写入：
 
 ```sh
-# .env.dev
+# .env.development
 
 # The format should be: GITHUB_ACCESS_TOKEN="[YOUR_TOKEN]"
 
@@ -151,9 +151,9 @@ GITHUB_ACCESS_TOKEN="ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 
    ```bash
    # 开发环境配置
-   cp .env.example .env.dev
+   cp .env.example .env.development
    # 或生产环境配置
-   cp .env.example .env.prod
+   cp .env.example .env.production
    ```
 
    然后编辑对应文件，填入必需的环境变量（参考 `.env.example` 中的详细说明）。
@@ -166,8 +166,8 @@ GITHUB_ACCESS_TOKEN="ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
    # .env（Docker Compose 专用，可选）
    DEV_PORT=8000          # 开发环境端口
    PROD_PORT=3000         # 生产环境端口
-   DEV_ENV_FILE=.env.dev  # 开发环境配置文件
-   PROD_ENV_FILE=.env.prod # 生产环境配置文件
+   DEV_ENV_FILE=.env.development  # 开发环境配置文件
+   PROD_ENV_FILE=.env.production # 生产环境配置文件
    ```
 
    如果不创建此文件，将使用 `docker-compose.yml` 中的默认值。
@@ -190,7 +190,7 @@ docker compose down
 
 #### 注意事项
 
-启动服务前，请确保已配置相应的环境文件（开发环境使用 `.env.dev`，生产环境使用 `.env.prod`）。
+启动服务前，请确保已配置相应的环境文件（开发环境使用 `.env.development`，生产环境使用 `.env.production`）。
 
 <!-- Link References -->
 
