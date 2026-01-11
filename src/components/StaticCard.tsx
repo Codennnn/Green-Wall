@@ -94,8 +94,8 @@ export function StatValue(props: StatValueProps) {
               >
                 <span
                   className={cn(
-                    'leading-none',
-                    large && 'md:text-3xl md:font-semibold',
+                    'leading-none font-bold',
+                    large && 'md:text-3xl',
                   )}
                 >
                   {finalValue}

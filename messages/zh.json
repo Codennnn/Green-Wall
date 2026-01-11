@@ -177,7 +177,6 @@
     "somethingWentWrong": "出了点问题，请稍后再试。",
     "badCredentials": "本地运行需要配置 GitHub Access Token 才能拉取数据。按 <link>这个步骤</link> 设置好环境变量即可。",
     "thisStep": "这个步骤",
-    "noRepos": "未找到仓库",
     "noIssues": "未找到 Issues",
     "loadingRepos": "正在加载仓库…",
     "loadingIssues": "正在加载 Issues…",
@@ -417,8 +416,8 @@
     "error": "错误",
     "retry": "重试",
     "emptyState": {
-      "title": "未找到仓库",
-      "description": "该用户没有任何可分析的仓库。"
+      "title": "期待你的第一个仓库",
+      "description": "开始你的开源之旅吧"
     },
     "forks": "派生",
     "healthScore": "健康度评分",

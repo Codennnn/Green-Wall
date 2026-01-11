@@ -177,7 +177,6 @@
     "somethingWentWrong": "Something went wrong.",
     "badCredentials": "You need access token to get data, please read <link>this step</link> to learn how to set the token correctly.",
     "thisStep": "this step",
-    "noRepos": "No repositories found.",
     "noIssues": "No issues found.",
     "loadingRepos": "Loading repositories...",
     "loadingIssues": "Loading issues...",
@@ -417,8 +416,8 @@
     "error": "Error",
     "retry": "Retry",
     "emptyState": {
-      "title": "No repositories found",
-      "description": "This user doesn't have any repositories to analyze."
+      "title": "Your first repository awaits",
+      "description": "Start your open source journey"
     },
     "forks": "Forks",
     "healthScore": "Health Score",

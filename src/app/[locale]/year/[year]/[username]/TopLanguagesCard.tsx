@@ -78,7 +78,7 @@ export function TopLanguagesCard(props: TopLanguagesCardProps) {
                       <EmptyMedia variant="icon">
                         <SquareCodeIcon />
                       </EmptyMedia>
-                      <EmptyDescription>
+                      <EmptyDescription className="text-xs">
                         {t('noLanguageData')}
                       </EmptyDescription>
                     </EmptyHeader>

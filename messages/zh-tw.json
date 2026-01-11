@@ -177,7 +177,6 @@
     "somethingWentWrong": "出了點問題，請稍後再試。",
     "badCredentials": "本地執行需要設定 GitHub Access Token 才能拉取資料。按 <link>這個步驟</link> 設定好環境變數即可。",
     "thisStep": "這個步驟",
-    "noRepos": "未找到儲存庫",
     "noIssues": "未找到 Issues",
     "loadingRepos": "正在載入儲存庫…",
     "loadingIssues": "正在載入 Issues…",
@@ -417,8 +416,8 @@
     "error": "錯誤",
     "retry": "重試",
     "emptyState": {
-      "title": "未找到儲存庫",
-      "description": "該使用者沒有任何可分析的儲存庫。"
+      "title": "期待你的第一個倉庫",
+      "description": "開始你的開源之旅吧"
     },
     "forks": "派生",
     "healthScore": "健康度評分",

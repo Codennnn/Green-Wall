@@ -9,6 +9,7 @@ import {
   EmptyDescription,
   EmptyHeader,
   EmptyMedia,
+  EmptyTitle,
 } from '~/components/ui/empty'
 import { ScrollArea } from '~/components/ui/scroll-area'
 import { Skeleton } from '~/components/ui/skeleton'
@@ -213,12 +214,12 @@ export function ReposCard(props: ReposCardProps) {
 
   const t = useTranslations('stats')
   const tErrors = useTranslations('errors')
+  const tRepoAnalysis = useTranslations('repoAnalysis')
   const showRemove = Boolean(onRemoveRepo)
 
   const isLoading = mode === ReposCardMode.Created ? createdLoading : interactionLoading
   const error = mode === ReposCardMode.Created ? createdError : interactionError
   const repos = mode === ReposCardMode.Created ? createdRepos : interactionRepos
-  const emptyMessage = tErrors('noRepos')
   const errorMessage = tErrors('failedLoadRepos')
 
   const handleModeChange = (value: unknown) => {
@@ -313,8 +314,11 @@ export function ReposCard(props: ReposCardProps) {
                           <EmptyMedia variant="icon">
                             <FolderGit2Icon />
                           </EmptyMedia>
-                          <EmptyDescription>
-                            {emptyMessage}
+                          <EmptyTitle className="text-sm">
+                            {tRepoAnalysis('emptyState.title')}
+                          </EmptyTitle>
+                          <EmptyDescription className="text-xs">
+                            {tRepoAnalysis('emptyState.description')}
                           </EmptyDescription>
                         </EmptyHeader>
                       </Empty>

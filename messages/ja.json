@@ -177,7 +177,6 @@
     "somethingWentWrong": "問題が発生しました。",
     "badCredentials": "データ取得にはアクセストークンが必要です。<link>この手順</link>を読んでトークンの正しい設定方法を学んでください。",
     "thisStep": "この手順",
-    "noRepos": "リポジトリが見つかりません。",
     "noIssues": "Issues が見つかりません。",
     "loadingRepos": "リポジトリを読み込み中...",
     "loadingIssues": "Issues を読み込み中...",
@@ -417,8 +416,8 @@
     "error": "エラー",
     "retry": "再試行",
     "emptyState": {
-      "title": "リポジトリが見つかりません",
-      "description": "このユーザーには分析可能なリポジトリがありません。"
+      "title": "最初のリポジトリを楽しみにしています",
+      "description": "オープンソースの旅を始めましょう"
     },
     "forks": "フォーク",
     "healthScore": "ヘルススコア",
