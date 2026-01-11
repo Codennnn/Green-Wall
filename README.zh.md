@@ -126,10 +126,10 @@ _为你的 GitHub 贡献拍张快照 📸，然后分享出去！_
 
 ### 方式 1：直接运行（推荐用于快速开发）
 
-拿到 token 后，在项目根目录新建 `.env.local` 文件，并按如下格式写入：
+拿到 token 后，在项目根目录新建 `.env.dev` 文件，并按如下格式写入：
 
 ```sh
-# .env.local
+# .env.dev
 
 # The format should be: GITHUB_ACCESS_TOKEN="[YOUR_TOKEN]"
 
@@ -188,9 +188,9 @@ docker compose up -d prod
 docker compose down
 ```
 
-#### 向后兼容
+#### 注意事项
 
-为了保持向后兼容，如果 `.env.dev` 或 `.env.prod` 不存在，服务会自动回退使用 `.env.local` 文件。因此现有的配置仍然可以正常工作。
+启动服务前，请确保已配置相应的环境文件（开发环境使用 `.env.dev`，生产环境使用 `.env.prod`）。
 
 <!-- Link References -->
 

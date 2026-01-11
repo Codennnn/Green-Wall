@@ -123,10 +123,10 @@ To run this project, which uses the [GitHub API][github-api] to fetch data, you'
 
 ### Option 1: Direct Run (Recommended for Quick Development)
 
-Once you have your personal access token, create a file named `.env.local` at the root of the project and insert the token as follows:
+Once you have your personal access token, create a file named `.env.dev` at the root of the project and insert the token as follows:
 
 ```sh
-# .env.local
+# .env.dev
 
 # The format should be: GITHUB_ACCESS_TOKEN="[YOUR_TOKEN]"
 
@@ -185,9 +185,9 @@ docker compose up -d prod
 docker compose down
 ```
 
-#### Backward Compatibility
+#### Notes
 
-For backward compatibility, if `.env.dev` or `.env.prod` doesn't exist, the service will automatically fall back to using the `.env.local` file. Therefore, existing configurations will continue to work.
+Make sure to configure the appropriate environment file (`.env.dev` for development, `.env.prod` for production) before starting the services.
 
 <!-- Link References -->
 
