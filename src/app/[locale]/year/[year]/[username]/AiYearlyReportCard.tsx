@@ -103,6 +103,7 @@ export function AiYearlyReportCard(props: AiYearlyReportCardProps) {
   })
 
   const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const [isAiConfigDialogOpen, setIsAiConfigDialogOpen] = useState(false)
 
   useEffect(() => {
     // 等待配置加载完成再自动开始
@@ -113,6 +114,14 @@ export function AiYearlyReportCard(props: AiYearlyReportCardProps) {
 
   const handleDialogOpenChange = useEvent((open: boolean) => {
     setIsDialogOpen(open)
+  })
+
+  const handleAiConfigDialogOpenChange = useEvent((open: boolean) => {
+    setIsAiConfigDialogOpen(open)
+  })
+
+  const openAiConfigDialog = useEvent(() => {
+    setIsAiConfigDialogOpen(true)
   })
 
   const handleCopy = useEvent(async () => {
@@ -153,21 +162,15 @@ export function AiYearlyReportCard(props: AiYearlyReportCardProps) {
             <Alert variant="default">
               <AlertDescription className="flex flex-col gap-2">
                 <span>{t('builtinErrorHint')}</span>
-                <AiConfigDialog
-                  config={aiConfig}
-                  trigger={(
-                    <Button
-                      className="w-fit"
-                      size={ACTION_BUTTON_SIZE}
-                      variant="outline"
-                    >
-                      <SettingsIcon className={ACTION_ICON_SIZE} />
-                      {t('configureCustomAi')}
-                    </Button>
-                  )}
-                  onReset={resetAiConfig}
-                  onSave={saveAiConfig}
-                />
+                <Button
+                  className="w-fit"
+                  size={ACTION_BUTTON_SIZE}
+                  variant="outline"
+                  onClick={openAiConfigDialog}
+                >
+                  <SettingsIcon className={ACTION_ICON_SIZE} />
+                  {t('configureCustomAi')}
+                </Button>
               </AlertDescription>
             </Alert>
           )}
@@ -227,6 +230,14 @@ export function AiYearlyReportCard(props: AiYearlyReportCardProps) {
       icon={<SparklesIcon className="size-5" />}
       title={t('title')}
     >
+      <AiConfigDialog
+        config={aiConfig}
+        open={isAiConfigDialogOpen}
+        onOpenChange={handleAiConfigDialogOpenChange}
+        onReset={resetAiConfig}
+        onSave={saveAiConfig}
+      />
+
       <Dialog open={isDialogOpen} onOpenChange={handleDialogOpenChange}>
         <div className="flex flex-col gap-grid-item h-full">
           {/* 内容区 */}
@@ -311,22 +322,16 @@ export function AiYearlyReportCard(props: AiYearlyReportCardProps) {
               )}
 
               <div className="ml-auto flex items-center gap-2">
-                <AiConfigDialog
-                  config={aiConfig}
-                  trigger={(
-                    <Button
-                      size={sourceInfo.source === 'custom'
-                        ? ACTION_BUTTON_SIZE
-                        : ACTION_ICON_BUTTON_SIZE}
-                      variant="ghost"
-                    >
-                      <SettingsIcon className={ACTION_ICON_SIZE} />
-                      {sourceInfo.source === 'custom' ? tConfig('configButton') : ''}
-                    </Button>
-                  )}
-                  onReset={resetAiConfig}
-                  onSave={saveAiConfig}
-                />
+                <Button
+                  size={sourceInfo.source === 'custom'
+                    ? ACTION_BUTTON_SIZE
+                    : ACTION_ICON_BUTTON_SIZE}
+                  variant="ghost"
+                  onClick={openAiConfigDialog}
+                >
+                  <SettingsIcon className={ACTION_ICON_SIZE} />
+                  {sourceInfo.source === 'custom' ? tConfig('configButton') : ''}
+                </Button>
               </div>
             </div>
           )}

@@ -143,9 +143,8 @@ export function useContributionSearch({
         && lastProcessed.toLowerCase() === urlUsername.toLowerCase()
       )
       const context = searchContextRef.current
-      const isAlreadyStarted = Boolean(
-        context?.username.toLowerCase() === urlUsername.toLowerCase(),
-      )
+      const isAlreadyStarted
+        = context?.username.toLowerCase() === urlUsername.toLowerCase()
 
       if (!isAlreadyProcessed && !isAlreadyStarted) {
         searchContextRef.current = {

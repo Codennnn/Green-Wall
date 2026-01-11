@@ -111,8 +111,8 @@ export function SearchInput({
 
   return (
     <Autocomplete
-      itemToStringValue={(user) => user.login}
       items={recentUsers}
+      itemToStringValue={(user) => user.login}
       mode="none"
       open={isOpen && hasRecentUsers}
       value={value ?? ''}

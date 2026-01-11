@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useEvent } from 'react-use-event-hook'
 
 import { useTranslations } from 'next-intl'
@@ -24,37 +24,76 @@ import type { AiRuntimeConfig, TestConnectionResponse } from '~/types/ai-config'
 
 import { AiConfigForm } from './AiConfigForm'
 
+const EMPTY_CONFIG: AiRuntimeConfig = {
+  baseUrl: '',
+  apiKey: '',
+  model: '',
+}
+
 export interface AiConfigDialogProps {
-  /** 当前配置 */
+  /** 当前已保存的配置 */
   config: AiRuntimeConfig | null
   /** 触发器（可选，默认为按钮） */
   trigger?: DialogTriggerProps['render']
+  /** 控制对话框开关状态（可选，用于受控模式） */
+  open?: boolean
+  /** 开关状态变化回调（可选，用于受控模式） */
+  onOpenChange?: (open: boolean) => void
   /** 重置配置回调 */
   onReset: () => void
   /** 保存配置回调 */
   onSave: (config: AiRuntimeConfig) => void
 }
 
+/**
+ * AI 配置对话框
+ *
+ * 设计原则：
+ * 1. 草稿状态 (draftConfig) 仅在对话框打开时有效
+ * 2. 对话框打开时，从 config prop 初始化草稿
+ * 3. 用户编辑时更新草稿，不影响原 config
+ * 4. 保存时将草稿提交给父组件
+ * 5. 取消/关闭时丢弃草稿
+ */
 export function AiConfigDialog({
   config,
   onSave,
   onReset,
   trigger,
+  open: controlledOpen,
+  onOpenChange: controlledOnOpenChange,
 }: AiConfigDialogProps) {
   const t = useTranslations('aiConfig')
 
-  const [open, setOpen] = useState(false)
-  const [draftConfig, setDraftConfig] = useState<AiRuntimeConfig | null>(config)
+  // 内部状态（非受控模式使用）
+  const [internalOpen, setInternalOpen] = useState(false)
+  // 草稿配置：始终有值，不为 null
+  const [draftConfig, setDraftConfig] = useState<AiRuntimeConfig>(config ?? EMPTY_CONFIG)
   const [isTesting, setIsTesting] = useState(false)
   const [testResult, setTestResult] = useState<TestConnectionResponse | null>(null)
 
-  const handleOpenChange = useEvent((newOpen: boolean) => {
-    if (newOpen) {
-      setDraftConfig(config)
+  // 用于追踪对话框是否刚刚打开
+  const prevOpenRef = useRef(false)
+
+  // 判断是否为受控模式
+  const isControlled = controlledOpen !== undefined
+  const open = isControlled ? controlledOpen : internalOpen
+  const setOpen = isControlled ? controlledOnOpenChange! : setInternalOpen
+
+  // 监听对话框打开事件，初始化草稿配置
+  useEffect(() => {
+    const wasOpen = prevOpenRef.current
+    prevOpenRef.current = open
+
+    // 仅在对话框从关闭变为打开时初始化
+    if (open && !wasOpen) {
+      setDraftConfig(config ?? EMPTY_CONFIG)
       setTestResult(null)
       eventTracker.ai.config.open(config ? 'custom' : 'builtin')
     }
+  }, [open, config])
 
+  const handleOpenChange = useEvent((newOpen: boolean) => {
     setOpen(newOpen)
   })
 
@@ -106,10 +145,16 @@ export function AiConfigDialog({
   })
 
   const handleSave = useEvent(() => {
-    if (draftConfig?.baseUrl && draftConfig.apiKey && draftConfig.model) {
-      const provider = new URL(draftConfig.baseUrl).hostname
+    const trimmedConfig: AiRuntimeConfig = {
+      baseUrl: draftConfig.baseUrl.trim(),
+      apiKey: draftConfig.apiKey.trim(),
+      model: draftConfig.model.trim(),
+    }
+
+    if (trimmedConfig.baseUrl && trimmedConfig.apiKey && trimmedConfig.model) {
+      const provider = new URL(trimmedConfig.baseUrl).hostname
       eventTracker.ai.config.save(provider)
-      onSave(draftConfig)
+      onSave(trimmedConfig)
       setOpen(false)
     }
   })
@@ -117,22 +162,26 @@ export function AiConfigDialog({
   const handleReset = useEvent(() => {
     eventTracker.ai.config.reset()
     onReset()
-    setDraftConfig(null)
+    setDraftConfig(EMPTY_CONFIG)
     setTestResult(null)
     setOpen(false)
   })
 
-  const canSave = draftConfig?.baseUrl && draftConfig.apiKey && draftConfig.model
+  const canSave = draftConfig.baseUrl.trim()
+    && draftConfig.apiKey.trim()
+    && draftConfig.model.trim()
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogTrigger
-        render={trigger ?? (
-          <Button size="icon" variant="ghost">
-            <SettingsIcon />
-          </Button>
-        )}
-      />
+      {(!isControlled || trigger) && (
+        <DialogTrigger
+          render={trigger ?? (
+            <Button size="icon" variant="ghost">
+              <SettingsIcon />
+            </Button>
+          )}
+        />
+      )}
 
       <DialogContent>
         <DialogHeader>
@@ -144,9 +193,9 @@ export function AiConfigDialog({
 
         <DialogPanel>
           <AiConfigForm
-            initialConfig={draftConfig}
             isTesting={isTesting}
             testResult={testResult}
+            value={draftConfig}
             onChange={handleConfigChange}
             onTest={handleTest}
           />

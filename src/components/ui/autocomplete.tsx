@@ -194,7 +194,7 @@ function AutocompleteList({
   ...props
 }: AutocompletePrimitive.List.Props) {
   return (
-    <ScrollArea scrollFade scrollbarGutter>
+    <ScrollArea scrollbarGutter scrollFade>
       <AutocompletePrimitive.List
         className={cn(
           'not-empty:scroll-py-1 not-empty:px-1 not-empty:py-1 in-data-has-overflow-y:pe-3',

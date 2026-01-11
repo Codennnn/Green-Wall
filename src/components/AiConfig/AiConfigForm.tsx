@@ -33,8 +33,8 @@ const AI_PROVIDERS: { name: string, url: string }[] = [
 ] as const
 
 export interface AiConfigFormProps {
-  /** 当前配置（用于初始化表单） */
-  initialConfig: AiRuntimeConfig | null
+  /** 当前配置值（受控模式） */
+  value: AiRuntimeConfig
   /** 配置变更回调 */
   onChange: (config: AiRuntimeConfig) => void
   /** 是否正在测试连接 */
@@ -45,11 +45,8 @@ export interface AiConfigFormProps {
   onTest?: (config: AiRuntimeConfig) => void
 }
 
-/**
- * AI 配置表单（简化版）
- */
 export function AiConfigForm({
-  initialConfig,
+  value,
   onChange,
   isTesting = false,
   testResult,
@@ -57,50 +54,29 @@ export function AiConfigForm({
 }: AiConfigFormProps) {
   const t = useTranslations('aiConfig')
 
-  const [baseUrl, setBaseUrl] = useState(initialConfig?.baseUrl ?? '')
-  const [apiKey, setApiKey] = useState(initialConfig?.apiKey ?? '')
-  const [model, setModel] = useState(initialConfig?.model ?? '')
   const [isBaseUrlOpen, setIsBaseUrlOpen] = useState(false)
-
   const [showApiKey, setShowApiKey] = useState(false)
 
-  const getCurrentConfig = useEvent((): AiRuntimeConfig => {
-    return {
-      baseUrl: baseUrl.trim(),
-      apiKey: apiKey.trim(),
-      model: model.trim(),
-    }
-  })
-
-  const handleFieldChange = useEvent((field: keyof AiRuntimeConfig, value: string) => {
-    const newConfig = { ...getCurrentConfig(), [field]: value }
-
-    switch (field) {
-      case 'baseUrl':
-        setBaseUrl(value)
-        break
-
-      case 'apiKey':
-        setApiKey(value)
-        break
-
-      case 'model':
-        setModel(value)
-        break
-    }
-
-    onChange(newConfig)
+  const handleFieldChange = useEvent((field: keyof AiRuntimeConfig, fieldValue: string) => {
+    onChange({
+      ...value,
+      [field]: fieldValue,
+    })
   })
 
   const handleTest = useEvent(() => {
-    const config = getCurrentConfig()
+    const trimmedConfig: AiRuntimeConfig = {
+      baseUrl: value.baseUrl.trim(),
+      apiKey: value.apiKey.trim(),
+      model: value.model.trim(),
+    }
 
-    if (config.baseUrl && config.apiKey && config.model) {
-      onTest?.(config)
+    if (trimmedConfig.baseUrl && trimmedConfig.apiKey && trimmedConfig.model) {
+      onTest?.(trimmedConfig)
     }
   })
 
-  const isFormValid = baseUrl.trim() && apiKey.trim() && model.trim()
+  const isFormValid = value.baseUrl.trim() && value.apiKey.trim() && value.model.trim()
 
   return (
     <div className="flex flex-col gap-4">
@@ -108,6 +84,7 @@ export function AiConfigForm({
       <div className="space-y-2">
         <Label htmlFor="baseUrl">{t('baseUrl')}</Label>
         <Autocomplete
+          items={AI_PROVIDERS.map((p) => p.url)}
           itemToStringValue={(url) => {
             const provider = AI_PROVIDERS.find((p) => p.url === url)
 
@@ -117,20 +94,18 @@ export function AiConfigForm({
 
             return url
           }}
-          items={AI_PROVIDERS.map((p) => p.url)}
           mode="none"
           open={isBaseUrlOpen}
-          value={baseUrl}
+          value={value.baseUrl}
           onOpenChange={setIsBaseUrlOpen}
-          onValueChange={(value) => { handleFieldChange('baseUrl', value) }}
+          onValueChange={(v) => { handleFieldChange('baseUrl', v) }}
         >
           <AutocompleteInput
             showTrigger
             id="baseUrl"
             placeholder={t('baseUrlPlaceholder')}
-            showClear={!!baseUrl}
+            showClear={!!value.baseUrl}
             onClick={() => { setIsBaseUrlOpen(true) }}
-            onFocus={() => { setIsBaseUrlOpen(true) }}
           />
           <AutocompletePopup>
             <AutocompleteList>
@@ -161,7 +136,7 @@ export function AiConfigForm({
             id="apiKey"
             placeholder={t('apiKeyPlaceholder')}
             type={showApiKey ? 'text' : 'password'}
-            value={apiKey}
+            value={value.apiKey}
             onChange={(e) => { handleFieldChange('apiKey', e.target.value) }}
           />
           <button
@@ -183,7 +158,7 @@ export function AiConfigForm({
         <Input
           id="model"
           placeholder={t('modelPlaceholder')}
-          value={model}
+          value={value.model}
           onChange={(e) => { handleFieldChange('model', e.target.value) }}
         />
         <p className="text-muted-foreground text-xs">

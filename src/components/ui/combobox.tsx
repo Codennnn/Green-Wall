@@ -257,7 +257,7 @@ function ComboboxValue({ ...props }: ComboboxPrimitive.Value.Props) {
 
 function ComboboxList({ className, ...props }: ComboboxPrimitive.List.Props) {
   return (
-    <ScrollArea scrollFade scrollbarGutter>
+    <ScrollArea scrollbarGutter scrollFade>
       <ComboboxPrimitive.List
         className={cn(
           'not-empty:scroll-py-1 not-empty:px-1 not-empty:py-1 in-data-has-overflow-y:pe-3',
