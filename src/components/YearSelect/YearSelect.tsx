@@ -64,7 +64,7 @@ export function YearSelect({
     >
       <SelectTrigger
         className={cn(
-          'h-10 w-[100px] justify-center text-center',
+          'h-10 justify-center text-center',
           triggerClassName,
         )}
       >

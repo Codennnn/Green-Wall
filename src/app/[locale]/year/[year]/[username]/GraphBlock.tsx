@@ -229,6 +229,7 @@ export function GraphBlock() {
           <YearSelect
             alignItemWithTrigger={false}
             disabled={isDownloading || isLoading}
+            triggerClassName="h-8 text-sm"
             value={String(queryYear)}
             valueClassName="font-bold text-lg"
             onValueChange={handleYearChange}

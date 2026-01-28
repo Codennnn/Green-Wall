@@ -8,7 +8,6 @@ import {
   Bar,
   BarChart,
   CartesianGrid,
-  Cell,
   ResponsiveContainer,
   Tooltip,
   XAxis,
@@ -56,6 +55,33 @@ function CustomTooltip({ active, payload, dayNames, contributionsLabel = 'contri
         {numberWithCommas(data.count)} {contributionsLabel}
       </p>
     </div>
+  )
+}
+
+interface CustomBarProps {
+  x?: number
+  y?: number
+  width?: number
+  height?: number
+  fill?: string
+  payload?: WeeklyChartData
+}
+
+function CustomBar(props: CustomBarProps) {
+  const { x = 0, y = 0, width = 0, height = 0, payload } = props
+  const fill = payload?.isMax ? 'var(--color-brand-500)' : 'var(--color-brand-300)'
+
+  return (
+    <rect
+      className="transition-opacity hover:opacity-80"
+      fill={fill}
+      height={height}
+      rx={4}
+      ry={4}
+      width={width}
+      x={x}
+      y={y}
+    />
   )
 }
 
@@ -156,15 +182,8 @@ export function WeeklyCommitChart(props: WeeklyCommitChartProps) {
             animationDuration={800}
             dataKey="count"
             radius={[4, 4, 0, 0]}
-          >
-            {data.map((entry) => (
-              <Cell
-                key={entry.day}
-                className="transition-opacity hover:opacity-80"
-                fill={entry.isMax ? 'var(--color-brand-500)' : 'var(--color-brand-300)'}
-              />
-            ))}
-          </Bar>
+            shape={<CustomBar />}
+          />
         </BarChart>
       </ResponsiveContainer>
     </ChartCard>

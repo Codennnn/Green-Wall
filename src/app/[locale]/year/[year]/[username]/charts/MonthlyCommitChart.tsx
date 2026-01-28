@@ -8,7 +8,6 @@ import {
   Bar,
   BarChart,
   CartesianGrid,
-  Cell,
   ResponsiveContainer,
   Tooltip,
   XAxis,
@@ -145,15 +144,30 @@ export function MonthlyCommitChart(props: MonthlyCommitChartProps) {
             animationDuration={800}
             dataKey="count"
             radius={[4, 4, 0, 0]}
-          >
-            {data.map((entry) => (
-              <Cell
-                key={entry.month}
-                className="transition-opacity hover:opacity-80"
-                fill={entry.isMax ? 'var(--color-brand-500)' : 'var(--color-brand-300)'}
-              />
-            ))}
-          </Bar>
+            shape={(props: {
+              x?: number
+              y?: number
+              width?: number
+              height?: number
+              payload?: MonthlyChartData
+            }) => {
+              const { x = 0, y = 0, width = 0, height = 0, payload } = props
+              const fill = payload?.isMax ? 'var(--color-brand-500)' : 'var(--color-brand-300)'
+
+              return (
+                <rect
+                  className="transition-opacity hover:opacity-80"
+                  fill={fill}
+                  height={height}
+                  rx={4}
+                  ry={4}
+                  width={width}
+                  x={x}
+                  y={y}
+                />
+              )
+            }}
+          />
         </BarChart>
       </ResponsiveContainer>
     </ChartCard>
