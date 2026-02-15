@@ -24,7 +24,7 @@ export function SearchForm({
   onRemoveUser,
   loadingLogin,
 }: SearchFormProps) {
-  const handleSubmit = (ev: React.FormEvent) => {
+  const handleSubmit = (ev: React.SubmitEvent) => {
     ev.preventDefault()
     clearPersistedSearchInput()
     onSubmit()

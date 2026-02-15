@@ -4,9 +4,50 @@ import { streamText } from 'ai'
 import { number, object, optional, parse, string } from 'valibot'
 
 import { getModelFromRequest, isModelFactoryError } from '~/lib/ai/runtime-model'
+import {
+  classifyAiError,
+  STREAM_EVENT_DONE,
+  STREAM_EVENT_ERROR,
+  STREAM_EVENT_TEXT,
+} from '~/lib/ai/stream-error'
 import { buildYearlyReportPrompt, type TagCategoryNames } from '~/lib/yearly-report/prompt'
+import type { StreamErrorInfo } from '~/types/ai-report'
 
 export const maxDuration = 30
+
+interface StreamTextData {
+  delta: string
+}
+
+interface StreamDoneData {
+  ok: true
+}
+
+function createErrorResponse(error: unknown, status = 500): NextResponse {
+  const classified = classifyAiError(error)
+
+  if (status === 400 && classified.code === 'unknown') {
+    return NextResponse.json(
+      {
+        code: 'badRequest',
+        message: 'Invalid request body',
+        retryable: false,
+      },
+      { status },
+    )
+  }
+
+  return NextResponse.json(classified, { status })
+}
+
+function encodeSseEvent(
+  event: string,
+  data: StreamTextData | StreamErrorInfo | StreamDoneData,
+): Uint8Array {
+  const payload = `event: ${event}\ndata: ${JSON.stringify(data)}\n\n`
+
+  return new TextEncoder().encode(payload)
+}
 
 const YearlyReportTagsSchema = object({
   activity_level: string(),
@@ -54,7 +95,11 @@ export async function POST(request: NextRequest) {
 
     if (isModelFactoryError(modelResult)) {
       return NextResponse.json(
-        { message: modelResult.message },
+        {
+          code: 'badRequest',
+          message: modelResult.message,
+          retryable: false,
+        },
         { status: 400 },
       )
     }
@@ -80,20 +125,98 @@ export async function POST(request: NextRequest) {
       categoryNames,
     })
 
-    // 5. 调用 AI SDK streamText（使用固定的合理默认值）
+    // 5. 调用 AI SDK streamText
+    // 关键：streamText 的错误不是通过异常抛出的，而是通过 onError 回调
+    // 或 fullStream 中的 error 部分传递的。我们需要使用这些机制来捕获错误。
+    let streamError: Error | null = null
+
     const result = streamText({
       model: modelResult.model,
       system,
       prompt,
       temperature: 0.7,
       maxOutputTokens: 3000,
+      // 使用 onError 回调捕获流式错误（如 401 认证错误）
+      onError: ({ error }) => {
+        console.error('[AI Yearly Report] onError callback:', error instanceof Error ? error.message : String(error))
+        streamError = error instanceof Error ? error : new Error(String(error))
+      },
     })
 
-    // 6. 返回纯文本流式响应
-    const response = result.toTextStreamResponse()
-    response.headers.set('Cache-Control', 'no-store')
+    // 6. 使用 fullStream 而不是 textStream 来检测错误部分
+    // fullStream 包含 text-delta、error 等不同类型的部分
+    const readableStream = new ReadableStream({
+      async start(controller) {
+        let hasErrored = false
 
-    return response
+        const emitError = (error: unknown) => {
+          if (hasErrored) {
+            return
+          }
+
+          hasErrored = true
+          const errorInfo = classifyAiError(error)
+          controller.enqueue(encodeSseEvent(STREAM_EVENT_ERROR, errorInfo))
+        }
+
+        try {
+          for await (const part of result.fullStream) {
+            // 检测 onError 回调中设置的错误
+            if (streamError) {
+              emitError(streamError)
+              controller.close()
+
+              return
+            }
+
+            // 检测流中的错误部分
+            if (part.type === 'error') {
+              console.error('[AI Yearly Report] Stream error part:', part.error instanceof Error ? part.error.message : String(part.error))
+
+              emitError(part.error)
+              controller.close()
+
+              return
+            }
+
+            // 只处理文本增量部分
+            if (part.type === 'text-delta') {
+              controller.enqueue(encodeSseEvent(STREAM_EVENT_TEXT, { delta: part.text }))
+            }
+          }
+
+          // 流结束后再次检查是否有 onError 设置的错误
+          if (streamError) {
+            emitError(streamError)
+          }
+          else {
+            controller.enqueue(encodeSseEvent(STREAM_EVENT_DONE, { ok: true }))
+          }
+
+          controller.close()
+        }
+        catch (unexpectedError) {
+          // 兜底：捕获任何意外的异常
+          console.error('[AI Yearly Report] Unexpected error:', unexpectedError instanceof Error ? unexpectedError.message : String(unexpectedError))
+
+          try {
+            emitError(unexpectedError)
+            controller.close()
+          }
+          catch {
+            // 忽略 enqueue/close 失败
+          }
+        }
+      },
+    })
+
+    return new Response(readableStream, {
+      headers: {
+        'Content-Type': 'text/event-stream; charset=utf-8',
+        'Cache-Control': 'no-store',
+        Connection: 'keep-alive',
+      },
+    })
   }
   catch (error) {
     // 注意：不要 log 完整的 body，避免泄露 apiKey
@@ -103,21 +226,15 @@ export async function POST(request: NextRequest) {
     if (error instanceof Error) {
       // Valibot 校验错误
       if (error.name === 'ValiError') {
-        return NextResponse.json(
-          { message: 'Invalid request body', details: error.message },
-          { status: 400 },
+        return createErrorResponse(
+          new Error('Invalid request body'),
+          400,
         )
       }
 
-      return NextResponse.json(
-        { message: error.message },
-        { status: 500 },
-      )
+      return createErrorResponse(error, 500)
     }
 
-    return NextResponse.json(
-      { message: 'An unexpected error occurred' },
-      { status: 500 },
-    )
+    return createErrorResponse(new Error('An unexpected error occurred'), 500)
   }
 }

@@ -5,9 +5,8 @@ import { useEvent } from 'react-use-event-hook'
 
 import { useTranslations } from 'next-intl'
 import type { DialogTriggerProps } from '@base-ui-components/react/dialog'
-import { AlertTriangleIcon, RotateCcwIcon, SettingsIcon } from 'lucide-react'
+import { RotateCcwIcon, SettingsIcon } from 'lucide-react'
 
-import { Alert, AlertDescription } from '~/components/ui/alert'
 import { Button } from '~/components/ui/button'
 import {
   Dialog,
@@ -199,13 +198,6 @@ export function AiConfigDialog({
             onChange={handleConfigChange}
             onTest={handleTest}
           />
-
-          <Alert className="mt-4" variant="warning">
-            <AlertTriangleIcon />
-            <AlertDescription>
-              {t('securityWarning')}
-            </AlertDescription>
-          </Alert>
         </DialogPanel>
 
         <DialogFooter>

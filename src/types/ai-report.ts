@@ -53,3 +53,41 @@ export interface YearlyReportRequest {
  * 流式请求状态
  */
 export type StreamStatus = 'idle' | 'streaming' | 'success' | 'error' | 'aborted'
+
+/**
+ * AI 流式传输错误码
+ * 用于标识具体的错误类型，前端据此展示本地化错误消息
+ */
+export type AiStreamErrorCode
+  = 'authError'
+    | 'badRequest'
+    | 'forbidden'
+    | 'modelNotFound'
+    | 'contextLengthExceeded'
+    | 'rateLimit'
+    | 'quotaExceeded'
+    | 'timeout'
+    | 'gatewayTimeout'
+    | 'serviceOverloaded'
+    | 'networkError'
+    | 'contentFilter'
+    | 'serverError'
+    | 'unknown'
+
+/**
+ * 流式传输中嵌入的结构化错误信息
+ */
+export interface StreamErrorInfo {
+  code: AiStreamErrorCode
+  message: string
+  retryable: boolean
+}
+
+/**
+ * AI 报告生成错误（前端使用）
+ */
+export interface AiReportError {
+  code: AiStreamErrorCode
+  message: string
+  retryable: boolean
+}

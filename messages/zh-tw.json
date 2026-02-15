@@ -153,7 +153,23 @@
     "builtinErrorHint": "內建 AI 服務出現錯誤，你可以設定自訂 AI 服務作為備選方案。",
     "configureCustomAi": "設定自訂 AI",
     "previousVersion": "上一個版本",
-    "nextVersion": "下一個版本"
+    "nextVersion": "下一個版本",
+    "streamErrors": {
+      "authError": "API 金鑰無效或已過期，請檢查你的 API 金鑰設定",
+      "badRequest": "請求參數無效，請檢查 AI 設定後重試",
+      "forbidden": "AI 服務拒絕存取，請檢查帳戶權限設定",
+      "modelNotFound": "模型不存在或 API 位址無效，請檢查設定",
+      "contextLengthExceeded": "輸入內容超過模型上下文限制，請精簡後重試",
+      "rateLimit": "請求過於頻繁，請稍後再試",
+      "quotaExceeded": "API 配額已用盡，請檢查帳戶額度",
+      "timeout": "AI 服務回應逾時，請稍後重試",
+      "gatewayTimeout": "AI 服務閘道逾時，請稍後重試",
+      "serviceOverloaded": "AI 服務目前負載較高，請稍後重試",
+      "networkError": "網路連線失敗，請檢查 API 位址是否正確",
+      "contentFilter": "內容被安全過濾器攔截，請調整後重試",
+      "serverError": "AI 服務暫時無法使用，請稍後重試",
+      "unknown": "生成過程中發生未知錯誤，請重試"
+    }
   },
   "aiConfig": {
     "configButton": "已設定",
@@ -172,8 +188,7 @@
     "testFailed": "連線失敗",
     "save": "儲存設定",
     "cancel": "取消",
-    "resetToDefault": "恢復預設",
-    "securityWarning": "API 金鑰將儲存在瀏覽器本地儲存空間。建議使用權限受限或可撤銷的金鑰，避免在公共裝置上儲存。"
+    "resetToDefault": "恢復預設"
   },
   "errors": {
     "somethingWentWrong": "出了點問題，請稍後再試。",

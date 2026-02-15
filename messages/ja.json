@@ -153,7 +153,23 @@
     "builtinErrorHint": "内蔵 AI サービスでエラーが発生しました。カスタム AI サービスを代替として設定できます。",
     "configureCustomAi": "カスタム AI を設定",
     "previousVersion": "前のバージョン",
-    "nextVersion": "次のバージョン"
+    "nextVersion": "次のバージョン",
+    "streamErrors": {
+      "authError": "API キーが無効または期限切れです。API キーの設定を確認してください",
+      "badRequest": "リクエストのパラメータが無効です。AI 設定を確認して再試行してください",
+      "forbidden": "AI サービスへのアクセスが拒否されました。アカウント権限を確認してください",
+      "modelNotFound": "モデルが見つからないか、API エンドポイントが無効です。設定を確認してください",
+      "contextLengthExceeded": "入力内容がモデルのコンテキスト上限を超えています。短くして再試行してください",
+      "rateLimit": "リクエストが多すぎます。しばらくしてからもう一度お試しください",
+      "quotaExceeded": "API クォータを超過しました。アカウント残高を確認してください",
+      "timeout": "AI サービスの応答がタイムアウトしました。しばらくしてからもう一度お試しください",
+      "gatewayTimeout": "AI サービスのゲートウェイがタイムアウトしました。しばらくしてから再試行してください",
+      "serviceOverloaded": "AI サービスが混雑しています。少し待ってから再試行してください",
+      "networkError": "ネットワーク接続に失敗しました。API エンドポイントが正しいか確認してください",
+      "contentFilter": "コンテンツがセーフティフィルターによりブロックされました。再試行してください",
+      "serverError": "AI サービスが一時的に利用できません。しばらくしてからもう一度お試しください",
+      "unknown": "生成中に不明なエラーが発生しました。再試行してください"
+    }
   },
   "aiConfig": {
     "configButton": "カスタム",
@@ -172,8 +188,7 @@
     "testFailed": "接続失敗",
     "save": "保存",
     "cancel": "キャンセル",
-    "resetToDefault": "デフォルトにリセット",
-    "securityWarning": "API キーはブラウザのローカルストレージに保存されます。権限制限付きまたは失効可能なキーのご使用を推奨し、公共のデバイスでの保存は避けてください。"
+    "resetToDefault": "デフォルトにリセット"
   },
   "errors": {
     "somethingWentWrong": "問題が発生しました。",

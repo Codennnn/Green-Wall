@@ -48,7 +48,7 @@ export function YearSearchPage() {
     }
   }
 
-  const handleSubmit = (ev: React.FormEvent) => {
+  const handleSubmit = (ev: React.SubmitEvent) => {
     ev.preventDefault()
 
     const normalizedUsername = normalizeGitHubUsername(username)

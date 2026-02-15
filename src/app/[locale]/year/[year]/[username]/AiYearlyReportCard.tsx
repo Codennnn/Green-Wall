@@ -46,6 +46,8 @@ import { useMarkdownIt } from '~/hooks/useMarkdownIt'
 import { useYearlyAiReportStream } from '~/hooks/useYearlyAiReportStream'
 import { eventTracker } from '~/lib/analytics'
 import type {
+  AiReportError,
+  AiStreamErrorCode,
   YearlyReportHighlights,
   YearlyReportTags,
 } from '~/types/ai-report'
@@ -164,15 +166,37 @@ export function AiYearlyReportCard(props: AiYearlyReportCardProps) {
 
   const { html: markdownHtml } = useMarkdownIt(displayText)
 
+  const getLocalizedErrorMessage = (reportError: AiReportError): string => {
+    const errorMessages: Record<AiStreamErrorCode, string> = {
+      authError: t('streamErrors.authError'),
+      badRequest: t('streamErrors.badRequest'),
+      forbidden: t('streamErrors.forbidden'),
+      modelNotFound: t('streamErrors.modelNotFound'),
+      contextLengthExceeded: t('streamErrors.contextLengthExceeded'),
+      rateLimit: t('streamErrors.rateLimit'),
+      quotaExceeded: t('streamErrors.quotaExceeded'),
+      timeout: t('streamErrors.timeout'),
+      gatewayTimeout: t('streamErrors.gatewayTimeout'),
+      serviceOverloaded: t('streamErrors.serviceOverloaded'),
+      networkError: t('streamErrors.networkError'),
+      contentFilter: t('streamErrors.contentFilter'),
+      serverError: t('streamErrors.serverError'),
+      unknown: t('streamErrors.unknown'),
+    }
+
+    return errorMessages[reportError.code] || reportError.message || t('streamErrors.unknown')
+  }
+
   const renderContent = () => {
     if (isError && error) {
       const showBuiltinErrorHint = sourceInfo.source === 'builtin'
+      const localizedMessage = getLocalizedErrorMessage(error)
 
       return (
         <div className="flex flex-col gap-2">
           <Alert variant="error">
             <AlertDescription>
-              {error}
+              {localizedMessage}
             </AlertDescription>
           </Alert>
 

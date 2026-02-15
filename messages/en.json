@@ -153,7 +153,23 @@
     "builtinErrorHint": "The built-in AI service encountered an error. You can configure a custom AI service as an alternative.",
     "configureCustomAi": "Configure Custom AI",
     "previousVersion": "Previous version",
-    "nextVersion": "Next version"
+    "nextVersion": "Next version",
+    "streamErrors": {
+      "authError": "Invalid or expired API key. Please check your API key configuration.",
+      "badRequest": "The request parameters are invalid. Please review your AI configuration and try again.",
+      "forbidden": "Access to the AI service was denied. Please check account permissions.",
+      "modelNotFound": "Model not found or API endpoint invalid. Please check your configuration.",
+      "contextLengthExceeded": "Input is too long for the model context window. Please reduce content and retry.",
+      "rateLimit": "Too many requests. Please try again later.",
+      "quotaExceeded": "API quota exceeded. Please check your account balance.",
+      "timeout": "AI service response timed out. Please try again later.",
+      "gatewayTimeout": "AI service gateway timed out. Please try again shortly.",
+      "serviceOverloaded": "AI service is overloaded. Please retry in a few moments.",
+      "networkError": "Network connection failed. Please check if the API endpoint is correct.",
+      "contentFilter": "Content was blocked by the safety filter. Please try again.",
+      "serverError": "AI service is temporarily unavailable. Please try again later.",
+      "unknown": "An unexpected error occurred during generation. Please retry."
+    }
   },
   "aiConfig": {
     "configButton": "Custom",
@@ -172,8 +188,7 @@
     "testFailed": "Connection failed",
     "save": "Save",
     "cancel": "Cancel",
-    "resetToDefault": "Reset to Default",
-    "securityWarning": "Your API key will be stored in browser local storage. We recommend using a limited or revocable key, and avoid saving on public devices."
+    "resetToDefault": "Reset to Default"
   },
   "errors": {
     "somethingWentWrong": "Something went wrong.",

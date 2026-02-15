@@ -3,10 +3,12 @@
 import { useRef, useState } from 'react'
 import { useEvent } from 'react-use-event-hook'
 
+import { AiStreamError } from '~/lib/ai/stream-error'
 import { eventTracker } from '~/lib/analytics'
 import { fetchYearlyReportStream, readTextStream } from '~/services/ai-report'
 import type { AiRuntimeConfig } from '~/types/ai-config'
 import type {
+  AiReportError,
   StreamStatus,
   YearlyReportHighlights,
   YearlyReportTags,
@@ -27,8 +29,8 @@ export interface UseYearlyAiReportStreamReturn {
   text: string
   /** 当前状态 */
   status: StreamStatus
-  /** 错误信息 */
-  error: string | null
+  /** 结构化错误信息（包含错误码和消息） */
+  error: AiReportError | null
   /** 开始生成 */
   start: () => Promise<void>
   /** 中止生成 */
@@ -44,10 +46,11 @@ export function useYearlyAiReportStream(
 
   const [text, setText] = useState('')
   const [status, setStatus] = useState<StreamStatus>('idle')
-  const [error, setError] = useState<string | null>(null)
+  const [error, setError] = useState<AiReportError | null>(null)
 
   const abortControllerRef = useRef<AbortController | null>(null)
   const startTimeRef = useRef<number>(0)
+  const latestTextRef = useRef('')
 
   const start = useEvent(async () => {
     if (abortControllerRef.current) {
@@ -55,6 +58,7 @@ export function useYearlyAiReportStream(
     }
 
     setText('')
+    latestTextRef.current = ''
     setError(null)
     setStatus('streaming')
 
@@ -83,11 +87,13 @@ export function useYearlyAiReportStream(
       const finalText = await readTextStream(
         response,
         (currentText) => {
+          latestTextRef.current = currentText
           setText(currentText)
         },
         abortController.signal,
       )
 
+      latestTextRef.current = finalText
       const durationMs = performance.now() - startTimeRef.current
       eventTracker.ai.report.generate.success(year, durationMs, finalText.length)
 
@@ -97,15 +103,18 @@ export function useYearlyAiReportStream(
       const durationMs = performance.now() - startTimeRef.current
 
       if (err instanceof DOMException && err.name === 'AbortError') {
-        // 使用最新的 text 状态值（因为流被中止，无法获取最终文本）
-        const currentTextLength = text.length
+        const currentTextLength = latestTextRef.current.length
         eventTracker.ai.report.generate.abort(year, durationMs, currentTextLength)
         setStatus('aborted')
       }
       else {
-        const errorMessage = err instanceof Error ? err.message : 'Unknown error'
-        eventTracker.ai.report.generate.error(year, errorMessage, durationMs, configSource)
-        setError(errorMessage)
+        // 区分 AI 流式错误（带错误码）和其他通用错误
+        const reportError: AiReportError = err instanceof AiStreamError
+          ? { code: err.code, message: err.message, retryable: err.retryable }
+          : { code: 'unknown', message: err instanceof Error ? err.message : 'Unknown error', retryable: true }
+
+        eventTracker.ai.report.generate.error(year, reportError.message, durationMs, configSource)
+        setError(reportError)
         setStatus('error')
       }
     }
@@ -124,6 +133,7 @@ export function useYearlyAiReportStream(
   const reset = useEvent(() => {
     abort()
     setText('')
+    latestTextRef.current = ''
     setError(null)
     setStatus('idle')
   })
