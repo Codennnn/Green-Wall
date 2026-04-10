@@ -35,6 +35,10 @@ type Action
     payload: State['theme']
   }
   | {
+    type: 'globalScale'
+    payload: State['globalScale']
+  }
+  | {
     type: 'reset'
     payload?: never
   }
@@ -76,6 +80,9 @@ export function useGraphSetting() {
 
       case 'theme':
         return { ...state, theme: payload }
+
+      case 'globalScale':
+        return { ...state, globalScale: payload }
 
       case 'reset':
         return initialState

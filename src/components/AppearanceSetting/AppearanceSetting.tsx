@@ -23,6 +23,7 @@ export const AppearanceSetting = memo(function AppearanceSetting() {
   const daysLabelId = useId()
   const safariHeader = useId()
   const attributionId = useId()
+  const globalScaleId = useId()
 
   const handleDaysLabelChange = useEvent(
     (checked: boolean) => {
@@ -42,6 +43,13 @@ export const AppearanceSetting = memo(function AppearanceSetting() {
     (checked: boolean) => {
       eventTracker.ui.settings.change('show_attribution', checked)
       dispatchSettings({ type: 'showAttribution', payload: checked })
+    },
+  )
+
+  const handleGlobalScaleChange = useEvent(
+    (checked: boolean) => {
+      eventTracker.ui.settings.change('global_scale', checked)
+      dispatchSettings({ type: 'globalScale', payload: checked })
     },
   )
 
@@ -112,11 +120,32 @@ export const AppearanceSetting = memo(function AppearanceSetting() {
       </fieldset>
 
       <fieldset>
-        <label className="flex items-center">
+        <label className="flex items-center gap-1" htmlFor={globalScaleId}>
+          {t('globalScale')}
+          <Tooltip>
+            <TooltipTrigger className="leading-none">
+              <CircleHelpIcon className="inline-block size-4 cursor-help opacity-90" />
+            </TooltipTrigger>
+            <TooltipContent>
+              <span className="inline-block max-w-xs leading-5">
+                {t('globalScaleHint')}
+              </span>
+            </TooltipContent>
+          </Tooltip>
+        </label>
+        <Switch
+          checked={settings.globalScale ?? false}
+          id={globalScaleId}
+          onCheckedChange={handleGlobalScaleChange}
+        />
+      </fieldset>
+
+      <fieldset>
+        <label className="flex items-center gap-1">
           {t('graphSize')}
           <Tooltip>
-            <TooltipTrigger>
-              <CircleHelpIcon className="ml-1 inline-block size-4 cursor-help opacity-90" />
+            <TooltipTrigger className="leading-none">
+              <CircleHelpIcon className="inline-block size-4 cursor-help opacity-90" />
             </TooltipTrigger>
             <TooltipContent>
               <span className="inline-block max-w-xs leading-5">
@@ -158,7 +187,7 @@ export const AppearanceSetting = memo(function AppearanceSetting() {
         >
           <Tooltip>
             <TooltipTrigger render={<Toggle size="sm" value={BlockShape.Square} />}>
-              <span className="inline-block size-4 rounded-[2px] bg-current" />
+              <span className="inline-block size-4 rounded-md bg-current" />
             </TooltipTrigger>
             <TooltipContent>{t('shapeSquare')}</TooltipContent>
           </Tooltip>

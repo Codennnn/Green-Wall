@@ -90,6 +90,8 @@ export interface GraphSettings {
   size?: GraphSize
   blockShape?: BlockShape
   theme?: Themes
+  /** 跨年全局色阶：开启后以所有年份中单日最大贡献数为基准统一着色 */
+  globalScale?: boolean
 }
 
 export interface GitHubApiJson<Data> {

@@ -85,7 +85,9 @@
     "shapeSquare": "四角",
     "shapeRound": "丸",
     "themes": "テーマ",
-    "sizeHint": "ヒント：ブラウザのズームで保存画像のサイズも調整できます。"
+    "sizeHint": "ヒント：ブラウザのズームで保存画像のサイズも調整できます。",
+    "globalScale": "グローバルスケール",
+    "globalScaleHint": "全年度で統一したカラースケールを使用します。同じ貢献数はどの年でも常に同じ色の濃さで表示されます。"
   },
   "discovery": {
     "popularProfiles": "人気プロフィール",

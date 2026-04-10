@@ -85,7 +85,9 @@
     "shapeSquare": "方形",
     "shapeRound": "圆形",
     "themes": "主题",
-    "sizeHint": "提示：也可以通过浏览器缩放来调整导出图片的尺寸。"
+    "sizeHint": "提示：也可以通过浏览器缩放来调整导出图片的尺寸。",
+    "globalScale": "全局色阶",
+    "globalScaleHint": "跨年使用统一的颜色比例尺。相同的贡献数在任何年份都会呈现相同的颜色深度。"
   },
   "discovery": {
     "popularProfiles": "热门用户",

@@ -72,6 +72,27 @@ function ContributionsGraphInner(
 
   const computedColors = useComputedLevelColors(graphRef, applyingTheme)
 
+  // 跨年最大单日贡献数，用于全局色阶模式
+  const globalMax = useMemo(() => {
+    if (!graphData) {
+      return 0
+    }
+
+    let max = 0
+
+    for (const calendar of graphData.contributionCalendars) {
+      for (const week of calendar.weeks) {
+        for (const day of week.days) {
+          if (day.count > max) {
+            max = day.count
+          }
+        }
+      }
+    }
+
+    return max
+  }, [graphData])
+
   const highlightDatesMap = useMemo(() => {
     const map = new Map<number, Set<string>>()
 
@@ -144,6 +165,7 @@ function ContributionsGraphInner(
                   computedColors={computedColors}
                   data={calendar}
                   daysLabel={settings.daysLabel}
+                  globalMax={settings.globalScale ? globalMax : undefined}
                   highlightedDates={highlightedDates}
                   showInspect={showInspect}
                   titleRender={titleRender}

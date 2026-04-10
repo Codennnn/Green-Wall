@@ -25,6 +25,8 @@ export interface GraphProps extends React.ComponentProps<'div'> {
   highlightedDates?: Set<string>
   blockShape?: BlockShape
   computedColors?: string[]
+  /** 全局色阶模式下所有年份的单日最大贡献数；undefined 表示关闭 */
+  globalMax?: number
   titleRender?: ((params: {
     year: number
     total: number
@@ -44,6 +46,7 @@ export function Graph(props: GraphProps) {
     highlightedDates,
     blockShape,
     computedColors,
+    globalMax,
     ...rest
   } = props
 
@@ -194,6 +197,7 @@ export function Graph(props: GraphProps) {
         <GraphSvgBlocks
           blockShape={blockShape ?? DEFAULT_BLOCK_SHAPE}
           computedColors={computedColors}
+          globalMax={globalMax}
           highlightedDates={highlightedDates}
           weeks={calendar.weeks}
           onDayHover={handleDayHover}

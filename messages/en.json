@@ -85,7 +85,9 @@
     "shapeSquare": "Square",
     "shapeRound": "Round",
     "themes": "Themes",
-    "sizeHint": "You can also adjust the web zoom to change the size of the saved image."
+    "sizeHint": "You can also adjust the web zoom to change the size of the saved image.",
+    "globalScale": "Global Scale",
+    "globalScaleHint": "Use a unified color scale across all years. The same contribution count will always appear with the same color intensity, regardless of which year it's in."
   },
   "discovery": {
     "popularProfiles": "Popular profiles",
