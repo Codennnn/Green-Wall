@@ -119,7 +119,7 @@ export function SearchInput({
       onOpenChange={handleOpenChange}
       onValueChange={handleValueChange}
     >
-      <div className="relative">
+      <div className="relative w-2/3 md:w-[240px]">
         <AutocompleteInput
           ref={inputRef}
           data-1p-ignore
@@ -130,7 +130,7 @@ export function SearchInput({
           {...props}
           required
           className={cn(
-            'h-[2.8rem] w-2/3 md:w-[240px]',
+            'h-[2.8rem] w-full',
             '**:data-[slot=autocomplete-input]:placeholder:text-center **:data-[slot=autocomplete-input]:placeholder:font-normal',
             '**:data-[slot=autocomplete-input]:text-base **:data-[slot=autocomplete-input]:font-semibold **:data-[slot=autocomplete-input]:text-center',
             props.className,
