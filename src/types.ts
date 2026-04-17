@@ -1,8 +1,28 @@
-import { array, type InferInput, nullable, number, object, optional, string } from 'valibot'
+import {
+  array,
+  type InferInput,
+  nullable,
+  number,
+  object,
+  optional,
+  string,
+} from 'valibot'
 
-import type { BlockShape, ColorScheme, ContributionLevel, ErrorType, GraphSize } from '~/enums'
+import type {
+  BlockShape,
+  ColorScheme,
+  ContributionLevel,
+  ErrorType,
+  GraphSize,
+} from '~/enums'
 
-export type Themes = 'Classic' | 'Midnight' | 'Sunset' | 'Sunsetx' | 'Violet' | 'GreenWall'
+export type Themes
+  = | 'Classic'
+    | 'Midnight'
+    | 'Sunset'
+    | 'Sunsetx'
+    | 'Violet'
+    | 'GreenWall'
 
 type GitHubProfileName = string
 
@@ -32,7 +52,8 @@ export interface GitHubContributionCalendar {
   }
 }
 
-export interface ContributionBasic extends Omit<GitHubUser, 'contributionsCollection'> {
+export interface ContributionBasic
+  extends Omit<GitHubUser, 'contributionsCollection'> {
   contributionYears: ContributionYear[]
 }
 
@@ -61,12 +82,23 @@ export type DataMode = 'public' | 'authorized'
 export type FallbackReason
   = | 'not_logged_in'
     | 'username_mismatch'
+    | 'private_disabled'
+    | 'scope_missing'
     | 'token_missing'
     | 'token_invalid'
+
+export interface DataAccessOptions {
+  /** 是否请求使用用户授权读取私有贡献 */
+  includePrivate?: boolean
+  /** 前端缓存隔离键，用于区分 public/authorized/session 状态 */
+  authCacheKey?: string
+}
 
 export interface ResponseMeta {
   /** 数据获取模式 */
   mode: DataMode
+  /** 请求是否尝试包含私有贡献 */
+  includePrivate?: boolean
   /** 登录用户信息 */
   viewer?: {
     login: string
@@ -81,6 +113,13 @@ export interface ResponseData {
   data?: GraphData
   meta?: ResponseMeta
 }
+
+export interface ApiResponseWithMeta<Data> {
+  data: Data
+  meta: ResponseMeta
+}
+
+export type ContributionApiResponse = ApiResponseWithMeta<GraphData>
 
 export interface GraphSettings {
   yearRange?: [start_year: string | undefined, end_year: string | undefined]
@@ -110,22 +149,40 @@ const RepoInfoSchema = object({
   issues: object({
     totalCount: number(),
   }),
-  defaultBranchRef: optional(nullable(object({
-    target: optional(nullable(object({
-      history: optional(nullable(object({
-        totalCount: number(),
-      }))),
-    }))),
-  }))),
-  languages: optional(nullable(object({
-    totalSize: number(),
-    edges: array(object({
-      size: number(),
-      node: object({
-        name: string(),
+  defaultBranchRef: optional(
+    nullable(
+      object({
+        target: optional(
+          nullable(
+            object({
+              history: optional(
+                nullable(
+                  object({
+                    totalCount: number(),
+                  }),
+                ),
+              ),
+            }),
+          ),
+        ),
       }),
-    })),
-  }))),
+    ),
+  ),
+  languages: optional(
+    nullable(
+      object({
+        totalSize: number(),
+        edges: array(
+          object({
+            size: number(),
+            node: object({
+              name: string(),
+            }),
+          }),
+        ),
+      }),
+    ),
+  ),
 })
 
 const IssueInfoSchema = object({
@@ -208,7 +265,9 @@ export type IssuesInYear = InferInput<typeof IssuesInYearSchema>
 
 export type RepoInteraction = InferInput<typeof RepoInteractionSchema>
 
-export type RepoInteractionsInYear = InferInput<typeof RepoInteractionsInYearSchema>
+export type RepoInteractionsInYear = InferInput<
+  typeof RepoInteractionsInYearSchema
+>
 
 export interface ValuableStatistics {
   weekendContributions: number
@@ -235,7 +294,13 @@ export interface ThemePreset {
   colorPrimary: string
   colorBorder: string
   colorBackgroundContainer: string
-  levelColors: [level_0: string, level_1: string, level_2: string, level_3: string, level_4: string]
+  levelColors: [
+    level_0: string,
+    level_1: string,
+    level_2: string,
+    level_3: string,
+    level_4: string,
+  ]
   selectable?: boolean
 }
 
@@ -370,8 +435,7 @@ export interface RepoAnalysis {
  */
 export interface RepoAnalysisResponse {
   data: RepoAnalysis
-  meta: {
-    mode: DataMode
+  meta: ResponseMeta & {
     fetchedAt: string
     metrics: string[]
   }

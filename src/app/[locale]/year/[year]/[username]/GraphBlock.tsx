@@ -16,7 +16,10 @@ import {
 } from 'lucide-react'
 
 import { ContributionsGraph } from '~/components/ContributionsGraph/ContributionsGraph'
-import type { GraphHighlightMode, GraphHighlightOptions } from '~/components/ContributionsGraph/graphHighlightUtils'
+import type {
+  GraphHighlightMode,
+  GraphHighlightOptions,
+} from '~/components/ContributionsGraph/graphHighlightUtils'
 import { StatCard, StatValue } from '~/components/StaticCard'
 import { Button } from '~/components/ui/button'
 import { Skeleton } from '~/components/ui/skeleton'
@@ -25,12 +28,14 @@ import { useData } from '~/DataContext'
 import { ReposCardMode } from '~/enums'
 import { useDateFormatters } from '~/hooks/useDateFormatters'
 import { useImageExport } from '~/hooks/useImageExport'
-import { useContributionQuery,
+import {
+  useContributionQuery,
   useIssuesQuery,
   useRepoInteractionsQuery,
   useReposQuery,
 } from '~/hooks/useQueries'
 import { useRouter } from '~/i18n/navigation'
+import { useSession } from '~/lib/auth-client'
 import { getTopLanguagesFromRepos } from '~/lib/language-stats'
 import { sortReposByDisplayValue, sortReposByInfluence } from '~/lib/repo-sort'
 import { deriveStatistics } from '~/lib/statistics'
@@ -39,7 +44,11 @@ import {
   deriveYearlyTags,
   extractHighlights,
 } from '~/lib/yearly-report/deriveTags'
-import type { IssueInfo, RepoInteraction } from '~/types'
+import type {
+  DataAccessOptions,
+  IssueInfo,
+  RepoInteraction,
+} from '~/types'
 
 import { MonthlyCommitChart } from './charts/MonthlyCommitChart'
 import { WeeklyCommitChart } from './charts/WeeklyCommitChart'
@@ -60,6 +69,18 @@ export function GraphBlock() {
   const tYearlyTags = useTranslations('yearlyTags')
 
   const { setGraphData } = useData()
+  const { data: session, isPending: isSessionPending } = useSession()
+  const viewerLogin = (session?.user as { login?: string } | undefined)?.login
+  const dataAccessOptions = useMemo<DataAccessOptions>(
+    () => ({
+      includePrivate: Boolean(viewerLogin),
+      authCacheKey: viewerLogin
+        ? `github:${viewerLogin.toLowerCase()}`
+        : 'public',
+    }),
+    [viewerLogin],
+  )
+  const queriesEnabled = !isSessionPending && Number.isFinite(queryYear)
 
   const router = useRouter()
 
@@ -71,51 +92,57 @@ export function GraphBlock() {
     router.push(`/year/${value}/${githubUsername}`)
   })
 
-  const {
-    data: contributionData,
-    isLoading: contributionLoading,
-  } = useContributionQuery(githubUsername, [queryYear], true, {
-    staleTime: 10 * 60 * 1000, // 10 分钟
-    gcTime: 60 * 60 * 1000, // 1 小时
-  })
+  const { data: contributionResult, isLoading: contributionLoading }
+    = useContributionQuery(
+      githubUsername,
+      [queryYear],
+      true,
+      {
+        ...dataAccessOptions,
+      },
+      {
+        enabled: queriesEnabled,
+        staleTime: 10 * 60 * 1000, // 10 分钟
+        gcTime: 60 * 60 * 1000, // 1 小时
+      },
+    )
+  const contributionData = contributionResult?.data
 
   const {
     data: reposData,
     isLoading: reposLoading,
     error: reposError,
-  } = useReposQuery(
-    githubUsername,
-    queryYear,
-  )
+  } = useReposQuery(githubUsername, queryYear, dataAccessOptions, {
+    enabled: queriesEnabled,
+  })
 
   const {
     data: issuesData,
     isLoading: issuesLoading,
     error: issuesError,
-  } = useIssuesQuery(
-    githubUsername,
-    queryYear,
-  )
+  } = useIssuesQuery(githubUsername, queryYear, dataAccessOptions, {
+    enabled: queriesEnabled,
+  })
 
-  const [reposCardMode, setReposCardMode] = useState<ReposCardMode>(ReposCardMode.Interactions)
+  const [reposCardMode, setReposCardMode] = useState<ReposCardMode>(
+    ReposCardMode.Interactions,
+  )
 
   const {
     data: repoInteractionsData,
     isLoading: repoInteractionsLoading,
     error: repoInteractionsErrorRaw,
-  } = useRepoInteractionsQuery(
-    githubUsername,
-    queryYear,
-    {
-      enabled: reposCardMode === ReposCardMode.Interactions,
-    },
-  )
+  } = useRepoInteractionsQuery(githubUsername, queryYear, dataAccessOptions, {
+    enabled: queriesEnabled && reposCardMode === ReposCardMode.Interactions,
+  })
   // 类型断言：react-query 的 error 类型默认为 unknown，需要显式转换
-  const repoInteractionsError: Error | null = repoInteractionsErrorRaw instanceof Error
-    ? repoInteractionsErrorRaw
-    : null
+  const repoInteractionsError: Error | null
+    = repoInteractionsErrorRaw instanceof Error ? repoInteractionsErrorRaw : null
 
-  const statistics = useMemo(() => deriveStatistics(contributionData), [contributionData])
+  const statistics = useMemo(
+    () => deriveStatistics(contributionData),
+    [contributionData],
+  )
 
   const repos = reposData?.repos
 
@@ -189,7 +216,8 @@ export function GraphBlock() {
   }, [statistics, reposData, issuesData])
 
   // 高亮状态管理
-  const [highlightMode, setHighlightMode] = useState<GraphHighlightMode>('none')
+  const [highlightMode, setHighlightMode]
+    = useState<GraphHighlightMode>('none')
   const [highlightOptions, setHighlightOptions] = useState<
     GraphHighlightOptions | undefined
   >(undefined)
@@ -200,7 +228,7 @@ export function GraphBlock() {
     }
   }, [contributionData, setGraphData])
 
-  const isLoading = contributionLoading
+  const isLoading = isSessionPending || contributionLoading
 
   const { formatDate, formatMonth, formatDateRange } = useDateFormatters()
 
@@ -210,7 +238,10 @@ export function GraphBlock() {
     reportContainerRef,
     githubUsername,
     {},
-    { filename: `${githubUsername}_${queryYear}_yearly_report`, context: 'year_report' },
+    {
+      filename: `${githubUsername}_${queryYear}_yearly_report`,
+      context: 'year_report',
+    },
   )
 
   const handleDownloadClick = useEvent(() => {
@@ -252,40 +283,38 @@ export function GraphBlock() {
       >
         {/* MARK: 贡献日历热力图 */}
         <div className="col-span-1 md:col-span-5 lg:col-span-7 h-full">
-          {
-            isLoading
-              ? (
-                  <div className="p-grid-item rounded-md flex flex-col h-full gap-grid-item">
-                    <div className="flex items-center gap-4">
-                      <Skeleton className="size-20 rounded-full" />
-                      <div className="flex-1 space-y-2.5">
-                        <Skeleton className="h-6 w-1/2" />
-                        <div className="flex items-center gap-2 w-2/3">
-                          <Skeleton className="h-3 w-1/3" />
-                          <Skeleton className="h-3 w-1/3" />
-                          <Skeleton className="h-3 w-1/3" />
-                        </div>
-                        <Skeleton className="h-4 w-1/2" />
+          {isLoading
+            ? (
+                <div className="p-grid-item rounded-md flex flex-col h-full gap-grid-item">
+                  <div className="flex items-center gap-4">
+                    <Skeleton className="size-20 rounded-full" />
+                    <div className="flex-1 space-y-2.5">
+                      <Skeleton className="h-6 w-1/2" />
+                      <div className="flex items-center gap-2 w-2/3">
+                        <Skeleton className="h-3 w-1/3" />
+                        <Skeleton className="h-3 w-1/3" />
+                        <Skeleton className="h-3 w-1/3" />
                       </div>
-                    </div>
-
-                    <div className="flex-1">
-                      <Skeleton className="size-full opacity-60 rounded-md" />
+                      <Skeleton className="h-4 w-1/2" />
                     </div>
                   </div>
-                )
-              : (
-                  <ContributionsGraph
-                    highlightMode={highlightMode}
-                    highlightOptions={highlightOptions}
-                    mockupClassName="h-full"
-                    mockupWrapperClassName="p-grid-item h-full"
-                    showInspect={false}
-                    titleRender={null}
-                    wrapperClassName="h-full"
-                  />
-                )
-          }
+
+                  <div className="flex-1">
+                    <Skeleton className="size-full opacity-60 rounded-md" />
+                  </div>
+                </div>
+              )
+            : (
+                <ContributionsGraph
+                  highlightMode={highlightMode}
+                  highlightOptions={highlightOptions}
+                  mockupClassName="h-full"
+                  mockupWrapperClassName="p-grid-item h-full"
+                  showInspect={false}
+                  titleRender={null}
+                  wrapperClassName="h-full"
+                />
+              )}
         </div>
 
         {/* MARK: AI 年度总结 */}
@@ -312,7 +341,9 @@ export function GraphBlock() {
             onMouseEnter={() => {
               if (statistics?.maxContributionsMonth) {
                 setHighlightMode('specificMonth')
-                setHighlightOptions({ specificMonth: statistics.maxContributionsMonth })
+                setHighlightOptions({
+                  specificMonth: statistics.maxContributionsMonth,
+                })
               }
             }}
             onMouseLeave={handleClearHighlight}
@@ -353,9 +384,7 @@ export function GraphBlock() {
                 target="_blank"
               >
                 <div className="min-w-0 font-medium">
-                  <span className="block truncate">
-                    {issue.title}
-                  </span>
+                  <span className="block truncate">{issue.title}</span>
                 </div>
                 <div className="mt-1 flex items-center gap-2 text-foreground/70 text-xs">
                   <span className="truncate">
@@ -385,7 +414,9 @@ export function GraphBlock() {
             onMouseEnter={() => {
               if (statistics?.maxContributionsDate) {
                 setHighlightMode('specificDate')
-                setHighlightOptions({ specificDate: statistics.maxContributionsDate })
+                setHighlightOptions({
+                  specificDate: statistics.maxContributionsDate,
+                })
               }
             }}
             onMouseLeave={handleClearHighlight}
@@ -408,7 +439,10 @@ export function GraphBlock() {
             icon={<CalendarDaysIcon className={STAT_CARD_ICON_SIZE} />}
             title={t('longestStreak')}
             onMouseEnter={() => {
-              if (statistics?.longestStreakStartDate && statistics.longestStreakEndDate) {
+              if (
+                statistics?.longestStreakStartDate
+                && statistics.longestStreakEndDate
+              ) {
                 setHighlightMode('longestStreak')
                 setHighlightOptions(undefined)
               }
@@ -425,7 +459,6 @@ export function GraphBlock() {
                 )}
                 unit={t('unitDays')}
                 value={statistics?.longestStreak}
-
               />
             </div>
           </StatCard>
@@ -437,7 +470,10 @@ export function GraphBlock() {
             icon={<CalendarMinus2Icon className={STAT_CARD_ICON_SIZE} />}
             title={t('longestGap')}
             onMouseEnter={() => {
-              if (statistics?.longestGapStartDate && statistics.longestGapEndDate) {
+              if (
+                statistics?.longestGapStartDate
+                && statistics.longestGapEndDate
+              ) {
                 setHighlightMode('longestGap')
                 setHighlightOptions({
                   longestGapRange: {
@@ -453,7 +489,7 @@ export function GraphBlock() {
               {(() => {
                 const isLeapYear
                   = (queryYear % 4 === 0 && queryYear % 100 !== 0)
-                    || (queryYear % 400 === 0)
+                    || queryYear % 400 === 0
                 const daysInYear = isLeapYear ? 366 : 365
                 const longestGap = statistics?.longestGap
 

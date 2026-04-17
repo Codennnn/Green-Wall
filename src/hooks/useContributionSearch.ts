@@ -4,7 +4,10 @@ import { type Dispatch, type SetStateAction, useEffect, useRef } from 'react'
 import { useEvent } from 'react-use-event-hook'
 
 import { normalizeGitHubUsername } from '~/helpers'
-import { clearPersistedSearchInput, usePersistedSearchInput } from '~/hooks/usePersistedSearchInput'
+import {
+  clearPersistedSearchInput,
+  usePersistedSearchInput,
+} from '~/hooks/usePersistedSearchInput'
 import { useContributionQuery } from '~/hooks/useQueries'
 import { eventTracker } from '~/lib/analytics'
 import type { GraphData } from '~/types'
@@ -60,27 +63,25 @@ export function useContributionSearch({
   })
 
   const {
-    data: contributionData,
+    data: contributionResult,
     isLoading,
     error: queryError,
     isError,
-  } = useContributionQuery(
-    urlUsername,
-    undefined,
-    false,
-    {
-      enabled: urlUsername.length > 0 && !isInvalidUrlUsername,
-      staleTime: 10 * 60 * 1000, // 10 分钟
-      gcTime: 60 * 60 * 1000, // 1 小时
-    },
-  )
+  } = useContributionQuery(urlUsername, undefined, false, undefined, {
+    enabled: urlUsername.length > 0 && !isInvalidUrlUsername,
+    staleTime: 10 * 60 * 1000, // 10 分钟
+    gcTime: 60 * 60 * 1000, // 1 小时
+  })
+  const contributionData = contributionResult?.data
 
   // 同步 URL 用户名到输入框（不写入 localStorage，避免覆盖 clearPersistedSearchInput 的效果）
   useEffect(() => {
     if (urlUsername.length > 0) {
       setSearchNameWithoutPersist((currentSearchName) => {
         // 只有值不同时才更新，避免中断滚动动画
-        return currentSearchName === urlUsername ? currentSearchName : urlUsername
+        return currentSearchName === urlUsername
+          ? currentSearchName
+          : urlUsername
       })
     }
   }, [urlUsername, setSearchNameWithoutPersist])
@@ -97,7 +98,10 @@ export function useContributionSearch({
   }, [isInvalidUrlUsername, setUsernameInUrl])
 
   useEffect(() => {
-    if (contributionData && contributionData.login !== lastProcessedUsernameRef.current) {
+    if (
+      contributionData
+      && contributionData.login !== lastProcessedUsernameRef.current
+    ) {
       lastProcessedUsernameRef.current = contributionData.login
       setGraphData(contributionData)
 
@@ -113,7 +117,8 @@ export function useContributionSearch({
       const normalizedLogin = contributionData.login
       const context = searchContextRef.current
 
-      let entryPoint: 'url' | 'input_submit' | 'famous_user' | 'recent_user' = 'url'
+      let entryPoint: 'url' | 'input_submit' | 'famous_user' | 'recent_user'
+        = 'url'
       let durationMs: number | undefined
 
       if (context?.username.toLowerCase() === normalizedLogin.toLowerCase()) {
@@ -123,11 +128,21 @@ export function useContributionSearch({
 
       eventTracker.user.search.success(entryPoint, true, durationMs, yearRange)
     }
-  }, [contributionData, urlUsername, setGraphData, addRecentUser, setUsernameInUrl, yearRange])
+  }, [
+    contributionData,
+    urlUsername,
+    setGraphData,
+    addRecentUser,
+    setUsernameInUrl,
+    yearRange,
+  ])
 
   // 处理 URL 清空
   useEffect(() => {
-    if (urlUsername.length === 0 && lastProcessedUsernameRef.current.length > 0) {
+    if (
+      urlUsername.length === 0
+      && lastProcessedUsernameRef.current.length > 0
+    ) {
       lastProcessedUsernameRef.current = ''
       setGraphData(undefined)
       resetSettings()
@@ -138,10 +153,9 @@ export function useContributionSearch({
   useEffect(() => {
     if (!isInvalidUrlUsername && urlUsername.length > 0) {
       const lastProcessed = lastProcessedUsernameRef.current
-      const isAlreadyProcessed = (
-        lastProcessed.length > 0
-        && lastProcessed.toLowerCase() === urlUsername.toLowerCase()
-      )
+      const isAlreadyProcessed
+        = lastProcessed.length > 0
+          && lastProcessed.toLowerCase() === urlUsername.toLowerCase()
       const context = searchContextRef.current
       const isAlreadyStarted
         = context?.username.toLowerCase() === urlUsername.toLowerCase()
@@ -198,25 +212,27 @@ export function useContributionSearch({
     }
   })
 
-  const handleQuickSearch = useEvent((raw: string, source: 'famous_user' | 'recent_user') => {
-    const username = normalizeGitHubUsername(raw)
+  const handleQuickSearch = useEvent(
+    (raw: string, source: 'famous_user' | 'recent_user') => {
+      const username = normalizeGitHubUsername(raw)
 
-    if (username && !isLoading) {
-      resetPreviousUserDataIfNeeded(username)
-      // 使用不持久化的方法设置值，保证搜索框显示用户名但不写入 localStorage
-      setSearchNameWithoutPersist(username)
-      // 确保 localStorage 中没有残留的搜索输入
-      clearPersistedSearchInput()
-      searchContextRef.current = {
-        entryPoint: source,
-        startedAt: Date.now(),
-        username,
+      if (username && !isLoading) {
+        resetPreviousUserDataIfNeeded(username)
+        // 使用不持久化的方法设置值，保证搜索框显示用户名但不写入 localStorage
+        setSearchNameWithoutPersist(username)
+        // 确保 localStorage 中没有残留的搜索输入
+        clearPersistedSearchInput()
+        searchContextRef.current = {
+          entryPoint: source,
+          startedAt: Date.now(),
+          username,
+        }
+
+        eventTracker.user.search.start(source, yearRange)
+        setUsernameInUrl(username, { replace: false })
       }
-
-      eventTracker.user.search.start(source, yearRange)
-      setUsernameInUrl(username, { replace: false })
-    }
-  })
+    },
+  )
 
   const error = isError
     ? {

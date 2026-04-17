@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 
 import { useTranslations } from 'next-intl'
+import { useQueryClient } from '@tanstack/react-query'
 import { CalendarIcon, LogInIcon, LogOutIcon } from 'lucide-react'
 
 import { LoginBenefitsPopoverContent } from '~/components/LoginBenefitsPopoverContent'
@@ -25,6 +26,7 @@ import { getCurrentYear } from '~/helpers'
 import { useCurrentPathWithSearch } from '~/hooks/useCurrentPathWithSearch'
 import { eventTracker } from '~/lib/analytics'
 import { authClient, useSession } from '~/lib/auth-client'
+import { clearGitHubDataQueries } from '~/lib/query-cache'
 
 interface ExtendedUser {
   name?: string | null
@@ -44,6 +46,7 @@ function AuthStatusButtonSkeleton() {
 export function AuthStatusButton() {
   const [isHydrated, setIsHydrated] = useState(false)
   const { data: session, isPending } = useSession()
+  const queryClient = useQueryClient()
   const t = useTranslations('auth')
   const currentYear = getCurrentYear()
   const callbackURL = useCurrentPathWithSearch()
@@ -63,7 +66,9 @@ export function AuthStatusButton() {
 
     const handleSignOut = () => {
       eventTracker.auth.signOut.click()
-      void authClient.signOut()
+      void authClient.signOut().finally(() => {
+        clearGitHubDataQueries(queryClient)
+      })
     }
 
     const handleYearReview = () => {

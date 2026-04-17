@@ -8,7 +8,7 @@ const SESSION_MAX_AGE = 60 * 60 * 24 * 30
  * Better Auth 实例
  *
  * 运行模式：Stateless（无数据库）
- * - Session 数据存储在签名的 JWT cookie 中，服务器无需查询数据库即可验证
+ * - Session 数据存储在加密的 JWE cookie 中，服务器无需查询数据库即可验证
  * - GitHub access token 存储在加密的 account cookie 中，不暴露给客户端
  * - 通过 customSession 插件扩展 session，注入 GitHub login 字段
  */
@@ -45,10 +45,13 @@ export const auth = betterAuth({
   },
 
   session: {
+    expiresIn: SESSION_MAX_AGE,
+    updateAge: 60 * 60 * 24,
     cookieCache: {
       enabled: true,
       maxAge: SESSION_MAX_AGE,
-      strategy: 'jwt',
+      strategy: 'jwe',
+      version: '2',
       refreshCache: true,
     },
   },
@@ -65,7 +68,8 @@ export const auth = betterAuth({
     errorURL: '/auth/error',
     onError: (error) => {
       // 将网络超时等错误记录到服务器日志
-      const errorMessage = error instanceof Error ? error.message : String(error)
+      const errorMessage
+        = error instanceof Error ? error.message : String(error)
       console.error('[Auth Error]', errorMessage)
     },
   },

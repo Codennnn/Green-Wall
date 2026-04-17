@@ -72,6 +72,13 @@ function getAccessToken(options?: ServiceOptions): string {
   return token
 }
 
+function getGitHubApiErrorMessage(
+  response: Pick<GitHubApiJson<unknown>, 'errors' | 'message'>,
+  fallback: string,
+): string {
+  return response.errors?.at(0)?.message ?? response.message ?? fallback
+}
+
 export async function fetchGitHubUser(
   username: GitHubUsername,
   options?: ServiceOptions,
@@ -79,8 +86,8 @@ export async function fetchGitHubUser(
   const token = getAccessToken(options)
 
   const query = `
-    {
-      user(login: "${username}") {
+    query($username: String!) {
+      user(login: $username) {
         name
         login
         avatarUrl
@@ -102,6 +109,7 @@ export async function fetchGitHubUser(
     method: 'POST',
     body: JSON.stringify({
       query,
+      variables: { username },
     }),
     headers: {
       Authorization: `Bearer ${token}`,
@@ -113,18 +121,12 @@ export async function fetchGitHubUser(
     throw new Error(`fetch error: ${res.statusText}.`)
   }
 
-  const resJson = await res.json() as GitHubApiJson<{ user: GitHubUser | null }>
+  const resJson = (await res.json()) as GitHubApiJson<{
+    user: GitHubUser | null
+  }>
 
   if (!resJson.data?.user) {
-    if (resJson.errors) {
-      const error = resJson.errors.at(0)
-
-      if (error) {
-        throw new Error(error.message)
-      }
-    }
-
-    throw new Error(resJson.message)
+    throw new Error(getGitHubApiErrorMessage(resJson, 'User not found'))
   }
 
   const { contributionsCollection, ...rest } = resJson.data.user
@@ -140,11 +142,9 @@ export async function fetchContributionsCollection(
   const token = getAccessToken(options)
 
   const query = `
-        {
-          user(login: "${username}") {
-            contributionsCollection(from: "${new Date(
-              `${year}-01-01`,
-            ).toISOString()}", to: "${new Date(`${year}-12-31`).toISOString()}") {
+        query($username: String!, $from: DateTime!, $to: DateTime!) {
+          user(login: $username) {
+            contributionsCollection(from: $from, to: $to) {
               contributionCalendar {
                 total: totalContributions
                 weeks {
@@ -165,6 +165,11 @@ export async function fetchContributionsCollection(
     method: 'POST',
     body: JSON.stringify({
       query,
+      variables: {
+        username,
+        from: new Date(`${year}-01-01`).toISOString(),
+        to: new Date(`${year}-12-31`).toISOString(),
+      },
     }),
     headers: {
       Authorization: `Bearer ${token}`,
@@ -176,13 +181,21 @@ export async function fetchContributionsCollection(
     throw new Error(`fetch error: ${res.statusText}.`)
   }
 
-  const resJson = await res.json() as GitHubApiJson<{ user: GitHubContributionCalendar | null }>
+  const resJson = (await res.json()) as GitHubApiJson<{
+    user: GitHubContributionCalendar | null
+  }>
 
   if (!resJson.data?.user) {
-    throw new Error(resJson.message)
+    throw new Error(
+      getGitHubApiErrorMessage(
+        resJson,
+        'Failed to fetch contribution calendar',
+      ),
+    )
   }
 
-  const contributionCalendar = resJson.data.user.contributionsCollection.contributionCalendar
+  const contributionCalendar
+    = resJson.data.user.contributionsCollection.contributionCalendar
 
   return { ...contributionCalendar, year }
 }
@@ -297,10 +310,16 @@ export async function fetchReposCreatedInYear(
       body: JSON.stringify({ query, variables }),
     })
 
-    const resJson = await res.json() as GitHubApiJson<{ user: GitHubRepo }>
+    if (!res.ok) {
+      throw new Error(`fetch error: ${res.statusText}.`)
+    }
+
+    const resJson = (await res.json()) as GitHubApiJson<{ user: GitHubRepo }>
 
     if (resJson.errors) {
-      throw new Error(resJson.message)
+      throw new Error(
+        getGitHubApiErrorMessage(resJson, 'Failed to fetch repositories'),
+      )
     }
 
     const repositories = resJson.data?.user.repositories
@@ -381,9 +400,9 @@ export async function fetchIssuesInYear(
     = directionOverride ?? getDefaultDirectionForYear(year, now)
 
   const query = `
-    query($pageSize: Int!, $cursor: String) {
+    query($searchQuery: String!, $pageSize: Int!, $cursor: String) {
       search(
-        query: "involves:${username} is:issue sort:created-${effectiveDirection.toLowerCase()}"
+        query: $searchQuery
         type: ISSUE
         first: $pageSize
         after: $cursor
@@ -414,8 +433,8 @@ export async function fetchIssuesInYear(
 
   while (hasNextPage) {
     const variables = {
+      searchQuery: `involves:${username} is:issue sort:created-${effectiveDirection.toLowerCase()}`,
       pageSize,
-      direction: effectiveDirection,
       cursor,
     }
 
@@ -428,10 +447,18 @@ export async function fetchIssuesInYear(
       body: JSON.stringify({ query, variables }),
     })
 
-    const resJson = await res.json() as GitHubApiJson<{ search: GitHubIssue }>
+    if (!res.ok) {
+      throw new Error(`fetch error: ${res.statusText}.`)
+    }
+
+    const resJson = (await res.json()) as GitHubApiJson<{
+      search: GitHubIssue
+    }>
 
     if (resJson.errors) {
-      throw new Error(resJson.message)
+      throw new Error(
+        getGitHubApiErrorMessage(resJson, 'Failed to fetch issues'),
+      )
     }
 
     const issues = resJson.data?.search
@@ -518,7 +545,8 @@ function computeInfluenceScore(repo: {
     INFLUENCE_WEIGHTS.star * Math.log(1 + repo.stargazerCount)
     + INFLUENCE_WEIGHTS.fork * Math.log(1 + repo.forkCount)
     + INFLUENCE_WEIGHTS.commit * Math.log(1 + repo.interaction.commits)
-    + INFLUENCE_WEIGHTS.pullRequest * Math.log(1 + repo.interaction.pullRequests)
+    + INFLUENCE_WEIGHTS.pullRequest
+    * Math.log(1 + repo.interaction.pullRequests)
     + INFLUENCE_WEIGHTS.review * Math.log(1 + repo.interaction.reviews)
     + INFLUENCE_WEIGHTS.issue * Math.log(1 + repo.interaction.issues)
   )
@@ -646,16 +674,16 @@ export async function fetchRepoInteractionsInYear(
     throw new Error(`fetch error: ${res.statusText}.`)
   }
 
-  const resJson = await res.json() as GitHubApiJson<ContributionsCollectionResponse>
+  const resJson
+    = (await res.json()) as GitHubApiJson<ContributionsCollectionResponse>
 
   if (resJson.errors) {
-    const error = resJson.errors.at(0)
-
-    if (error) {
-      throw new Error(error.message)
-    }
-
-    throw new Error(resJson.message)
+    throw new Error(
+      getGitHubApiErrorMessage(
+        resJson,
+        'Failed to fetch repository interactions',
+      ),
+    )
   }
 
   if (!resJson.data?.user) {
@@ -665,17 +693,20 @@ export async function fetchRepoInteractionsInYear(
   const collection = resJson.data.user.contributionsCollection
 
   // 按仓库 URL 聚合所有交互类型
-  const repoMap = new Map<string, {
-    nameWithOwner: string
-    url: string
-    description: string | null
-    stargazerCount: number
-    forkCount: number
-    commits: number
-    pullRequests: number
-    reviews: number
-    issues: number
-  }>()
+  const repoMap = new Map<
+    string,
+    {
+      nameWithOwner: string
+      url: string
+      description: string | null
+      stargazerCount: number
+      forkCount: number
+      commits: number
+      pullRequests: number
+      reviews: number
+      issues: number
+    }
+  >()
 
   // 辅助函数：合并贡献到 map
   const mergeContributions = (
@@ -706,8 +737,14 @@ export async function fetchRepoInteractionsInYear(
   }
 
   mergeContributions(collection.commitContributionsByRepository, 'commits')
-  mergeContributions(collection.pullRequestContributionsByRepository, 'pullRequests')
-  mergeContributions(collection.pullRequestReviewContributionsByRepository, 'reviews')
+  mergeContributions(
+    collection.pullRequestContributionsByRepository,
+    'pullRequests',
+  )
+  mergeContributions(
+    collection.pullRequestReviewContributionsByRepository,
+    'reviews',
+  )
   mergeContributions(collection.issueContributionsByRepository, 'issues')
 
   // 转换为 RepoInteraction 数组并计算评分
@@ -902,8 +939,8 @@ export async function fetchRepoAnalysis(
   const includeTechStack = metrics.includes('techstack')
 
   const query = `
-    query {
-      repository(owner: "${owner}", name: "${repo}") {
+    query($owner: String!, $repo: String!) {
+      repository(owner: $owner, name: $repo) {
         nameWithOwner
         url
         description
@@ -932,8 +969,9 @@ export async function fetchRepoAnalysis(
           totalCount
         }
 
-        ${includeHealth
-          ? `
+        ${
+          includeHealth
+            ? `
           openIssues: issues(states: OPEN) {
             totalCount
           }
@@ -954,10 +992,12 @@ export async function fetchRepoAnalysis(
             totalCount
           }
         `
-          : ''}
+            : ''
+        }
 
-        ${includeTechStack
-          ? `
+        ${
+          includeTechStack
+            ? `
           languages(first: 100, orderBy: {field: SIZE, direction: DESC}) {
             totalSize
             edges {
@@ -993,7 +1033,8 @@ export async function fetchRepoAnalysis(
 
           diskUsage
         `
-          : ''}
+            : ''
+        }
 
         owner {
           login
@@ -1036,14 +1077,16 @@ export async function fetchRepoAnalysis(
       Authorization: `Bearer ${token}`,
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ query }),
+    body: JSON.stringify({ query, variables: { owner, repo } }),
   })
 
   if (!res.ok) {
     throw new Error(`fetch error: ${res.statusText}.`)
   }
 
-  const resJson = await res.json() as GitHubApiJson<{ repository: GitHubRepositoryResponse | null }>
+  const resJson = (await res.json()) as GitHubApiJson<{
+    repository: GitHubRepositoryResponse | null
+  }>
 
   if (resJson.errors) {
     const error = resJson.errors.at(0)
@@ -1145,7 +1188,8 @@ export async function fetchRepoAnalysis(
             }
           : null,
       },
-      topics: repository.repositoryTopics?.nodes.map((node) => node.topic.name) ?? [],
+      topics:
+        repository.repositoryTopics?.nodes.map((node) => node.topic.name) ?? [],
       diskUsage: repository.diskUsage ?? null,
     }
   }
@@ -1163,7 +1207,9 @@ export async function fetchRepoAnalysis(
       avatarUrl: ownerData.avatarUrl,
       bio: isUser ? ownerData.bio : ownerData.description,
       url: ownerData.url,
-      followers: isUser ? ownerData.followers.totalCount : ownerData.membersWithRole.totalCount,
+      followers: isUser
+        ? ownerData.followers.totalCount
+        : ownerData.membersWithRole.totalCount,
       following: isUser ? ownerData.following.totalCount : 0,
       repositories: ownerData.repositories.totalCount,
       createdAt: ownerData.createdAt,

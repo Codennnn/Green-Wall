@@ -1,6 +1,15 @@
 import { type NextRequest, NextResponse } from 'next/server'
 
-import { getGitHubAccessToken } from '~/server/auth/get-github-access-token'
+import { ErrorType } from '~/enums'
+import {
+  isGitHubTokenError,
+  runWithGitHubAccessToken,
+  tokenResultToMeta,
+} from '~/server/auth/get-github-access-token'
+import {
+  isValidGitHubRepoName,
+  isValidGitHubUsername,
+} from '~/server/github/validation'
 import { fetchRepoAnalysis } from '~/services'
 
 export const dynamic = 'force-dynamic'
@@ -20,28 +29,40 @@ export async function GET(
   const { searchParams } = request.nextUrl
 
   const includeMetrics = searchParams.get('includeMetrics') ?? 'basic,health'
-  const metrics = includeMetrics.split(',') as ('basic' | 'health' | 'techstack')[]
+  const metrics = includeMetrics.split(',') as (
+    | 'basic'
+    | 'health'
+    | 'techstack'
+  )[]
+  const includePrivate = searchParams.get('includePrivate') === 'true'
 
   if (!owner || !repo) {
     return NextResponse.json(
-      { error: 'Missing owner or repo' },
+      { errorType: ErrorType.BadRequest, message: 'Missing owner or repo' },
+      { status: 400 },
+    )
+  }
+
+  if (!isValidGitHubUsername(owner) || !isValidGitHubRepoName(repo)) {
+    return NextResponse.json(
+      { errorType: ErrorType.BadRequest, message: 'Invalid owner or repo' },
       { status: 400 },
     )
   }
 
   try {
-    const tokenResult = await getGitHubAccessToken(request, owner)
-    const { token, mode } = tokenResult
-
-    const data = await fetchRepoAnalysis(
-      { owner, repo, metrics },
-      { token },
+    const { data, tokenResult } = await runWithGitHubAccessToken(
+      request,
+      owner,
+      { includePrivate, requiredScopes: ['repo'] },
+      ({ token }) => fetchRepoAnalysis({ owner, repo, metrics }, { token }),
     )
+    const meta = tokenResultToMeta(tokenResult)
 
     const response = NextResponse.json({
       data,
       meta: {
-        mode,
+        ...meta,
         fetchedAt: new Date().toISOString(),
         metrics,
       },
@@ -56,11 +77,18 @@ export async function GET(
   catch (error) {
     console.error('Failed to fetch repository analysis:', error)
 
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+    const errorMessage
+      = error instanceof Error ? error.message : 'Unknown error'
+    const status = isGitHubTokenError(error) ? 401 : 500
 
     return NextResponse.json(
-      { error: 'Failed to fetch repository analysis', message: errorMessage },
-      { status: 500 },
+      {
+        errorType:
+          status === 401 ? ErrorType.BadCredentials : ErrorType.BadRequest,
+        error: 'Failed to fetch repository analysis',
+        message: errorMessage,
+      },
+      { status },
     )
   }
 }

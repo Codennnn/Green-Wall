@@ -1,6 +1,14 @@
 import { type NextRequest, NextResponse } from 'next/server'
 
-import { getGitHubAccessToken } from '~/server/auth/get-github-access-token'
+import { ErrorType } from '~/enums'
+import {
+  isGitHubTokenError,
+  runWithGitHubAccessToken,
+} from '~/server/auth/get-github-access-token'
+import {
+  isValidContributionYear,
+  isValidGitHubUsername,
+} from '~/server/github/validation'
 import { fetchRepoInteractionsInYear } from '~/services'
 
 export const dynamic = 'force-dynamic'
@@ -9,23 +17,61 @@ export async function GET(request: NextRequest) {
   const { searchParams } = request.nextUrl
   const username = searchParams.get('username')
   const year = searchParams.get('year')
+  const includePrivate = searchParams.get('includePrivate') === 'true'
 
   if (username && year) {
-    const tokenResult = await getGitHubAccessToken(request, username)
-    const { token } = tokenResult
+    const targetYear = Number(year)
 
-    const interactions = await fetchRepoInteractionsInYear(
-      { username, year: Number(year) },
-      { token },
-    )
+    if (!isValidGitHubUsername(username)) {
+      return NextResponse.json(
+        { errorType: ErrorType.BadRequest, message: 'Invalid GitHub username' },
+        { status: 400 },
+      )
+    }
 
-    const response = NextResponse.json(interactions)
+    if (!isValidContributionYear(targetYear)) {
+      return NextResponse.json(
+        { errorType: ErrorType.BadRequest, message: 'Invalid contribution year' },
+        { status: 400 },
+      )
+    }
 
-    response.headers.set('Cache-Control', 'private, no-store')
-    response.headers.set('Vary', 'Cookie')
+    try {
+      const { data: interactions } = await runWithGitHubAccessToken(
+        request,
+        username,
+        { includePrivate, requiredScopes: ['repo'] },
+        ({ token }) =>
+          fetchRepoInteractionsInYear({ username, year: targetYear }, { token }),
+      )
 
-    return response
+      const response = NextResponse.json(interactions)
+
+      response.headers.set('Cache-Control', 'private, no-store')
+      response.headers.set('Vary', 'Cookie')
+
+      return response
+    }
+    catch (error) {
+      const message
+        = error instanceof Error
+          ? error.message
+          : 'Failed to fetch repository interactions'
+      const status = isGitHubTokenError(error) ? 401 : 400
+
+      return NextResponse.json(
+        {
+          errorType:
+            status === 401 ? ErrorType.BadCredentials : ErrorType.BadRequest,
+          message,
+        },
+        { status },
+      )
+    }
   }
 
-  return NextResponse.json({ error: 'Missing username or year' }, { status: 400 })
+  return NextResponse.json(
+    { errorType: ErrorType.BadRequest, message: 'Missing username or year' },
+    { status: 400 },
+  )
 }

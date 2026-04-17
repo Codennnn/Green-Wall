@@ -17,14 +17,22 @@ const ERROR_CODE_MAP: Record<string, string> = {
   // OAuth 流程错误
   invalid_code: 'invalidCode',
   code_expired: 'invalidCode',
+  no_code: 'invalidCode',
+  state_mismatch: 'invalidCode',
+  state_not_found: 'invalidCode',
+  please_restart_the_process: 'invalidCode',
   access_denied: 'accessDenied',
   user_cancelled: 'accessDenied',
   // 服务端错误
   server_error: 'serverError',
+  internal_server_error: 'serverError',
   temporarily_unavailable: 'serverError',
+  unable_to_get_user_info: 'serverError',
   // 配置错误
   invalid_client: 'configError',
   invalid_request: 'configError',
+  invalid_callback_request: 'configError',
+  oauth_provider_not_found: 'configError',
 }
 
 /**
@@ -62,7 +70,8 @@ export function AuthErrorContent({ locale }: AuthErrorContentProps) {
   const t = useTranslations('auth.error')
 
   const errorCode = searchParams.get('error')
-  const messageKey = getErrorMessageKey(errorCode)
+  const stateCode = searchParams.get('state')
+  const messageKey = getErrorMessageKey(errorCode ?? stateCode)
 
   const handleRetry = () => {
     void authClient.signIn.social({
@@ -82,9 +91,7 @@ export function AuthErrorContent({ locale }: AuthErrorContentProps) {
       <h1 className="text-2xl font-semibold">{t('title')}</h1>
 
       {/* 错误描述 */}
-      <p className="text-muted-foreground">
-        {t(messageKey)}
-      </p>
+      <p className="text-muted-foreground">{t(messageKey)}</p>
 
       {/* 操作按钮 */}
       <div className="flex flex-col gap-3 sm:flex-row">
@@ -103,9 +110,9 @@ export function AuthErrorContent({ locale }: AuthErrorContentProps) {
       </div>
 
       {/* 调试信息（仅开发环境） */}
-      {process.env.NODE_ENV === 'development' && errorCode && (
+      {process.env.NODE_ENV === 'development' && (errorCode || stateCode) && (
         <div className="mt-4 rounded-md bg-muted px-3 py-2 text-xs text-muted-foreground">
-          Error code: {errorCode}
+          Error code: {errorCode ?? stateCode}
         </div>
       )}
     </div>

@@ -1,6 +1,14 @@
 import { type NextRequest, NextResponse } from 'next/server'
 
-import { getGitHubAccessToken } from '~/server/auth/get-github-access-token'
+import { ErrorType } from '~/enums'
+import {
+  isGitHubTokenError,
+  runWithGitHubAccessToken,
+} from '~/server/auth/get-github-access-token'
+import {
+  isValidContributionYear,
+  isValidGitHubUsername,
+} from '~/server/github/validation'
 import { fetchReposCreatedInYear } from '~/services'
 
 /**
@@ -12,26 +20,66 @@ export async function GET(request: NextRequest) {
   const { searchParams } = request.nextUrl
   const username = searchParams.get('username')
   const year = searchParams.get('year')
+  const includePrivate = searchParams.get('includePrivate') === 'true'
 
   if (username && year) {
-    const tokenResult = await getGitHubAccessToken(request, username)
-    const { token, mode } = tokenResult
+    const targetYear = Number(year)
 
-    // 授权模式下包含私有仓库
-    const includePrivate = mode === 'authorized'
+    if (!isValidGitHubUsername(username)) {
+      return NextResponse.json(
+        { errorType: ErrorType.BadRequest, message: 'Invalid GitHub username' },
+        { status: 400 },
+      )
+    }
 
-    const repos = await fetchReposCreatedInYear(
-      { username, year: Number(year), includePrivate },
-      { token },
-    )
+    if (!isValidContributionYear(targetYear)) {
+      return NextResponse.json(
+        { errorType: ErrorType.BadRequest, message: 'Invalid contribution year' },
+        { status: 400 },
+      )
+    }
 
-    const response = NextResponse.json(repos)
+    try {
+      const { data: repos } = await runWithGitHubAccessToken(
+        request,
+        username,
+        { includePrivate, requiredScopes: ['repo'] },
+        ({ token, mode }) =>
+          fetchReposCreatedInYear(
+            {
+              username,
+              year: targetYear,
+              includePrivate: mode === 'authorized',
+            },
+            { token },
+          ),
+      )
 
-    response.headers.set('Cache-Control', 'private, no-store')
-    response.headers.set('Vary', 'Cookie')
+      const response = NextResponse.json(repos)
 
-    return response
+      response.headers.set('Cache-Control', 'private, no-store')
+      response.headers.set('Vary', 'Cookie')
+
+      return response
+    }
+    catch (error) {
+      const message
+        = error instanceof Error ? error.message : 'Failed to fetch repositories'
+      const status = isGitHubTokenError(error) ? 401 : 400
+
+      return NextResponse.json(
+        {
+          errorType:
+            status === 401 ? ErrorType.BadCredentials : ErrorType.BadRequest,
+          message,
+        },
+        { status },
+      )
+    }
   }
 
-  return NextResponse.json({ error: 'Missing username or year' }, { status: 400 })
+  return NextResponse.json(
+    { errorType: ErrorType.BadRequest, message: 'Missing username or year' },
+    { status: 400 },
+  )
 }

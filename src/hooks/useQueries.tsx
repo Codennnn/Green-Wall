@@ -14,9 +14,10 @@ import {
   queryKeys,
 } from '~/services/api'
 import type {
+  ContributionApiResponse,
   ContributionYear,
+  DataAccessOptions,
   GitHubUsername,
-  GraphData,
   IssuesInYear,
   RepoAnalysisResponse,
   RepoCreatedInYear,
@@ -27,11 +28,21 @@ export function useContributionQuery(
   username: GitHubUsername,
   years?: ContributionYear[],
   statistics = false,
-  options?: Omit<UseQueryOptions<GraphData, ApiError>, 'queryKey' | 'queryFn'>,
+  accessOptions?: DataAccessOptions,
+  options?: Omit<
+    UseQueryOptions<ContributionApiResponse, ApiError>,
+    'queryKey' | 'queryFn'
+  >,
 ) {
   return useQuery({
-    queryKey: queryKeys.contribution(username, years, statistics),
-    queryFn: () => fetchContributionData(username, years, statistics),
+    queryKey: queryKeys.contribution(
+      username,
+      years,
+      statistics,
+      accessOptions,
+    ),
+    queryFn: () =>
+      fetchContributionData(username, years, statistics, accessOptions),
     enabled: !!username,
     ...options,
   })
@@ -40,14 +51,15 @@ export function useContributionQuery(
 export function useReposQuery(
   username: GitHubUsername,
   year: ContributionYear,
+  accessOptions?: DataAccessOptions,
   options?: Omit<
     UseQueryOptions<RepoCreatedInYear, ApiError>,
     'queryKey' | 'queryFn'
   >,
 ) {
   return useQuery({
-    queryKey: queryKeys.repos(username, year),
-    queryFn: () => fetchReposInYear(username, year),
+    queryKey: queryKeys.repos(username, year, accessOptions),
+    queryFn: () => fetchReposInYear(username, year, accessOptions),
     enabled: !!username && !!year,
     ...options,
   })
@@ -56,14 +68,15 @@ export function useReposQuery(
 export function useIssuesQuery(
   username: GitHubUsername,
   year: ContributionYear,
+  accessOptions?: DataAccessOptions,
   options?: Omit<
     UseQueryOptions<IssuesInYear, ApiError>,
     'queryKey' | 'queryFn'
   >,
 ) {
   return useQuery({
-    queryKey: queryKeys.issues(username, year),
-    queryFn: () => fetchIssuesInYear(username, year),
+    queryKey: queryKeys.issues(username, year, accessOptions),
+    queryFn: () => fetchIssuesInYear(username, year, accessOptions),
     enabled: !!username && !!year,
     ...options,
   })
@@ -75,14 +88,15 @@ export function useIssuesQuery(
 export function useRepoInteractionsQuery(
   username: GitHubUsername,
   year: ContributionYear,
+  accessOptions?: DataAccessOptions,
   options?: Omit<
     UseQueryOptions<RepoInteractionsInYear, ApiError>,
     'queryKey' | 'queryFn'
   >,
 ) {
   return useQuery<RepoInteractionsInYear, ApiError>({
-    queryKey: queryKeys.repoInteractions(username, year),
-    queryFn: () => fetchRepoInteractionsInYear(username, year),
+    queryKey: queryKeys.repoInteractions(username, year, accessOptions),
+    queryFn: () => fetchRepoInteractionsInYear(username, year, accessOptions),
     enabled: !!username && !!year,
     ...options,
   })
@@ -96,7 +110,7 @@ export function useUserDataQueries(
   year?: ContributionYear,
   options?: {
     contribution?: Omit<
-      UseQueryOptions<GraphData, ApiError>,
+      UseQueryOptions<ContributionApiResponse, ApiError>,
       'queryKey' | 'queryFn'
     >
     repos?: Omit<
@@ -157,14 +171,15 @@ export function useRepoAnalysisQuery(
   owner: string,
   repo: string,
   metrics?: ('basic' | 'health' | 'techstack')[],
+  accessOptions?: DataAccessOptions,
   options?: Omit<
     UseQueryOptions<RepoAnalysisResponse, ApiError>,
     'queryKey' | 'queryFn'
   >,
 ) {
   return useQuery({
-    queryKey: queryKeys.repoAnalysis(owner, repo, metrics),
-    queryFn: () => fetchRepoAnalysis(owner, repo, metrics),
+    queryKey: queryKeys.repoAnalysis(owner, repo, metrics, accessOptions),
+    queryFn: () => fetchRepoAnalysis(owner, repo, metrics, accessOptions),
     enabled: !!owner && !!repo,
     staleTime: 1000 * 60 * 5, // 5 分钟
     gcTime: 1000 * 60 * 30, // 30 分钟（gcTime 是 cacheTime 的新名称）

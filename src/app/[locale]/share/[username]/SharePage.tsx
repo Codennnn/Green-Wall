@@ -55,15 +55,25 @@ export function SharePage() {
   const username = typeof params.username === 'string' ? params.username : ''
 
   const {
-    data: graphData,
+    data: graphResult,
     isLoading: loading,
     error,
     isError,
-  } = useContributionQuery(username, undefined, false, {
-    enabled: !!username,
-    staleTime: 10 * 60 * 1000, // 10 分钟
-    gcTime: 60 * 60 * 1000, // 1 小时
-  })
+  } = useContributionQuery(
+    username,
+    undefined,
+    false,
+    {
+      authCacheKey: 'public',
+      includePrivate: false,
+    },
+    {
+      enabled: !!username,
+      staleTime: 10 * 60 * 1000, // 10 分钟
+      gcTime: 60 * 60 * 1000, // 1 小时
+    },
+  )
+  const graphData = graphResult?.data
 
   useEffect(() => {
     if (graphData) {
@@ -72,13 +82,12 @@ export function SharePage() {
   }, [graphData, setGraphData])
 
   // 构造错误对象以兼容现有接口
-  const errorData
-    = isError
-      ? {
-          errorType: error.errorType,
-          message: error.message,
-        }
-      : undefined
+  const errorData = isError
+    ? {
+        errorType: error.errorType,
+        message: error.message,
+      }
+    : undefined
 
   if (loading) {
     return (
@@ -90,7 +99,9 @@ export function SharePage() {
           src="/mona-loading-default.gif"
           width={60}
         />
-        <span className="bg-background px-3 py-4">{tGraph('loadingContributions')}</span>
+        <span className="bg-background px-3 py-4">
+          {tGraph('loadingContributions')}
+        </span>
       </div>
     )
   }

@@ -1,15 +1,38 @@
 import { eventTracker } from '~/lib/analytics'
 import { apiClient, ApiError } from '~/lib/api-client'
 import type {
+  ContributionApiResponse,
   ContributionYear,
+  DataAccessOptions,
   GitHubUsername,
-  GraphData,
   IssuesInYear,
   RepoAnalysisResponse,
   RepoCreatedInYear,
   RepoInteractionsInYear,
   ResponseData,
 } from '~/types'
+
+function getAccessCacheKey(options?: DataAccessOptions): string {
+  if (options?.includePrivate) {
+    return options.authCacheKey ?? 'authorized:unknown'
+  }
+
+  return 'public'
+}
+
+function applyDataAccessParams(
+  params: Record<string, string | number | string[]>,
+  options?: DataAccessOptions,
+): Record<string, string | number | string[]> {
+  if (options?.includePrivate) {
+    return {
+      ...params,
+      includePrivate: 'true',
+    }
+  }
+
+  return params
+}
 
 /**
  * 获取用户贡献数据
@@ -18,7 +41,8 @@ export async function fetchContributionData(
   username: GitHubUsername,
   years?: ContributionYear[],
   statistics = false,
-): Promise<GraphData> {
+  accessOptions?: DataAccessOptions,
+): Promise<ContributionApiResponse> {
   const endpoint = `/api/contribution/${username}`
 
   try {
@@ -32,26 +56,22 @@ export async function fetchContributionData(
       params.statistics = 'true'
     }
 
-    const response = await apiClient.get<ResponseData>(
-      endpoint,
-      {
-        params,
-      },
-    )
+    const response = await apiClient.get<ResponseData>(endpoint, {
+      params: applyDataAccessParams(params, accessOptions),
+    })
 
-    if (!response.data) {
+    if (!response.data || !response.meta) {
       throw new Error('No data received from contribution API')
     }
 
-    return response.data
+    return {
+      data: response.data,
+      meta: response.meta,
+    }
   }
   catch (error) {
     if (error instanceof ApiError) {
-      eventTracker.api.error(
-        endpoint,
-        error.status,
-        error.errorType,
-      )
+      eventTracker.api.error(endpoint, error.status, error.errorType)
     }
 
     throw error
@@ -64,21 +84,18 @@ export async function fetchContributionData(
 export async function fetchReposInYear(
   username: GitHubUsername,
   year: ContributionYear,
+  accessOptions?: DataAccessOptions,
 ): Promise<RepoCreatedInYear> {
   const endpoint = '/api/repos'
 
   try {
     return await apiClient.get<RepoCreatedInYear>(endpoint, {
-      params: { username, year },
+      params: applyDataAccessParams({ username, year }, accessOptions),
     })
   }
   catch (error) {
     if (error instanceof ApiError) {
-      eventTracker.api.error(
-        endpoint,
-        error.status,
-        error.errorType,
-      )
+      eventTracker.api.error(endpoint, error.status, error.errorType)
     }
 
     throw error
@@ -91,21 +108,18 @@ export async function fetchReposInYear(
 export async function fetchIssuesInYear(
   username: GitHubUsername,
   year: ContributionYear,
+  accessOptions?: DataAccessOptions,
 ): Promise<IssuesInYear> {
   const endpoint = '/api/issues'
 
   try {
     return await apiClient.get<IssuesInYear>(endpoint, {
-      params: { username, year },
+      params: applyDataAccessParams({ username, year }, accessOptions),
     })
   }
   catch (error) {
     if (error instanceof ApiError) {
-      eventTracker.api.error(
-        endpoint,
-        error.status,
-        error.errorType,
-      )
+      eventTracker.api.error(endpoint, error.status, error.errorType)
     }
 
     throw error
@@ -118,21 +132,18 @@ export async function fetchIssuesInYear(
 export async function fetchRepoInteractionsInYear(
   username: GitHubUsername,
   year: ContributionYear,
+  accessOptions?: DataAccessOptions,
 ): Promise<RepoInteractionsInYear> {
   const endpoint = '/api/repo-interactions'
 
   try {
     return await apiClient.get<RepoInteractionsInYear>(endpoint, {
-      params: { username, year },
+      params: applyDataAccessParams({ username, year }, accessOptions),
     })
   }
   catch (error) {
     if (error instanceof ApiError) {
-      eventTracker.api.error(
-        endpoint,
-        error.status,
-        error.errorType,
-      )
+      eventTracker.api.error(endpoint, error.status, error.errorType)
     }
 
     throw error
@@ -146,6 +157,7 @@ export async function fetchRepoAnalysis(
   owner: string,
   repo: string,
   metrics?: ('basic' | 'health' | 'techstack')[],
+  accessOptions?: DataAccessOptions,
 ): Promise<RepoAnalysisResponse> {
   const endpoint = `/api/repo/${owner}/${repo}`
 
@@ -157,16 +169,12 @@ export async function fetchRepoAnalysis(
     }
 
     return await apiClient.get<RepoAnalysisResponse>(endpoint, {
-      params,
+      params: applyDataAccessParams(params, accessOptions),
     })
   }
   catch (error) {
     if (error instanceof ApiError) {
-      eventTracker.api.error(
-        endpoint,
-        error.status,
-        error.errorType,
-      )
+      eventTracker.api.error(endpoint, error.status, error.errorType)
     }
 
     throw error
@@ -185,29 +193,69 @@ export const queryKeys = {
     username: GitHubUsername,
     years?: ContributionYear[],
     statistics?: boolean,
+    accessOptions?: DataAccessOptions,
   ) =>
     [
       'contribution',
       username,
       ...(years ? [{ years }] : []),
       ...(statistics ? [{ statistics }] : []),
+      { access: getAccessCacheKey(accessOptions) },
     ] as const,
 
   // 仓库相关
-  repos: (username: GitHubUsername, year: ContributionYear) =>
-    ['repos', username, year] as const,
+  repos: (
+    username: GitHubUsername,
+    year: ContributionYear,
+    accessOptions?: DataAccessOptions,
+  ) =>
+    [
+      'repos',
+      username,
+      year,
+      { access: getAccessCacheKey(accessOptions) },
+    ] as const,
 
   // 问题相关
-  issues: (username: GitHubUsername, year: ContributionYear) =>
-    ['issues', username, year] as const,
+  issues: (
+    username: GitHubUsername,
+    year: ContributionYear,
+    accessOptions?: DataAccessOptions,
+  ) =>
+    [
+      'issues',
+      username,
+      year,
+      { access: getAccessCacheKey(accessOptions) },
+    ] as const,
 
   // 仓库交互相关
-  repoInteractions: (username: GitHubUsername, year: ContributionYear) =>
-    ['repoInteractions', username, year] as const,
+  repoInteractions: (
+    username: GitHubUsername,
+    year: ContributionYear,
+    accessOptions?: DataAccessOptions,
+  ) =>
+    [
+      'repoInteractions',
+      username,
+      year,
+      { access: getAccessCacheKey(accessOptions) },
+    ] as const,
 
   // 单仓库深度分析相关
-  repoAnalysis: (owner: string, repo: string, metrics?: string[]) =>
-    ['repoAnalysis', owner, repo, ...(metrics ? [{ metrics }] : [])] as const,
+  repoAnalysis: (
+    owner: string,
+    repo: string,
+    metrics?: string[],
+    accessOptions?: DataAccessOptions,
+  ) =>
+    [
+      'repoAnalysis',
+      owner,
+      repo,
+      ...(metrics ? [{ metrics }] : []),
+      { access: getAccessCacheKey(accessOptions) },
+    ] as const,
 
   // 用户所有数据（用于组合查询）
   userData: (username: GitHubUsername, year?: ContributionYear) =>
