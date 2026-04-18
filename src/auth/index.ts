@@ -4,6 +4,21 @@ import { customSession } from 'better-auth/plugins'
 /** Session 有效期：30 天（秒） */
 const SESSION_MAX_AGE = 60 * 60 * 24 * 30
 
+/** 项目默认公开 URL；部署到其他域名时应通过 BETTER_AUTH_URL 覆盖 */
+const DEFAULT_AUTH_BASE_URL = 'https://green-wall.leoku.dev'
+
+function normalizeBaseURL(url: string | undefined) {
+  const trimmedURL = url?.trim()
+
+  return trimmedURL ? trimmedURL.replace(/\/+$/, '') : undefined
+}
+
+const authBaseURL
+  = normalizeBaseURL(process.env.BETTER_AUTH_URL)
+    ?? normalizeBaseURL(process.env.AUTH_URL)
+    ?? normalizeBaseURL(process.env.NEXT_PUBLIC_SITE_URL)
+    ?? DEFAULT_AUTH_BASE_URL
+
 /**
  * Better Auth 实例
  *
@@ -17,7 +32,7 @@ export const auth = betterAuth({
   secret: process.env.AUTH_SECRET,
 
   /** 服务的公开 URL，用于生成 OAuth 回调地址 */
-  baseURL: process.env.AUTH_URL,
+  baseURL: authBaseURL,
 
   socialProviders: {
     github: {
