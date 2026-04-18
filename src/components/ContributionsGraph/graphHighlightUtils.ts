@@ -47,6 +47,12 @@ export interface GraphHighlightOptions {
 }
 
 const MS_PER_DAY = 24 * 60 * 60 * 1000
+const DATE_PATTERN = /^(\d{4})-(\d{2})-(\d{2})$/
+
+interface DateRange {
+  start?: string
+  end?: string
+}
 
 /**
  * 解析 UTC 日期字符串为毫秒时间戳
@@ -54,7 +60,7 @@ const MS_PER_DAY = 24 * 60 * 60 * 1000
  * @returns UTC 毫秒时间戳，解析失败返回 null
  */
 function parseUtcDateMs(date: string): number | null {
-  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(date)
+  const match = DATE_PATTERN.exec(date)
   let utcMs: number | null = null
 
   if (match) {
@@ -78,28 +84,62 @@ function parseUtcDateMs(date: string): number | null {
   return utcMs
 }
 
+function getInclusiveDaySpan(startMs: number, endMs: number): number {
+  return Math.round((endMs - startMs) / MS_PER_DAY) + 1
+}
+
+function shouldReplaceRange(
+  candidateSpanDays: number,
+  candidateStart: string,
+  bestSpanDays: number,
+  bestStart: string | undefined,
+): boolean {
+  return (
+    candidateSpanDays > bestSpanDays
+    || (candidateSpanDays === bestSpanDays
+      && (bestStart === undefined || candidateStart < bestStart))
+  )
+}
+
+function normalizeMaxGapDays(maxGapDays: number | undefined): number {
+  if (
+    !Number.isFinite(maxGapDays)
+    || maxGapDays === undefined
+    || maxGapDays < 0
+  ) {
+    return 1
+  }
+
+  return Math.floor(maxGapDays)
+}
+
 /**
  * 计算最长连续贡献天数的日期范围
  */
-function calculateLongestStreak(daysInYear: ContributionDay[]): {
-  start?: string
-  end?: string
-} {
+function calculateLongestStreak(daysInYear: ContributionDay[]): DateRange {
   let bestLen = 0
   let currentLen = 0
   let currentStart: string | undefined = undefined
   let bestRangeStart: string | undefined = undefined
   let bestRangeEnd: string | undefined = undefined
+  let previousContributionMs: number | null = null
 
-  daysInYear.forEach((day) => {
-    const hasContributions = day.count > 0
+  for (const day of daysInYear) {
+    const currentMs = day.date ? parseUtcDateMs(day.date) : null
+    const hasContributions = day.count > 0 && currentMs !== null
 
     if (hasContributions) {
-      if (currentLen === 0) {
+      const continuesStreak
+        = previousContributionMs !== null
+          && currentMs - previousContributionMs === MS_PER_DAY
+
+      if (!continuesStreak) {
+        currentLen = 0
         currentStart = day.date
       }
 
       currentLen++
+      previousContributionMs = currentMs
 
       if (currentLen > bestLen) {
         bestLen = currentLen
@@ -110,8 +150,9 @@ function calculateLongestStreak(daysInYear: ContributionDay[]): {
     else {
       currentLen = 0
       currentStart = undefined
+      previousContributionMs = null
     }
-  })
+  }
 
   return {
     start: bestRangeStart,
@@ -125,87 +166,68 @@ function calculateLongestStreak(daysInYear: ContributionDay[]): {
 function calculateLongestGappedSpan(
   daysInYear: ContributionDay[],
   maxGapDays: number,
-): {
-  start?: string
-  end?: string
-} {
-  const contributionDates = daysInYear
-    .filter((day) => day.count > 0)
-    .map((day) => day.date)
-
+): DateRange {
   let bestSpanDays = 0
-  let segmentStartIndex = 0
-  let bestSegmentStartIndex = 0
-  let bestSegmentEndIndex = 0
+  let bestStart: string | undefined = undefined
+  let bestEnd: string | undefined = undefined
+  let segmentStart: string | undefined = undefined
+  let segmentStartMs = 0
+  let previousContributionDate: string | undefined = undefined
+  let previousContributionMs = 0
 
-  for (let i = 1; i < contributionDates.length; i++) {
-    const prev = contributionDates[i - 1]
-    const current = contributionDates[i]
-
-    const prevMs = parseUtcDateMs(prev)
-    const currentMs = parseUtcDateMs(current)
-
-    let shouldSplit = true
-
-    if (prevMs !== null && currentMs !== null) {
-      const diffDays = Math.round((currentMs - prevMs) / MS_PER_DAY)
-      shouldSplit = diffDays > maxGapDays + 1
+  const commitSegment = () => {
+    if (segmentStart === undefined || previousContributionDate === undefined) {
+      return
     }
 
-    if (shouldSplit) {
-      const startDate = contributionDates[segmentStartIndex]
-      const endDate = contributionDates[i - 1]
+    const spanDays = getInclusiveDaySpan(
+      segmentStartMs,
+      previousContributionMs,
+    )
 
-      const startMs = parseUtcDateMs(startDate)
-      const endMs = parseUtcDateMs(endDate)
-
-      if (startMs !== null && endMs !== null) {
-        const spanDays = Math.round((endMs - startMs) / MS_PER_DAY) + 1
-        const segmentStartDate = contributionDates[segmentStartIndex]
-        const bestSegmentStartDate = contributionDates[bestSegmentStartIndex]
-        const shouldReplace
-          = spanDays > bestSpanDays
-            || (spanDays === bestSpanDays
-              && segmentStartDate < bestSegmentStartDate)
-
-        if (shouldReplace) {
-          bestSpanDays = spanDays
-          bestSegmentStartIndex = segmentStartIndex
-          bestSegmentEndIndex = i - 1
-        }
-      }
-
-      segmentStartIndex = i
+    if (shouldReplaceRange(spanDays, segmentStart, bestSpanDays, bestStart)) {
+      bestSpanDays = spanDays
+      bestStart = segmentStart
+      bestEnd = previousContributionDate
     }
   }
 
-  if (contributionDates.length > 0) {
-    const startDate = contributionDates[segmentStartIndex]
-    const endDate = contributionDates[contributionDates.length - 1]
+  for (const day of daysInYear) {
+    if (day.count <= 0 || !day.date) {
+      continue
+    }
 
-    const startMs = parseUtcDateMs(startDate)
-    const endMs = parseUtcDateMs(endDate)
+    const currentMs = parseUtcDateMs(day.date)
 
-    if (startMs !== null && endMs !== null) {
-      const spanDays = Math.round((endMs - startMs) / MS_PER_DAY) + 1
-      const segmentStartDate = contributionDates[segmentStartIndex]
-      const bestSegmentStartDate = contributionDates[bestSegmentStartIndex]
-      const shouldReplace
-        = spanDays > bestSpanDays
-          || (spanDays === bestSpanDays
-            && segmentStartDate < bestSegmentStartDate)
+    if (currentMs === null) {
+      continue
+    }
 
-      if (shouldReplace) {
-        bestSpanDays = spanDays
-        bestSegmentStartIndex = segmentStartIndex
-        bestSegmentEndIndex = contributionDates.length - 1
+    if (segmentStart === undefined) {
+      segmentStart = day.date
+      segmentStartMs = currentMs
+    }
+    else {
+      const diffDays = Math.round(
+        (currentMs - previousContributionMs) / MS_PER_DAY,
+      )
+
+      if (diffDays > maxGapDays + 1) {
+        commitSegment()
+        segmentStart = day.date
+        segmentStartMs = currentMs
       }
     }
+
+    previousContributionDate = day.date
+    previousContributionMs = currentMs
   }
+
+  commitSegment()
 
   return {
-    start: contributionDates[bestSegmentStartIndex],
-    end: contributionDates[bestSegmentEndIndex],
+    start: bestStart,
+    end: bestEnd,
   }
 }
 
@@ -216,18 +238,15 @@ function calculateMaxDays(daysInYear: ContributionDay[]): Set<string> {
   const set = new Set<string>()
   let maxCount = 0
 
-  daysInYear.forEach((day) => {
+  for (const day of daysInYear) {
     if (day.count > maxCount) {
       maxCount = day.count
+      set.clear()
     }
-  })
 
-  if (maxCount > 0) {
-    daysInYear.forEach((day) => {
-      if (day.count === maxCount) {
-        set.add(day.date)
-      }
-    })
+    if (maxCount > 0 && day.count === maxCount) {
+      set.add(day.date)
+    }
   }
 
   return set
@@ -243,12 +262,47 @@ function createDateRangeSet(
 ): Set<string> {
   const set = new Set<string>()
 
-  if (rangeStart && rangeEnd) {
-    daysInYear.forEach((day) => {
-      if (day.date >= rangeStart && day.date <= rangeEnd) {
-        set.add(day.date)
-      }
-    })
+  if (!rangeStart || !rangeEnd || rangeStart > rangeEnd) {
+    return set
+  }
+
+  for (const day of daysInYear) {
+    if (!day.date || day.date < rangeStart) {
+      continue
+    }
+
+    if (day.date > rangeEnd) {
+      break
+    }
+
+    set.add(day.date)
+  }
+
+  return set
+}
+
+function createMonthSet(
+  daysInYear: ContributionDay[],
+  targetMonth: string | undefined,
+): Set<string> {
+  const set = new Set<string>()
+
+  if (!targetMonth) {
+    return set
+  }
+
+  for (const day of daysInYear) {
+    const month = day.date.slice(0, 7)
+
+    if (month < targetMonth) {
+      continue
+    }
+
+    if (month > targetMonth) {
+      break
+    }
+
+    set.add(day.date)
   }
 
   return set
@@ -266,68 +320,53 @@ export function calculateHighlightDates(
   highlightMode: GraphHighlightMode = 'none',
   highlightOptions?: GraphHighlightOptions,
 ): Set<string> {
-  if (highlightMode === 'none') {
-    return new Set<string>()
-  }
+  switch (highlightMode) {
+    case 'none':
+      return new Set<string>()
 
-  let maxGapDays = highlightOptions?.maxGapDays ?? 1
+    case 'maxDay':
+      return calculateMaxDays(daysInYear)
 
-  if (!Number.isFinite(maxGapDays) || maxGapDays < 0) {
-    maxGapDays = 1
-  }
+    case 'longestStreak': {
+      const { start, end } = calculateLongestStreak(daysInYear)
 
-  maxGapDays = Math.floor(maxGapDays)
-
-  if (highlightMode === 'maxDay') {
-    return calculateMaxDays(daysInYear)
-  }
-
-  if (highlightMode === 'longestStreak') {
-    const { start, end } = calculateLongestStreak(daysInYear)
-
-    return createDateRangeSet(daysInYear, start, end)
-  }
-
-  if (highlightMode === 'longestGappedSpan') {
-    const { start, end } = calculateLongestGappedSpan(daysInYear, maxGapDays)
-
-    return createDateRangeSet(daysInYear, start, end)
-  }
-
-  if (highlightMode === 'specificDate') {
-    const set = new Set<string>()
-    const targetDate = highlightOptions?.specificDate
-
-    if (targetDate) {
-      set.add(targetDate)
+      return createDateRangeSet(daysInYear, start, end)
     }
 
-    return set
-  }
+    case 'longestGappedSpan': {
+      const maxGapDays = normalizeMaxGapDays(highlightOptions?.maxGapDays)
+      const { start, end } = calculateLongestGappedSpan(daysInYear, maxGapDays)
 
-  if (highlightMode === 'specificMonth') {
-    const set = new Set<string>()
-    const targetMonth = highlightOptions?.specificMonth
-
-    if (targetMonth) {
-      daysInYear.forEach((day) => {
-        if (day.date.startsWith(targetMonth)) {
-          set.add(day.date)
-        }
-      })
+      return createDateRangeSet(daysInYear, start, end)
     }
 
-    return set
+    case 'specificDate': {
+      const set = new Set<string>()
+      const targetDate = highlightOptions?.specificDate
+
+      if (targetDate) {
+        set.add(targetDate)
+      }
+
+      return set
+    }
+
+    case 'specificMonth':
+      return createMonthSet(daysInYear, highlightOptions?.specificMonth)
+
+    case 'longestGap': {
+      const { start, end } = highlightOptions?.longestGapRange ?? {}
+
+      return createDateRangeSet(daysInYear, start, end)
+    }
+
+    default: {
+      const exhaustiveMode: never = highlightMode
+      void exhaustiveMode
+
+      return new Set<string>()
+    }
   }
-
-  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-  if (highlightMode === 'longestGap') {
-    const { start, end } = highlightOptions?.longestGapRange ?? {}
-
-    return createDateRangeSet(daysInYear, start, end)
-  }
-
-  return new Set<string>()
 }
 
 /**
@@ -339,16 +378,25 @@ export function flattenAndSortDays(
   weeks: { days: ContributionDay[] }[],
 ): ContributionDay[] {
   const flattened: ContributionDay[] = []
+  let previousDate = ''
+  let isSorted = true
 
-  weeks.forEach((week) => {
-    week.days.forEach((day) => {
+  for (const week of weeks) {
+    for (const day of week.days) {
       if (day.date) {
-        flattened.push(day)
-      }
-    })
-  })
+        if (previousDate && day.date < previousDate) {
+          isSorted = false
+        }
 
-  flattened.sort((a, b) => a.date.localeCompare(b.date))
+        flattened.push(day)
+        previousDate = day.date
+      }
+    }
+  }
+
+  if (!isSorted) {
+    flattened.sort((a, b) => a.date.localeCompare(b.date))
+  }
 
   return flattened
 }

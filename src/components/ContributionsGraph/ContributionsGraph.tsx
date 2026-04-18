@@ -1,12 +1,19 @@
-import { forwardRef, useImperativeHandle, useMemo, useRef } from 'react'
+import {
+  type CSSProperties,
+  forwardRef,
+  useImperativeHandle,
+  useMemo,
+  useRef,
+} from 'react'
 
 import { MockupSafari } from '~/components/mockup/MockupSafari'
 import { getThemeProperties } from '~/components/ThemeVariablesProvider'
-import { DEFAULT_SIZE, DEFAULT_THEME, sizeProperties, THEME_PRESETS } from '~/constants'
+import { DEFAULT_SIZE, sizeProperties } from '~/constants'
 import { useData } from '~/DataContext'
 import { BlockShape } from '~/enums'
 import { useComputedLevelColors } from '~/hooks/useComputedLevelColors'
 import { cn } from '~/lib/utils'
+import type { ContributionCalendar } from '~/types'
 
 import { Graph, type GraphProps } from './Graph'
 import { GraphFooter } from './GraphFooter'
@@ -17,6 +24,13 @@ import {
   type GraphHighlightMode,
   type GraphHighlightOptions,
 } from './graphHighlightUtils'
+
+type GraphCssProperties = CSSProperties & Record<`--${string}`, string>
+
+interface VisibleYearRange {
+  startYear: number
+  endYear: number
+}
 
 interface ContributionsGraphProps
   extends Pick<GraphProps, 'showInspect' | 'titleRender'> {
@@ -32,6 +46,100 @@ interface ContributionsGraphProps
   mockupClassName?: string
   highlightMode?: GraphHighlightMode
   highlightOptions?: GraphHighlightOptions
+}
+
+function getGlobalMaxContributionCount(
+  calendars: ContributionCalendar[],
+): number {
+  let max = 0
+
+  for (const calendar of calendars) {
+    for (const week of calendar.weeks) {
+      for (const day of week.days) {
+        if (day.count > max) {
+          max = day.count
+        }
+      }
+    }
+  }
+
+  return max
+}
+
+function getHighlightDatesByYear(
+  calendars: ContributionCalendar[],
+  highlightMode: GraphHighlightMode | undefined,
+  highlightOptions: GraphHighlightOptions | undefined,
+): Map<number, Set<string>> | undefined {
+  if (!highlightMode || highlightMode === 'none') {
+    return undefined
+  }
+
+  const map = new Map<number, Set<string>>()
+
+  for (const calendar of calendars) {
+    const daysInYear = flattenAndSortDays(calendar.weeks)
+    const highlightedDates = calculateHighlightDates(
+      daysInYear,
+      highlightMode,
+      highlightOptions,
+    )
+
+    if (highlightedDates.size > 0) {
+      map.set(calendar.year, highlightedDates)
+    }
+  }
+
+  return map
+}
+
+function toYear(value: string | undefined, fallback: number): number {
+  const year = Number(value)
+
+  return Number.isInteger(year) ? year : fallback
+}
+
+function getCalendarYearBounds(
+  calendars: ContributionCalendar[],
+): VisibleYearRange {
+  let startYear = Number.POSITIVE_INFINITY
+  let endYear = Number.NEGATIVE_INFINITY
+
+  for (const calendar of calendars) {
+    if (calendar.year < startYear) {
+      startYear = calendar.year
+    }
+
+    if (calendar.year > endYear) {
+      endYear = calendar.year
+    }
+  }
+
+  return {
+    startYear: Number.isFinite(startYear) ? startYear : 0,
+    endYear: Number.isFinite(endYear) ? endYear : 0,
+  }
+}
+
+function getVisibleYearRange(
+  yearRange: [string | undefined, string | undefined] | undefined,
+  firstYear: string | undefined,
+  lastYear: string | undefined,
+  fallbackRange: VisibleYearRange,
+): VisibleYearRange {
+  const [startYearValue, endYearValue] = yearRange ?? []
+
+  return {
+    startYear: toYear(startYearValue ?? firstYear, fallbackRange.startYear),
+    endYear: toYear(endYearValue ?? lastYear, fallbackRange.endYear),
+  }
+}
+
+function isCalendarVisible(
+  calendarYear: number,
+  range: VisibleYearRange,
+): boolean {
+  return calendarYear >= range.startYear && calendarYear <= range.endYear
 }
 
 /**
@@ -53,69 +161,86 @@ function ContributionsGraphInner(
     Mockup = MockupSafari,
   } = props
 
-  const { graphData, settings, firstYear, lastYear } = useData()
+  const {
+    applyingTheme,
+    graphData,
+    settings,
+    firstYear,
+    lastYear,
+    username,
+  } = useData()
 
   const graphRef = useRef<HTMLDivElement>(null)
 
-  useImperativeHandle<HTMLDivElement | null, HTMLDivElement | null>(ref, () => graphRef.current)
-
-  const applyingTheme = useMemo(
-    () => {
-      const targetTheme = settings.theme ?? DEFAULT_THEME
-
-      return THEME_PRESETS.find(
-        (item) => item.name.toLowerCase() === targetTheme.toLowerCase(),
-      )
-    },
-    [settings.theme],
+  useImperativeHandle<HTMLDivElement | null, HTMLDivElement | null>(
+    ref,
+    () => graphRef.current,
   )
 
   const computedColors = useComputedLevelColors(graphRef, applyingTheme)
 
-  // 跨年最大单日贡献数，用于全局色阶模式
+  const highlightMaxGapDays = highlightOptions?.maxGapDays
+  const highlightSpecificDate = highlightOptions?.specificDate
+  const highlightSpecificMonth = highlightOptions?.specificMonth
+  const highlightLongestGapStart = highlightOptions?.longestGapRange?.start
+  const highlightLongestGapEnd = highlightOptions?.longestGapRange?.end
+
   const globalMax = useMemo(() => {
-    if (!graphData) {
-      return 0
+    if (!graphData || !settings.globalScale) {
+      return undefined
     }
 
-    let max = 0
+    return getGlobalMaxContributionCount(graphData.contributionCalendars)
+  }, [graphData, settings.globalScale])
 
-    for (const calendar of graphData.contributionCalendars) {
-      for (const week of calendar.weeks) {
-        for (const day of week.days) {
-          if (day.count > max) {
-            max = day.count
-          }
-        }
-      }
+  const highlightDatesByYear = useMemo(() => {
+    if (!graphData || !highlightMode || highlightMode === 'none') {
+      return undefined
     }
 
-    return max
-  }, [graphData])
-
-  const highlightDatesMap = useMemo(() => {
-    const map = new Map<number, Set<string>>()
-
-    if (!graphData) {
-      return map
+    const options: GraphHighlightOptions = {
+      maxGapDays: highlightMaxGapDays,
+      specificDate: highlightSpecificDate,
+      specificMonth: highlightSpecificMonth,
+      longestGapRange: {
+        start: highlightLongestGapStart,
+        end: highlightLongestGapEnd,
+      },
     }
 
-    graphData.contributionCalendars.forEach((calendar) => {
-      const daysInYear = flattenAndSortDays(calendar.weeks)
-      const highlightedDates = calculateHighlightDates(daysInYear, highlightMode, highlightOptions)
-      map.set(calendar.year, highlightedDates)
-    })
-
-    return map
-  }, [graphData, highlightMode, highlightOptions])
+    return getHighlightDatesByYear(
+      graphData.contributionCalendars,
+      highlightMode,
+      options,
+    )
+  }, [
+    graphData,
+    highlightMode,
+    highlightMaxGapDays,
+    highlightSpecificDate,
+    highlightSpecificMonth,
+    highlightLongestGapStart,
+    highlightLongestGapEnd,
+  ])
 
   if (!graphData) {
     return null
   }
 
-  const themeProperties = applyingTheme ? getThemeProperties(applyingTheme) : {}
+  const fallbackYearRange = getCalendarYearBounds(
+    graphData.contributionCalendars,
+  )
+  const visibleYearRange = getVisibleYearRange(
+    settings.yearRange,
+    firstYear,
+    lastYear,
+    fallbackYearRange,
+  )
+  const themeProperties = applyingTheme
+    ? getThemeProperties(applyingTheme)
+    : {}
 
-  const cssProperties = {
+  const cssProperties: GraphCssProperties = {
     ...themeProperties,
     ...sizeProperties[settings.size ?? DEFAULT_SIZE],
     ...(settings.blockShape === BlockShape.Round
@@ -140,22 +265,19 @@ function ContributionsGraphInner(
         wrapperClassName={mockupWrapperClassName}
       >
         <div>
-          <div className={cn('px-6', settings.showSafariHeader ? 'pt-2' : 'pt-6')}>
+          <div
+            className={cn('px-6', settings.showSafariHeader ? 'pt-2' : 'pt-6')}
+          >
             <GraphHeader />
           </div>
 
           <div className="flex flex-col gap-y-6 p-6">
             {graphData.contributionCalendars.map((calendar) => {
-              let [startYear, endYear] = settings.yearRange ?? []
-              startYear = startYear && Number.isInteger(Number(startYear)) ? startYear : firstYear
-              endYear = endYear && Number.isInteger(Number(endYear)) ? endYear : lastYear
-
-              const shouldDisplay
-                = startYear && endYear
-                  ? calendar.year >= Number(startYear) && calendar.year <= Number(endYear)
-                  : true
-
-              const highlightedDates = highlightDatesMap.get(calendar.year)
+              const shouldDisplay = isCalendarVisible(
+                calendar.year,
+                visibleYearRange,
+              )
+              const highlightedDates = highlightDatesByYear?.get(calendar.year)
 
               return (
                 <Graph
@@ -165,20 +287,23 @@ function ContributionsGraphInner(
                   computedColors={computedColors}
                   data={calendar}
                   daysLabel={settings.daysLabel}
-                  globalMax={settings.globalScale ? globalMax : undefined}
+                  globalMax={globalMax}
                   highlightedDates={highlightedDates}
                   showInspect={showInspect}
                   titleRender={titleRender}
+                  username={username}
                 />
               )
             })}
           </div>
 
-          {settings.showAttribution && (
-            <div className="border-t-[1.5px] border-t-[color-mix(in_srgb,var(--theme-border)_50%,transparent)] px-6 py-3">
-              <GraphFooter />
-            </div>
-          )}
+          {settings.showAttribution
+            ? (
+                <div className="border-t-[1.5px] border-t-[color-mix(in_srgb,var(--theme-border)_50%,transparent)] px-6 py-3">
+                  <GraphFooter />
+                </div>
+              )
+            : null}
         </div>
       </Mockup>
     </div>
