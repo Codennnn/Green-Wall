@@ -6,6 +6,73 @@ import { DEFAULT_LEVEL_COLORS } from '~/constants'
 import { rgbToHex } from '~/lib/utils'
 import type { ThemePreset } from '~/types'
 
+const LEVEL_COLOR_COUNT = 5
+
+function getThemeSignature(theme: ThemePreset | undefined): string {
+  if (!theme) {
+    return ''
+  }
+
+  return [
+    theme.name,
+    theme.colorPrimary,
+    theme.colorSecondary,
+    theme.colorForeground,
+    theme.colorBackground,
+    theme.colorBorder,
+    ...theme.levelColors,
+  ].join('|')
+}
+
+function areColorsEqual(left: string[], right: string[]): boolean {
+  if (left.length !== right.length) {
+    return false
+  }
+
+  for (let index = 0; index < left.length; index++) {
+    if (left[index] !== right[index]) {
+      return false
+    }
+  }
+
+  return true
+}
+
+function resolveLevelColors(container: HTMLElement): string[] {
+  const computedStyle = getComputedStyle(container)
+  const tempDiv = container.ownerDocument.createElement('div')
+  const colors = new Array<string>(LEVEL_COLOR_COUNT)
+
+  tempDiv.style.display = 'none'
+  container.appendChild(tempDiv)
+
+  try {
+    for (let index = 0; index < LEVEL_COLOR_COUNT; index++) {
+      const cssVar = computedStyle.getPropertyValue(`--level-${index}`).trim()
+
+      if (!cssVar) {
+        colors[index] = DEFAULT_LEVEL_COLORS[index]
+        continue
+      }
+
+      tempDiv.style.color = ''
+      tempDiv.style.color = cssVar
+
+      if (!tempDiv.style.color) {
+        colors[index] = DEFAULT_LEVEL_COLORS[index]
+        continue
+      }
+
+      colors[index] = rgbToHex(getComputedStyle(tempDiv).color)
+    }
+  }
+  finally {
+    tempDiv.remove()
+  }
+
+  return colors
+}
+
 /**
  * 计算并返回解析后的等级颜色值
  *
@@ -24,6 +91,7 @@ export function useComputedLevelColors(
 ): string[] {
   const [computedColors, setComputedColors] = useState<string[]>(DEFAULT_LEVEL_COLORS)
   const isMounted = useRef(true)
+  const themeSignature = getThemeSignature(applyingTheme)
 
   useEffect(() => {
     isMounted.current = true
@@ -47,35 +115,16 @@ export function useComputedLevelColors(
         return
       }
 
-      const computedStyle = getComputedStyle(container)
-      const colors: string[] = []
-
-      for (let i = 0; i <= 4; i++) {
-        const cssVar = computedStyle.getPropertyValue(`--level-${i}`).trim()
-
-        if (cssVar) {
-          // 创建临时元素来解析可能包含 color-mix() 的颜色值
-          const tempDiv = document.createElement('div')
-          tempDiv.style.cssText = `color: ${cssVar}; display: none;`
-          document.body.appendChild(tempDiv)
-
-          const resolved = getComputedStyle(tempDiv).color
-          document.body.removeChild(tempDiv)
-
-          colors.push(rgbToHex(resolved))
-        }
-        else {
-          colors.push(DEFAULT_LEVEL_COLORS[i])
-        }
-      }
-
-      setComputedColors(colors)
+      const colors = resolveLevelColors(container)
+      setComputedColors((currentColors) => {
+        return areColorsEqual(currentColors, colors) ? currentColors : colors
+      })
     })
 
     return () => {
       cancelAnimationFrame(rafId)
     }
-  }, [containerRef, applyingTheme])
+  }, [containerRef, themeSignature])
 
   return computedColors
 }

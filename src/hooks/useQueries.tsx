@@ -1,3 +1,5 @@
+import { useMemo } from 'react'
+
 import {
   useQueries,
   useQuery,
@@ -24,6 +26,17 @@ import type {
   RepoInteractionsInYear,
 } from '~/types'
 
+function resolveEnabled<TEnabled>(
+  defaultEnabled: boolean,
+  optionEnabled: TEnabled | undefined,
+): boolean | TEnabled {
+  if (!defaultEnabled) {
+    return false
+  }
+
+  return optionEnabled ?? true
+}
+
 export function useContributionQuery(
   username: GitHubUsername,
   years?: ContributionYear[],
@@ -35,6 +48,7 @@ export function useContributionQuery(
   >,
 ) {
   return useQuery({
+    ...options,
     queryKey: queryKeys.contribution(
       username,
       years,
@@ -43,8 +57,7 @@ export function useContributionQuery(
     ),
     queryFn: () =>
       fetchContributionData(username, years, statistics, accessOptions),
-    enabled: !!username,
-    ...options,
+    enabled: resolveEnabled(username.length > 0, options?.enabled),
   })
 }
 
@@ -58,10 +71,13 @@ export function useReposQuery(
   >,
 ) {
   return useQuery({
+    ...options,
     queryKey: queryKeys.repos(username, year, accessOptions),
     queryFn: () => fetchReposInYear(username, year, accessOptions),
-    enabled: !!username && !!year,
-    ...options,
+    enabled: resolveEnabled(
+      username.length > 0 && Number.isFinite(year),
+      options?.enabled,
+    ),
   })
 }
 
@@ -75,10 +91,13 @@ export function useIssuesQuery(
   >,
 ) {
   return useQuery({
+    ...options,
     queryKey: queryKeys.issues(username, year, accessOptions),
     queryFn: () => fetchIssuesInYear(username, year, accessOptions),
-    enabled: !!username && !!year,
-    ...options,
+    enabled: resolveEnabled(
+      username.length > 0 && Number.isFinite(year),
+      options?.enabled,
+    ),
   })
 }
 
@@ -95,10 +114,13 @@ export function useRepoInteractionsQuery(
   >,
 ) {
   return useQuery<RepoInteractionsInYear, ApiError>({
+    ...options,
     queryKey: queryKeys.repoInteractions(username, year, accessOptions),
     queryFn: () => fetchRepoInteractionsInYear(username, year, accessOptions),
-    enabled: !!username && !!year,
-    ...options,
+    enabled: resolveEnabled(
+      username.length > 0 && Number.isFinite(year),
+      options?.enabled,
+    ),
   })
 }
 
@@ -123,44 +145,85 @@ export function useUserDataQueries(
     >
   },
 ) {
-  const queries = []
+  const contributionOptions = options?.contribution
+  const reposOptions = options?.repos
+  const issuesOptions = options?.issues
+  const contributionYears = useMemo(() => {
+    if (year === undefined || !Number.isFinite(year)) {
+      return undefined
+    }
 
-  queries.push({
-    queryKey: queryKeys.contribution(username, year ? [year] : undefined),
-    queryFn: () => fetchContributionData(username, year ? [year] : undefined),
-    enabled: !!username,
-    ...options?.contribution,
-  })
+    return [year]
+  }, [year])
+  const queryYear = contributionYears?.[0]
 
-  // 如果指定了年份，添加仓库和问题查询
-  if (year) {
-    queries.push({
-      queryKey: queryKeys.repos(username, year),
-      queryFn: () => fetchReposInYear(username, year),
-      enabled: !!username,
-      ...options?.repos,
-    })
+  const queries = useMemo(() => {
+    const contributionQuery = {
+      ...contributionOptions,
+      queryKey: queryKeys.contribution(username, contributionYears),
+      queryFn: () => fetchContributionData(username, contributionYears),
+      enabled: resolveEnabled(
+        username.length > 0,
+        contributionOptions?.enabled,
+      ),
+    }
 
-    queries.push({
-      queryKey: queryKeys.issues(username, year),
-      queryFn: () => fetchIssuesInYear(username, year),
-      enabled: !!username,
-      ...options?.issues,
-    })
-  }
+    if (queryYear === undefined) {
+      return [contributionQuery]
+    }
+
+    return [
+      contributionQuery,
+      {
+        ...reposOptions,
+        queryKey: queryKeys.repos(username, queryYear),
+        queryFn: () => fetchReposInYear(username, queryYear),
+        enabled: resolveEnabled(username.length > 0, reposOptions?.enabled),
+      },
+      {
+        ...issuesOptions,
+        queryKey: queryKeys.issues(username, queryYear),
+        queryFn: () => fetchIssuesInYear(username, queryYear),
+        enabled: resolveEnabled(username.length > 0, issuesOptions?.enabled),
+      },
+    ]
+  }, [
+    username,
+    contributionYears,
+    queryYear,
+    contributionOptions,
+    reposOptions,
+    issuesOptions,
+  ])
 
   const results = useQueries({ queries })
+  const queryState = useMemo(() => {
+    let isLoading = false
+    let isError = false
+    const errors: ApiError[] = []
+
+    for (const result of results) {
+      isLoading ||= result.isLoading
+      isError ||= result.isError
+
+      if (result.error) {
+        errors.push(result.error)
+      }
+    }
+
+    return {
+      isLoading,
+      isError,
+      errors,
+    }
+  }, [results])
 
   return {
     contribution: results[0],
-    repos: year ? results[1] : undefined,
-    issues: year ? results[2] : undefined,
+    repos: queryYear === undefined ? undefined : results[1],
+    issues: queryYear === undefined ? undefined : results[2],
     // 便捷的状态聚合
-    isLoading: results.some((result) => result.isLoading),
-    isError: results.some((result) => result.isError),
-    errors: results
-      .filter((result) => result.error)
-      .map((result) => result.error),
+    ...queryState,
   }
 }
 
@@ -180,10 +243,13 @@ export function useRepoAnalysisQuery(
   return useQuery({
     queryKey: queryKeys.repoAnalysis(owner, repo, metrics, accessOptions),
     queryFn: () => fetchRepoAnalysis(owner, repo, metrics, accessOptions),
-    enabled: !!owner && !!repo,
     staleTime: 1000 * 60 * 5, // 5 分钟
     gcTime: 1000 * 60 * 30, // 30 分钟（gcTime 是 cacheTime 的新名称）
     refetchOnWindowFocus: false,
     ...options,
+    enabled: resolveEnabled(
+      owner.length > 0 && repo.length > 0,
+      options?.enabled,
+    ),
   })
 }

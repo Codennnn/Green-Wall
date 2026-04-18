@@ -4,7 +4,6 @@ import { useTranslations } from 'next-intl'
 
 import {
   createDateFormatter,
-  createDateFormatters,
   createDateRangeFormatter,
   createMonthFormatter,
   type DateFormatters,
@@ -20,8 +19,21 @@ import {
  */
 export function useDateFormatters(): DateFormatters {
   const tMonths = useTranslations('months')
+  const formatDate = useMemo(() => createDateFormatter(tMonths), [tMonths])
+  const formatMonth = useMemo(() => createMonthFormatter(tMonths), [tMonths])
+  const formatDateRange = useMemo(
+    () => createDateRangeFormatter(formatDate),
+    [formatDate],
+  )
 
-  return useMemo(() => createDateFormatters(tMonths), [tMonths])
+  return useMemo(
+    () => ({
+      formatDate,
+      formatMonth,
+      formatDateRange,
+    }),
+    [formatDate, formatMonth, formatDateRange],
+  )
 }
 
 /**
@@ -73,11 +85,7 @@ export function useDateRangeFormatter(): (
   startDate: string | undefined,
   endDate: string | undefined,
 ) => string | undefined {
-  const tMonths = useTranslations('months')
+  const formatDate = useDateFormatter()
 
-  return useMemo(() => {
-    const formatDate = createDateFormatter(tMonths)
-
-    return createDateRangeFormatter(formatDate)
-  }, [tMonths])
+  return useMemo(() => createDateRangeFormatter(formatDate), [formatDate])
 }

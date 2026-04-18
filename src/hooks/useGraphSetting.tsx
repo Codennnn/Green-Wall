@@ -57,45 +57,47 @@ const initialState: State = {
   showSafariHeader: true,
 }
 
+function graphSettingReducer(state: State, { type, payload }: Action): State {
+  switch (type) {
+    case 'size':
+      return { ...state, size: payload }
+
+    case 'yearRange':
+      return { ...state, yearRange: payload }
+
+    case 'daysLabel':
+      return { ...state, daysLabel: payload }
+
+    case 'showSafariHeader':
+      return { ...state, showSafariHeader: payload }
+
+    case 'showAttribution':
+      return { ...state, showAttribution: payload }
+
+    case 'blockShape':
+      return { ...state, blockShape: payload }
+
+    case 'theme':
+      return { ...state, theme: payload }
+
+    case 'globalScale':
+      return { ...state, globalScale: payload }
+
+    case 'reset':
+      return initialState
+
+    case 'replace':
+      if (payload) {
+        return payload
+      }
+
+      return state
+
+    default:
+      throw new Error('Not a valid action type.')
+  }
+}
+
 export function useGraphSetting() {
-  return useReducer((state: State, { type, payload }: Action): State => {
-    switch (type) {
-      case 'size':
-        return { ...state, size: payload }
-
-      case 'yearRange':
-        return { ...state, yearRange: payload }
-
-      case 'daysLabel':
-        return { ...state, daysLabel: payload }
-
-      case 'showSafariHeader':
-        return { ...state, showSafariHeader: payload }
-
-      case 'showAttribution':
-        return { ...state, showAttribution: payload }
-
-      case 'blockShape':
-        return { ...state, blockShape: payload }
-
-      case 'theme':
-        return { ...state, theme: payload }
-
-      case 'globalScale':
-        return { ...state, globalScale: payload }
-
-      case 'reset':
-        return initialState
-
-      case 'replace':
-        if (payload) {
-          return payload
-        }
-
-        return state
-
-      default:
-        throw new Error('Not a valid action type.')
-    }
-  }, initialState)
+  return useReducer(graphSettingReducer, initialState)
 }

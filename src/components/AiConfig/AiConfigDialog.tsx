@@ -18,6 +18,11 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '~/components/ui/dialog'
+import {
+  type AiConfigUrlErrorKey,
+  extractDomain,
+  validateAiConfigBaseUrl,
+} from '~/lib/ai-config-url'
 import { eventTracker } from '~/lib/analytics'
 import type { AiRuntimeConfig, TestConnectionResponse } from '~/types/ai-config'
 
@@ -27,6 +32,56 @@ const EMPTY_CONFIG: AiRuntimeConfig = {
   baseUrl: '',
   apiKey: '',
   model: '',
+}
+
+const TEST_CONNECTION_TIMEOUT_MS = 20_000
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null
+}
+
+function parseTestConnectionResponse(value: unknown): TestConnectionResponse | null {
+  if (!isRecord(value)) {
+    return null
+  }
+
+  const message = typeof value.message === 'string' ? value.message : undefined
+  const latencyMs = typeof value.latencyMs === 'number' ? value.latencyMs : undefined
+  const modelName = typeof value.modelName === 'string' ? value.modelName : undefined
+
+  if (typeof value.ok === 'boolean') {
+    return {
+      ok: value.ok,
+      latencyMs,
+      message,
+      modelName,
+    }
+  }
+
+  if (message) {
+    return { ok: false, message, latencyMs, modelName }
+  }
+
+  return null
+}
+
+async function readTestConnectionResponse(
+  response: Response,
+): Promise<TestConnectionResponse | null> {
+  try {
+    return parseTestConnectionResponse(await response.json())
+  }
+  catch {
+    return null
+  }
+}
+
+function isAbortError(error: unknown): boolean {
+  return error instanceof Error && error.name === 'AbortError'
+}
+
+function noopSetOpen(): void {
+  return undefined
 }
 
 export interface AiConfigDialogProps {
@@ -73,11 +128,39 @@ export function AiConfigDialog({
 
   // 用于追踪对话框是否刚刚打开
   const prevOpenRef = useRef(false)
+  const testRequestIdRef = useRef(0)
+  const testAbortControllerRef = useRef<AbortController | null>(null)
 
   // 判断是否为受控模式
   const isControlled = controlledOpen !== undefined
   const open = isControlled ? controlledOpen : internalOpen
-  const setOpen = isControlled ? controlledOnOpenChange! : setInternalOpen
+  const setOpen = isControlled ? (controlledOnOpenChange ?? noopSetOpen) : setInternalOpen
+
+  const getUrlValidationMessage = useEvent((errorKey: AiConfigUrlErrorKey) => {
+    switch (errorKey) {
+      case 'httpsUrlRequired':
+        return t('httpsUrlRequired')
+
+      case 'urlHostNotAllowed':
+        return t('urlHostNotAllowed')
+
+      case 'urlPrivateAddressNotAllowed':
+        return t('urlPrivateAddressNotAllowed')
+
+      case 'invalidUrlFormat':
+        return t('invalidUrlFormat')
+
+      default:
+        return t('invalidUrlFormat')
+    }
+  })
+
+  const cancelActiveTest = useEvent(() => {
+    testRequestIdRef.current += 1
+    testAbortControllerRef.current?.abort()
+    testAbortControllerRef.current = null
+    setIsTesting(false)
+  })
 
   // 监听对话框打开事件，初始化草稿配置
   useEffect(() => {
@@ -92,33 +175,91 @@ export function AiConfigDialog({
     }
   }, [open, config])
 
+  useEffect(() => {
+    return () => {
+      testRequestIdRef.current += 1
+      testAbortControllerRef.current?.abort()
+      testAbortControllerRef.current = null
+    }
+  }, [])
+
   const handleOpenChange = useEvent((newOpen: boolean) => {
+    if (!newOpen) {
+      cancelActiveTest()
+    }
+
     setOpen(newOpen)
   })
 
   const handleConfigChange = useEvent((newConfig: AiRuntimeConfig) => {
+    cancelActiveTest()
     setDraftConfig(newConfig)
     setTestResult(null)
   })
 
   const handleTestAsync = useEvent(async (configToTest: AiRuntimeConfig) => {
+    const requestId = testRequestIdRef.current + 1
+    testRequestIdRef.current = requestId
+
+    testAbortControllerRef.current?.abort()
+    const abortController = new AbortController()
+    testAbortControllerRef.current = abortController
+
     setIsTesting(true)
     setTestResult(null)
 
-    const provider = new URL(configToTest.baseUrl).hostname
     const startTime = performance.now()
+    const timeoutState = { didTimeout: false }
+    const timeoutId = window.setTimeout(() => {
+      timeoutState.didTimeout = true
+      abortController.abort()
+    }, TEST_CONNECTION_TIMEOUT_MS)
 
-    eventTracker.ai.config.test.start(provider)
+    const isCurrentRequest = () => testRequestIdRef.current === requestId
 
     try {
+      const validation = validateAiConfigBaseUrl(configToTest.baseUrl)
+
+      if (!validation.valid) {
+        if (isCurrentRequest()) {
+          setTestResult({ ok: false, message: getUrlValidationMessage(validation.errorKey) })
+        }
+
+        return
+      }
+
+      const provider = validation.domain
+
+      eventTracker.ai.config.test.start(provider)
+
       const response = await fetch('/api/ai/test-connection', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ aiConfig: configToTest }),
+        signal: abortController.signal,
       })
 
-      const result = await response.json() as TestConnectionResponse
+      const parsedResult = await readTestConnectionResponse(response)
       const latencyMs = performance.now() - startTime
+
+      if (!isCurrentRequest()) {
+        return
+      }
+
+      if (!parsedResult) {
+        eventTracker.ai.config.test.error(provider, 'invalid_response', latencyMs)
+        setTestResult({ ok: false, message: t('testInvalidResponse') })
+
+        return
+      }
+
+      const result = response.ok
+        ? parsedResult
+        : {
+            ...parsedResult,
+            ok: false,
+            message: parsedResult.message ?? t('testRequestFailed', { status: response.status }),
+          }
 
       if (result.ok) {
         eventTracker.ai.config.test.success(provider, result.latencyMs ?? latencyMs)
@@ -129,13 +270,35 @@ export function AiConfigDialog({
 
       setTestResult(result)
     }
-    catch {
+    catch (error) {
+      if (!isCurrentRequest()) {
+        return
+      }
+
       const latencyMs = performance.now() - startTime
+      const provider = extractDomain(configToTest.baseUrl) ?? configToTest.baseUrl
+
+      if (isAbortError(error) && timeoutState.didTimeout) {
+        eventTracker.ai.config.test.error(provider, 'timeout', latencyMs)
+        setTestResult({ ok: false, message: t('testTimeout') })
+
+        return
+      }
+
+      if (isAbortError(error)) {
+        return
+      }
+
       eventTracker.ai.config.test.error(provider, 'network_error', latencyMs)
-      setTestResult({ ok: false, message: 'Network error' })
+      setTestResult({ ok: false, message: t('testNetworkError') })
     }
     finally {
-      setIsTesting(false)
+      window.clearTimeout(timeoutId)
+
+      if (isCurrentRequest()) {
+        testAbortControllerRef.current = null
+        setIsTesting(false)
+      }
     }
   })
 
@@ -151,7 +314,17 @@ export function AiConfigDialog({
     }
 
     if (trimmedConfig.baseUrl && trimmedConfig.apiKey && trimmedConfig.model) {
-      const provider = new URL(trimmedConfig.baseUrl).hostname
+      const validation = validateAiConfigBaseUrl(trimmedConfig.baseUrl)
+
+      if (!validation.valid) {
+        setTestResult({ ok: false, message: getUrlValidationMessage(validation.errorKey) })
+
+        return
+      }
+
+      const provider = validation.domain
+
+      cancelActiveTest()
       eventTracker.ai.config.save(provider)
       onSave(trimmedConfig)
       setOpen(false)
@@ -159,6 +332,7 @@ export function AiConfigDialog({
   })
 
   const handleReset = useEvent(() => {
+    cancelActiveTest()
     eventTracker.ai.config.reset()
     onReset()
     setDraftConfig(EMPTY_CONFIG)
@@ -166,9 +340,11 @@ export function AiConfigDialog({
     setOpen(false)
   })
 
-  const canSave = draftConfig.baseUrl.trim()
+  const canSave = Boolean(
+    draftConfig.baseUrl.trim()
     && draftConfig.apiKey.trim()
-    && draftConfig.model.trim()
+    && draftConfig.model.trim(),
+  )
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>

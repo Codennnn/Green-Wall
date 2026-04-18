@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useEvent } from 'react-use-event-hook'
 
 export interface UseCopyToClipboardOptions {
@@ -22,6 +22,9 @@ export interface UseCopyToClipboardReturn {
   reset: () => void
 }
 
+const DEFAULT_RESET_DELAY = 2000
+const DEFAULT_OPTIONS: UseCopyToClipboardOptions = {}
+
 /**
  * 用于复制文本到剪贴板的自定义 Hook
  *
@@ -29,64 +32,83 @@ export interface UseCopyToClipboardReturn {
  * @returns 包含 copied 状态和 copy 函数的对象
  */
 export function useCopyToClipboard(
-  options: UseCopyToClipboardOptions = {},
+  options: UseCopyToClipboardOptions = DEFAULT_OPTIONS,
 ): UseCopyToClipboardReturn {
-  const { resetDelay = 2000 } = options
+  const { resetDelay = DEFAULT_RESET_DELAY } = options
 
   const [copied, setCopied] = useState(false)
-  const timerRef = useRef<NodeJS.Timeout | null>(null)
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const isMountedRef = useRef(false)
 
   const reset = useEvent(() => {
-    setCopied(false)
-
     if (timerRef.current) {
       clearTimeout(timerRef.current)
       timerRef.current = null
     }
+
+    setCopied(false)
   })
 
-  const copy = useCallback(
-    async (text: string): Promise<boolean> => {
-      if (!text) {
+  const copy = useEvent(async (text: string): Promise<boolean> => {
+    if (!text) {
+      return false
+    }
+
+    try {
+      await navigator.clipboard.writeText(text)
+
+      if (!isMountedRef.current) {
         return false
       }
 
-      try {
-        await navigator.clipboard.writeText(text)
-        setCopied(true)
+      setCopied(true)
 
-        if (timerRef.current) {
-          clearTimeout(timerRef.current)
-        }
-
-        timerRef.current = setTimeout(() => {
-          setCopied(false)
-          timerRef.current = null
-        }, resetDelay)
-
-        return true
-      }
-      catch (error) {
-        // 复制失败，保持 copied 为 false
-        console.error('Failed to copy text to clipboard:', error)
-
-        return false
-      }
-    },
-    [resetDelay],
-  )
-
-  useEffect(() => {
-    return () => {
       if (timerRef.current) {
         clearTimeout(timerRef.current)
+      }
+
+      timerRef.current = setTimeout(() => {
+        if (!isMountedRef.current) {
+          return
+        }
+
+        setCopied(false)
+        timerRef.current = null
+      }, resetDelay)
+
+      return true
+    }
+    catch (error) {
+      // 复制失败，保持 copied 为 false
+      if (isMountedRef.current) {
+        reset()
+      }
+
+      console.error('Failed to copy text to clipboard:', error)
+
+      return false
+    }
+  })
+
+  useEffect(() => {
+    isMountedRef.current = true
+
+    return () => {
+      isMountedRef.current = false
+
+      if (timerRef.current) {
+        clearTimeout(timerRef.current)
+        timerRef.current = null
       }
     }
   }, [])
 
-  return {
-    copied,
-    copy,
-    reset,
-  }
+  return useMemo(
+    () => ({
+      copied,
+      copy,
+      reset,
+    }),
+    [copied, copy, reset],
+  )
 }

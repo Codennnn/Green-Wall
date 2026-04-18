@@ -26,7 +26,7 @@ export function ProseContainer(props: React.PropsWithChildren<ProseContainerProp
     <Component
       className={cn(
         // 基础 prose 样式
-        'prose prose-strong:font-bold',
+        'prose dark:prose-invert prose-strong:font-bold',
         // 引用块样式
         'prose-blockquote:font-normal prose-blockquote:not-italic',
         // 链接样式

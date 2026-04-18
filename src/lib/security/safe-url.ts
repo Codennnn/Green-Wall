@@ -20,9 +20,18 @@ const DANGEROUS_HOSTNAMES = [
   '169.254.169.254', // AWS/GCP metadata
 ]
 
+export type SafeUrlValidationCode
+  = | 'required'
+    | 'invalid_format'
+    | 'https_required'
+    | 'hostname_not_allowed'
+    | 'private_ip_not_allowed'
+    | 'ip_not_allowed'
+
 export interface SafeUrlValidationResult {
   valid: boolean
   message?: string
+  code?: SafeUrlValidationCode
 }
 
 /**
@@ -57,7 +66,7 @@ function isDangerousHostname(hostname: string): boolean {
 export function validateSafeUrl(baseUrl: string): SafeUrlValidationResult {
   // 空值检查
   if (!baseUrl || typeof baseUrl !== 'string') {
-    return { valid: false, message: 'Base URL is required' }
+    return { valid: false, code: 'required', message: 'Base URL is required' }
   }
 
   const trimmedUrl = baseUrl.trim()
@@ -69,29 +78,29 @@ export function validateSafeUrl(baseUrl: string): SafeUrlValidationResult {
     url = new URL(trimmedUrl)
   }
   catch {
-    return { valid: false, message: 'Invalid URL format' }
+    return { valid: false, code: 'invalid_format', message: 'Invalid URL format' }
   }
 
   // 只允许 HTTPS（生产环境安全要求）
   if (url.protocol !== 'https:') {
-    return { valid: false, message: 'Only HTTPS URLs are allowed' }
+    return { valid: false, code: 'https_required', message: 'Only HTTPS URLs are allowed' }
   }
 
   // 检查是否为危险主机名
   if (isDangerousHostname(url.hostname)) {
-    return { valid: false, message: 'This hostname is not allowed' }
+    return { valid: false, code: 'hostname_not_allowed', message: 'This hostname is not allowed' }
   }
 
   // 检查是否为私有 IP
   if (isPrivateIp(url.hostname)) {
-    return { valid: false, message: 'Private IP addresses are not allowed' }
+    return { valid: false, code: 'private_ip_not_allowed', message: 'Private IP addresses are not allowed' }
   }
 
   // 检查是否为纯 IP 地址（可选的严格模式）
   const ipv4Regex = /^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/
 
   if (ipv4Regex.test(url.hostname)) {
-    return { valid: false, message: 'IP addresses are not allowed, please use a domain name' }
+    return { valid: false, code: 'ip_not_allowed', message: 'IP addresses are not allowed, please use a domain name' }
   }
 
   return { valid: true }

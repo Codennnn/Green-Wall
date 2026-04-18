@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useReducer, useRef } from 'react'
 import { useEvent } from 'react-use-event-hook'
 
 import type { AiRuntimeConfig } from '~/types/ai-config'
@@ -37,6 +37,16 @@ interface UseAiReportHistoryReturn {
   goToNext: () => void
 }
 
+interface HistoryState {
+  history: AiReportHistoryRecord[]
+  currentIndex: number
+}
+
+type HistoryAction
+  = { type: 'add', record: AiReportHistoryRecord }
+    | { type: 'previous' }
+    | { type: 'next' }
+
 /** 空记录标识符，用于区分空状态 */
 const EMPTY_RECORD_ID = '__empty__'
 
@@ -48,21 +58,71 @@ const EMPTY_RECORD: AiReportHistoryRecord = {
   config: null,
 }
 
+const INITIAL_HISTORY_STATE: HistoryState = {
+  history: [],
+  currentIndex: 0,
+}
+
+function historyReducer(state: HistoryState, action: HistoryAction): HistoryState {
+  switch (action.type) {
+    case 'add': {
+      const history = [...state.history, action.record]
+
+      return {
+        history,
+        currentIndex: history.length - 1,
+      }
+    }
+
+    case 'previous': {
+      if (state.currentIndex === 0) {
+        return state
+      }
+
+      return {
+        ...state,
+        currentIndex: state.currentIndex - 1,
+      }
+    }
+
+    case 'next': {
+      if (state.history.length === 0) {
+        return state
+      }
+
+      const nextIndex = Math.min(state.history.length - 1, state.currentIndex + 1)
+
+      if (nextIndex === state.currentIndex) {
+        return state
+      }
+
+      return {
+        ...state,
+        currentIndex: nextIndex,
+      }
+    }
+
+    default:
+      return state
+  }
+}
+
 export function useAiReportHistory(
   options: UseAiReportHistoryOptions,
 ): UseAiReportHistoryReturn {
   const { text, status, aiConfig } = options
 
-  const [history, setHistory] = useState<AiReportHistoryRecord[]>([])
-  const [currentIndex, setCurrentIndex] = useState(0)
+  const [{ history, currentIndex }, dispatch] = useReducer(
+    historyReducer,
+    INITIAL_HISTORY_STATE,
+  )
 
-  const historyRef = useRef(history)
-  // 跟踪最后添加的文本，避免重复添加检测依赖 history
-  const lastAddedTextRef = useRef<string | null>(null)
+  const previousStatusRef = useRef<UseAiReportHistoryOptions['status'] | null>(null)
+  const addedForSuccessRef = useRef(false)
 
-  useEffect(() => {
-    historyRef.current = history
-  }, [history])
+  const aiConfigBaseUrl = aiConfig?.baseUrl
+  const aiConfigApiKey = aiConfig?.apiKey
+  const aiConfigModel = aiConfig?.model
 
   const derivedState = useMemo(() => {
     // 确保索引在有效范围内
@@ -79,33 +139,55 @@ export function useAiReportHistory(
     }
   }, [history, currentIndex, status])
 
-  const addToHistory = useEvent((record: AiReportHistoryRecord) => {
-    setHistory((prev) => [...prev, record])
-    setCurrentIndex(historyRef.current.length)
-    lastAddedTextRef.current = record.text
-  })
-
   const goToPrevious = useEvent(() => {
-    setCurrentIndex((prev) => Math.max(0, prev - 1))
+    dispatch({ type: 'previous' })
   })
 
   const goToNext = useEvent(() => {
-    const maxIndex = historyRef.current.length - 1
-    setCurrentIndex((prev) => Math.min(maxIndex, prev + 1))
+    dispatch({ type: 'next' })
   })
 
   useEffect(() => {
-    const shouldAddToHistory = status === 'success' && text.length > 0 && lastAddedTextRef.current !== text
+    const wasSuccess = previousStatusRef.current === 'success'
+    const isSuccess = status === 'success'
 
-    if (shouldAddToHistory) {
-      addToHistory({
-        id: crypto.randomUUID(),
-        timestamp: Date.now(),
-        text,
-        config: aiConfig,
-      })
+    if (!isSuccess) {
+      previousStatusRef.current = status
+      addedForSuccessRef.current = false
+
+      return
     }
-  }, [status, text, aiConfig, addToHistory])
+
+    if (!wasSuccess) {
+      addedForSuccessRef.current = false
+    }
+
+    previousStatusRef.current = status
+
+    if (!addedForSuccessRef.current && text.length > 0) {
+      const hasCustomConfig = aiConfigBaseUrl !== undefined
+        && aiConfigApiKey !== undefined
+        && aiConfigModel !== undefined
+      const config = hasCustomConfig
+        ? {
+            baseUrl: aiConfigBaseUrl,
+            apiKey: aiConfigApiKey,
+            model: aiConfigModel,
+          }
+        : null
+
+      dispatch({
+        type: 'add',
+        record: {
+          id: crypto.randomUUID(),
+          timestamp: Date.now(),
+          text,
+          config,
+        },
+      })
+      addedForSuccessRef.current = true
+    }
+  }, [status, text, aiConfigBaseUrl, aiConfigApiKey, aiConfigModel])
 
   return {
     history,

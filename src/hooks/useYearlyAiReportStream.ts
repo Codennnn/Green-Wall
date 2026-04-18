@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useState } from 'react'
+import { startTransition, useEffect, useRef, useState } from 'react'
 import { useEvent } from 'react-use-event-hook'
 
 import { AiStreamError } from '~/lib/ai/stream-error'
@@ -39,6 +39,26 @@ export interface UseYearlyAiReportStreamReturn {
   reset: () => void
 }
 
+function isAbortError(error: unknown) {
+  return error instanceof DOMException && error.name === 'AbortError'
+}
+
+function toAiReportError(error: unknown): AiReportError {
+  if (error instanceof AiStreamError) {
+    return {
+      code: error.code,
+      message: error.message,
+      retryable: error.retryable,
+    }
+  }
+
+  return {
+    code: 'unknown',
+    message: error instanceof Error ? error.message : 'Unknown error',
+    retryable: true,
+  }
+}
+
 export function useYearlyAiReportStream(
   options: UseYearlyAiReportStreamOptions,
 ): UseYearlyAiReportStreamReturn {
@@ -49,13 +69,62 @@ export function useYearlyAiReportStream(
   const [error, setError] = useState<AiReportError | null>(null)
 
   const abortControllerRef = useRef<AbortController | null>(null)
+  const activeRequestIdRef = useRef(0)
+  const textFrameRef = useRef<number | null>(null)
   const startTimeRef = useRef<number>(0)
   const latestTextRef = useRef('')
 
-  const start = useEvent(async () => {
-    if (abortControllerRef.current) {
-      abortControllerRef.current.abort()
+  const cancelScheduledTextUpdate = useEvent(() => {
+    if (textFrameRef.current === null) {
+      return
     }
+
+    window.cancelAnimationFrame(textFrameRef.current)
+    textFrameRef.current = null
+  })
+
+  const isActiveRequest = useEvent((requestId: number, abortController: AbortController) => (
+    activeRequestIdRef.current === requestId && abortControllerRef.current === abortController
+  ))
+
+  const scheduleTextUpdate = useEvent((requestId: number, currentText: string) => {
+    latestTextRef.current = currentText
+
+    if (textFrameRef.current !== null) {
+      return
+    }
+
+    textFrameRef.current = window.requestAnimationFrame(() => {
+      textFrameRef.current = null
+
+      if (activeRequestIdRef.current !== requestId) {
+        return
+      }
+
+      const nextText = latestTextRef.current
+      startTransition(() => {
+        setText(nextText)
+      })
+    })
+  })
+
+  const flushTextUpdate = useEvent((requestId: number, currentText: string) => {
+    latestTextRef.current = currentText
+    cancelScheduledTextUpdate()
+
+    if (activeRequestIdRef.current !== requestId) {
+      return
+    }
+
+    setText(currentText)
+  })
+
+  const start = useEvent(async () => {
+    const requestId = activeRequestIdRef.current + 1
+    activeRequestIdRef.current = requestId
+
+    abortControllerRef.current?.abort()
+    cancelScheduledTextUpdate()
 
     setText('')
     latestTextRef.current = ''
@@ -84,34 +153,42 @@ export function useYearlyAiReportStream(
         abortController.signal,
       )
 
+      if (!isActiveRequest(requestId, abortController)) {
+        return
+      }
+
       const finalText = await readTextStream(
         response,
         (currentText) => {
-          latestTextRef.current = currentText
-          setText(currentText)
+          scheduleTextUpdate(requestId, currentText)
         },
         abortController.signal,
       )
 
-      latestTextRef.current = finalText
+      if (!isActiveRequest(requestId, abortController)) {
+        return
+      }
+
+      flushTextUpdate(requestId, finalText)
       const durationMs = performance.now() - startTimeRef.current
       eventTracker.ai.report.generate.success(year, durationMs, finalText.length)
 
       setStatus('success')
     }
     catch (err) {
+      if (!isActiveRequest(requestId, abortController)) {
+        return
+      }
+
       const durationMs = performance.now() - startTimeRef.current
 
-      if (err instanceof DOMException && err.name === 'AbortError') {
+      if (isAbortError(err)) {
         const currentTextLength = latestTextRef.current.length
         eventTracker.ai.report.generate.abort(year, durationMs, currentTextLength)
         setStatus('aborted')
       }
       else {
-        // 区分 AI 流式错误（带错误码）和其他通用错误
-        const reportError: AiReportError = err instanceof AiStreamError
-          ? { code: err.code, message: err.message, retryable: err.retryable }
-          : { code: 'unknown', message: err instanceof Error ? err.message : 'Unknown error', retryable: true }
+        const reportError = toAiReportError(err)
 
         eventTracker.ai.report.generate.error(year, reportError.message, durationMs, configSource)
         setError(reportError)
@@ -119,24 +196,28 @@ export function useYearlyAiReportStream(
       }
     }
     finally {
-      abortControllerRef.current = null
+      if (abortControllerRef.current === abortController) {
+        abortControllerRef.current = null
+      }
     }
   })
 
   const abort = useEvent(() => {
-    if (abortControllerRef.current) {
-      abortControllerRef.current.abort()
-      abortControllerRef.current = null
-    }
+    abortControllerRef.current?.abort()
   })
 
   const reset = useEvent(() => {
-    abort()
+    activeRequestIdRef.current += 1
+    abortControllerRef.current?.abort()
+    abortControllerRef.current = null
+    cancelScheduledTextUpdate()
     setText('')
     latestTextRef.current = ''
     setError(null)
     setStatus('idle')
   })
+
+  useEffect(() => cancelScheduledTextUpdate, [cancelScheduledTextUpdate])
 
   return {
     text,

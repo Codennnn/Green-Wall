@@ -1,5 +1,3 @@
-import { useMemo } from 'react'
-
 import { usePathname, useSearchParams } from 'next/navigation'
 
 /**
@@ -10,10 +8,7 @@ import { usePathname, useSearchParams } from 'next/navigation'
 export function useCurrentPathWithSearch(): string {
   const pathname = usePathname()
   const searchParams = useSearchParams()
+  const query = searchParams.toString()
 
-  return useMemo(() => {
-    const query = searchParams.toString()
-
-    return query ? `${pathname}?${query}` : pathname
-  }, [pathname, searchParams])
+  return query ? `${pathname}?${query}` : pathname
 }

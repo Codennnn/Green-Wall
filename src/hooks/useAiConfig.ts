@@ -1,64 +1,195 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useMemo, useSyncExternalStore } from 'react'
 import { useEvent } from 'react-use-event-hook'
 
 import { StorageKeys } from '~/constants'
+import { extractDomain } from '~/lib/ai-config-url'
 import type {
   AiConfigSource,
   AiConfigState,
   AiRuntimeConfig,
 } from '~/types/ai-config'
 
-function loadConfigFromStorage(): AiRuntimeConfig | null {
-  if (typeof window === 'undefined') {
+export { extractDomain } from '~/lib/ai-config-url'
+
+export interface AiConfigSourceInfo {
+  source: AiConfigSource
+  label: string
+}
+
+const SERVER_AI_CONFIG_STATE: AiConfigState = {
+  config: null,
+  source: 'builtin',
+  isLoaded: false,
+}
+
+const BUILTIN_AI_CONFIG_STATE: AiConfigState = {
+  config: null,
+  source: 'builtin',
+  isLoaded: true,
+}
+
+const BUILTIN_SOURCE_INFO: AiConfigSourceInfo = {
+  source: 'builtin',
+  label: 'builtin',
+}
+
+const aiConfigListeners = new Set<() => void>()
+
+let cachedStorageValue: string | null | undefined
+let cachedState: AiConfigState | undefined
+let storageListenerAttached = false
+
+function isAiRuntimeConfig(value: unknown): value is AiRuntimeConfig {
+  return (
+    typeof value === 'object'
+    && value !== null
+    && 'baseUrl' in value
+    && 'apiKey' in value
+    && 'model' in value
+    && typeof (value as AiRuntimeConfig).baseUrl === 'string'
+    && typeof (value as AiRuntimeConfig).apiKey === 'string'
+    && typeof (value as AiRuntimeConfig).model === 'string'
+  )
+}
+
+function parseConfigFromStorageValue(stored: string | null): AiRuntimeConfig | null {
+  if (!stored) {
     return null
   }
 
   try {
-    const stored = localStorage.getItem(StorageKeys.AiConfig)
-
-    if (!stored) {
-      return null
-    }
-
     const parsed = JSON.parse(stored) as unknown
 
-    if (
-      typeof parsed === 'object'
-      && parsed !== null
-      && 'baseUrl' in parsed
-      && 'apiKey' in parsed
-      && 'model' in parsed
-      && typeof (parsed as AiRuntimeConfig).baseUrl === 'string'
-      && typeof (parsed as AiRuntimeConfig).apiKey === 'string'
-      && typeof (parsed as AiRuntimeConfig).model === 'string'
-    ) {
-      return parsed as AiRuntimeConfig
-    }
-
-    return null
+    return isAiRuntimeConfig(parsed)
+      ? {
+          baseUrl: parsed.baseUrl,
+          apiKey: parsed.apiKey,
+          model: parsed.model,
+        }
+      : null
   }
   catch {
     return null
+  }
+}
+
+function serializeConfigForStorage(config: AiRuntimeConfig): string {
+  return JSON.stringify({
+    baseUrl: config.baseUrl,
+    apiKey: config.apiKey,
+    model: config.model,
+  })
+}
+
+function setCachedAiConfigState(stored: string | null, config?: AiRuntimeConfig | null): void {
+  const resolvedConfig = config === undefined
+    ? parseConfigFromStorageValue(stored)
+    : config
+
+  cachedStorageValue = stored
+  cachedState = resolvedConfig
+    ? {
+        config: resolvedConfig,
+        source: 'custom',
+        isLoaded: true,
+      }
+    : BUILTIN_AI_CONFIG_STATE
+}
+
+function readStoredConfigValue(): string | null {
+  if (typeof window === 'undefined') {
+    return null
+  }
+
+  if (cachedStorageValue !== undefined) {
+    return cachedStorageValue
+  }
+
+  try {
+    cachedStorageValue = localStorage.getItem(StorageKeys.AiConfig)
+  }
+  catch {
+    cachedStorageValue = null
+  }
+
+  return cachedStorageValue
+}
+
+function getAiConfigSnapshot(): AiConfigState {
+  const stored = readStoredConfigValue()
+
+  if (cachedState === undefined || cachedStorageValue !== stored) {
+    setCachedAiConfigState(stored)
+  }
+
+  return cachedState ?? BUILTIN_AI_CONFIG_STATE
+}
+
+function getServerAiConfigSnapshot(): AiConfigState {
+  return SERVER_AI_CONFIG_STATE
+}
+
+function notifyAiConfigListeners(): void {
+  aiConfigListeners.forEach((listener) => {
+    listener()
+  })
+}
+
+function handleStorageChange(event: StorageEvent): void {
+  if (event.key !== StorageKeys.AiConfig && event.key !== null) {
+    return
+  }
+
+  setCachedAiConfigState(event.newValue)
+  notifyAiConfigListeners()
+}
+
+function subscribeAiConfig(listener: () => void): () => void {
+  aiConfigListeners.add(listener)
+
+  if (typeof window !== 'undefined' && !storageListenerAttached) {
+    window.addEventListener('storage', handleStorageChange)
+    storageListenerAttached = true
+  }
+
+  return () => {
+    aiConfigListeners.delete(listener)
+
+    if (typeof window !== 'undefined' && aiConfigListeners.size === 0 && storageListenerAttached) {
+      window.removeEventListener('storage', handleStorageChange)
+      storageListenerAttached = false
+    }
   }
 }
 
 function saveConfigToStorage(config: AiRuntimeConfig): void {
+  const stored = serializeConfigForStorage(config)
+
   if (typeof window === 'undefined') {
+    setCachedAiConfigState(stored, config)
+    notifyAiConfigListeners()
+
     return
   }
 
   try {
-    localStorage.setItem(StorageKeys.AiConfig, JSON.stringify(config))
+    localStorage.setItem(StorageKeys.AiConfig, stored)
   }
   catch {
     // 忽略存储错误（如配额超限）
   }
+
+  setCachedAiConfigState(stored, config)
+  notifyAiConfigListeners()
 }
 
 function removeConfigFromStorage(): void {
   if (typeof window === 'undefined') {
+    setCachedAiConfigState(null, null)
+    notifyAiConfigListeners()
+
     return
   }
 
@@ -68,28 +199,17 @@ function removeConfigFromStorage(): void {
   catch {
     // 忽略删除错误
   }
+
+  setCachedAiConfigState(null, null)
+  notifyAiConfigListeners()
 }
 
-export function extractDomain(baseUrl: string): string {
-  try {
-    const url = new URL(baseUrl)
-
-    return url.hostname
-  }
-  catch {
-    return baseUrl
-  }
-}
-
-export function getSourceDisplayInfo(config: AiRuntimeConfig | null): {
-  source: AiConfigSource
-  label: string
-} {
+export function getSourceDisplayInfo(config: AiRuntimeConfig | null): AiConfigSourceInfo {
   if (!config) {
-    return { source: 'builtin', label: 'builtin' }
+    return BUILTIN_SOURCE_INFO
   }
 
-  return { source: 'custom', label: extractDomain(config.baseUrl) }
+  return { source: 'custom', label: extractDomain(config.baseUrl) ?? config.baseUrl }
 }
 
 export interface UseAiConfigReturn extends AiConfigState {
@@ -98,44 +218,25 @@ export interface UseAiConfigReturn extends AiConfigState {
   /** 重置为默认（删除自定义配置） */
   reset: () => void
   /** 获取来源显示信息 */
-  sourceInfo: { source: AiConfigSource, label: string }
+  sourceInfo: AiConfigSourceInfo
 }
 
 export function useAiConfig(): UseAiConfigReturn {
-  const [state, setState] = useState<AiConfigState>({
-    config: null,
-    source: 'builtin',
-    isLoaded: false,
-  })
-
-  useEffect(() => {
-    const storedConfig = loadConfigFromStorage()
-    setState({
-      config: storedConfig,
-      source: storedConfig ? 'custom' : 'builtin',
-      isLoaded: true,
-    })
-  }, [])
+  const state = useSyncExternalStore(
+    subscribeAiConfig,
+    getAiConfigSnapshot,
+    getServerAiConfigSnapshot,
+  )
 
   const save = useEvent((config: AiRuntimeConfig) => {
     saveConfigToStorage(config)
-    setState({
-      config,
-      source: 'custom',
-      isLoaded: true,
-    })
   })
 
   const reset = useEvent(() => {
     removeConfigFromStorage()
-    setState({
-      config: null,
-      source: 'builtin',
-      isLoaded: true,
-    })
   })
 
-  const sourceInfo = getSourceDisplayInfo(state.config)
+  const sourceInfo = useMemo(() => getSourceDisplayInfo(state.config), [state.config])
 
   return {
     ...state,
