@@ -5,7 +5,7 @@ import type { GraphSettings } from '~/types'
 
 type State = GraphSettings
 
-type Action
+export type GraphSettingAction
   = | {
     type: 'size'
     payload: State['size']
@@ -57,31 +57,60 @@ const initialState: State = {
   showSafariHeader: true,
 }
 
-function graphSettingReducer(state: State, { type, payload }: Action): State {
+function updateState<Key extends keyof State>(
+  state: State,
+  key: Key,
+  value: State[Key],
+): State {
+  if (Object.is(state[key], value)) {
+    return state
+  }
+
+  return { ...state, [key]: value }
+}
+
+function updateYearRange(
+  state: State,
+  yearRange: State['yearRange'],
+): State {
+  if (
+    state.yearRange?.[0] === yearRange?.[0]
+    && state.yearRange?.[1] === yearRange?.[1]
+  ) {
+    return state
+  }
+
+  return { ...state, yearRange }
+}
+
+function graphSettingReducer(
+  state: State,
+  { type, payload }: GraphSettingAction,
+): State {
   switch (type) {
     case 'size':
-      return { ...state, size: payload }
+      return updateState(state, 'size', payload)
 
     case 'yearRange':
-      return { ...state, yearRange: payload }
+      return updateYearRange(state, payload)
 
     case 'daysLabel':
-      return { ...state, daysLabel: payload }
+      return updateState(state, 'daysLabel', payload)
 
     case 'showSafariHeader':
-      return { ...state, showSafariHeader: payload }
+      return updateState(state, 'showSafariHeader', payload)
 
     case 'showAttribution':
-      return { ...state, showAttribution: payload }
+      return updateState(state, 'showAttribution', payload)
 
     case 'blockShape':
-      return { ...state, blockShape: payload }
+      return updateState(state, 'blockShape', payload)
 
     case 'theme':
-      return { ...state, theme: payload }
+      return updateState(state, 'theme', payload)
 
     case 'globalScale':
-      return { ...state, globalScale: payload }
+      return updateState(state, 'globalScale', payload)
 
     case 'reset':
       return initialState

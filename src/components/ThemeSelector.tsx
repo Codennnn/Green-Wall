@@ -1,5 +1,3 @@
-import { useEvent } from 'react-use-event-hook'
-
 import { THEME_PRESETS } from '~/constants'
 import { cn } from '~/lib/utils'
 import type { ThemePreset, Themes } from '~/types'
@@ -14,15 +12,15 @@ interface ThemeSelectorProps extends Omit<React.ComponentProps<'div'>, 'onChange
 interface ThemeOptionProps {
   theme: ThemePreset
   isSelected: boolean
-  onClick: (themeName: Themes) => void
+  onClick?: (themeName: Themes) => void
 }
 
 function ThemeOption({ theme, isSelected, onClick }: ThemeOptionProps) {
   const themeProperties = getThemeProperties(theme)
 
-  const handleClick = useEvent(() => {
-    onClick(theme.name)
-  })
+  function handleClick() {
+    onClick?.(theme.name)
+  }
 
   return (
     <div
@@ -52,16 +50,10 @@ function ThemeOption({ theme, isSelected, onClick }: ThemeOptionProps) {
   )
 }
 
+const selectableThemes = THEME_PRESETS.filter((theme) => theme.selectable !== false)
+
 export function ThemeSelector(props: ThemeSelectorProps) {
   const { value, onChange, className, ...rest } = props
-
-  const handleThemeClick = useEvent(
-    (themeName: Themes) => {
-      onChange?.(themeName)
-    },
-  )
-
-  const selectableThemes = THEME_PRESETS.filter((theme) => theme.selectable !== false)
 
   return (
     <div
@@ -76,7 +68,7 @@ export function ThemeSelector(props: ThemeSelectorProps) {
           key={theme.name}
           isSelected={value === theme.name}
           theme={theme}
-          onClick={handleThemeClick}
+          onClick={onChange}
         />
       ))}
     </div>

@@ -1,5 +1,4 @@
-import { memo, useMemo } from 'react'
-import { useEvent } from 'react-use-event-hook'
+import { memo } from 'react'
 
 import {
   Select,
@@ -8,59 +7,41 @@ import {
   SelectTrigger,
   SelectValue,
 } from '~/components/ui/select'
-import { useData } from '~/DataContext'
-import { eventTracker } from '~/lib/analytics'
-import type { GraphData } from '~/types'
+import type { ContributionYear, GraphSettings } from '~/types'
+
+type YearRange = NonNullable<GraphSettings['yearRange']>
 
 interface YearRangeSelectProps {
-  graphData: GraphData | undefined
+  contributionYears: ContributionYear[]
+  endYear: string | undefined
+  startYear: string | undefined
+  onChange: (yearRange: YearRange) => void
 }
 
-export const YearRangeSelect = memo(function YearRangeSelect(props: YearRangeSelectProps) {
-  const { graphData } = props
-
-  const { settings, dispatchSettings, firstYear, lastYear } = useData()
-
-  const yearRange = useMemo(() => {
-    let [startYear, endYear] = settings.yearRange ?? []
-    startYear ??= firstYear
-    endYear ??= lastYear
-
-    return { startYear, endYear }
-  }, [settings.yearRange, firstYear, lastYear])
-
-  const { startYear, endYear } = yearRange
-
-  const handleStartYearChange = useEvent(
-    (year: string | null) => {
-      if (!year) {
-        return
-      }
-
-      eventTracker.ui.settings.change('year_range', `${year}-${endYear ?? ''}`)
-      dispatchSettings({
-        type: 'yearRange',
-        payload: [year, endYear],
-      })
-    },
-  )
-
-  const handleEndYearChange = useEvent(
-    (year: string | null) => {
-      if (!year) {
-        return
-      }
-
-      eventTracker.ui.settings.change('year_range', `${startYear ?? ''}-${year}`)
-      dispatchSettings({
-        type: 'yearRange',
-        payload: [startYear, year],
-      })
-    },
-  )
-
+export const YearRangeSelect = memo(function YearRangeSelect({
+  contributionYears,
+  endYear,
+  startYear,
+  onChange,
+}: YearRangeSelectProps) {
   if (!startYear || !endYear) {
     return null
+  }
+
+  function handleStartYearChange(year: string | null) {
+    if (!year) {
+      return
+    }
+
+    onChange([year, endYear])
+  }
+
+  function handleEndYearChange(year: string | null) {
+    if (!year) {
+      return
+    }
+
+    onChange([startYear, year])
   }
 
   return (
@@ -73,7 +54,7 @@ export const YearRangeSelect = memo(function YearRangeSelect(props: YearRangeSel
           <SelectValue />
         </SelectTrigger>
         <SelectContent>
-          {graphData?.contributionYears.map((year) => (
+          {contributionYears.map((year) => (
             <SelectItem
               key={year}
               disabled={year > Number(endYear)}
@@ -95,7 +76,7 @@ export const YearRangeSelect = memo(function YearRangeSelect(props: YearRangeSel
           <SelectValue />
         </SelectTrigger>
         <SelectContent>
-          {graphData?.contributionYears.map((year) => (
+          {contributionYears.map((year) => (
             <SelectItem
               key={year}
               disabled={year < Number(startYear)}

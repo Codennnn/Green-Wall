@@ -1,5 +1,4 @@
-import { memo, useId } from 'react'
-import { useEvent } from 'react-use-event-hook'
+import { memo, type ReactNode, startTransition, useId, useOptimistic } from 'react'
 
 import { useTranslations } from 'next-intl'
 import { CircleHelpIcon } from 'lucide-react'
@@ -8,137 +7,249 @@ import { ThemeSelector } from '~/components/ThemeSelector'
 import { Switch } from '~/components/ui/switch'
 import { Toggle, ToggleGroup } from '~/components/ui/toggle-group'
 import { Tooltip, TooltipContent, TooltipTrigger } from '~/components/ui/tooltip'
+import { DEFAULT_BLOCK_SHAPE, DEFAULT_SIZE } from '~/constants'
 import { useData } from '~/DataContext'
 import { BlockShape, GraphSize } from '~/enums'
+import type { GraphSettingAction } from '~/hooks/useGraphSetting'
 import { eventTracker } from '~/lib/analytics'
-import type { Themes } from '~/types'
+import type { GraphSettings, Themes } from '~/types'
 
 import { YearRangeSelect } from './YearRangeSelect'
+
+type BooleanSettingAction = Extract<
+  GraphSettingAction,
+  {
+    payload?: boolean
+  }
+>
+
+interface SettingSwitchFieldProps {
+  checked: boolean
+  id: string
+  label: ReactNode
+  onCheckedChange: (checked: boolean) => void
+}
+
+function SettingSwitchField({
+  checked,
+  id,
+  label,
+  onCheckedChange,
+}: SettingSwitchFieldProps) {
+  return (
+    <fieldset>
+      <label htmlFor={id}>{label}</label>
+      <Switch
+        checked={checked}
+        id={id}
+        onCheckedChange={onCheckedChange}
+      />
+    </fieldset>
+  )
+}
 
 export const AppearanceSetting = memo(function AppearanceSetting() {
   const t = useTranslations('settings')
 
-  const { graphData, settings, dispatchSettings } = useData()
+  const {
+    firstYear,
+    graphData,
+    lastYear,
+    settings,
+    dispatchSettings,
+  } = useData()
+
+  const [optimisticSettings, updateOptimisticSettings] = useOptimistic(
+    settings,
+    (currentSettings: GraphSettings, patch: Partial<GraphSettings>) => ({
+      ...currentSettings,
+      ...patch,
+    }),
+  )
 
   const daysLabelId = useId()
-  const safariHeader = useId()
+  const safariHeaderId = useId()
   const attributionId = useId()
   const globalScaleId = useId()
 
-  const handleDaysLabelChange = useEvent(
-    (checked: boolean) => {
-      eventTracker.ui.settings.change('days_label', checked)
-      dispatchSettings({ type: 'daysLabel', payload: checked })
-    },
-  )
+  const [configuredStartYear, configuredEndYear] = optimisticSettings.yearRange ?? []
+  const startYear = configuredStartYear ?? firstYear
+  const endYear = configuredEndYear ?? lastYear
+  const size = optimisticSettings.size ?? DEFAULT_SIZE
+  const blockShape = optimisticSettings.blockShape ?? DEFAULT_BLOCK_SHAPE
+  const daysLabel = optimisticSettings.daysLabel ?? false
+  const showSafariHeader = optimisticSettings.showSafariHeader ?? true
+  const showAttribution = optimisticSettings.showAttribution ?? true
+  const globalScale = optimisticSettings.globalScale ?? false
 
-  const handleSafariHeaderChange = useEvent(
-    (checked: boolean) => {
-      eventTracker.ui.settings.change('show_safari_header', checked)
-      dispatchSettings({ type: 'showSafariHeader', payload: checked })
-    },
-  )
+  function commitSettingsChange(
+    action: GraphSettingAction,
+    optimisticPatch: Partial<GraphSettings>,
+  ) {
+    startTransition(() => {
+      updateOptimisticSettings(optimisticPatch)
+      dispatchSettings(action)
+    })
+  }
 
-  const handleAttributionChange = useEvent(
-    (checked: boolean) => {
-      eventTracker.ui.settings.change('show_attribution', checked)
-      dispatchSettings({ type: 'showAttribution', payload: checked })
-    },
-  )
+  function updateBooleanSetting(
+    actionType: BooleanSettingAction['type'],
+    settingKey: 'daysLabel' | 'showSafariHeader' | 'showAttribution' | 'globalScale',
+    trackingKey: string,
+    checked: boolean,
+  ) {
+    if (optimisticSettings[settingKey] === checked) {
+      return
+    }
 
-  const handleGlobalScaleChange = useEvent(
-    (checked: boolean) => {
-      eventTracker.ui.settings.change('global_scale', checked)
-      dispatchSettings({ type: 'globalScale', payload: checked })
-    },
-  )
+    eventTracker.ui.settings.change(trackingKey, checked)
+    commitSettingsChange(
+      { type: actionType, payload: checked } as BooleanSettingAction,
+      { [settingKey]: checked },
+    )
+  }
 
-  const handleSizeChange = useEvent(
-    (size: string[]) => {
-      if (size.length > 0) {
-        eventTracker.ui.settings.change('graph_size', size[0])
-        dispatchSettings({ type: 'size', payload: size[0] as GraphSize })
-      }
-    },
-  )
+  function handleDaysLabelChange(checked: boolean) {
+    if (daysLabel === checked) {
+      return
+    }
 
-  const handleBlockShapeChange = useEvent(
-    (shape: string[]) => {
-      if (shape.length > 0) {
-        eventTracker.ui.settings.change('block_shape', shape[0])
-        dispatchSettings({
-          type: 'blockShape',
-          payload: shape[0] as BlockShape,
-        })
-      }
-    },
-  )
+    updateBooleanSetting('daysLabel', 'daysLabel', 'days_label', checked)
+  }
 
-  const handleThemeChange = useEvent(
-    (theme: Themes) => {
-      eventTracker.ui.theme.change(theme)
-      eventTracker.ui.settings.change('theme', theme)
-      dispatchSettings({ type: 'theme', payload: theme })
-    },
-  )
+  function handleSafariHeaderChange(checked: boolean) {
+    if (showSafariHeader === checked) {
+      return
+    }
+
+    updateBooleanSetting('showSafariHeader', 'showSafariHeader', 'show_safari_header', checked)
+  }
+
+  function handleAttributionChange(checked: boolean) {
+    if (showAttribution === checked) {
+      return
+    }
+
+    updateBooleanSetting('showAttribution', 'showAttribution', 'show_attribution', checked)
+  }
+
+  function handleGlobalScaleChange(checked: boolean) {
+    if (globalScale === checked) {
+      return
+    }
+
+    updateBooleanSetting('globalScale', 'globalScale', 'global_scale', checked)
+  }
+
+  function handleSizeChange(nextSizeValues: string[]) {
+    const nextSize = nextSizeValues[0] as GraphSize | undefined
+
+    if (!nextSize || size === nextSize) {
+      return
+    }
+
+    eventTracker.ui.settings.change('graph_size', nextSize)
+    commitSettingsChange(
+      { type: 'size', payload: nextSize },
+      { size: nextSize },
+    )
+  }
+
+  function handleBlockShapeChange(nextShapeValues: string[]) {
+    const nextBlockShape = nextShapeValues[0] as BlockShape | undefined
+
+    if (!nextBlockShape || blockShape === nextBlockShape) {
+      return
+    }
+
+    eventTracker.ui.settings.change('block_shape', nextBlockShape)
+    commitSettingsChange(
+      { type: 'blockShape', payload: nextBlockShape },
+      { blockShape: nextBlockShape },
+    )
+  }
+
+  function handleThemeChange(theme: Themes) {
+    if (optimisticSettings.theme === theme) {
+      return
+    }
+
+    eventTracker.ui.theme.change(theme)
+    eventTracker.ui.settings.change('theme', theme)
+    commitSettingsChange(
+      { type: 'theme', payload: theme },
+      { theme },
+    )
+  }
+
+  function handleYearRangeChange(yearRange: NonNullable<GraphSettings['yearRange']>) {
+    if (
+      optimisticSettings.yearRange?.[0] === yearRange[0]
+      && optimisticSettings.yearRange?.[1] === yearRange[1]
+    ) {
+      return
+    }
+
+    eventTracker.ui.settings.change('year_range', `${yearRange[0] ?? ''}-${yearRange[1] ?? ''}`)
+    commitSettingsChange(
+      { type: 'yearRange', payload: yearRange },
+      { yearRange },
+    )
+  }
 
   return (
     <div className="appearance-setting min-w-[min(40vw,220px)] max-w-[min(90vw,280px)] text-muted-foreground space-y-2">
       <fieldset>
         <label>{t('yearRange')}</label>
-        <YearRangeSelect graphData={graphData} />
-      </fieldset>
-
-      <fieldset>
-        <label htmlFor={daysLabelId}>{t('daysLabel')}</label>
-        <Switch
-          checked={settings.daysLabel}
-          defaultChecked={true}
-          id={daysLabelId}
-          onCheckedChange={handleDaysLabelChange}
+        <YearRangeSelect
+          contributionYears={graphData?.contributionYears ?? []}
+          endYear={endYear}
+          startYear={startYear}
+          onChange={handleYearRangeChange}
         />
       </fieldset>
 
-      <fieldset>
-        <label htmlFor={safariHeader}>{t('safariHeader')}</label>
-        <Switch
-          checked={settings.showSafariHeader}
-          defaultChecked={true}
-          id={safariHeader}
-          onCheckedChange={handleSafariHeaderChange}
-        />
-      </fieldset>
+      <SettingSwitchField
+        checked={daysLabel}
+        id={daysLabelId}
+        label={t('daysLabel')}
+        onCheckedChange={handleDaysLabelChange}
+      />
 
-      <fieldset>
-        <label htmlFor={attributionId}>{t('attribution')}</label>
-        <Switch
-          checked={settings.showAttribution}
-          defaultChecked={true}
-          id={attributionId}
-          onCheckedChange={handleAttributionChange}
-        />
-      </fieldset>
+      <SettingSwitchField
+        checked={showSafariHeader}
+        id={safariHeaderId}
+        label={t('safariHeader')}
+        onCheckedChange={handleSafariHeaderChange}
+      />
 
-      <fieldset>
-        <label className="flex items-center gap-1" htmlFor={globalScaleId}>
-          {t('globalScale')}
-          <Tooltip>
-            <TooltipTrigger className="leading-none">
-              <CircleHelpIcon className="inline-block size-4 cursor-help opacity-90" />
-            </TooltipTrigger>
-            <TooltipContent>
-              <span className="inline-block max-w-xs leading-5">
-                {t('globalScaleHint')}
-              </span>
-            </TooltipContent>
-          </Tooltip>
-        </label>
-        <Switch
-          checked={settings.globalScale ?? false}
-          id={globalScaleId}
-          onCheckedChange={handleGlobalScaleChange}
-        />
-      </fieldset>
+      <SettingSwitchField
+        checked={showAttribution}
+        id={attributionId}
+        label={t('attribution')}
+        onCheckedChange={handleAttributionChange}
+      />
+
+      <SettingSwitchField
+        checked={globalScale}
+        id={globalScaleId}
+        label={(
+          <span className="flex items-center gap-1">
+            {t('globalScale')}
+            <Tooltip>
+              <TooltipTrigger className="leading-none">
+                <CircleHelpIcon className="inline-block size-4 cursor-help opacity-90" />
+              </TooltipTrigger>
+              <TooltipContent>
+                <span className="inline-block max-w-xs leading-5">
+                  {t('globalScaleHint')}
+                </span>
+              </TooltipContent>
+            </Tooltip>
+          </span>
+        )}
+        onCheckedChange={handleGlobalScaleChange}
+      />
 
       <fieldset>
         <label className="flex items-center gap-1">
@@ -155,7 +266,7 @@ export const AppearanceSetting = memo(function AppearanceSetting() {
           </Tooltip>
         </label>
         <ToggleGroup
-          value={[settings.size]}
+          value={[size]}
           onValueChange={handleSizeChange}
         >
           <Tooltip>
@@ -182,7 +293,7 @@ export const AppearanceSetting = memo(function AppearanceSetting() {
       <fieldset>
         <label className="flex items-center">{t('blockShape')}</label>
         <ToggleGroup
-          value={[settings.blockShape]}
+          value={[blockShape]}
           onValueChange={handleBlockShapeChange}
         >
           <Tooltip>
@@ -204,7 +315,7 @@ export const AppearanceSetting = memo(function AppearanceSetting() {
         <label>{t('themes')}</label>
         <ThemeSelector
           className="mt-3 pl-1"
-          value={settings.theme}
+          value={optimisticSettings.theme}
           onChange={handleThemeChange}
         />
       </fieldset>
