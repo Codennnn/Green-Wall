@@ -72,7 +72,7 @@ export async function GET(
 
         const graphData: GraphData = {
           ...githubUser,
-          contributionYears: filteredYears,
+          contributionYears,
           contributionCalendars,
         }
 

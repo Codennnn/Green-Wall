@@ -19,6 +19,8 @@ export interface YearSelectProps {
   value: string
   /** 年份变更回调 */
   onValueChange: (value: string | null) => void
+  /** 显式年份选项；传入时优先于 startYear/endYear */
+  years?: number[]
   /** 禁用状态 */
   disabled?: boolean
   /** 年份范围起始年（包含），默认 2008 */
@@ -36,6 +38,7 @@ export interface YearSelectProps {
 export function YearSelect({
   value,
   onValueChange,
+  years,
   disabled = false,
   startYear = DEFAULT_START_YEAR,
   endYear,
@@ -47,14 +50,20 @@ export function YearSelect({
   const resolvedEndYear = endYear ?? currentYear
 
   const yearOptions = useMemo(() => {
-    const years: number[] = []
-
-    for (let year = resolvedEndYear; year >= startYear; year--) {
-      years.push(year)
+    if (years) {
+      return Array.from(new Set(years))
+        .filter(Number.isFinite)
+        .sort((a, b) => b - a)
     }
 
-    return years
-  }, [resolvedEndYear, startYear])
+    const rangeYears: number[] = []
+
+    for (let year = resolvedEndYear; year >= startYear; year--) {
+      rangeYears.push(year)
+    }
+
+    return rangeYears
+  }, [resolvedEndYear, startYear, years])
 
   return (
     <Select

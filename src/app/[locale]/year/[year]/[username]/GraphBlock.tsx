@@ -71,14 +71,16 @@ export function GraphBlock() {
   const { setGraphData } = useData()
   const { data: session, isPending: isSessionPending } = useSession()
   const viewerLogin = (session?.user as { login?: string } | undefined)?.login
+  const isViewingOwnProfile
+    = viewerLogin?.toLowerCase() === githubUsername.toLowerCase()
   const dataAccessOptions = useMemo<DataAccessOptions>(
     () => ({
-      includePrivate: Boolean(viewerLogin),
-      authCacheKey: viewerLogin
+      includePrivate: isViewingOwnProfile,
+      authCacheKey: isViewingOwnProfile && viewerLogin
         ? `github:${viewerLogin.toLowerCase()}`
         : 'public',
     }),
-    [viewerLogin],
+    [isViewingOwnProfile, viewerLogin],
   )
   const queriesEnabled = !isSessionPending && Number.isFinite(queryYear)
 
@@ -107,6 +109,16 @@ export function GraphBlock() {
       },
     )
   const contributionData = contributionResult?.data
+  const contributionYears = contributionData?.contributionYears
+  const yearSelectOptions = useMemo(() => {
+    if (!contributionYears?.length) {
+      return [queryYear]
+    }
+
+    return contributionYears
+  }, [contributionYears, queryYear])
+  const isYearSelectLoading
+    = isSessionPending || contributionLoading || !contributionYears?.length
 
   const {
     data: reposData,
@@ -259,10 +271,11 @@ export function GraphBlock() {
         <div className="ml-auto flex items-center gap-3 ring-4 ring-background bg-background">
           <YearSelect
             alignItemWithTrigger={false}
-            disabled={isDownloading || isLoading}
+            disabled={isDownloading || isYearSelectLoading}
             triggerClassName="h-8 text-sm"
             value={String(queryYear)}
             valueClassName="font-bold text-lg"
+            years={yearSelectOptions}
             onValueChange={handleYearChange}
           />
 

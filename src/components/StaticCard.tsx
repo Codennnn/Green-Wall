@@ -1,18 +1,47 @@
+'use client'
+
+import {
+  type ComponentProps,
+  type PropsWithChildren,
+  type ReactNode,
+  useSyncExternalStore,
+} from 'react'
+
 import { LoaderIcon } from 'lucide-react'
 
 import { cn } from '~/lib/utils'
 
-export function SpinningLoader() {
+type StoreSubscribe = (onStoreChange: () => void) => () => void
+
+const unsubscribeFromHydration = (): void => undefined
+
+const subscribeToHydration: StoreSubscribe = () => unsubscribeFromHydration
+
+function useIsHydrated() {
+  return useSyncExternalStore(
+    subscribeToHydration,
+    () => true,
+    () => false,
+  )
+}
+
+export type StatPrimitiveValue = number | string
+
+type SpinningLoaderProps = ComponentProps<typeof LoaderIcon>
+
+export function SpinningLoader({ className, ...props }: SpinningLoaderProps) {
   return (
     <LoaderIcon
-      className="size-4 animate-spin text-muted-foreground"
+      aria-hidden="true"
+      className={cn('size-4 animate-spin text-muted-foreground', className)}
+      {...props}
     />
   )
 }
 
 export interface StaticCardTitleProps {
-  children: React.ReactNode
-  icon: React.ReactNode
+  children: ReactNode
+  icon: ReactNode
 }
 
 export function StaticCardTitle(props: StaticCardTitleProps) {
@@ -27,7 +56,7 @@ export function StaticCardTitle(props: StaticCardTitleProps) {
 }
 
 export interface StaticCardProps {
-  children: React.ReactNode
+  children: ReactNode
   className?: string
   contentClassName?: string
 }
@@ -65,10 +94,10 @@ export function StaticCard(props: StaticCardProps) {
 }
 
 export interface StatValueProps {
-  value: number | string | undefined
-  subValue?: number | string | undefined
-  isLoading: boolean
-  fallback?: number | string
+  value?: StatPrimitiveValue
+  subValue?: StatPrimitiveValue
+  isLoading?: boolean
+  fallback?: StatPrimitiveValue
   /** 是否启用大尺寸展示样式（用于跨行卡片） */
   large?: boolean
   /** 数值单位，显示在数值后面 */
@@ -76,14 +105,24 @@ export interface StatValueProps {
 }
 
 export function StatValue(props: StatValueProps) {
-  const { value, subValue, isLoading, fallback = 0, large, unit } = props
+  const {
+    value,
+    subValue,
+    isLoading = false,
+    fallback = 0,
+    large = false,
+    unit,
+  } = props
+  const isHydrated = useIsHydrated()
+  const showLoader = isHydrated && isLoading
 
   const finalValue = value ?? fallback
+  const hasSubValue = subValue !== undefined && subValue !== ''
 
   return (
     <div className={cn('tabular-nums', large ? 'ml-auto md:ml-0 md:w-full' : 'ml-auto')}>
       {
-        isLoading
+        showLoader
           ? <SpinningLoader />
           : (
               <div
@@ -106,7 +145,7 @@ export function StatValue(props: StatValueProps) {
                   )}
                 </span>
 
-                {!!subValue && (
+                {hasSubValue && (
                   <span
                     className={cn(
                       'text-foreground/70 leading-none',
@@ -124,8 +163,8 @@ export function StatValue(props: StatValueProps) {
 }
 
 export interface StatCardProps {
-  icon: React.ReactNode
-  title?: React.ReactNode
+  icon: ReactNode
+  title?: ReactNode
   onMouseEnter?: () => void
   onMouseLeave?: () => void
   /** 外层容器的 className */
@@ -137,19 +176,10 @@ export interface StatCardProps {
   /** 卡片内容的 className */
   cardContentClassName?: string
   /** StatValue 组件的属性配置 */
-  statValueProps?: {
-    value?: number | string
-    subValue?: number | string
-    isLoading?: boolean
-    fallback?: number | string
-    /** 是否启用大尺寸展示样式（用于跨行卡片） */
-    large?: boolean
-    /** 数值单位，显示在数值后面 */
-    unit?: string
-  }
+  statValueProps?: StatValueProps
 }
 
-export function StatCard(props: React.PropsWithChildren<StatCardProps>) {
+export function StatCard(props: PropsWithChildren<StatCardProps>) {
   const {
     children,
     icon,
@@ -181,14 +211,7 @@ export function StatCard(props: React.PropsWithChildren<StatCardProps>) {
           )}
 
           {!!statValueProps && (
-            <StatValue
-              fallback={statValueProps.fallback}
-              isLoading={statValueProps.isLoading ?? true}
-              large={statValueProps.large}
-              subValue={statValueProps.subValue}
-              unit={statValueProps.unit}
-              value={statValueProps.value}
-            />
+            <StatValue {...statValueProps} />
           )}
         </div>
 

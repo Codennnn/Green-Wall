@@ -1,3 +1,5 @@
+import type { ReactNode } from 'react'
+
 import { Empty, EmptyDescription } from '~/components/ui/empty'
 import {
   Popover,
@@ -9,14 +11,14 @@ import { Skeleton } from '~/components/ui/skeleton'
 import { cn } from '~/lib/utils'
 
 export interface StatCardWithPopoverProps<T extends { url: string }> {
-  children: React.ReactNode
+  children: ReactNode
   ariaLabel: string
   popoverTitle: string
   popoverCount: number | undefined
   isLoading: boolean
   error: Error | null | undefined
   items: T[]
-  renderItem: (item: T) => React.ReactNode
+  renderItem: (item: T) => ReactNode
   emptyMessage: string
   errorMessage: string
   side?: 'left' | 'right' | 'top' | 'bottom'
@@ -49,11 +51,11 @@ export function StatCardWithPopover<T extends { url: string }>(props: StatCardWi
       <Popover>
         <PopoverTrigger
           openOnHover
+          nativeButton={false}
           render={(
-            <button
+            <div
               aria-label={ariaLabel}
               className="block h-full w-full cursor-pointer appearance-none border-0 bg-transparent p-0 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500/40 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-              type="button"
             />
           )}
         >
