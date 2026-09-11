@@ -5,8 +5,6 @@ import { THEME_PRESETS } from '~/constants'
 import { ContributionLevel } from '~/enums'
 import { fetchContributionsCollection, fetchGitHubUser } from '~/services'
 
-export const runtime = 'edge'
-
 const IMAGE_WIDTH = 1200
 const IMAGE_HEIGHT = 630
 
