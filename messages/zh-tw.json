@@ -23,7 +23,6 @@
   },
   "common": {
     "appName": "Green Wall",
-    "loading": "載入中...",
     "copy": "複製",
     "copied": "已複製",
     "close": "關閉",
@@ -92,9 +91,6 @@
   "discovery": {
     "popularProfiles": "熱門使用者",
     "popularDescription": "一鍵看看他們的貢獻牆長什麼樣",
-    "recentlyViewed": "最近瀏覽",
-    "recentDescription": "從你上次生成的記錄繼續",
-    "lastViewed": "上次查看 {time}",
     "famousUsers": {
       "torvalds": "Linux/Git 之父",
       "gaearon": "React 核心團隊",
@@ -109,12 +105,10 @@
   "stats": {
     "maxContributions": "你最活躍的一天",
     "averagePerDay": "日均貢獻",
-    "mostActiveDay": "一週裡最忙的一天",
     "mostActiveMonth": "這一年的高光月份",
     "longestStreak": "最長連續打卡",
     "longestGap": "休息最久的一段時間",
     "repos": "{year} 年你在折騰的儲存庫",
-    "reposCreated": "{year} 年你新開張的儲存庫",
     "reposModeCreated": "新開的",
     "reposModeInteractions": "最出圈的",
     "issues": "{year} 年你碰過的 Issues",
@@ -123,13 +117,10 @@
     "weeklyDistribution": "{year} 你一週裡的節奏",
     "contributions": "次貢獻",
     "noLanguageData": "還沒有形成明顯的語言畫像",
-    "top": "前 {count} 名",
     "peak": "高光時刻：{month}",
     "total": "這一年的總貢獻",
     "mostActive": "最忙的時候",
-    "showRepos": "查看 {year} 年你新開的儲存庫",
     "showIssues": "看看你在 {year} 年碰過哪些 Issues",
-    "reposIn": "{year} 年你新開的儲存庫",
     "issuesIn": "{year} 年你碰過的 Issues",
     "downloadYearlyReport": "下載我的年度回顧",
     "unitContributions": "次貢獻",
@@ -150,9 +141,7 @@
     "copy": "複製",
     "copied": "已複製",
     "viewFull": "展開",
-    "charCount": "{count} 字",
     "generating": "正在生成...",
-    "failed": "生成失敗，請重試",
     "builtinErrorHint": "內建 AI 服務出現錯誤，你可以設定自訂 AI 服務作為備選方案。",
     "customErrorHint": "自訂 AI 服務出現錯誤，你可以恢復預設改用內建 AI 服務作為備選方案。",
     "errorReasonLabel": "具體原因：",
@@ -206,10 +195,7 @@
   "errors": {
     "somethingWentWrong": "出了點問題，請稍後再試。",
     "badCredentials": "本地執行需要設定 GitHub Access Token 才能拉取資料。按 <link>這個步驟</link> 設定好環境變數即可。",
-    "thisStep": "這個步驟",
     "noIssues": "未找到 Issues",
-    "loadingRepos": "正在載入儲存庫…",
-    "loadingIssues": "正在載入 Issues…",
     "failedLoadRepos": "載入儲存庫失敗",
     "failedLoadIssues": "載入 Issues 失敗"
   },
@@ -237,8 +223,7 @@
     "support": "支持與分享",
     "supportContent": "如果 Green Wall 幫你把努力變得更可見，歡迎在 <github>GitHub</github> 點個 Star，或去 <productHunt>Product Hunt</productHunt> 支持一下；也歡迎把它分享給同事、朋友，或放進你的作品集。",
     "reportingIssues": "回饋與共建",
-    "reportingIssuesContent": "遇到問題、想要新功能、或者希望體驗更順手，都可以到 <link>GitHub Issues</link> 留言交流。我們會認真看每一條回饋。",
-    "githubIssues": "GitHub Issues"
+    "reportingIssuesContent": "遇到問題、想要新功能、或者希望體驗更順手，都可以到 <link>GitHub Issues</link> 留言交流。我們會認真看每一條回饋。"
   },
   "themeMode": {
     "light": "淺色",
@@ -286,9 +271,7 @@
     "titleWithYear": "{year} 年度 GitHub 回顧",
     "description": "輸入使用者名稱並選擇年份，查看詳細的分析資料與年度報告。",
     "descriptionWithYear": "探索 {year} 年的 GitHub 貢獻資料，查看詳細的分析與年度報告。",
-    "usernamePlaceholder": "輸入 GitHub 使用者名稱",
     "searchPlaceholder": "輸入 GitHub 使用者名稱",
-    "selectYear": "選擇年份",
     "viewWrapped": "查看回顧",
     "myQuickEntryCta": "我的 {year} 回顧",
     "orSearchOthers": "或搜尋其他使用者",
@@ -296,27 +279,10 @@
     "loginMissingDesc": "請重新登入以查看你的年度回顧。",
     "reSignIn": "重新登入"
   },
-  "navigation": {
-    "backToOverview": "返回總覽",
-    "backToHome": "返回首頁",
-    "home": "首頁",
-    "yearReport": "{year} 年度回顧",
-    "switchYear": "切換年份",
-    "previousYear": "上一年",
-    "nextYear": "下一年",
-    "viewYearDetails": "查看 {year} 年詳情",
-    "inspectYear": "查看年度詳情"
-  },
   "auth": {
     "signIn": "GitHub 登入",
     "signOut": "登出",
     "yearReview": "{year} 年度回顧",
-    "modePublic": "公開模式",
-    "modeAuthorized": "包含私人貢獻",
-    "modePublicMismatch": "公開模式（正在查看其他使用者）",
-    "promptTitle": "解鎖私人儲存庫貢獻",
-    "promptDescription": "登入 GitHub 後，查看自己的貢獻牆時將包含私人儲存庫的貢獻記錄。",
-    "scopeExplanation": "我們只會在產生你自己的資料時使用 GitHub 授權，不會用於查看其他使用者。",
     "signInBenefitsTitle": "登入後可解鎖更多資料",
     "signInBenefitsIntro": "使用 GitHub 授權登入後，你可以：",
     "signInBenefitsItemYearWrapped": "一鍵打開你的年度回顧與更完整的統計",
@@ -379,15 +345,7 @@
   },
   "repo": {
     "analysis": {
-      "title": "儲存庫深度分析",
       "error": "載入儲存庫資料失敗",
-      "coreMetrics": {
-        "title": "核心指標",
-        "stars": "星標",
-        "forks": "派生",
-        "commits": "提交",
-        "issues": "問題"
-      },
       "healthMetrics": {
         "title": "健康度分析",
         "issueStatus": "Issue 狀態",
@@ -395,6 +353,8 @@
         "openRatio": "Open 佔比",
         "mergedRatio": "Merged 佔比"
       },
+      "healthScore": "健康度評分",
+      "engagementScore": "參與度評分",
       "status": {
         "archived": "已封存",
         "private": "私有",
@@ -412,12 +372,9 @@
         "releases": "版本發佈",
         "latestRelease": "最新版本",
         "totalReleases": "總發佈數",
-        "releaseCount": "{count} 個版本",
-        "topics": "專案標籤",
         "diskUsage": "儲存庫大小",
         "noLicense": "無授權條款",
         "noReleases": "暫無發佈版本",
-        "noTopics": "暫無標籤",
         "noLanguages": "暫無語言資料",
         "publishedAt": "發佈於",
         "viewRelease": "檢視 Release"
@@ -433,33 +390,10 @@
     }
   },
   "repoAnalysis": {
-    "title": "儲存庫分析",
-    "totalRepos": "儲存庫總數",
-    "sortBy": "排序方式",
-    "sortOptions": {
-      "healthScore": "健康度評分",
-      "engagement": "參與度",
-      "stars": "星標數",
-      "updated": "最近更新",
-      "created": "建立時間"
-    },
-    "error": "錯誤",
-    "retry": "重試",
     "emptyState": {
       "title": "期待你的第一個倉庫",
       "description": "開始你的開源之旅吧"
-    },
-    "forks": "派生",
-    "healthScore": "健康度評分",
-    "engagementScore": "參與度評分",
-    "lastUpdated": "最近更新",
-    "today": "今天",
-    "daysAgo": "{days} 天前",
-    "statsOverview": "統計概覽",
-    "totalStars": "總星標數",
-    "totalForks": "總派生數",
-    "avgHealthScore": "平均健康度",
-    "avgEngagementScore": "平均參與度"
+    }
   },
   "relativeTime": {
     "today": "今天",

@@ -23,7 +23,6 @@
   },
   "common": {
     "appName": "Green Wall",
-    "loading": "加载中...",
     "copy": "复制",
     "copied": "已复制",
     "close": "关闭",
@@ -92,9 +91,6 @@
   "discovery": {
     "popularProfiles": "热门用户",
     "popularDescription": "一键看看他们的贡献墙长什么样",
-    "recentlyViewed": "最近浏览",
-    "recentDescription": "从你上次生成的记录继续",
-    "lastViewed": "上次查看 {time}",
     "famousUsers": {
       "torvalds": "Linux/Git 之父",
       "gaearon": "React 核心团队",
@@ -109,12 +105,10 @@
   "stats": {
     "maxContributions": "你最活跃的一天",
     "averagePerDay": "日均贡献",
-    "mostActiveDay": "一周里最忙的一天",
     "mostActiveMonth": "这一年的高光月份",
     "longestStreak": "最长连续打卡",
     "longestGap": "休息最久的一段时间",
     "repos": "{year} 年你在折腾的仓库",
-    "reposCreated": "{year} 年你新开张的仓库",
     "reposModeCreated": "新开的",
     "reposModeInteractions": "最出圈的",
     "issues": "{year} 年碰过的 Issues",
@@ -123,13 +117,10 @@
     "weeklyDistribution": "{year} 你一周里的节奏",
     "contributions": "次贡献",
     "noLanguageData": "还没有形成明显的语言画像",
-    "top": "前 {count} 名",
     "peak": "高光时刻：{month}",
     "total": "这一年的总贡献",
     "mostActive": "最忙的时候",
-    "showRepos": "查看 {year} 年你新开的仓库",
     "showIssues": "看看你在 {year} 年碰过哪些 Issues",
-    "reposIn": "{year} 年你新开的仓库",
     "issuesIn": "{year} 年你碰过的 Issues",
     "downloadYearlyReport": "下载我的年度回顾",
     "unitContributions": "次贡献",
@@ -150,9 +141,7 @@
     "copy": "复制",
     "copied": "已复制",
     "viewFull": "展开",
-    "charCount": "{count} 字",
     "generating": "正在生成...",
-    "failed": "生成失败，请重试",
     "builtinErrorHint": "内置 AI 服务出现错误，你可以配置自定义 AI 服务作为备选方案。",
     "customErrorHint": "自定义 AI 服务出现错误，你可以恢复默认改用内置 AI 服务作为备选方案。",
     "errorReasonLabel": "具体原因：",
@@ -206,10 +195,7 @@
   "errors": {
     "somethingWentWrong": "出了点问题，请稍后再试。",
     "badCredentials": "本地运行需要配置 GitHub Access Token 才能拉取数据。按 <link>这个步骤</link> 设置好环境变量即可。",
-    "thisStep": "这个步骤",
     "noIssues": "未找到 Issues",
-    "loadingRepos": "正在加载仓库…",
-    "loadingIssues": "正在加载 Issues…",
     "failedLoadRepos": "加载仓库失败",
     "failedLoadIssues": "加载 Issues 失败"
   },
@@ -237,8 +223,7 @@
     "support": "支持与分享",
     "supportContent": "如果 Green Wall 帮你把努力变得更可见，欢迎在 <github>GitHub</github> 点个 Star，或去 <productHunt>Product Hunt</productHunt> 支持一下；也欢迎把它分享给同事、朋友，或放进你的作品集。",
     "reportingIssues": "反馈与共建",
-    "reportingIssuesContent": "遇到问题、想要新功能、或者希望体验更顺手，都可以到 <link>GitHub Issues</link> 留言交流。我们会认真看每一条反馈。",
-    "githubIssues": "GitHub Issues"
+    "reportingIssuesContent": "遇到问题、想要新功能、或者希望体验更顺手，都可以到 <link>GitHub Issues</link> 留言交流。我们会认真看每一条反馈。"
   },
   "themeMode": {
     "light": "浅色",
@@ -286,9 +271,7 @@
     "titleWithYear": "{year} 年度 GitHub 回顾",
     "description": "输入用户名并选择年份，查看详细的分析数据与年度报告。",
     "descriptionWithYear": "探索 {year} 年的 GitHub 贡献数据，查看详细的分析与年度报告。",
-    "usernamePlaceholder": "输入 GitHub 用户名",
     "searchPlaceholder": "输入 GitHub 用户名",
-    "selectYear": "选择年份",
     "viewWrapped": "查看回顾",
     "myQuickEntryCta": "我的 {year} 回顾",
     "orSearchOthers": "或搜索其他用户",
@@ -296,27 +279,10 @@
     "loginMissingDesc": "请重新登录以查看你的年度回顾。",
     "reSignIn": "重新登录"
   },
-  "navigation": {
-    "backToOverview": "返回总览",
-    "backToHome": "返回首页",
-    "home": "首页",
-    "yearReport": "{year} 年度回顾",
-    "switchYear": "切换年份",
-    "previousYear": "上一年",
-    "nextYear": "下一年",
-    "viewYearDetails": "查看 {year} 年详情",
-    "inspectYear": "查看年度详情"
-  },
   "auth": {
     "signIn": "GitHub 登录",
     "signOut": "退出登录",
     "yearReview": "{year} 年度回顾",
-    "modePublic": "公开模式",
-    "modeAuthorized": "包含私有贡献",
-    "modePublicMismatch": "公开模式（正在查看其他用户）",
-    "promptTitle": "解锁私有仓库贡献",
-    "promptDescription": "登录 GitHub 后，查看自己的贡献墙时将包含私有仓库的贡献记录。",
-    "scopeExplanation": "我们只会在生成你自己的数据时使用 GitHub 授权，不会用于查看其他用户。",
     "signInBenefitsTitle": "登录后可解锁更多数据",
     "signInBenefitsIntro": "使用 GitHub 授权登录后，你可以：",
     "signInBenefitsItemYearWrapped": "一键打开你的年度回顾与更完整的统计",
@@ -379,15 +345,7 @@
   },
   "repo": {
     "analysis": {
-      "title": "仓库深度分析",
       "error": "加载仓库数据失败",
-      "coreMetrics": {
-        "title": "核心指标",
-        "stars": "星标",
-        "forks": "派生",
-        "commits": "提交",
-        "issues": "问题"
-      },
       "healthMetrics": {
         "title": "健康度分析",
         "issueStatus": "Issue 状态",
@@ -395,6 +353,8 @@
         "openRatio": "Open 占比",
         "mergedRatio": "Merged 占比"
       },
+      "healthScore": "健康度评分",
+      "engagementScore": "参与度评分",
       "status": {
         "archived": "已归档",
         "private": "私有",
@@ -412,12 +372,9 @@
         "releases": "版本发布",
         "latestRelease": "最新版本",
         "totalReleases": "总发布数",
-        "releaseCount": "{count} 个版本",
-        "topics": "项目标签",
         "diskUsage": "仓库大小",
         "noLicense": "无许可证",
         "noReleases": "暂无发布版本",
-        "noTopics": "暂无标签",
         "noLanguages": "暂无语言数据",
         "publishedAt": "发布于",
         "viewRelease": "查看 Release"
@@ -433,33 +390,10 @@
     }
   },
   "repoAnalysis": {
-    "title": "仓库分析",
-    "totalRepos": "仓库总数",
-    "sortBy": "排序方式",
-    "sortOptions": {
-      "healthScore": "健康度评分",
-      "engagement": "参与度",
-      "stars": "星标数",
-      "updated": "最近更新",
-      "created": "创建时间"
-    },
-    "error": "错误",
-    "retry": "重试",
     "emptyState": {
       "title": "期待你的第一个仓库",
       "description": "开始你的开源之旅吧"
-    },
-    "forks": "派生",
-    "healthScore": "健康度评分",
-    "engagementScore": "参与度评分",
-    "lastUpdated": "最近更新",
-    "today": "今天",
-    "daysAgo": "{days} 天前",
-    "statsOverview": "统计概览",
-    "totalStars": "总星标数",
-    "totalForks": "总派生数",
-    "avgHealthScore": "平均健康度",
-    "avgEngagementScore": "平均参与度"
+    }
   },
   "relativeTime": {
     "today": "今天",

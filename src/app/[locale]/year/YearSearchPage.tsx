@@ -120,7 +120,6 @@ export function YearSearchPage() {
               disabled={isNavigating}
               isLoading={isNavigating}
               loadingLogin={null}
-              placeholder={t('usernamePlaceholder')}
               recentUsers={recentUsers}
               translationNamespace="yearSearch"
               value={username}

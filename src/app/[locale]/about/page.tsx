@@ -44,7 +44,9 @@ const SectionTitle = (props: React.PropsWithChildren) => (
   </h2>
 )
 
-const Paragraph = (props: React.PropsWithChildren) => <p className="py-2">{props.children}</p>
+const Paragraph = (props: React.PropsWithChildren) => (
+  <p className="whitespace-pre-line py-2">{props.children}</p>
+)
 
 export default async function AboutPage() {
   const t = await getTranslations('about')

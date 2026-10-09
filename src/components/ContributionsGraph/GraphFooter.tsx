@@ -12,7 +12,7 @@ export function GraphFooter() {
 
   return (
     <div className="flex items-center justify-end whitespace-nowrap text-xs opacity-40">
-      <span>{t('madeIn')} </span>
+      <span>{t('madeIn')}</span>
       <a className="ml-1" href={origin}>
         {origin}
       </a>

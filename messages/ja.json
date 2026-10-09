@@ -23,7 +23,6 @@
   },
   "common": {
     "appName": "Green Wall",
-    "loading": "読み込み中...",
     "copy": "コピー",
     "copied": "コピーしました",
     "close": "閉じる",
@@ -92,9 +91,6 @@
   "discovery": {
     "popularProfiles": "人気プロフィール",
     "popularDescription": "貢献グラフを素早く確認",
-    "recentlyViewed": "最近表示",
-    "recentDescription": "前回の続きから",
-    "lastViewed": "最終表示 {time}",
     "famousUsers": {
       "torvalds": "Linux・Git 生みの親",
       "gaearon": "React コアチーム、Redux",
@@ -109,12 +105,10 @@
   "stats": {
     "maxContributions": "最も生産的な日",
     "averagePerDay": "1日あたりの平均",
-    "mostActiveDay": "最も忙しい曜日",
     "mostActiveMonth": "ピーク月",
     "longestStreak": "最長連続コーディング",
     "longestGap": "最長休止期間",
     "repos": "{year} 年のリポジトリ",
-    "reposCreated": "{year} 年に開始した新しいリポジトリ",
     "reposModeCreated": "新規開始",
     "reposModeInteractions": "最も影響力のある",
     "issues": "{year} 年に関わった Issues",
@@ -123,13 +117,10 @@
     "weeklyDistribution": "{year} 年の曜日別リズム",
     "contributions": "貢献",
     "noLanguageData": "言語データがまだありません。",
-    "top": "上位 {count}",
     "peak": "{month} のピーク",
     "total": "総貢献数",
     "mostActive": "最もアクティブな時間",
-    "showRepos": "{year} 年に作成したリポジトリを表示",
     "showIssues": "{year} 年に関わった Issues を表示",
-    "reposIn": "{year} 年のリポジトリ",
     "issuesIn": "{year} 年に関わった Issues",
     "downloadYearlyReport": "年間レビューをダウンロード",
     "unitContributions": "貢献",
@@ -150,9 +141,7 @@
     "copy": "コピー",
     "copied": "コピーしました",
     "viewFull": "展開",
-    "charCount": "{count} 文字",
     "generating": "生成中...",
-    "failed": "生成に失敗しました。再試行してください",
     "builtinErrorHint": "内蔵 AI サービスでエラーが発生しました。カスタム AI サービスを代替として設定できます。",
     "customErrorHint": "カスタム AI サービスでエラーが発生しました。デフォルトの内蔵 AI サービスに戻すこともできます。",
     "errorReasonLabel": "詳細: ",
@@ -206,10 +195,7 @@
   "errors": {
     "somethingWentWrong": "問題が発生しました。",
     "badCredentials": "データ取得にはアクセストークンが必要です。<link>この手順</link>を読んでトークンの正しい設定方法を学んでください。",
-    "thisStep": "この手順",
     "noIssues": "Issues が見つかりません。",
-    "loadingRepos": "リポジトリを読み込み中...",
-    "loadingIssues": "Issues を読み込み中...",
     "failedLoadRepos": "リポジトリの読み込みに失敗しました。",
     "failedLoadIssues": "Issues の読み込みに失敗しました。"
   },
@@ -237,8 +223,7 @@
     "support": "サポートと共有",
     "supportContent": "Green Wall があなたの仕事をより見えるものにするなら、<github>GitHub</github> でスターを付けるか、<productHunt>Product Hunt</productHunt> で投票してサポートできます。友人と共有したり、ポートフォリオに追加したりすることも大いに役立ちます。",
     "reportingIssues": "フィードバックとアイデア",
-    "reportingIssuesContent": "バグを見つけた、機能のアイデアがある、または体験をよりスムーズにしたい場合は、<link>GitHub issues</link> でメモを残してください。すべてのフィードバックを読んでいます。",
-    "githubIssues": "GitHub issues"
+    "reportingIssuesContent": "バグを見つけた、機能のアイデアがある、または体験をよりスムーズにしたい場合は、<link>GitHub issues</link> でメモを残してください。すべてのフィードバックを読んでいます。"
   },
   "themeMode": {
     "light": "ライト",
@@ -286,9 +271,7 @@
     "titleWithYear": "{year} 年 GitHub ラップド",
     "description": "ユーザー名を入力し、年を選択して詳細な貢献統計を表示。",
     "descriptionWithYear": "{year} 年の GitHub 貢献データを詳細な分析と年間レポートで探索。",
-    "usernamePlaceholder": "GitHub ユーザー名",
     "searchPlaceholder": "GitHub ユーザー名",
-    "selectYear": "年を選択",
     "viewWrapped": "ラップドを表示",
     "myQuickEntryCta": "私の {year} 年ラップド",
     "orSearchOthers": "または他のユーザーを検索",
@@ -296,27 +279,10 @@
     "loginMissingDesc": "年間レビューにアクセスするには、再度サインインしてください。",
     "reSignIn": "再度サインイン"
   },
-  "navigation": {
-    "backToOverview": "概要に戻る",
-    "backToHome": "ホームに戻る",
-    "home": "ホーム",
-    "yearReport": "{year} 年レポート",
-    "switchYear": "年を切り替え",
-    "previousYear": "前年",
-    "nextYear": "翌年",
-    "viewYearDetails": "{year} 年の詳細を表示",
-    "inspectYear": "年を検査"
-  },
   "auth": {
     "signIn": "GitHub でサインイン",
     "signOut": "サインアウト",
     "yearReview": "{year} 年ラップド",
-    "modePublic": "公開モード",
-    "modeAuthorized": "プライベート貢献を含む",
-    "modePublicMismatch": "公開モード（他のユーザーを表示中）",
-    "promptTitle": "プライベートリポジトリ貢献をアンロック",
-    "promptDescription": "GitHub でサインインすると、自分の貢献ウォールにプライベートリポジトリの貢献を含められます。",
-    "scopeExplanation": "GitHub 認可は自分のデータを生成するときだけ使用します。他のユーザーの表示には使用しません。",
     "signInBenefitsTitle": "サインインしてさらにアンロック",
     "signInBenefitsIntro": "GitHub 認証でサインインすると、以下ができます：",
     "signInBenefitsItemYearWrapped": "年間ラップドとより深い統計を開く",
@@ -379,15 +345,7 @@
   },
   "repo": {
     "analysis": {
-      "title": "リポジトリ詳細分析",
       "error": "リポジトリデータの読み込みに失敗しました",
-      "coreMetrics": {
-        "title": "コアメトリクス",
-        "stars": "スター",
-        "forks": "フォーク",
-        "commits": "コミット",
-        "issues": "Issue"
-      },
       "healthMetrics": {
         "title": "ヘルス分析",
         "issueStatus": "Issue ステータス",
@@ -395,6 +353,8 @@
         "openRatio": "Open 比率",
         "mergedRatio": "Merged 比率"
       },
+      "healthScore": "ヘルススコア",
+      "engagementScore": "エンゲージメントスコア",
       "status": {
         "archived": "アーカイブ済み",
         "private": "プライベート",
@@ -412,12 +372,9 @@
         "releases": "リリース",
         "latestRelease": "最新リリース",
         "totalReleases": "総リリース数",
-        "releaseCount": "{count} リリース",
-        "topics": "トピック",
         "diskUsage": "リポジトリサイズ",
         "noLicense": "ライセンスなし",
         "noReleases": "リリースなし",
-        "noTopics": "トピックなし",
         "noLanguages": "言語データなし",
         "publishedAt": "公開日",
         "viewRelease": "リリースを表示"
@@ -433,33 +390,10 @@
     }
   },
   "repoAnalysis": {
-    "title": "リポジトリ分析",
-    "totalRepos": "リポジトリ総数",
-    "sortBy": "並び替え",
-    "sortOptions": {
-      "healthScore": "ヘルススコア",
-      "engagement": "エンゲージメント",
-      "stars": "スター数",
-      "updated": "最終更新",
-      "created": "作成日"
-    },
-    "error": "エラー",
-    "retry": "再試行",
     "emptyState": {
       "title": "最初のリポジトリを楽しみにしています",
       "description": "オープンソースの旅を始めましょう"
-    },
-    "forks": "フォーク",
-    "healthScore": "ヘルススコア",
-    "engagementScore": "エンゲージメントスコア",
-    "lastUpdated": "最終更新",
-    "today": "今日",
-    "daysAgo": "{days} 日前",
-    "statsOverview": "統計概要",
-    "totalStars": "スター総数",
-    "totalForks": "フォーク総数",
-    "avgHealthScore": "平均ヘルススコア",
-    "avgEngagementScore": "平均エンゲージメントスコア"
+    }
   },
   "relativeTime": {
     "today": "今日",
