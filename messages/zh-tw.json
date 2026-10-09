@@ -180,7 +180,7 @@
     "apiKeyHint": "你的 API 金鑰將儲存在本地，僅用於發送請求",
     "model": "模型名稱",
     "modelPlaceholder": "",
-    "modelHint": "例如：gpt-4o-mini，deepseek-chat，qwen-plus",
+    "modelHint": "例如：gpt-4o-mini，deepseek-flash，qwen-plus",
     "testConnection": "測試連線",
     "testSuccess": "連線成功",
     "testFailed": "連線失敗",

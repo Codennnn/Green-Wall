@@ -180,7 +180,7 @@
     "apiKeyHint": "API キーはローカルに保存され、リクエストにのみ使用されます",
     "model": "モデル名",
     "modelPlaceholder": "",
-    "modelHint": "例：gpt-4o-mini、deepseek-chat、qwen-plus",
+    "modelHint": "例：gpt-4o-mini、deepseek-flash、qwen-plus",
     "testConnection": "接続テスト",
     "testSuccess": "接続成功",
     "testFailed": "接続失敗",
