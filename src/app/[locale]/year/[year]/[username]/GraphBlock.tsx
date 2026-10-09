@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import { useEvent } from 'react-use-event-hook'
 
 import { useParams } from 'next/navigation'
@@ -20,11 +20,11 @@ import type {
   GraphHighlightMode,
   GraphHighlightOptions,
 } from '~/components/ContributionsGraph/graphHighlightUtils'
+import { ErrorMessage } from '~/components/ErrorMessage'
 import { StatCard, StatValue } from '~/components/StaticCard'
 import { Button } from '~/components/ui/button'
 import { Skeleton } from '~/components/ui/skeleton'
 import { YearSelect } from '~/components/YearSelect/YearSelect'
-import { useData } from '~/DataContext'
 import { ReposCardMode } from '~/enums'
 import { useDateFormatters } from '~/hooks/useDateFormatters'
 import { useImageExport } from '~/hooks/useImageExport'
@@ -34,6 +34,7 @@ import {
   useRepoInteractionsQuery,
   useReposQuery,
 } from '~/hooks/useQueries'
+import { useSyncGraphData } from '~/hooks/useSyncGraphData'
 import { useRouter } from '~/i18n/navigation'
 import { useSession } from '~/lib/auth-client'
 import { getTopLanguagesFromRepos } from '~/lib/language-stats'
@@ -68,7 +69,6 @@ export function GraphBlock() {
   const tErrors = useTranslations('errors')
   const tYearlyTags = useTranslations('yearlyTags')
 
-  const { setGraphData } = useData()
   const { data: session, isPending: isSessionPending } = useSession()
   const viewerLogin = (session?.user as { login?: string } | undefined)?.login
   const isViewingOwnProfile
@@ -94,7 +94,11 @@ export function GraphBlock() {
     router.push(`/year/${value}/${githubUsername}`)
   })
 
-  const { data: contributionResult, isLoading: contributionLoading }
+  const {
+    data: contributionResult,
+    isLoading: contributionLoading,
+    error: contributionError,
+  }
     = useContributionQuery(
       githubUsername,
       [queryYear],
@@ -240,11 +244,7 @@ export function GraphBlock() {
     GraphHighlightOptions | undefined
   >(undefined)
 
-  useEffect(() => {
-    if (contributionData) {
-      setGraphData(contributionData)
-    }
-  }, [contributionData, setGraphData])
+  useSyncGraphData(contributionData)
 
   const isLoading = isSessionPending || contributionLoading
 
@@ -270,6 +270,18 @@ export function GraphBlock() {
     setHighlightMode('none')
     setHighlightOptions(undefined)
   })
+
+  // 只在无数据可展示时兜底，后台刷新失败仍保留已有报告
+  if (!contributionData && contributionError) {
+    return (
+      <div className="flex flex-col items-center py-5 w-full">
+        <ErrorMessage
+          errorType={contributionError.errorType}
+          text={contributionError.message}
+        />
+      </div>
+    )
+  }
 
   return (
     <div className="flex flex-col items-center py-5 w-full">

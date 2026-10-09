@@ -7,6 +7,9 @@ import type { Auth } from '~/auth/index'
 
 export const authClient = createAuthClient({
   plugins: [customSessionClient<Auth>()],
+  sessionOptions: {
+    refetchOnWindowFocus: false,
+  },
 })
 
 export const {

@@ -14,8 +14,8 @@ const queryClientConfig: QueryClientConfig = {
       gcTime: 30 * 60 * 1000,
       // 全局不进行失败重试；在具体查询中按需设置 retry
       retry: false,
-      // 窗口重新获得焦点时重新获取数据
-      refetchOnWindowFocus: true,
+      // 窗口重新获得焦点时不重新获取数据
+      refetchOnWindowFocus: false,
       // 网络重连时重新获取数据
       refetchOnReconnect: true,
       // 组件挂载时重新获取数据

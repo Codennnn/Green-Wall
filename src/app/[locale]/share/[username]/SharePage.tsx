@@ -14,6 +14,7 @@ import { DEFAULT_THEME, THEME_PRESETS } from '~/constants'
 import { useData } from '~/DataContext'
 import type { GraphSize } from '~/enums'
 import { useContributionQuery } from '~/hooks/useQueries'
+import { useSyncGraphData } from '~/hooks/useSyncGraphData'
 import { eventTracker } from '~/lib/analytics'
 import type { GraphSettings, Themes } from '~/types'
 
@@ -43,7 +44,7 @@ export function SharePage() {
     }
   }, [query])
 
-  const { setGraphData, dispatchSettings } = useData()
+  const { dispatchSettings } = useData()
 
   useEffect(() => {
     if (settings) {
@@ -75,11 +76,7 @@ export function SharePage() {
   )
   const graphData = graphResult?.data
 
-  useEffect(() => {
-    if (graphData) {
-      setGraphData(graphData)
-    }
-  }, [graphData, setGraphData])
+  useSyncGraphData(graphData)
 
   // 构造错误对象以兼容现有接口
   const errorData = isError

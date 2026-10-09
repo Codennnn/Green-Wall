@@ -1,20 +1,16 @@
 'use client'
 
-import { useEffect } from 'react'
-
 import Image from 'next/image'
 import { useParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 
 import { ContributionsGraph } from '~/components/ContributionsGraph/ContributionsGraph'
 import { ErrorMessage } from '~/components/ErrorMessage'
-import { useData } from '~/DataContext'
 import { useContributionQuery } from '~/hooks/useQueries'
+import { useSyncGraphData } from '~/hooks/useSyncGraphData'
 
 export function UserPage() {
   const t = useTranslations('graph')
-  const { setGraphData } = useData()
-
   const params = useParams()
   const username = typeof params.username === 'string' ? params.username : ''
 
@@ -39,11 +35,7 @@ export function UserPage() {
   )
   const graphData = graphResult?.data
 
-  useEffect(() => {
-    if (graphData) {
-      setGraphData(graphData)
-    }
-  }, [graphData, setGraphData])
+  useSyncGraphData(graphData)
 
   // 构造错误对象以兼容现有接口
   const errorData = isError
