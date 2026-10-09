@@ -20,7 +20,7 @@ import {
 import { AiConfigDialog } from '~/components/AiConfig/AiConfigDialog'
 import { ProseContainer } from '~/components/ProseContainer'
 import { StatCard } from '~/components/StaticCard'
-import { Alert, AlertDescription } from '~/components/ui/alert'
+import { Alert, AlertDescription, AlertTitle } from '~/components/ui/alert'
 import { Button } from '~/components/ui/button'
 import {
   Dialog,
@@ -44,7 +44,9 @@ import { useAiReportHistory } from '~/hooks/useAiReportHistory'
 import { useCopyToClipboard } from '~/hooks/useCopyToClipboard'
 import { useMarkdownIt } from '~/hooks/useMarkdownIt'
 import { useYearlyAiReportStream } from '~/hooks/useYearlyAiReportStream'
+import { isConfigErrorCode } from '~/lib/ai/stream-error'
 import { eventTracker } from '~/lib/analytics'
+import type { AiRuntimeConfig } from '~/types/ai-config'
 import type {
   AiReportError,
   AiStreamErrorCode,
@@ -62,6 +64,8 @@ interface AiYearlyReportCardProps {
   autoStart?: boolean
   /** 是否隐藏操作按钮 */
   hideActions?: boolean
+  /** 依赖的年度数据是否已就绪，未就绪时不允许生成，避免用兜底标签生成出错误结论 */
+  isDataReady?: boolean
 }
 
 const ACTION_BUTTON_SIZE = 'xs'
@@ -77,6 +81,7 @@ export function AiYearlyReportCard(props: AiYearlyReportCardProps) {
     highlights,
     autoStart = false,
     hideActions = false,
+    isDataReady = true,
   } = props
 
   const t = useTranslations('aiReport')
@@ -121,22 +126,48 @@ export function AiYearlyReportCard(props: AiYearlyReportCardProps) {
     text,
     status,
     aiConfig,
+    storageScope: `${username}-${year}`,
   })
 
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [isAiConfigDialogOpen, setIsAiConfigDialogOpen] = useState(false)
 
   const isStreaming = status === 'streaming'
-  const isSuccess = status === 'success'
   const isError = status === 'error'
   const displayText = isGeneratingNew ? text : (currentVersion.text || text)
   const hasText = displayText.length > 0
+  const isBuiltinSource = sourceInfo.source === 'builtin'
+
+  /** 内容区是否展示了可阅读的正文（成功内容，或失败、取消后保留的内容） */
+  const hasReadableContent = hasText && !isStreaming
+
+  /** 数据未就绪时禁止发起生成，避免用兜底标签得到错误结论 */
+  const canGenerate = isDataReady
+
+  /**
+   * 失败时只保留一个主操作，避免「重试」与「重新生成」重复：
+   * - 可重试的错误 → 重试
+   * - 配置类错误（密钥、模型等，重试无法解决）→ 把配置入口变成明确的引导按钮
+   *   内置 AI 服务已在内容区给出同样的引导，这里只处理自定义配置的情况
+   * - 其余不可重试的错误（配额用尽、内容过滤等）→ 兜底给一个重新生成入口，
+   *   否则动作区会一个按钮都没有，用户只能刷新页面；
+   *   内置服务不兜底，它的出口已经在内容区的提示里了
+   */
+  const showRetryAction = isError && error?.retryable === true
+  const showConfigAction = isError
+    && error?.retryable === false
+    && !isBuiltinSource
+    && isConfigErrorCode(error.code)
+  const showErrorFallbackAction = isError
+    && !showRetryAction
+    && !showConfigAction
+    && !isBuiltinSource
 
   useEffect(() => {
-    if (autoStart && status === 'idle' && isLoaded) {
+    if (autoStart && status === 'idle' && isLoaded && isDataReady) {
       void start()
     }
-  }, [autoStart, status, start, isLoaded])
+  }, [autoStart, status, start, isLoaded, isDataReady])
 
   const handleDialogOpenChange = useEvent((open: boolean) => {
     setIsDialogOpen(open)
@@ -148,6 +179,23 @@ export function AiYearlyReportCard(props: AiYearlyReportCardProps) {
 
   const openAiConfigDialog = useEvent(() => {
     setIsAiConfigDialogOpen(true)
+  })
+
+  /** 配置变更后，上一次失败的原因已不成立，清掉失败状态让用户能直接重新生成（生成中不打断） */
+  const clearStaleError = useEvent(() => {
+    if (isError) {
+      reset()
+    }
+  })
+
+  const handleAiConfigSave = useEvent((nextConfig: AiRuntimeConfig) => {
+    saveAiConfig(nextConfig)
+    clearStaleError()
+  })
+
+  const handleAiConfigReset = useEvent(() => {
+    resetAiConfig()
+    clearStaleError()
   })
 
   const handleCopy = useEvent(async () => {
@@ -187,23 +235,38 @@ export function AiYearlyReportCard(props: AiYearlyReportCardProps) {
     return errorMessages[reportError.code] || reportError.message || t('streamErrors.unknown')
   }
 
+  /** 配置入口文案：需要引导时表达动作，其余情况只表示当前配置来源 */
+  const getConfigButtonLabel = () => {
+    if (showConfigAction) {
+      return t('configureCustomAi')
+    }
+
+    if (sourceInfo.source === 'custom') {
+      return tConfig('configButton')
+    }
+
+    return ''
+  }
+
   const renderContent = () => {
-    if (isError && error) {
-      const showBuiltinErrorHint = sourceInfo.source === 'builtin'
-      const localizedMessage = getLocalizedErrorMessage(error)
-
-      return (
-        <div className="flex flex-col gap-2">
+    // 生成失败时保留已生成的内容，错误提示置于正文上方
+    const errorAlert = isError && error
+      ? (
           <Alert variant="error">
-            <AlertDescription>
-              {localizedMessage}
-            </AlertDescription>
-          </Alert>
+            {/* 主信息：面向用户的说明与备选方案 */}
+            <AlertTitle>
+              {isBuiltinSource ? t('builtinErrorHint') : t('customErrorHint')}
+            </AlertTitle>
 
-          {showBuiltinErrorHint && (
-            <Alert variant="default">
-              <AlertDescription className="flex flex-col gap-2">
-                <span>{t('builtinErrorHint')}</span>
+            {/* 次信息：具体原因弱化展示，便于排查 */}
+            <AlertDescription>
+              <span>
+                {t('errorReasonLabel')}
+                {getLocalizedErrorMessage(error)}
+              </span>
+
+              {/* 内置服务失败时在内容区给出配置入口；自定义配置的入口在动作区，避免出现两个 */}
+              {isBuiltinSource && (
                 <Button
                   className="w-fit"
                   size={ACTION_BUTTON_SIZE}
@@ -213,21 +276,34 @@ export function AiYearlyReportCard(props: AiYearlyReportCardProps) {
                   <SettingsIcon className={ACTION_ICON_SIZE} />
                   {t('configureCustomAi')}
                 </Button>
-              </AlertDescription>
-            </Alert>
-          )}
-        </div>
-      )
-    }
+              )}
+            </AlertDescription>
+          </Alert>
+        )
+      : null
 
     if (hasText) {
-      return (
+      const reportBody = (
         <div className="p-1 pt-0">
           <ProseContainer className="text-muted-foreground leading-relaxed prose-p:first-of-type:mt-0 prose-p:last-of-type:mb-0 prose-sm">
             <div dangerouslySetInnerHTML={{ __html: markdownHtml }} />
           </ProseContainer>
         </div>
       )
+
+      // 无错误时保持正文原样渲染，避免多包一层容器影响正文间距
+      return errorAlert
+        ? (
+            <div className="flex flex-col gap-2">
+              {errorAlert}
+              {reportBody}
+            </div>
+          )
+        : reportBody
+    }
+
+    if (errorAlert) {
+      return errorAlert
     }
 
     if (isStreaming) {
@@ -247,10 +323,11 @@ export function AiYearlyReportCard(props: AiYearlyReportCardProps) {
         <Empty className="border-0 p-4">
           <EmptyContent>
             <EmptyDescription>
-              {t('description')}
+              {canGenerate ? t('description') : t('waitingForData')}
             </EmptyDescription>
 
             <Button
+              disabled={!canGenerate}
               size="sm"
               onClick={() => {
                 void start()
@@ -332,14 +409,24 @@ export function AiYearlyReportCard(props: AiYearlyReportCardProps) {
         config={aiConfig}
         open={isAiConfigDialogOpen}
         onOpenChange={handleAiConfigDialogOpenChange}
-        onReset={resetAiConfig}
-        onSave={saveAiConfig}
+        onReset={handleAiConfigReset}
+        onSave={handleAiConfigSave}
       />
 
       <Dialog open={isDialogOpen} onOpenChange={handleDialogOpenChange}>
         <div className="flex flex-col gap-grid-item h-full">
           {/* 内容区 */}
-          <div className="relative flex-1 py-0 overflow-auto">
+          <div
+            aria-busy={isStreaming}
+            className="relative flex-1 py-0 overflow-auto"
+          >
+            {/* 生成中给读屏软件一个状态提示，视觉上由骨架屏表达 */}
+            {isStreaming && (
+              <span className="sr-only" role="status">
+                {t('generating')}
+              </span>
+            )}
+
             <ScrollArea
               scrollFade
               className="p-grid-item"
@@ -364,23 +451,45 @@ export function AiYearlyReportCard(props: AiYearlyReportCardProps) {
                 </Button>
               )}
 
-              {/* 生成完成或失败 - 重新生成按钮 */}
-              {(isSuccess || isError || (status === 'aborted' && hasText)) && (
-                <Button size={ACTION_BUTTON_SIZE} variant="outline" onClick={handleRegenerate}>
+              {/* 生成失败 - 重试按钮（此时没有内容可「重新生成」，只保留重试） */}
+              {showRetryAction && (
+                <Button
+                  disabled={!canGenerate}
+                  size={ACTION_BUTTON_SIZE}
+                  onClick={() => void start()}
+                >
+                  {t('retry')}
+                </Button>
+              )}
+
+              {/* 生成失败且无法重试也无法通过改配置解决 - 兜底提供重新生成 */}
+              {showErrorFallbackAction && (
+                <Button
+                  disabled={!canGenerate}
+                  size={ACTION_BUTTON_SIZE}
+                  variant="outline"
+                  onClick={handleRegenerate}
+                >
                   <RefreshCwIcon className={ACTION_ICON_SIZE} />
                   {t('regenerate')}
                 </Button>
               )}
 
-              {/* 错误状态 - 重试按钮 */}
-              {isError && (
-                <Button size={ACTION_BUTTON_SIZE} onClick={() => void start()}>
-                  {t('retry')}
+              {/* 有正文且未失败 - 重新生成按钮（含配置修复后重新开始的情况） */}
+              {hasReadableContent && !isError && (
+                <Button
+                  disabled={!canGenerate}
+                  size={ACTION_BUTTON_SIZE}
+                  variant="outline"
+                  onClick={handleRegenerate}
+                >
+                  <RefreshCwIcon className={ACTION_ICON_SIZE} />
+                  {t('regenerate')}
                 </Button>
               )}
 
-              {/* 生成完成 - 复制按钮 */}
-              {isSuccess && hasText && (
+              {/* 有正文可复制（含失败时保留的上一版内容） */}
+              {hasReadableContent && (
                 <Button
                   size={ACTION_BUTTON_SIZE}
                   variant="outline"
@@ -402,13 +511,14 @@ export function AiYearlyReportCard(props: AiYearlyReportCardProps) {
                 </Button>
               )}
 
-              {isSuccess && hasText && (
+              {hasReadableContent && (
                 <Tooltip>
                   <TooltipTrigger
                     render={(
                       <DialogTrigger
                         render={(
                           <Button
+                            aria-label={t('viewFull')}
                             size={ACTION_ICON_BUTTON_SIZE}
                             variant="ghost"
                           >
@@ -424,16 +534,18 @@ export function AiYearlyReportCard(props: AiYearlyReportCardProps) {
                 </Tooltip>
               )}
 
+              {/* 配置入口：动作区只保留这一个，需要引导时它变成主按钮 */}
               <div className="ml-auto flex items-center gap-2">
                 <Button
-                  size={sourceInfo.source === 'custom'
+                  aria-label={t('configureCustomAi')}
+                  size={sourceInfo.source === 'custom' || showConfigAction
                     ? ACTION_BUTTON_SIZE
                     : ACTION_ICON_BUTTON_SIZE}
-                  variant="ghost"
+                  variant={showConfigAction ? 'default' : 'ghost'}
                   onClick={openAiConfigDialog}
                 >
                   <SettingsIcon className={ACTION_ICON_SIZE} />
-                  {sourceInfo.source === 'custom' ? tConfig('configButton') : ''}
+                  {getConfigButtonLabel()}
                 </Button>
               </div>
             </div>

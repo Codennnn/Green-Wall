@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useReducer, useRef } from 'react'
 import { useEvent } from 'react-use-event-hook'
 
+import { StorageKeys } from '~/constants'
 import type { AiRuntimeConfig } from '~/types/ai-config'
 
 export interface AiReportHistoryRecord {
@@ -23,6 +24,8 @@ interface UseAiReportHistoryOptions {
   status: 'idle' | 'streaming' | 'success' | 'error' | 'aborted'
   /** 当前 AI 配置 */
   aiConfig: AiRuntimeConfig | null
+  /** 本地缓存作用域（例如 `username-year`），传入后历史版本会落盘，刷新不丢 */
+  storageScope?: string
 }
 
 interface UseAiReportHistoryReturn {
@@ -44,6 +47,7 @@ interface HistoryState {
 
 type HistoryAction
   = { type: 'add', record: AiReportHistoryRecord }
+    | { type: 'hydrate', history: AiReportHistoryRecord[] }
     | { type: 'previous' }
     | { type: 'next' }
 
@@ -63,6 +67,75 @@ const INITIAL_HISTORY_STATE: HistoryState = {
   currentIndex: 0,
 }
 
+/** 本地缓存保留的最大版本数，避免历史无限增长 */
+const MAX_PERSISTED_VERSIONS = 5
+
+/** 落盘的版本记录：不含 AI 配置，避免把 API Key 复制到别处 */
+interface PersistedRecord {
+  id: string
+  timestamp: number
+  text: string
+}
+
+function getStorageKey(scope: string): string {
+  return `${StorageKeys.AiReport}:${scope}`
+}
+
+function readPersistedHistory(scope: string): AiReportHistoryRecord[] {
+  try {
+    const raw = localStorage.getItem(getStorageKey(scope))
+
+    if (!raw) {
+      return []
+    }
+
+    const parsed: unknown = JSON.parse(raw)
+
+    if (!Array.isArray(parsed)) {
+      return []
+    }
+
+    return parsed
+      .filter((item): item is PersistedRecord => {
+        if (typeof item !== 'object' || item === null) {
+          return false
+        }
+
+        const record = item as Record<string, unknown>
+
+        return typeof record.id === 'string'
+          && typeof record.timestamp === 'number'
+          && typeof record.text === 'string'
+          && record.text.length > 0
+      })
+      .slice(-MAX_PERSISTED_VERSIONS)
+      .map((record) => ({
+        id: record.id,
+        timestamp: record.timestamp,
+        text: record.text,
+        // 缓存不保存配置来源，恢复后的版本不标注生成时使用的配置
+        config: null,
+      }))
+  }
+  catch {
+    // 缓存不可用（隐私模式、配额满等）时按无历史处理
+    return []
+  }
+}
+
+function writePersistedHistory(scope: string, history: AiReportHistoryRecord[]): void {
+  const records: PersistedRecord[] = history
+    .slice(-MAX_PERSISTED_VERSIONS)
+    .map(({ id, timestamp, text }) => ({ id, timestamp, text }))
+
+  try {
+    localStorage.setItem(getStorageKey(scope), JSON.stringify(records))
+  }
+  catch {
+    // 忽略存储错误，缓存失败不影响当前会话
+  }
+}
+
 function historyReducer(state: HistoryState, action: HistoryAction): HistoryState {
   switch (action.type) {
     case 'add': {
@@ -71,6 +144,13 @@ function historyReducer(state: HistoryState, action: HistoryAction): HistoryStat
       return {
         history,
         currentIndex: history.length - 1,
+      }
+    }
+
+    case 'hydrate': {
+      return {
+        history: action.history,
+        currentIndex: Math.max(0, action.history.length - 1),
       }
     }
 
@@ -110,7 +190,7 @@ function historyReducer(state: HistoryState, action: HistoryAction): HistoryStat
 export function useAiReportHistory(
   options: UseAiReportHistoryOptions,
 ): UseAiReportHistoryReturn {
-  const { text, status, aiConfig } = options
+  const { text, status, aiConfig, storageScope } = options
 
   const [{ history, currentIndex }, dispatch] = useReducer(
     historyReducer,
@@ -119,6 +199,26 @@ export function useAiReportHistory(
 
   const previousStatusRef = useRef<UseAiReportHistoryOptions['status'] | null>(null)
   const addedForSuccessRef = useRef(false)
+  const hydratedScopeRef = useRef<string | null>(null)
+
+  // 换用户或换年份时用缓存里的历史替换内存状态（同一作用域内不重复恢复）
+  useEffect(() => {
+    if (!storageScope || hydratedScopeRef.current === storageScope) {
+      return
+    }
+
+    hydratedScopeRef.current = storageScope
+    dispatch({ type: 'hydrate', history: readPersistedHistory(storageScope) })
+  }, [storageScope])
+
+  // 历史变化后写回缓存；空历史不写，避免覆盖已缓存的内容
+  useEffect(() => {
+    if (!storageScope || hydratedScopeRef.current !== storageScope || history.length === 0) {
+      return
+    }
+
+    writePersistedHistory(storageScope, history)
+  }, [storageScope, history])
 
   const aiConfigBaseUrl = aiConfig?.baseUrl
   const aiConfigApiKey = aiConfig?.apiKey

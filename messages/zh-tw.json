@@ -142,6 +142,7 @@
   "aiReport": {
     "title": "AI 年度總結",
     "description": "讓 AI 為你生成一段個人化的年度 GitHub 總結文案",
+    "waitingForData": "正在載入你的年度資料，稍後即可生成。",
     "generate": "生成文案",
     "regenerate": "重新生成",
     "cancel": "取消",
@@ -153,6 +154,8 @@
     "generating": "正在生成...",
     "failed": "生成失敗，請重試",
     "builtinErrorHint": "內建 AI 服務出現錯誤，你可以設定自訂 AI 服務作為備選方案。",
+    "customErrorHint": "自訂 AI 服務出現錯誤，你可以恢復預設改用內建 AI 服務作為備選方案。",
+    "errorReasonLabel": "具體原因：",
     "configureCustomAi": "設定自訂 AI",
     "previousVersion": "上一個版本",
     "nextVersion": "下一個版本",

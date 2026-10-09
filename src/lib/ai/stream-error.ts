@@ -38,6 +38,23 @@ function getDefaultRetryable(code: AiStreamErrorCode): boolean {
   return false
 }
 
+/**
+ * 需要通过修改 AI 配置才能解决的错误码
+ *
+ * 这类错误重试无效（密钥写错、模型名不存在、参数非法等），
+ * UI 应当引导用户去调整配置，而不是给出重试入口。
+ */
+const CONFIG_ERROR_CODES: ReadonlySet<AiStreamErrorCode> = new Set([
+  'authError',
+  'badRequest',
+  'forbidden',
+  'modelNotFound',
+])
+
+export function isConfigErrorCode(code: AiStreamErrorCode): boolean {
+  return CONFIG_ERROR_CODES.has(code)
+}
+
 function createStreamErrorInfo(code: AiStreamErrorCode, message: string): StreamErrorInfo {
   return {
     code,

@@ -227,6 +227,12 @@ export function GraphBlock() {
     })
   }, [statistics, reposData, issuesData])
 
+  // 年度报告的标签与高光都来自这些查询，没加载完就用兜底标签会生成出错误结论
+  const isYearlyReportDataReady = !isSessionPending
+    && !contributionLoading
+    && !reposLoading
+    && !issuesLoading
+
   // 高亮状态管理
   const [highlightMode, setHighlightMode]
     = useState<GraphHighlightMode>('none')
@@ -335,6 +341,7 @@ export function GraphBlock() {
           <AiYearlyReportCard
             hideActions={isDownloading}
             highlights={yearlyHighlights}
+            isDataReady={isYearlyReportDataReady}
             locale={currentLocale}
             tags={yearlyTags}
             username={githubUsername}

@@ -142,6 +142,7 @@
   "aiReport": {
     "title": "AI Year in Review",
     "description": "Let AI generate a personalized annual GitHub summary for you",
+    "waitingForData": "Loading your yearly data, generation will be available shortly.",
     "generate": "Generate",
     "regenerate": "Regenerate",
     "cancel": "Cancel",
@@ -153,6 +154,8 @@
     "generating": "Generating...",
     "failed": "Generation failed, please retry",
     "builtinErrorHint": "The built-in AI service encountered an error. You can configure a custom AI service as an alternative.",
+    "customErrorHint": "Your custom AI service failed. You can restore the default built-in AI service as an alternative.",
+    "errorReasonLabel": "Reason: ",
     "configureCustomAi": "Configure Custom AI",
     "previousVersion": "Previous version",
     "nextVersion": "Next version",

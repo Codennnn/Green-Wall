@@ -7,6 +7,8 @@ export const enum StorageKeys {
   SearchInput = 'greenwall.searchInput.v1',
   /** AI 配置持久化存储键 */
   AiConfig = 'greenwall.aiConfig.v1',
+  /** AI 年度总结历史版本存储键（按用户 + 年份拼出完整键） */
+  AiReport = 'greenwall.aiReport.v1',
   /** 最近搜索的 GitHub 用户存储键 */
   RecentUsers = 'gw:recent_github_users:v1',
 }

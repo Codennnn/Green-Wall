@@ -142,6 +142,7 @@
   "aiReport": {
     "title": "AI 年間レビュー",
     "description": "AI がパーソナライズされた年間 GitHub サマリーを生成",
+    "waitingForData": "年間データを読み込み中です。まもなく生成できます。",
     "generate": "生成",
     "regenerate": "再生成",
     "cancel": "キャンセル",
@@ -153,6 +154,8 @@
     "generating": "生成中...",
     "failed": "生成に失敗しました。再試行してください",
     "builtinErrorHint": "内蔵 AI サービスでエラーが発生しました。カスタム AI サービスを代替として設定できます。",
+    "customErrorHint": "カスタム AI サービスでエラーが発生しました。デフォルトの内蔵 AI サービスに戻すこともできます。",
+    "errorReasonLabel": "詳細: ",
     "configureCustomAi": "カスタム AI を設定",
     "previousVersion": "前のバージョン",
     "nextVersion": "次のバージョン",

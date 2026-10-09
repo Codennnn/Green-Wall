@@ -217,7 +217,12 @@ export function useYearlyAiReportStream(
     setStatus('idle')
   })
 
-  useEffect(() => cancelScheduledTextUpdate, [cancelScheduledTextUpdate])
+  // 卸载时中止进行中的请求，避免用户离开页面后仍然继续消耗 AI 额度
+  useEffect(() => () => {
+    activeRequestIdRef.current += 1
+    abortControllerRef.current?.abort()
+    cancelScheduledTextUpdate()
+  }, [cancelScheduledTextUpdate])
 
   return {
     text,
