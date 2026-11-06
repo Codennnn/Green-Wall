@@ -158,10 +158,13 @@ export async function getGitHubAccessToken(
     let grantedScopes: string[] | undefined
 
     try {
+      // Better Auth 1.7 起 getAccessToken 需要显式选择账号来源：
+      // 本项目使用 stateless session + storeAccountCookie，token 存在签名 cookie 中，
+      // 没有数据库账号表可供 accountId 查询，因此走 useAccountCookie。
       const tokenResult = await auth.api.getAccessToken({
         headers: request.headers,
         body: {
-          providerId: 'github',
+          useAccountCookie: true,
         },
       })
 
