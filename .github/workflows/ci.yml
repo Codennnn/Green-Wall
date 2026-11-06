@@ -30,6 +30,10 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      # next/root-params、PageProps 等类型由此生成，缺失时 next/root-params 会退化成 any
+      - name: Generate route types
+        run: pnpm exec next typegen
+
       - name: Type check
         run: pnpm lint:ts
 
