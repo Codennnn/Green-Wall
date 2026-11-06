@@ -35,7 +35,7 @@ interface ExtendedUser {
   login?: string
 }
 
-function AuthStatusButtonSkeleton() {
+export function AuthStatusButtonSkeleton() {
   return (
     <Button disabled size="icon" variant="outline">
       <Spinner />
