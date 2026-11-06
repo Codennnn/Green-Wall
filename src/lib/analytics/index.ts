@@ -66,7 +66,8 @@ function normalizeApiEndpointForAnalytics(endpoint: string): {
   endpoint_name: string
 } {
   let normalizedEndpoint = endpoint
-  let endpointName = ''
+  // 下面每个分支都会赋值，无需初始化（避免 no-useless-assignment）
+  let endpointName: string
 
   if (normalizedEndpoint.startsWith('/api/contribution/')) {
     // 避免把 username 上报到分析系统（高敏 + 高基数）
