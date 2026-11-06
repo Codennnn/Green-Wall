@@ -15,7 +15,7 @@ import {
   MenuTrigger,
 } from '~/components/ui/menu'
 import { Spinner } from '~/components/ui/spinner'
-import { ThemeMode } from '~/enums'
+import { isThemeMode, ThemeMode } from '~/enums'
 
 export function ThemeModeSelector() {
   const { theme, setTheme } = useTheme()
@@ -58,7 +58,7 @@ export function ThemeModeSelector() {
     },
   ]
 
-  const currentTheme = (theme ?? DEFAULT_THEME_MODE) as ThemeMode
+  const currentTheme = isThemeMode(theme) ? theme : DEFAULT_THEME_MODE
   const currentMode
     = modes.find((mode) => mode.value === currentTheme)
       ?? modes.find((mode) => mode.value === DEFAULT_THEME_MODE)!

@@ -9,7 +9,7 @@ import { Toggle, ToggleGroup } from '~/components/ui/toggle-group'
 import { Tooltip, TooltipContent, TooltipTrigger } from '~/components/ui/tooltip'
 import { DEFAULT_BLOCK_SHAPE, DEFAULT_SIZE } from '~/constants'
 import { useData } from '~/DataContext'
-import { BlockShape, GraphSize } from '~/enums'
+import { BlockShape, GraphSize, isBlockShape, isGraphSize } from '~/enums'
 import type { GraphSettingAction } from '~/hooks/useGraphSetting'
 import { eventTracker } from '~/lib/analytics'
 import type { GraphSettings, Themes } from '~/types'
@@ -142,9 +142,9 @@ export const AppearanceSetting = memo(function AppearanceSetting() {
   }
 
   function handleSizeChange(nextSizeValues: string[]) {
-    const nextSize = nextSizeValues[0] as GraphSize | undefined
+    const nextSize = nextSizeValues[0]
 
-    if (!nextSize || size === nextSize) {
+    if (!isGraphSize(nextSize) || size === nextSize) {
       return
     }
 
@@ -156,9 +156,9 @@ export const AppearanceSetting = memo(function AppearanceSetting() {
   }
 
   function handleBlockShapeChange(nextShapeValues: string[]) {
-    const nextBlockShape = nextShapeValues[0] as BlockShape | undefined
+    const nextBlockShape = nextShapeValues[0]
 
-    if (!nextBlockShape || blockShape === nextBlockShape) {
+    if (!isBlockShape(nextBlockShape) || blockShape === nextBlockShape) {
       return
     }
 

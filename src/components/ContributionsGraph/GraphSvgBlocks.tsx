@@ -4,7 +4,7 @@ import { useMemo } from 'react'
 import { useEvent } from 'react-use-event-hook'
 
 import { DEFAULT_LEVEL_COLORS, levels, SVG_GRAPH_CONSTANTS } from '~/constants'
-import { BlockShape, ContributionLevel } from '~/enums'
+import { BlockShape, ContributionLevel, isContributionLevel } from '~/enums'
 import type { ContributionCalendar, ContributionDay } from '~/types'
 
 import type { PixelMatrix, PixelOverride } from './animations/types'
@@ -178,10 +178,12 @@ export function GraphSvgBlocks({
       return
     }
 
+    const levelKey = target.dataset.levelKey
+
     const day: ContributionDay = {
       date: target.dataset.date,
       count: Number(target.dataset.count || 0),
-      level: target.dataset.levelKey as ContributionLevel,
+      level: isContributionLevel(levelKey) ? levelKey : ContributionLevel.Null,
     }
 
     onDayHover?.(day, target)

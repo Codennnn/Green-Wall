@@ -58,6 +58,8 @@ export function GraphTooltip({
       {open && (
         <span
           {...getFloatingProps({
+            // refs.setFloating 是 useCallback 箭头函数，不读 this 且引用稳定
+            // eslint-disable-next-line @typescript-eslint/unbound-method
             ref: refs.setFloating,
             style: {
               position: strategy,

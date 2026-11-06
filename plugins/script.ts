@@ -1,11 +1,13 @@
+/// <reference types="greasemonkey" />
+
 // ==================== Global Initialization ====================
 type T = History['replaceState']
 
 function addHistoryEvent(type: 'replaceState'): (...args: Parameters<T>) => ReturnType<T> {
-  const originalMethod = window.history[type]
+  const originalMethod = window.history[type].bind(window.history)
 
   return function (...args) {
-    originalMethod.apply(window.history, args)
+    originalMethod(...args)
 
     const ev = new Event(type)
     window.dispatchEvent(ev)

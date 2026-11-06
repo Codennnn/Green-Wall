@@ -12,7 +12,7 @@ import { ErrorMessage } from '~/components/ErrorMessage'
 import { Button } from '~/components/ui/button'
 import { DEFAULT_THEME, THEME_PRESETS } from '~/constants'
 import { useData } from '~/DataContext'
-import type { GraphSize } from '~/enums'
+import { isGraphSize } from '~/enums'
 import { useContributionQuery } from '~/hooks/useQueries'
 import { useSyncGraphData } from '~/hooks/useSyncGraphData'
 import { eventTracker } from '~/lib/analytics'
@@ -37,7 +37,7 @@ export function SharePage() {
 
     return {
       yearRange: [start, end] as GraphSettings['yearRange'],
-      size: size as GraphSize | undefined,
+      size: isGraphSize(size) ? size : undefined,
       theme: theme as Themes | undefined,
       showSafariHeader,
       showAttribution,

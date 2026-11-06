@@ -361,7 +361,10 @@ export function calculateHighlightDates(
     }
 
     default: {
+      // 新增未处理的 GraphHighlightMode 会让这一行类型不匹配，从而在编译期报错。
+      // 运行期仍可能收到旧设置里的未知模式，所以兜底是不高亮，而不是抛错。
       const exhaustiveMode: never = highlightMode
+      // eslint-disable-next-line @typescript-eslint/no-meaningless-void-operator
       void exhaustiveMode
 
       return new Set<string>()
