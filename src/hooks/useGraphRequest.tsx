@@ -46,7 +46,7 @@ export function useGraphRequest(config?: UseGraphRequestConfig) {
       }
 
       try {
-        const result = await queryClient.fetchQuery({
+        const result = await queryClient.query({
           queryKey: queryKeys.contribution(username, normalizedYears),
           queryFn: () => fetchContributionData(username, normalizedYears),
           staleTime: CONTRIBUTION_STALE_TIME_MS,
