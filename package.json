@@ -28,10 +28,10 @@
     "better-auth": "^1.7.18",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
-    "framer-motion": "^12.42.2",
+    "framer-motion": "^14.9.0",
     "html-to-image": "^1.11.13",
     "lucide-react": "^1.24.0",
-    "markdown-it": "^14.3.3",
+    "markdown-it": "^15.0.3",
     "next": "16.4.5",
     "next-intl": "^4.13.4",
     "next-themes": "^0.4.6",
@@ -43,25 +43,25 @@
     "valibot": "1.4.2"
   },
   "devDependencies": {
-    "@babel/preset-react": "^7.28.5",
+    "@babel/preset-react": "^8.0.1",
     "@codennnn/tsconfig": "1.2.1",
     "@tailwindcss/postcss": "^4.3.2",
     "@tailwindcss/typography": "^0.5.20",
     "@types/greasemonkey": "^4.0.7",
     "@types/markdown-it": "^14.1.2",
-    "@types/node": "22.15.18",
+    "@types/node": "26.6.6",
     "@types/react": "19.2.17",
     "babel-plugin-react-compiler": "^1.0.0",
     "next-secure-headers": "^2.2.0",
     "npm-run-all": "^4.1.5",
     "postcss": "^8.5.32",
-    "prefer-code-style": "^3.10.0",
+    "prefer-code-style": "^4.0.0",
     "stylelint": "^17.14.0",
     "stylelint-config-clean-order": "^10.0.0",
     "stylelint-config-standard": "^40.0.0",
     "stylelint-config-tailwindcss": "^1.0.1",
     "tailwindcss": "^4.3.2",
-    "typescript": "^5.9.3"
+    "typescript": "^7.0.2"
   },
   "engines": {
     "node": ">=22"
